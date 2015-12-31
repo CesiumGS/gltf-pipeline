@@ -1,0 +1,42 @@
+{
+  "name": "gltf-pipeline",
+  "version": "0.0.0",
+  "description": "Content pipeline tools for optimizing glTF assets.",
+  "license": "Apache-2.0",
+  "contributors": {
+    "name": "Richard Lee, Analytical Graphics, Inc., and Contributors",
+    "url": "https://github.com/AnalyticalGraphicsInc/gltf-pipeline/graphs/contributors"
+  },
+  "keywords": [
+    "glTF",
+    "WebGL"
+  ],
+  "homepage": "https://github.com/AnalyticalGraphicsInc/gltf-pipeline",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:AnalyticalGraphicsInc/gltf-pipeline.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AnalyticalGraphicsInc/gltf-pipeline/issues"
+  },
+  "scripts": {
+    "jsHint": "gulp jsHint",
+    "jsHint-watch": "gulp jsHint-watch",
+    "jasmine": "./node_modules/.bin/jasmine-node specs",
+    "test": "npm run jsHint && npm run jasmine"
+  },
+  "directories": {
+    "bin": "./bin",
+    "lib": "./lib"
+  },
+  "dependencies": {
+    "minimist": "1.1.0"
+  },
+  "devDependencies": {
+    "gulp": "3.9.0",
+    "gulp-jshint": "2.0.0",
+    "jasmine-node": "^1.14.5",
+    "jshint": "2.8.0",
+    "jshint-stylish": "2.1.0"
+  }
+}
