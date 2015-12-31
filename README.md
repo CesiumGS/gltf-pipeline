@@ -23,6 +23,10 @@ node ./bin/gltf-pipeline.js ./specs/data/boxTexturedUnoptimized/CesiumTexturedBo
 
 ## Build Instructions
 
+Run the tests:
+```
+npm run jasmine
+```
 To run JSHint on the entire codebase, run
 ```
 npm run jsHint
