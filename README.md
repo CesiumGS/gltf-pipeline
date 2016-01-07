@@ -9,6 +9,8 @@
 
 Content pipeline tools for optimizing [glTF](https://www.khronos.org/gltf) assets by [Richard Lee](http://leerichard.net/) and the [Cesium team](http://cesiumjs.org/).
 
+See the [roadmap](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/issues/1).
+
 ## Instructions
 
 Clone this repo and install [Node.js](http://nodejs.org/).  From the root directory of this repo, run:
