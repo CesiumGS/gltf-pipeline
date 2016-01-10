@@ -8,8 +8,8 @@ describe('addDefaults', function() {
     it('Adds accessor properties', function() {
         var gltf = {
             "accessors": {
-                "accessor_21": {
-                    "bufferView": "bufferView_29",
+                "accessorId": {
+                    "bufferView": "bufferViewId",
                     "byteOffset": 0,
                     "componentType": 5123,
                     "count": 36,
@@ -19,30 +19,28 @@ describe('addDefaults', function() {
         };
 
         addDefaults(gltf, undefined);
-        expect(gltf.accessors.accessor_21.byteStride).toEqual(0);
+        expect(gltf.accessors.accessorId.byteStride).toEqual(0);
     });
 
     it('Adds animation properties', function() {
         var gltf = {
             "animations": {
-                "animation_0": {
+                "animationId": {
                     "channels": [
                         {
-                            "sampler": "animation_0_rotation_sampler",
+                            "sampler": "samplerId",
                             "target": {
-                                "id": "Skeleton_torso_joint_1",
+                                "id": "jointId",
                                 "path": "rotation"
                             }
                         }
                     ],
                     "parameters": {
-                        "TIME": "animAccessor_0",
-                        "rotation": "animAccessor_3",
-                        "scale": "animAccessor_1",
-                        "translation": "animAccessor_2"
+                        "TIME": "timeAccessorId",
+                        "rotation": "rotationAccessorId",
                     },
                     "samplers": {
-                        "animation_0_rotation_sampler": {
+                        "samplerId": {
                             "input": "TIME",
                             "output": "rotation"
                         }
@@ -52,21 +50,21 @@ describe('addDefaults', function() {
         };
 
         addDefaults(gltf, undefined);
-        expect(gltf.animations.animation_0.samplers.animation_0_rotation_sampler.interpolation).toEqual('LINEAR');
+        expect(gltf.animations.animationId.samplers.samplerId.interpolation).toEqual('LINEAR');
     });
 
     it('Adds animation empty properties', function() {
         var gltf = {
             "animations": {
-                "animation_0" : {
+                "animationId" : {
                 }
             }
         };
 
         addDefaults(gltf, undefined);
-        expect(gltf.animations.animation_0.channels).toEqual([]);
-        expect(gltf.animations.animation_0.parameters).toEqual({});
-        expect(gltf.animations.animation_0.samplers).toEqual({});
+        expect(gltf.animations.animationId.channels).toEqual([]);
+        expect(gltf.animations.animationId.parameters).toEqual({});
+        expect(gltf.animations.animationId.samplers).toEqual({});
     });
 
     it('Adds asset properties', function() {
@@ -92,15 +90,15 @@ describe('addDefaults', function() {
     it('Adds buffer properties', function() {
         var gltf = {
             "buffers": {
-                "CesiumTexturedBoxTest": {
+                "bufferId": {
                     "byteLength": 840,
-                    "uri": "CesiumTexturedBoxTest.bin"
+                    "uri": "buffer.bin"
                 }
             }
         };
 
         addDefaults(gltf, undefined);
-        expect(gltf.buffers.CesiumTexturedBoxTest.type).toEqual('arraybuffer');
+        expect(gltf.buffers.bufferId.type).toEqual('arraybuffer');
     });
 
     // TODO: tests for materialDefaults()
@@ -108,21 +106,21 @@ describe('addDefaults', function() {
     it('Adds mesh properties', function() {
         var gltf = {
             "meshes": {
-                "Geometry_mesh002": {
+                "meshId": {
                 }
             }
         };
 
         addDefaults(gltf, undefined);
-        expect(gltf.meshes.Geometry_mesh002.primitives).toEqual([]);
+        expect(gltf.meshes.meshId.primitives).toEqual([]);
 
         gltf = {
             "meshes": {
-                "Geometry_mesh002": {
+                "meshId": {
                     "primitives": [
                         {
-                            "indices": "accessor_21",
-                            "material": "Effect-Texture"
+                            "indices": "accessorId",
+                            "material": "materialId"
                         }
                     ]
                 }
@@ -130,18 +128,18 @@ describe('addDefaults', function() {
         };
 
         addDefaults(gltf, undefined);
-        expect(gltf.meshes.Geometry_mesh002.primitives[0].attributes).toBeDefined();
-        expect(gltf.meshes.Geometry_mesh002.primitives[0].mode).toEqual(WebGLConstants.TRIANGLES);
+        expect(gltf.meshes.meshId.primitives[0].attributes).toBeDefined();
+        expect(gltf.meshes.meshId.primitives[0].mode).toEqual(WebGLConstants.TRIANGLES);
     });
 
     it('glTF 0.8 to 1.0, primitive.primitive -> primitive.mode', function() {
         var gltf = {
             "meshes": {
-                "Geometry_mesh002": {
+                "meshId": {
                     "primitives": [
                         {
-                            "indices": "accessor_21",
-                            "material": "Effect-Texture",
+                            "indices": "accessorId",
+                            "material": "materialId",
                             "primitive": 5
                         }
                     ]
@@ -150,50 +148,50 @@ describe('addDefaults', function() {
         };
 
         addDefaults(gltf, undefined);
-        expect(gltf.meshes.Geometry_mesh002.primitives[0].mode).toEqual(WebGLConstants.TRIANGLE_STRIP);
+        expect(gltf.meshes.meshId.primitives[0].mode).toEqual(WebGLConstants.TRIANGLE_STRIP);
     });
 
     it('Adds node properties', function() {
         var gltf = {
             "nodes": {
-                "Geometry_mesh002Node": {
+                "nodeId": {
                 }
             }
         };
 
         addDefaults(gltf, undefined);
-        expect(gltf.nodes.Geometry_mesh002Node.children).toEqual([]);
-        expect(gltf.nodes.Geometry_mesh002Node.matrix).toEqual([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
+        expect(gltf.nodes.nodeId.children).toEqual([]);
+        expect(gltf.nodes.nodeId.matrix).toEqual([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
 
         gltf = {
             "nodes": {
-                "Geometry_mesh002Node": {
+                "nodeId": {
                     "translation": [0.0, 0.0, 0.0]
                 }
             }
         };
 
         addDefaults(gltf, undefined);
-        expect(gltf.nodes.Geometry_mesh002Node.rotation).toEqual([0.0, 0.0, 0.0, 1.0]);
-        expect(gltf.nodes.Geometry_mesh002Node.scale).toEqual([1.0, 1.0, 1.0]);
+        expect(gltf.nodes.nodeId.rotation).toEqual([0.0, 0.0, 0.0, 1.0]);
+        expect(gltf.nodes.nodeId.scale).toEqual([1.0, 1.0, 1.0]);
 
         gltf = {
             "nodes": {
-                "Geometry_mesh002Node": {
+                "nodeId": {
                     "scale": [1.0, 1.0, 1.0]
                 }
             }
         };
 
         addDefaults(gltf, undefined);
-        expect(gltf.nodes.Geometry_mesh002Node.translation).toEqual([0.0, 0.0, 0.0]);
-        expect(gltf.nodes.Geometry_mesh002Node.rotation).toEqual([0.0, 0.0, 0.0, 1.0]);
+        expect(gltf.nodes.nodeId.translation).toEqual([0.0, 0.0, 0.0]);
+        expect(gltf.nodes.nodeId.rotation).toEqual([0.0, 0.0, 0.0, 1.0]);
     });
 
     it('glTF 0.8 to 1.0, node.instanceSkin -> node', function() {
         var gltf = {
             "nodes": {
-                "Geometry_mesh002Node": {
+                "nodeId": {
                     "instanceSkin": {
                         "skeletons": {},
                         "skin": {},
@@ -204,53 +202,53 @@ describe('addDefaults', function() {
         };
 
         addDefaults(gltf, undefined);
-        expect(gltf.nodes.Geometry_mesh002Node.skeletons).toBeDefined();
-        expect(gltf.nodes.Geometry_mesh002Node.skin).toBeDefined();
-        expect(gltf.nodes.Geometry_mesh002Node.meshes).toBeDefined();
-        expect(gltf.nodes.Geometry_mesh002Node.instanceSkin).not.toBeDefined();
+        expect(gltf.nodes.nodeId.skeletons).toBeDefined();
+        expect(gltf.nodes.nodeId.skin).toBeDefined();
+        expect(gltf.nodes.nodeId.meshes).toBeDefined();
+        expect(gltf.nodes.nodeId.instanceSkin).not.toBeDefined();
     });
 
     it('glTF 0.8 to 1.0, axis angle -> quaternion', function() {
         var gltf = {
             "version": 0.8,
             "nodes": {
-                "Geometry_mesh002Node": {
+                "nodeId": {
                     "rotation": [1.0, 0.0, 0.0, 0.0]
                 }
             }
         };
 
         addDefaults(gltf, undefined);
-        expect(gltf.nodes.Geometry_mesh002Node.rotation).toEqual([0.0, 0.0, 0.0, 1.0]);
+        expect(gltf.nodes.nodeId.rotation).toEqual([0.0, 0.0, 0.0, 1.0]);
     });
 
     it('Adds program properties', function() {
         var gltf = {
             "programs": {
-                "program_0": {
-                    "fragmentShader": "CesiumTexturedBoxTest0FS",
-                    "vertexShader": "CesiumTexturedBoxTest0VS"
+                "programId": {
+                    "fragmentShader": "bufferId0FS",
+                    "vertexShader": "bufferId0VS"
                 }
             }
         };
 
         addDefaults(gltf, undefined);
-        expect(gltf.programs.program_0.attributes).toEqual([]);
+        expect(gltf.programs.programId.attributes).toEqual([]);
     });
 
     it('Adds sampler properties', function() {
         var gltf = {
             "samplers": {
-                "sampler_0": {
+                "samplerId": {
                 }
             }
         };
 
         addDefaults(gltf, undefined);
-        expect(gltf.samplers.sampler_0.magFilter).toEqual(WebGLConstants.LINEAR);
-        expect(gltf.samplers.sampler_0.minFilter).toEqual(WebGLConstants.NEAREST_MIPMAP_LINEAR);
-        expect(gltf.samplers.sampler_0.wrapS).toEqual(WebGLConstants.REPEAT);
-        expect(gltf.samplers.sampler_0.wrapT).toEqual(WebGLConstants.REPEAT);
+        expect(gltf.samplers.samplerId.magFilter).toEqual(WebGLConstants.LINEAR);
+        expect(gltf.samplers.samplerId.minFilter).toEqual(WebGLConstants.NEAREST_MIPMAP_LINEAR);
+        expect(gltf.samplers.samplerId.wrapS).toEqual(WebGLConstants.REPEAT);
+        expect(gltf.samplers.samplerId.wrapT).toEqual(WebGLConstants.REPEAT);
     });
 
     it('Adds scene properties', function() {
@@ -268,10 +266,10 @@ describe('addDefaults', function() {
     it('Adds skin properties', function() {
         var gltf = {
             "skins": {
-                "Armature_Cesium_Man_skin": {
-                    "inverseBindMatrices": "IBM_Armature_Cesium_Man-skin",
+                "skinId": {
+                    "inverseBindMatrices": "accessorId",
                     "jointNames": [
-                        "Skeleton_torso_joint_1"
+                        "jointId"
                     ],
                     "name": "Armature"
                 }
@@ -279,7 +277,7 @@ describe('addDefaults', function() {
         };
 
         addDefaults(gltf, undefined);
-        expect(gltf.skins.Armature_Cesium_Man_skin.bindShapeMatrix).toEqual([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
+        expect(gltf.skins.skinId.bindShapeMatrix).toEqual([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
     });
 
     // TODO: tests for techniqueDefaults()
@@ -287,19 +285,19 @@ describe('addDefaults', function() {
     it('Adds texture properties', function() {
         var gltf = {
             "textures": {
-                "texture_Image0001": {
+                "textureId": {
                     "format": 6408,
-                    "sampler": "sampler_0",
+                    "sampler": "samplerId",
                     "source": "Image0001"
                 }
             }
         };
 
         addDefaults(gltf, undefined);
-        expect(gltf.textures.texture_Image0001.format).toEqual(WebGLConstants.RGBA);
-        expect(gltf.textures.texture_Image0001.internalFormat).toEqual(6408);
-        expect(gltf.textures.texture_Image0001.target).toEqual(WebGLConstants.TEXTURE_2D);
-        expect(gltf.textures.texture_Image0001.type).toEqual(WebGLConstants.UNSIGNED_BYTE);
+        expect(gltf.textures.textureId.format).toEqual(WebGLConstants.RGBA);
+        expect(gltf.textures.textureId.internalFormat).toEqual(6408);
+        expect(gltf.textures.textureId.target).toEqual(WebGLConstants.TEXTURE_2D);
+        expect(gltf.textures.textureId.type).toEqual(WebGLConstants.UNSIGNED_BYTE);
     });
 
 
