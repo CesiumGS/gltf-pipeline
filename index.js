@@ -1,6 +1,7 @@
 'use strict';
 
 module.exports = {
-	removeUnusedImages : require('./lib/removeUnusedImages'),
+    addDefaults : require('./lib/addDefaults'),
+    removeUnusedImages : require('./lib/removeUnusedImages'),
     OptimizationStatistics : require('./lib/OptimizationStatistics')
 };
