@@ -35,7 +35,7 @@ Run the tests:
 ```
 npm run jasmine
 ```
-To run JSHint on the entire codebase, run
+To run JSHint on the entire codebase, run:
 ```
 npm run jsHint
 ```
@@ -44,13 +44,25 @@ To run JSHint automatically when a file is saved, run the following and leave it
 npm run jsHint-watch
 ```
 
+### Running test coverage
+
+First, install `istanbul`:
+```
+npm install -g istanbul
+```
+Then run:
+```
+npm run coverage
+```
+For complete coverage details, open `coverage/lcov-report/index.html`.
+
 ### Building the JavaScript library
 
 A pre-built unminified `.js` file is in the `build` directory.  This is built with [browserify](http://browserify.org/).  Install it with:
 ```
 npm install -g browserify
 ```
-To rebuild, from the `gltf-pipeline` root directory, run
+To rebuild, run:
 ```
 npm run build
 ```
