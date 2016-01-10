@@ -1,7 +1,8 @@
 # glTF Pipeline
 
-[![Build Status](https://travis-ci.org/AnalyticalGraphicsInc/gltf-pipeline.svg?branch=master)](https://travis-ci.org/AnalyticalGraphicsInc/gltf-pipeline)
 [![License](https://img.shields.io/:license-apache-blue.svg)](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/blob/master/LICENSE.md)
+[![Build Status](https://travis-ci.org/AnalyticalGraphicsInc/gltf-pipeline.svg?branch=master)](https://travis-ci.org/AnalyticalGraphicsInc/gltf-pipeline)
+[![Coverage Status](https://coveralls.io/repos/AnalyticalGraphicsInc/gltf-pipeline/badge.svg?branch=master)](https://coveralls.io/r/AnalyticalGraphicsInc/gltf-pipeline?branch=master)
 
 <p align="center">
 <a href="https://www.khronos.org/gltf"><img src="doc/gltf.png" /></a>
@@ -35,7 +36,7 @@ Run the tests:
 ```
 npm run jasmine
 ```
-To run JSHint on the entire codebase, run
+To run JSHint on the entire codebase, run:
 ```
 npm run jsHint
 ```
@@ -44,13 +45,21 @@ To run JSHint automatically when a file is saved, run the following and leave it
 npm run jsHint-watch
 ```
 
+### Running test coverage
+
+Coverage uses [istanbul](https://github.com/gotwarlost/istanbul).  Run:
+```
+npm run coverage
+```
+For complete coverage details, open `coverage/lcov-report/index.html`.
+
 ### Building the JavaScript library
 
 A pre-built unminified `.js` file is in the `build` directory.  This is built with [browserify](http://browserify.org/).  Install it with:
 ```
 npm install -g browserify
 ```
-To rebuild, from the `gltf-pipeline` root directory, run
+To rebuild, run:
 ```
 npm run build
 ```
