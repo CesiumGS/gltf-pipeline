@@ -53,6 +53,8 @@ npm run coverage
 ```
 For complete coverage details, open `coverage/lcov-report/index.html`.
 
+The tests and coverage covers the Node.js module; it does not cover the command-line interface (which is tiny) or the built JavaScript library (which is the same code just ran through browserify).
+
 ### Building the JavaScript library
 
 A pre-built unminified `.js` file is in the `build` directory.  This is built with [browserify](http://browserify.org/).  Install it with:
