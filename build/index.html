@@ -1,0 +1,39 @@
+<!-- Example of using gltf-pipeline in a browser, instead of Node.js, by using the browserify build. -->
+<!doctype html>
+<html>
+<head>
+    <title>gltf-pipeline example</title>
+    <script src="gltf-pipeline.js"></script>
+    <script>
+        var gltf = {
+            "images": {
+                "Image0001": {
+                    "name": "Image0001",
+                    "uri": "Cesium_Logo_Flat.png"
+                },
+                "unusedId": {
+                    "name": "An unused image for testing removal",
+                    "uri": "unused.png"
+                }
+            },
+            "textures": {
+                "texture_Image0001": {
+                    "format": 6408,
+                    "internalFormat": 6408,
+                    "sampler": "sampler_0",
+                    "source": "Image0001",
+                    "target": 3553,
+                    "type": 5121
+                }
+            }
+        };
+
+        var stats = new gltfPipeline.OptimizationStatistics();
+        gltfPipeline.removeUnusedImages(gltf, stats);
+        console.log(stats);
+    </script>
+</head>
+
+<body>
+</body>
+</html>
