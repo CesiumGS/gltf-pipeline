@@ -1,7 +1,8 @@
 # glTF Pipeline
 
-[![Build Status](https://travis-ci.org/AnalyticalGraphicsInc/gltf-pipeline.svg?branch=master)](https://travis-ci.org/AnalyticalGraphicsInc/gltf-pipeline)
 [![License](https://img.shields.io/:license-apache-blue.svg)](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/blob/master/LICENSE.md)
+[![Build Status](https://travis-ci.org/AnalyticalGraphicsInc/gltf-pipeline.svg?branch=master)](https://travis-ci.org/AnalyticalGraphicsInc/gltf-pipeline)
+[![Coverage Status](https://coveralls.io/repos/AnalyticalGraphicsInc/gltf-pipeline/badge.svg?branch=master)](https://coveralls.io/r/AnalyticalGraphicsInc/gltf-pipeline?branch=master)
 
 <p align="center">
 <a href="https://www.khronos.org/gltf"><img src="doc/gltf.png" /></a>
@@ -46,11 +47,7 @@ npm run jsHint-watch
 
 ### Running test coverage
 
-First, install `istanbul`:
-```
-npm install -g istanbul
-```
-Then run:
+Coverage uses [istanbul](https://github.com/gotwarlost/istanbul).  Run:
 ```
 npm run coverage
 ```
