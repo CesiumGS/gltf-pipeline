@@ -33,6 +33,7 @@
     "lib": "./lib"
   },
   "dependencies": {
+    "cesium": "^1.17.0",
     "minimist": "1.1.0"
   },
   "devDependencies": {
