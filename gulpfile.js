@@ -3,7 +3,7 @@
 var jshint = require('gulp-jshint');
 var gulp = require('gulp');
 
-var jsHintFiles = ['bin/*.js', 'lib/*.js', 'specs/*.js', '!node_modules/**', '!build/**', '!coverage/**'];
+var jsHintFiles = ['index.js', 'bin/*.js', 'lib/*.js', 'specs/*.js', '!node_modules/**', '!build/**', '!coverage/**'];
 
 gulp.task('default', ['jsHint']);
 
