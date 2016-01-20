@@ -90,6 +90,11 @@
             "byteLength": 840,
             "type": "arraybuffer",
             "uri": "CesiumTexturedBoxTest.bin"
+        },
+        "unusedBufferId": {
+            "byteLength": 840,
+            "type": "arraybuffer",
+            "uri": "CesiumTexturedBoxTest.bin"
         }
     },
     "images": {
