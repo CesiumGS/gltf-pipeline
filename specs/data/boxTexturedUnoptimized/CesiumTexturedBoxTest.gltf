@@ -242,6 +242,15 @@
             ],
             "fragmentShader": "CesiumTexturedBoxTest0FS",
             "vertexShader": "CesiumTexturedBoxTest0VS"
+        },
+        "unusedProgramId": {
+            "attributes": [
+                "a_normal",
+                "a_position",
+                "a_texcoord0"
+            ],
+            "fragmentShader": "CesiumTexturedBoxTest0FS",
+            "vertexShader": "CesiumTexturedBoxTest0VS"
         }
     },
     "samplers": {
