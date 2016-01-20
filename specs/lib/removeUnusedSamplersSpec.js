@@ -34,7 +34,7 @@ describe('removeUnusedSamplers', function() {
 
         var stats = new OptimizationStatistics();
         removeUnusedSamplers(gltf, stats);
-        expect(gltf.samplers.unusedId).not.toBeDefined();
+        expect(gltf.samplers.unusedSamplerId).not.toBeDefined();
         expect(stats.numberOfSamplersRemoved).toEqual(1);
     });
 
