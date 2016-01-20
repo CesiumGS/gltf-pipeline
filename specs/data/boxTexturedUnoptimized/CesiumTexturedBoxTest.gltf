@@ -83,6 +83,12 @@
             "byteLength": 768,
             "byteOffset": 72,
             "target": 34962
+        },
+        "unusedBufferViewId": {
+            "buffer": "CesiumTexturedBoxTest",
+            "byteLength": 768,
+            "byteOffset": 72,
+            "target": 34962
         }
     },
     "buffers": {
