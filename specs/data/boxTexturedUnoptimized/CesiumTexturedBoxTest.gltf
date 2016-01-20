@@ -274,6 +274,10 @@
         "CesiumTexturedBoxTest0VS": {
             "type": 35633,
             "uri": "CesiumTexturedBoxTest0VS.glsl"
+        },
+        "unusedShaderId": {
+            "type": 35633,
+            "uri": "CesiumTexturedBoxTest0VS.glsl"
         }
     },
     "skins": {},

@@ -6,6 +6,7 @@ var argv = require('minimist')(process.argv.slice(2));
 var addDefaults = require('../').addDefaults;
 var removeUnusedImages = require('../').removeUnusedImages;
 var removeUnusedSamplers = require('../').removeUnusedSamplers;
+var removeUnusedShaders = require('../').removeUnusedShaders;
 var OptimizationStatistics = require('../').OptimizationStatistics;
 var Cesium = require('cesium');
 var defined = Cesium.defined;
@@ -31,6 +32,7 @@ fs.readFile(gltfPath, function (err, data) {
     // TODO: custom pipeline based on arguments / config
     removeUnusedImages(gltf, stats);
     removeUnusedSamplers(gltf, stats);
+    removeUnusedShaders(gltf, stats);
     addDefaults(gltf, stats);
 
     stats.print();
