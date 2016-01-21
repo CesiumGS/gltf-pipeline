@@ -83,6 +83,12 @@
             "byteLength": 768,
             "byteOffset": 72,
             "target": 34962
+        },
+        "unusedBufferViewId": {
+            "buffer": "CesiumTexturedBoxTest",
+            "byteLength": 768,
+            "byteOffset": 72,
+            "target": 34962
         }
     },
     "buffers": {
@@ -240,6 +246,15 @@
     },
     "programs": {
         "program_0": {
+            "attributes": [
+                "a_normal",
+                "a_position",
+                "a_texcoord0"
+            ],
+            "fragmentShader": "CesiumTexturedBoxTest0FS",
+            "vertexShader": "CesiumTexturedBoxTest0VS"
+        },
+        "unusedProgramId": {
             "attributes": [
                 "a_normal",
                 "a_position",
