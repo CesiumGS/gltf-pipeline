@@ -6,5 +6,6 @@ module.exports = {
     removeUnusedSamplers : require('./lib/removeUnusedSamplers'),
     removeUnusedShaders : require('./lib/removeUnusedShaders'),
     removeUnusedBufferViews : require('./lib/removeUnusedBufferViews'),
+    removeUnusedSkins : require('./lib/removeUnusedSkins'),
     OptimizationStatistics : require('./lib/OptimizationStatistics')
 };
