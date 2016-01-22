@@ -101,7 +101,7 @@
     "cameras": {
         "camera_0": {
             "perspective": {
-                "aspect_ratio": 1.5,
+                "aspectRatio": 1.5,
                 "yfov": 0.660593,
                 "zfar": 100,
                 "znear": 0.01
@@ -110,7 +110,7 @@
         },
         "unusedCameraId": {
             "perspective": {
-                "aspect_ratio": 1.5,
+                "aspectRatio": 1.5,
                 "yfov": 0.660593,
                 "zfar": 100,
                 "znear": 0.01

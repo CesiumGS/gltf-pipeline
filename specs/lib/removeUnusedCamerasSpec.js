@@ -9,7 +9,7 @@ describe('removeUnusedCameras', function() {
             "cameras": {
                 "camera_0": {
                     "perspective": {
-                        "aspect_ratio": 1.5,
+                        "aspectRatio": 1.5,
                         "yfov": 0.660593,
                         "zfar": 100,
                         "znear": 0.01
@@ -18,7 +18,7 @@ describe('removeUnusedCameras', function() {
                 },
                 "unusedCameraId": {
                     "perspective": {
-                        "aspect_ratio": 1.5,
+                        "aspectRatio": 1.5,
                         "yfov": 0.660593,
                         "zfar": 100,
                         "znear": 0.01
@@ -28,30 +28,7 @@ describe('removeUnusedCameras', function() {
             },
             "nodes": {
                 "node_3": {
-                    "camera": "camera_0",
-                    "children": [
-                        "Geometry-mesh002Node",
-                        "groupLocator030Node"
-                    ],
-                    "matrix": [
-                        1,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        -1,
-                        0,
-                        0,
-                        1,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        1
-                    ],
-                    "name": "Y_UP_Transform"
+                    "camera": "camera_0"
                 }
             }
         };
@@ -67,7 +44,7 @@ describe('removeUnusedCameras', function() {
             "cameras": {
                 "camera_0": {
                     "perspective": {
-                        "aspect_ratio": 1.5,
+                        "aspectRatio": 1.5,
                         "yfov": 0.660593,
                         "zfar": 100,
                         "znear": 0.01
@@ -77,30 +54,7 @@ describe('removeUnusedCameras', function() {
             },
             "nodes": {
                 "node_3": {
-                    "camera": "camera_0",
-                    "children": [
-                        "Geometry-mesh002Node",
-                        "groupLocator030Node"
-                    ],
-                    "matrix": [
-                        1,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        -1,
-                        0,
-                        0,
-                        1,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        1
-                    ],
-                    "name": "Y_UP_Transform"
+                    "camera": "camera_0"
                 }
             }
         };
