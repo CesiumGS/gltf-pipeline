@@ -8,85 +8,21 @@ describe('removeUnusedSkins', function() {
         var gltf = {
             "nodes": {
                 "Cylinder": {
-                    "children": [],
-                    "matrix": [
-                        1,
-                        0,
-                        0,
-                        0,
-                        0,
-                        1,
-                        0,
-                        0,
-                        0,
-                        0,
-                        1,
-                        0,
-                        0,
-                        0,
-                        0,
-                        1
-                    ],
-                    "meshes": [
-                        "Cylinder-mesh"
-                    ],
-                    "name": "Cylinder",
-                    "skeletons": [
-                        "Bone"
-                    ],
                     "skin": "Armature_Cylinder-skin"
                 }
             },
             "skins": {
                 "Armature_Cylinder-skin": {
-                    "bindShapeMatrix": [
-                        1,
-                        0,
-                        0,
-                        0,
-                        0,
-                        1,
-                        0,
-                        0,
-                        0,
-                        0,
-                        1,
-                        0,
-                        0,
-                        0,
-                        0,
-                        1
-                    ],
                     "inverseBindMatrices": "IBM_Armature_Cylinder-skin",
                     "jointNames": [
                         "Bone"
-                    ],
-                    "name": "Armature"
+                    ]
                 },
                 "unusedSkinId": {
-                    "bindShapeMatrix": [
-                        1,
-                        0,
-                        0,
-                        0,
-                        0,
-                        1,
-                        0,
-                        0,
-                        0,
-                        0,
-                        1,
-                        0,
-                        0,
-                        0,
-                        0,
-                        1
-                    ],
                     "inverseBindMatrices": "IBM_Armature_Cylinder-skin",
                     "jointNames": [
                         "Bone"
-                    ],
-                    "name": "Armature"
+                    ]
                 }
             }
         };
@@ -101,60 +37,15 @@ describe('removeUnusedSkins', function() {
         var gltf = {
             "nodes": {
                 "Cylinder": {
-                    "children": [],
-                    "matrix": [
-                        1,
-                        0,
-                        0,
-                        0,
-                        0,
-                        1,
-                        0,
-                        0,
-                        0,
-                        0,
-                        1,
-                        0,
-                        0,
-                        0,
-                        0,
-                        1
-                    ],
-                    "meshes": [
-                        "Cylinder-mesh"
-                    ],
-                    "name": "Cylinder",
-                    "skeletons": [
-                        "Bone"
-                    ],
                     "skin": "Armature_Cylinder-skin"
                 }
             },
             "skins": {
                 "Armature_Cylinder-skin": {
-                    "bindShapeMatrix": [
-                        1,
-                        0,
-                        0,
-                        0,
-                        0,
-                        1,
-                        0,
-                        0,
-                        0,
-                        0,
-                        1,
-                        0,
-                        0,
-                        0,
-                        0,
-                        1
-                    ],
                     "inverseBindMatrices": "IBM_Armature_Cylinder-skin",
                     "jointNames": [
                         "Bone"
-                    ],
-                    "name": "Armature"
+                    ]
                 }
             }
         };
