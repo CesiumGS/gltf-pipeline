@@ -9,6 +9,7 @@ var removeUnusedSamplers = require('../').removeUnusedSamplers;
 var removeUnusedShaders = require('../').removeUnusedShaders;
 var removeUnusedPrograms = require('../').removeUnusedPrograms;
 var removeUnusedBufferViews = require('../').removeUnusedBufferViews;
+var removeUnusedMaterials = require('../').removeUnusedMaterials;
 var OptimizationStatistics = require('../').OptimizationStatistics;
 var Cesium = require('cesium');
 var defined = Cesium.defined;
@@ -37,6 +38,7 @@ fs.readFile(gltfPath, function (err, data) {
     removeUnusedShaders(gltf, stats);
     removeUnusedPrograms(gltf, stats);
     removeUnusedBufferViews(gltf, stats);
+    removeUnusedMaterials(gltf, stats);
     addDefaults(gltf, stats);
 
     stats.print();

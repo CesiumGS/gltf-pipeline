@@ -122,6 +122,14 @@
                     1
                 ]
             }
+        },
+        "unusedMaterialId": {
+            "name": "Texture",
+            "technique": "technique0",
+            "values": {
+                "diffuse": "texture_Image0001",
+                "shininess": 256
+            }
         }
     },
     "meshes": {
