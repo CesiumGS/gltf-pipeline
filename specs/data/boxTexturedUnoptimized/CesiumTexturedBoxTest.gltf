@@ -351,6 +351,32 @@
                 "u_shininess": "shininess",
                 "u_specular": "specular"
             }
+        },
+        "unusedTechniqueId": {
+            "attributes": {
+                "a_position": "position"
+            },
+            "parameters": {
+                "modelViewMatrix": {
+                    "semantic": "MODELVIEW",
+                    "type": 35676
+                },
+                "projectionMatrix": {
+                    "semantic": "PROJECTION",
+                    "type": 35676
+                }
+            },
+            "program": "program_0",
+            "states": {
+                "enable": [
+                    2929,
+                    2884
+                ]
+            },
+            "uniforms": {
+                "u_modelViewMatrix": "modelViewMatrix",
+                "u_projectionMatrix": "projectionMatrix"
+            }
         }
     },
     "textures": {
