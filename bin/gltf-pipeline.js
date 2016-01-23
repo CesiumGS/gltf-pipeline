@@ -7,8 +7,11 @@ var addDefaults = require('../').addDefaults;
 var removeUnusedImages = require('../').removeUnusedImages;
 var removeUnusedSamplers = require('../').removeUnusedSamplers;
 var removeUnusedShaders = require('../').removeUnusedShaders;
+var removeUnusedTechniques = require('../').removeUnusedTechniques;
+var removeUnusedPrograms = require('../').removeUnusedPrograms;
 var removeUnusedBufferViews = require('../').removeUnusedBufferViews;
 var removeUnusedSkins = require('../').removeUnusedSkins;
+var removeUnusedCameras = require('../').removeUnusedCameras;
 var OptimizationStatistics = require('../').OptimizationStatistics;
 var Cesium = require('cesium');
 var defined = Cesium.defined;
@@ -31,13 +34,18 @@ fs.readFile(gltfPath, function (err, data) {
     var gltf = JSON.parse(data);
     var stats = new OptimizationStatistics();
 
+    addDefaults(gltf, stats);
+
     // TODO: custom pipeline based on arguments / config
+    // TODO: remove in top-down order
     removeUnusedImages(gltf, stats);
     removeUnusedSamplers(gltf, stats);
     removeUnusedShaders(gltf, stats);
+    removeUnusedTechniques(gltf, stats);
+    removeUnusedPrograms(gltf, stats);
     removeUnusedBufferViews(gltf, stats);
     removeUnusedSkins(gltf, stats);
-    addDefaults(gltf, stats);
+    removeUnusedCameras(gltf, stats);
 
     stats.print();
 
