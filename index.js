@@ -8,5 +8,6 @@ module.exports = {
     removeUnusedTechniques : require('./lib/removeUnusedTechniques'),
     removeUnusedPrograms : require('./lib/removeUnusedPrograms'),
     removeUnusedBufferViews : require('./lib/removeUnusedBufferViews'),
+    removeUnusedCameras : require('./lib/removeUnusedCameras'),
     OptimizationStatistics : require('./lib/OptimizationStatistics')
 };
