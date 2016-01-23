@@ -98,6 +98,26 @@
             "uri": "CesiumTexturedBoxTest.bin"
         }
     },
+    "cameras": {
+        "camera_0": {
+            "perspective": {
+                "aspectRatio": 1.5,
+                "yfov": 0.660593,
+                "zfar": 100,
+                "znear": 0.01
+            },
+            "type": "perspective"
+        },
+        "unusedCameraId": {
+            "perspective": {
+                "aspectRatio": 1.5,
+                "yfov": 0.660593,
+                "zfar": 100,
+                "znear": 0.01
+            },
+            "type": "perspective"
+        }
+    },
     "images": {
         "Image0001": {
             "name": "Image0001",
@@ -200,6 +220,7 @@
             "name": "Texture_Group"
         },
         "node_3": {
+            "camera": "camera_0",
             "children": [
                 "Geometry-mesh002Node",
                 "groupLocator030Node"
@@ -358,6 +379,32 @@
                 "u_projectionMatrix": "projectionMatrix",
                 "u_shininess": "shininess",
                 "u_specular": "specular"
+            }
+        },
+        "unusedTechniqueId": {
+            "attributes": {
+                "a_position": "position"
+            },
+            "parameters": {
+                "modelViewMatrix": {
+                    "semantic": "MODELVIEW",
+                    "type": 35676
+                },
+                "projectionMatrix": {
+                    "semantic": "PROJECTION",
+                    "type": 35676
+                }
+            },
+            "program": "program_0",
+            "states": {
+                "enable": [
+                    2929,
+                    2884
+                ]
+            },
+            "uniforms": {
+                "u_modelViewMatrix": "modelViewMatrix",
+                "u_projectionMatrix": "projectionMatrix"
             }
         }
     },
