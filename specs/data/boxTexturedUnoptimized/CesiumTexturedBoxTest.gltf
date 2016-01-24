@@ -172,7 +172,8 @@
                     "mode": 4
                 }
             ]
-        }
+        },
+        "unusedMeshId": {}
     },
     "nodes": {
         "Geometry-mesh002Node": {
