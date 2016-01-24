@@ -10,5 +10,6 @@ module.exports = {
     removeUnusedBufferViews : require('./lib/removeUnusedBufferViews'),
     removeUnusedSkins : require('./lib/removeUnusedSkins'),
     removeUnusedCameras : require('./lib/removeUnusedCameras'),
+    removeUnusedMeshes : require('./lib/removeUnusedMeshes'),
     OptimizationStatistics : require('./lib/OptimizationStatistics')
 };

@@ -159,6 +159,14 @@
                     "mode": 4
                 }
             ]
+        },
+        "unusedMeshId": {
+            "name": "Mesh",
+            "primitives": [
+                {
+                    "material": "Effect-Texture"
+                }
+            ]
         }
     },
     "nodes": {
