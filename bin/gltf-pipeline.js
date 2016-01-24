@@ -10,6 +10,7 @@ var removeUnusedShaders = require('../').removeUnusedShaders;
 var removeUnusedTechniques = require('../').removeUnusedTechniques;
 var removeUnusedPrograms = require('../').removeUnusedPrograms;
 var removeUnusedBufferViews = require('../').removeUnusedBufferViews;
+var removeUnusedMaterials = require('../').removeUnusedMaterials;
 var removeUnusedSkins = require('../').removeUnusedSkins;
 var removeUnusedCameras = require('../').removeUnusedCameras;
 var OptimizationStatistics = require('../').OptimizationStatistics;
@@ -44,6 +45,7 @@ fs.readFile(gltfPath, function (err, data) {
     removeUnusedTechniques(gltf, stats);
     removeUnusedPrograms(gltf, stats);
     removeUnusedBufferViews(gltf, stats);
+    removeUnusedMaterials(gltf, stats);
     removeUnusedSkins(gltf, stats);
     removeUnusedCameras(gltf, stats);
 
