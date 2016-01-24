@@ -44,6 +44,41 @@ describe('removeUnusedTextures', function() {
         expect(stats.numberOfTexturesRemoved).toEqual(1);
     });
 
+    it('removes a texture', function() {
+        var gltf = {
+            "techniques": {
+                "technique0": {
+                    "parameters": {
+                        "diffuse": {
+                            "type": 35678,
+                            "value": "texture_Image0001"
+                        }
+                    },
+                    "program": "program_0"
+                }
+            },
+            "textures": {
+                "texture_Image0001": {
+                    "format": 6408,
+                    "internalFormat": 6408,
+                    "sampler": "sampler_0",
+                    "source": "Image0001",
+                    "target": 3553,
+                    "type": 5121
+                },
+                "unusedTextureId": {
+                    "sampler": "sampler_0",
+                    "source": "Image0001"
+                }
+            }
+        };
+
+        var stats = new OptimizationStatistics();
+        removeUnusedTextures(gltf, stats);
+        expect(gltf.textures.unusedTextureId).not.toBeDefined();
+        expect(stats.numberOfTexturesRemoved).toEqual(1);
+    });
+
     it('does not remove any textures', function() {
         var gltf = {
             "materials": {
@@ -60,6 +95,37 @@ describe('removeUnusedTextures', function() {
                             1
                         ]
                     }
+                }
+            },
+            "textures": {
+                "texture_Image0001": {
+                    "format": 6408,
+                    "internalFormat": 6408,
+                    "sampler": "sampler_0",
+                    "source": "Image0001",
+                    "target": 3553,
+                    "type": 5121
+                }
+            }
+        };
+
+        var stats = new OptimizationStatistics();
+        removeUnusedTextures(gltf, stats);
+        expect(gltf.textures.texture_Image0001).toBeDefined();
+        expect(stats.numberOfTexturesRemoved).toEqual(0);
+    });
+
+    it('does not remove any textures', function() {
+        var gltf = {
+            "techniques": {
+                "technique0": {
+                    "parameters": {
+                        "diffuse": {
+                            "type": 35678,
+                            "value": "texture_Image0001"
+                        }
+                    },
+                    "program": "program_0"
                 }
             },
             "textures": {
