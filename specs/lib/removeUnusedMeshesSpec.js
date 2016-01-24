@@ -7,22 +7,8 @@ describe('removeUnusedMeshes', function() {
     it('removes a mesh', function() {
         var gltf = {
             "meshes": {
-                "Geometry-mesh002": {
-                    "name": "Mesh",
-                    "primitives": [
-                        {
-                            "material": "Effect-Texture"
-                        }
-                    ]
-                },
-                "unusedMeshId": {
-                    "name": "Mesh",
-                    "primitives": [
-                        {
-                            "material": "Effect-Texture"
-                        }
-                    ]
-                }
+                "Geometry-mesh002": {},
+                "unusedMeshId": {}
             },
             "nodes": {
                 "Geometry-mesh002Node": {
@@ -42,14 +28,7 @@ describe('removeUnusedMeshes', function() {
     it('does not remove any meshes', function() {
         var gltf = {
             "meshes": {
-                "Geometry-mesh002": {
-                    "name": "Mesh",
-                    "primitives": [
-                        {
-                            "material": "Effect-Texture"
-                        }
-                    ]
-                }
+                "Geometry-mesh002": {}
             },
             "nodes": {
                 "Geometry-mesh002Node": {

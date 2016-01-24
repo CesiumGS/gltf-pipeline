@@ -160,14 +160,7 @@
                 }
             ]
         },
-        "unusedMeshId": {
-            "name": "Mesh",
-            "primitives": [
-                {
-                    "material": "Effect-Texture"
-                }
-            ]
-        }
+        "unusedMeshId": {}
     },
     "nodes": {
         "Geometry-mesh002Node": {
