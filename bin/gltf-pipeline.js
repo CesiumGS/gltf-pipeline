@@ -9,6 +9,7 @@ var removeUnusedSamplers = require('../').removeUnusedSamplers;
 var removeUnusedShaders = require('../').removeUnusedShaders;
 var removeUnusedTechniques = require('../').removeUnusedTechniques;
 var removeUnusedPrograms = require('../').removeUnusedPrograms;
+var removeUnusedBuffers = require('../').removeUnusedBuffers;
 var removeUnusedBufferViews = require('../').removeUnusedBufferViews;
 var removeUnusedMaterials = require('../').removeUnusedMaterials;
 var removeUnusedSkins = require('../').removeUnusedSkins;
@@ -44,6 +45,7 @@ fs.readFile(gltfPath, function (err, data) {
     removeUnusedShaders(gltf, stats);
     removeUnusedTechniques(gltf, stats);
     removeUnusedPrograms(gltf, stats);
+    removeUnusedBuffers(gltf, stats);
     removeUnusedBufferViews(gltf, stats);
     removeUnusedMaterials(gltf, stats);
     removeUnusedSkins(gltf, stats);
