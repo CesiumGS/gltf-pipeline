@@ -9,18 +9,14 @@ describe('removeUnusedPrograms', function() {
             "programs": {
                 "program_0": {
                     "attributes": [
-                        "a_normal",
-                        "a_position",
-                        "a_texcoord0"
+                        "a_position"
                     ],
                     "fragmentShader": "CesiumTexturedBoxTest0FS",
                     "vertexShader": "CesiumTexturedBoxTest0VS"
                 },
                 "unusedProgramId": {
                     "attributes": [
-                        "a_normal",
-                        "a_position",
-                        "a_texcoord0"
+                        "a_position"
                     ],
                     "fragmentShader": "CesiumTexturedBoxTest0FS",
                     "vertexShader": "CesiumTexturedBoxTest0VS"
@@ -29,43 +25,16 @@ describe('removeUnusedPrograms', function() {
             "techniques": {
                 "technique0": {
                     "attributes": {
-                        "a_normal": "normal",
-                        "a_position": "position",
-                        "a_texcoord0": "texcoord0"
+                        "a_position": "position"
                     },
                     "parameters": {
-                        "diffuse": {
-                            "type": 35678
-                        },
                         "modelViewMatrix": {
                             "semantic": "MODELVIEW",
                             "type": 35676
                         },
-                        "normal": {
-                            "semantic": "NORMAL",
-                            "type": 35665
-                        },
-                        "normalMatrix": {
-                            "semantic": "MODELVIEWINVERSETRANSPOSE",
-                            "type": 35675
-                        },
-                        "position": {
-                            "semantic": "POSITION",
-                            "type": 35665
-                        },
                         "projectionMatrix": {
                             "semantic": "PROJECTION",
                             "type": 35676
-                        },
-                        "shininess": {
-                            "type": 5126
-                        },
-                        "specular": {
-                            "type": 35666
-                        },
-                        "texcoord0": {
-                            "semantic": "TEXCOORD_0",
-                            "type": 35664
                         }
                     },
                     "program": "program_0",
@@ -76,12 +45,8 @@ describe('removeUnusedPrograms', function() {
                         ]
                     },
                     "uniforms": {
-                        "u_diffuse": "diffuse",
                         "u_modelViewMatrix": "modelViewMatrix",
-                        "u_normalMatrix": "normalMatrix",
-                        "u_projectionMatrix": "projectionMatrix",
-                        "u_shininess": "shininess",
-                        "u_specular": "specular"
+                        "u_projectionMatrix": "projectionMatrix"
                     }
                 }
             }
@@ -98,9 +63,7 @@ describe('removeUnusedPrograms', function() {
             "programs": {
                 "program_0": {
                     "attributes": [
-                        "a_normal",
-                        "a_position",
-                        "a_texcoord0"
+                        "a_position"
                     ],
                     "fragmentShader": "CesiumTexturedBoxTest0FS",
                     "vertexShader": "CesiumTexturedBoxTest0VS"
@@ -109,43 +72,16 @@ describe('removeUnusedPrograms', function() {
             "techniques": {
                 "technique0": {
                     "attributes": {
-                        "a_normal": "normal",
-                        "a_position": "position",
-                        "a_texcoord0": "texcoord0"
+                        "a_position": "position"
                     },
                     "parameters": {
-                        "diffuse": {
-                            "type": 35678
-                        },
                         "modelViewMatrix": {
                             "semantic": "MODELVIEW",
                             "type": 35676
                         },
-                        "normal": {
-                            "semantic": "NORMAL",
-                            "type": 35665
-                        },
-                        "normalMatrix": {
-                            "semantic": "MODELVIEWINVERSETRANSPOSE",
-                            "type": 35675
-                        },
-                        "position": {
-                            "semantic": "POSITION",
-                            "type": 35665
-                        },
                         "projectionMatrix": {
                             "semantic": "PROJECTION",
                             "type": 35676
-                        },
-                        "shininess": {
-                            "type": 5126
-                        },
-                        "specular": {
-                            "type": 35666
-                        },
-                        "texcoord0": {
-                            "semantic": "TEXCOORD_0",
-                            "type": 35664
                         }
                     },
                     "program": "program_0",
@@ -156,12 +92,8 @@ describe('removeUnusedPrograms', function() {
                         ]
                     },
                     "uniforms": {
-                        "u_diffuse": "diffuse",
                         "u_modelViewMatrix": "modelViewMatrix",
-                        "u_normalMatrix": "normalMatrix",
-                        "u_projectionMatrix": "projectionMatrix",
-                        "u_shininess": "shininess",
-                        "u_specular": "specular"
+                        "u_projectionMatrix": "projectionMatrix"
                     }
                 }
             }

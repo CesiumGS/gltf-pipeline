@@ -103,6 +103,26 @@
             "uri": "CesiumTexturedBoxTest.bin"
         }
     },
+    "cameras": {
+        "camera_0": {
+            "perspective": {
+                "aspectRatio": 1.5,
+                "yfov": 0.660593,
+                "zfar": 100,
+                "znear": 0.01
+            },
+            "type": "perspective"
+        },
+        "unusedCameraId": {
+            "perspective": {
+                "aspectRatio": 1.5,
+                "yfov": 0.660593,
+                "zfar": 100,
+                "znear": 0.01
+            },
+            "type": "perspective"
+        }
+    },
     "images": {
         "Image0001": {
             "name": "Image0001",
@@ -126,6 +146,14 @@
                     0.2,
                     1
                 ]
+            }
+        },
+        "unusedMaterialId": {
+            "name": "Texture",
+            "technique": "technique0",
+            "values": {
+                "diffuse": "texture_Image0001",
+                "shininess": 256
             }
         }
     },
@@ -197,6 +225,7 @@
             "name": "Texture_Group"
         },
         "node_3": {
+            "camera": "camera_0",
             "children": [
                 "Geometry-mesh002Node",
                 "groupLocator030Node"
@@ -256,9 +285,7 @@
         },
         "unusedProgramId": {
             "attributes": [
-                "a_normal",
-                "a_position",
-                "a_texcoord0"
+                "a_position"
             ],
             "fragmentShader": "CesiumTexturedBoxTest0FS",
             "vertexShader": "CesiumTexturedBoxTest0VS"
@@ -361,43 +388,16 @@
         },
         "unusedTechniqueId": {
             "attributes": {
-                "a_normal": "normal",
-                "a_position": "position",
-                "a_texcoord0": "texcoord0"
+                "a_position": "position"
             },
             "parameters": {
-                "diffuse": {
-                    "type": 35678
-                },
                 "modelViewMatrix": {
                     "semantic": "MODELVIEW",
                     "type": 35676
                 },
-                "normal": {
-                    "semantic": "NORMAL",
-                    "type": 35665
-                },
-                "normalMatrix": {
-                    "semantic": "MODELVIEWINVERSETRANSPOSE",
-                    "type": 35675
-                },
-                "position": {
-                    "semantic": "POSITION",
-                    "type": 35665
-                },
                 "projectionMatrix": {
                     "semantic": "PROJECTION",
                     "type": 35676
-                },
-                "shininess": {
-                    "type": 5126
-                },
-                "specular": {
-                    "type": 35666
-                },
-                "texcoord0": {
-                    "semantic": "TEXCOORD_0",
-                    "type": 35664
                 }
             },
             "program": "program_0",
@@ -408,12 +408,8 @@
                 ]
             },
             "uniforms": {
-                "u_diffuse": "diffuse",
                 "u_modelViewMatrix": "modelViewMatrix",
-                "u_normalMatrix": "normalMatrix",
-                "u_projectionMatrix": "projectionMatrix",
-                "u_shininess": "shininess",
-                "u_specular": "specular"
+                "u_projectionMatrix": "projectionMatrix"
             }
         }
     },
