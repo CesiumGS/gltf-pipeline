@@ -96,6 +96,11 @@
             "byteLength": 840,
             "type": "arraybuffer",
             "uri": "CesiumTexturedBoxTest.bin"
+        },
+        "unusedBufferId": {
+            "byteLength": 840,
+            "type": "arraybuffer",
+            "uri": "CesiumTexturedBoxTest.bin"
         }
     },
     "cameras": {
@@ -142,6 +147,14 @@
                     1
                 ]
             }
+        },
+        "unusedMaterialId": {
+            "name": "Texture",
+            "technique": "technique0",
+            "values": {
+                "diffuse": "texture_Image0001",
+                "shininess": 256
+            }
         }
     },
     "meshes": {
@@ -159,7 +172,8 @@
                     "mode": 4
                 }
             ]
-        }
+        },
+        "unusedMeshId": {}
     },
     "nodes": {
         "Geometry-mesh002Node": {
