@@ -422,6 +422,10 @@
             "source": "Image0001",
             "target": 3553,
             "type": 5121
+        },
+        "unusedTextureId": {
+            "sampler": "sampler_0",
+            "source": "Image0001"
         }
     }
 }
