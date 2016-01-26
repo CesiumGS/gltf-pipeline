@@ -16,6 +16,7 @@ var removeUnusedSkins = require('../').removeUnusedSkins;
 var removeUnusedCameras = require('../').removeUnusedCameras;
 var removeUnusedTextures = require('../').removeUnusedTextures;
 var removeUnusedMeshes = require('../').removeUnusedMeshes;
+var removeUnusedAnimationSamplers = require('../').removeUnusedAnimationSamplers;
 var OptimizationStatistics = require('../').OptimizationStatistics;
 var Cesium = require('cesium');
 var defined = Cesium.defined;
@@ -54,6 +55,7 @@ fs.readFile(gltfPath, function (err, data) {
     removeUnusedCameras(gltf, stats);
     removeUnusedTextures(gltf, stats);
     removeUnusedMeshes(gltf, stats);
+    removeUnusedAnimationSamplers(gltf, stats);
 
     stats.print();
 

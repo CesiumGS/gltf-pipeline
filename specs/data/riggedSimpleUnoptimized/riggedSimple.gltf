@@ -187,6 +187,10 @@
                     "input": "TIME",
                     "interpolation": "LINEAR",
                     "output": "translation"
+                },
+                "unusedAnimationSamplerId": {
+                    "input": "TIME",
+                    "output": "translation"
                 }
             }
         },

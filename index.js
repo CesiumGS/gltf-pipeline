@@ -14,5 +14,6 @@ module.exports = {
     removeUnusedCameras : require('./lib/removeUnusedCameras'),
     removeUnusedTextures : require('./lib/removeUnusedTextures'),
     removeUnusedMeshes : require('./lib/removeUnusedMeshes'),
+    removeUnusedAnimationSamplers : require('./lib/removeUnusedAnimationSamplers'),
     OptimizationStatistics : require('./lib/OptimizationStatistics')
 };
