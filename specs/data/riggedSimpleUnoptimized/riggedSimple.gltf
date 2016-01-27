@@ -139,6 +139,13 @@
             "componentType": 5126,
             "count": 3,
             "type": "VEC4"
+        },
+        "unusedAccessorId": {
+            "bufferView": "bufferView_43",
+            "byteOffset": 128,
+            "componentType": 5126,
+            "count": 3,
+            "type": "SCALAR"
         }
     },
     "animations": {
