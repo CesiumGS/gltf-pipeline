@@ -4,3 +4,5 @@ npm-debug.log
 Thumbs.db
 /coverage
 output.gltf
+.idea/workspace.xml
+.idea/tasks.xml
