@@ -38,7 +38,7 @@ describe('removeUnusedMaterials', function() {
         var stats = new OptimizationStatistics();
         removeUnusedMaterials(gltf, stats);
         expect(gltf.materials.unusedMaterialId).not.toBeDefined();
-        expect(stats.numberOfMaterialsRemoved).toEqual(1);
+        expect(stats.numberRemoved.materials).toEqual(1);
     });
 
     it('does not remove any materials', function() {
@@ -67,6 +67,6 @@ describe('removeUnusedMaterials', function() {
         var stats = new OptimizationStatistics();
         removeUnusedMaterials(gltf, stats);
         expect(gltf.materials["Effect-Texture"]).toBeDefined();
-        expect(stats.numberOfMaterialsRemoved).toEqual(0);
+        expect(stats.numberRemoved.materials).toEqual(0);
     });
 });

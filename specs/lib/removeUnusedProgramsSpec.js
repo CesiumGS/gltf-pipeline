@@ -55,7 +55,7 @@ describe('removeUnusedPrograms', function() {
         var stats = new OptimizationStatistics();
         removeUnusedPrograms(gltf, stats);
         expect(gltf.programs.unusedProgramId).not.toBeDefined();
-        expect(stats.numberOfProgramsRemoved).toEqual(1);
+        expect(stats.numberRemoved.programs).toEqual(1);
     });
 
     it('does not remove any programs', function() {
@@ -102,6 +102,6 @@ describe('removeUnusedPrograms', function() {
         var stats = new OptimizationStatistics();
         removeUnusedPrograms(gltf, stats);
         expect(gltf.programs.program_0).toBeDefined();
-        expect(stats.numberOfProgramsRemoved).toEqual(0);
+        expect(stats.numberRemoved.programs).toEqual(0);
     });
 });

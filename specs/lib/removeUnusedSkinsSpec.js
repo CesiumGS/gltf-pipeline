@@ -30,7 +30,7 @@ describe('removeUnusedSkins', function() {
         var stats = new OptimizationStatistics();
         removeUnusedSkins(gltf, stats);
         expect(gltf.skins.unusedSkinId).not.toBeDefined();
-        expect(stats.numberOfSkinsRemoved).toEqual(1);
+        expect(stats.numberRemoved.skins).toEqual(1);
     });
 
     it('does not remove any skins', function() {
@@ -53,6 +53,6 @@ describe('removeUnusedSkins', function() {
         var stats = new OptimizationStatistics();
         removeUnusedSkins(gltf, stats);
         expect(gltf.skins["Armature_Cylinder-skin"]).toBeDefined();
-        expect(stats.numberOfSkinsRemoved).toEqual(0);
+        expect(stats.numberRemoved.skins).toEqual(0);
     });
 });

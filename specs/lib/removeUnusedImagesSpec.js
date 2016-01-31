@@ -31,7 +31,7 @@ describe('removeUnusedImages', function() {
         var stats = new OptimizationStatistics();
         removeUnusedImages(gltf, stats);
         expect(gltf.images.unusedId).not.toBeDefined();
-        expect(stats.numberOfImagesRemoved).toEqual(1);
+        expect(stats.numberRemoved.images).toEqual(1);
     });
 
     it('does not remove any images', function() {
@@ -57,6 +57,6 @@ describe('removeUnusedImages', function() {
         var stats = new OptimizationStatistics();
         removeUnusedImages(gltf, stats);
         expect(gltf.images.Image0001).toBeDefined();
-        expect(stats.numberOfImagesRemoved).toEqual(0);
+        expect(stats.numberRemoved.images).toEqual(0);
     });
 });
