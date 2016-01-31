@@ -37,7 +37,7 @@ describe('removeUnusedNodes', function() {
         var stats = new OptimizationStatistics();
         removeUnusedNodes(gltf, stats);
         expect(gltf.nodes.unusedNodeId).not.toBeDefined();
-        expect(stats.numberOfNodesRemoved).toEqual(1);
+        expect(stats.numberRemoved.nodes).toEqual(1);
     });
 
     it('removes an unused tree', function() {
@@ -71,7 +71,7 @@ describe('removeUnusedNodes', function() {
         expect(gltf.nodes.left_node).not.toBeDefined();
         expect(gltf.nodes.right_node).not.toBeDefined();
         expect(gltf.nodes.txtrLocator026Node).not.toBeDefined();
-        expect(stats.numberOfNodesRemoved).toEqual(4);
+        expect(stats.numberRemoved.nodes).toEqual(4);
     });
 
     it('removes an extra tree', function() {
@@ -123,7 +123,7 @@ describe('removeUnusedNodes', function() {
         expect(gltf.nodes.unusedLeftId).not.toBeDefined();
         expect(gltf.nodes.unusedRightId).not.toBeDefined();
         expect(gltf.nodes.unusedChildId).not.toBeDefined();
-        expect(stats.numberOfNodesRemoved).toEqual(4);
+        expect(stats.numberRemoved.nodes).toEqual(4);
     });
 
     it('does not remove any nodes', function() {
@@ -160,6 +160,6 @@ describe('removeUnusedNodes', function() {
         expect(gltf.nodes.left_node).toBeDefined();
         expect(gltf.nodes.right_node).toBeDefined();
         expect(gltf.nodes.txtrLocator026Node).toBeDefined();
-        expect(stats.numberOfNodesRemoved).toEqual(0);
+        expect(stats.numberRemoved.nodes).toEqual(0);
     });
 });

@@ -36,7 +36,7 @@ describe('removeUnusedShaders', function() {
         var stats = new OptimizationStatistics();
         removeUnusedShaders(gltf, stats);
         expect(gltf.shaders.unusedShaderId).not.toBeDefined();
-        expect(stats.numberOfShadersRemoved).toEqual(1);
+        expect(stats.numberRemoved.shaders).toEqual(1);
     });
 
     it('does not remove any shaders', function() {
@@ -68,6 +68,6 @@ describe('removeUnusedShaders', function() {
         removeUnusedShaders(gltf, stats);
         expect(gltf.shaders.CesiumTexturedBoxTest0FS).toBeDefined();
         expect(gltf.shaders.CesiumTexturedBoxTest0VS).toBeDefined();
-        expect(stats.numberOfShadersRemoved).toEqual(0);
+        expect(stats.numberRemoved.shaders).toEqual(0);
     });
 });

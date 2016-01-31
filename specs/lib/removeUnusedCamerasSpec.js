@@ -36,7 +36,7 @@ describe('removeUnusedCameras', function() {
         var stats = new OptimizationStatistics();
         removeUnusedCameras(gltf, stats);
         expect(gltf.cameras.unusedCameraId).not.toBeDefined();
-        expect(stats.numberOfCamerasRemoved).toEqual(1);
+        expect(stats.numberRemoved.cameras).toEqual(1);
     });
 
     it('does not remove any cameras', function() {
@@ -62,6 +62,6 @@ describe('removeUnusedCameras', function() {
         var stats = new OptimizationStatistics();
         removeUnusedCameras(gltf, stats);
         expect(gltf.cameras.camera_0).toBeDefined();
-        expect(stats.numberOfCamerasRemoved).toEqual(0);
+        expect(stats.numberRemoved.cameras).toEqual(0);
     });
 });

@@ -16,5 +16,6 @@ module.exports = {
     removeUnusedMeshes : require('./lib/removeUnusedMeshes'),
     removeUnusedNodes : require('./lib/removeUnusedNodes'),
     removeUnusedAccessors : require('./lib/removeUnusedAccessors'),
+    removeUnused : require('./lib/removeUnused'),
     OptimizationStatistics : require('./lib/OptimizationStatistics')
 };
