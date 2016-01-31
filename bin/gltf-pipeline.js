@@ -44,7 +44,6 @@ fs.readFile(gltfPath, function (err, data) {
     addDefaults(gltf, stats);
 
     // TODO: custom pipeline based on arguments / config
-    // TODO: remove in top-down order
     removeUnused(gltf, stats);
 
     printStats(stats);
