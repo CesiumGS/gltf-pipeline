@@ -22,7 +22,7 @@ describe('removeUnusedMeshes', function() {
         var stats = new OptimizationStatistics();
         removeUnusedMeshes(gltf, stats);
         expect(gltf.meshes.unusedMeshId).not.toBeDefined();
-        expect(stats.numberOfMeshesRemoved).toEqual(1);
+        expect(stats.numberRemoved.meshes).toEqual(1);
     });
 
     it('does not remove any meshes', function() {
@@ -42,6 +42,6 @@ describe('removeUnusedMeshes', function() {
         var stats = new OptimizationStatistics();
         removeUnusedMeshes(gltf, stats);
         expect(gltf.meshes["Geometry-mesh002"]).toBeDefined();
-        expect(stats.numberOfMeshesRemoved).toEqual(0);
+        expect(stats.numberRemoved.meshes).toEqual(0);
     });
 });

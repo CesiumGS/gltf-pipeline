@@ -41,7 +41,7 @@ describe('removeUnusedTextures', function() {
         var stats = new OptimizationStatistics();
         removeUnusedTextures(gltf, stats);
         expect(gltf.textures.unusedTextureId).not.toBeDefined();
-        expect(stats.numberOfTexturesRemoved).toEqual(1);
+        expect(stats.numberRemoved.textures).toEqual(1);
     });
 
     it('removes a texture', function() {
@@ -76,7 +76,7 @@ describe('removeUnusedTextures', function() {
         var stats = new OptimizationStatistics();
         removeUnusedTextures(gltf, stats);
         expect(gltf.textures.unusedTextureId).not.toBeDefined();
-        expect(stats.numberOfTexturesRemoved).toEqual(1);
+        expect(stats.numberRemoved.textures).toEqual(1);
     });
 
     it('does not remove any textures', function() {
@@ -112,7 +112,7 @@ describe('removeUnusedTextures', function() {
         var stats = new OptimizationStatistics();
         removeUnusedTextures(gltf, stats);
         expect(gltf.textures.texture_Image0001).toBeDefined();
-        expect(stats.numberOfTexturesRemoved).toEqual(0);
+        expect(stats.numberRemoved.textures).toEqual(0);
     });
 
     it('does not remove any textures', function() {
@@ -143,6 +143,6 @@ describe('removeUnusedTextures', function() {
         var stats = new OptimizationStatistics();
         removeUnusedTextures(gltf, stats);
         expect(gltf.textures.texture_Image0001).toBeDefined();
-        expect(stats.numberOfTexturesRemoved).toEqual(0);
+        expect(stats.numberRemoved.textures).toEqual(0);
     });
 });

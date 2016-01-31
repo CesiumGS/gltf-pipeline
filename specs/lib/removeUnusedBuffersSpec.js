@@ -31,7 +31,7 @@ describe('removeUnusedBuffers', function() {
         var stats = new OptimizationStatistics();
         removeUnusedBuffers(gltf, stats);
         expect(gltf.buffers.unusedBufferId).not.toBeDefined();
-        expect(stats.numberOfBuffersRemoved).toEqual(1);
+        expect(stats.numberRemoved.buffers).toEqual(1);
     });
 
     it('does not remove any buffers', function() {
@@ -56,6 +56,6 @@ describe('removeUnusedBuffers', function() {
         var stats = new OptimizationStatistics();
         removeUnusedBuffers(gltf, stats);
         expect(gltf.buffers.CesiumTexturedBoxTest).toBeDefined();
-        expect(stats.numberOfBuffersRemoved).toEqual(0);
+        expect(stats.numberRemoved.buffers).toEqual(0);
     });
 });

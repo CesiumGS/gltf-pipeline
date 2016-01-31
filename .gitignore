@@ -6,3 +6,5 @@ Thumbs.db
 output.gltf
 .git-credentials
 .gitconfig
+.idea/workspace.xml
+.idea/tasks.xml

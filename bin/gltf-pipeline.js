@@ -47,7 +47,7 @@ fs.readFile(gltfPath, function (err, data) {
     // TODO: remove in top-down order
     removeUnused(gltf, stats);
 
-    stats.print();
+    printStats(stats);
 
     var outputPath = argv.o;
     if (!defined(outputPath)) {
@@ -64,3 +64,20 @@ fs.readFile(gltfPath, function (err, data) {
         }
     });        
 });
+
+function printStats(stats) {
+    process.stdout.write('Nodes removed: ' + stats.numberRemoved.nodes + '\n');
+    process.stdout.write('Skins removed: ' + stats.numberRemoved.skins + '\n');
+    process.stdout.write('Cameras removed: ' + stats.numberRemoved.cameras + '\n');
+    process.stdout.write('Meshes removed: ' + stats.numberRemoved.meshes + '\n');
+    process.stdout.write('Accessors removed: ' + stats.numberRemoved.accessors + '\n');
+    process.stdout.write('Materials removed: ' + stats.numberRemoved.materials + '\n');
+    process.stdout.write('BufferViews removed: ' + stats.numberRemoved.bufferViews + '\n');
+    process.stdout.write('Techniques removed: ' + stats.numberRemoved.techniques + '\n');
+    process.stdout.write('Textures removed: ' + stats.numberRemoved.textures + '\n');
+    process.stdout.write('Buffers removed: ' + stats.numberRemoved.buffers + '\n');
+    process.stdout.write('Programs removed: ' + stats.numberRemoved.programs + '\n');
+    process.stdout.write('Images removed: ' + stats.numberRemoved.images + '\n');
+    process.stdout.write('Samplers removed: ' + stats.numberRemoved.samplers + '\n');
+    process.stdout.write('Shaders removed: ' + stats.numberRemoved.shaders + '\n');
+}

@@ -35,7 +35,7 @@ describe('removeUnusedSamplers', function() {
         var stats = new OptimizationStatistics();
         removeUnusedSamplers(gltf, stats);
         expect(gltf.samplers.unusedSamplerId).not.toBeDefined();
-        expect(stats.numberOfSamplersRemoved).toEqual(1);
+        expect(stats.numberRemoved.samplers).toEqual(1);
     });
 
     it('does not remove any samplers', function() {
@@ -63,6 +63,6 @@ describe('removeUnusedSamplers', function() {
         var stats = new OptimizationStatistics();
         removeUnusedSamplers(gltf, stats);
         expect(gltf.samplers.sampler_0).toBeDefined();
-        expect(stats.numberOfSamplersRemoved).toEqual(0);
+        expect(stats.numberRemoved.samplers).toEqual(0);
     });
 });

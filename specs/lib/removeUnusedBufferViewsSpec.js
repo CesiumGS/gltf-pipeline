@@ -35,7 +35,7 @@ describe('removeUnusedBufferViews', function() {
         var stats = new OptimizationStatistics();
         removeUnusedBufferViews(gltf, stats);
         expect(gltf.bufferViews.unusedBufferViewId).not.toBeDefined();
-        expect(stats.numberOfBufferViewsRemoved).toEqual(1);
+        expect(stats.numberRemoved.bufferViews).toEqual(1);
     });
 
     it('does not remove any buffers', function() {
@@ -63,6 +63,6 @@ describe('removeUnusedBufferViews', function() {
         var stats = new OptimizationStatistics();
         removeUnusedBufferViews(gltf, stats);
         expect(gltf.bufferViews.bufferView_29).toBeDefined();
-        expect(stats.numberOfBufferViewsRemoved).toEqual(0);
+        expect(stats.numberRemoved.bufferViews).toEqual(0);
     });
 });

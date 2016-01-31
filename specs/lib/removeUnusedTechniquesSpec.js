@@ -74,7 +74,7 @@ describe('removeUnusedTechniques', function() {
         var stats = new OptimizationStatistics();
         removeUnusedTechniques(gltf, stats);
         expect(gltf.techniques.unusedTechniqueId).not.toBeDefined();
-        expect(stats.numberOfTechniquesRemoved).toEqual(1);
+        expect(stats.numberRemoved.techniques).toEqual(1);
     });
 
     it('does not remove any techniques', function() {
@@ -121,6 +121,6 @@ describe('removeUnusedTechniques', function() {
         var stats = new OptimizationStatistics();
         removeUnusedTechniques(gltf, stats);
         expect(gltf.techniques.technique0).toBeDefined();
-        expect(stats.numberOfTechniquesRemoved).toEqual(0);
+        expect(stats.numberRemoved.techniques).toEqual(0);
     });
 });

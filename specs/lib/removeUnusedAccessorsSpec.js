@@ -74,7 +74,7 @@ describe('removeUnusedAccessors', function() {
         var stats = new OptimizationStatistics();
         removeUnusedAccessors(gltf, stats);
         expect(gltf.accessors.unusedAccessorId).not.toBeDefined();
-        expect(stats.numberOfAccessorsRemoved).toEqual(1);
+        expect(stats.numberRemoved.accessors).toEqual(1);
     });
 
     it('does not remove any accessors', function() {
@@ -143,6 +143,6 @@ describe('removeUnusedAccessors', function() {
         expect(gltf.accessors.accessor_16).toBeDefined();
         expect(gltf.accessors.accessor_18).toBeDefined();
         expect(gltf.accessors.animAccessor_0).toBeDefined();
-        expect(stats.numberOfAccessorsRemoved).toEqual(0);
+        expect(stats.numberRemoved.accessors).toEqual(0);
     });
 });
