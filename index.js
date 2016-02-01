@@ -17,5 +17,6 @@ module.exports = {
     removeUnusedNodes : require('./lib/removeUnusedNodes'),
     removeUnusedAccessors : require('./lib/removeUnusedAccessors'),
     removeUnused : require('./lib/removeUnused'),
+    parseGLTF : require('./lib/parseGLTF'),
     OptimizationStatistics : require('./lib/OptimizationStatistics')
 };
