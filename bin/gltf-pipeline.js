@@ -19,7 +19,7 @@ var removeUnusedMeshes = require('../').removeUnusedMeshes;
 var removeUnusedNodes = require('../').removeUnusedNodes;
 var removeUnusedAccessors = require('../').removeUnusedAccessors;
 var removeUnused = require('../').removeUnused;
-var parseGLTF = require('../').parseGLTF;
+var loadGltfUris = require('../').loadGltfUris;
 var OptimizationStatistics = require('../').OptimizationStatistics;
 var Cesium = require('cesium');
 var defined = Cesium.defined;
@@ -39,7 +39,8 @@ fs.readFile(gltfPath, function (err, data) {
         throw err;
     }
 
-    var gltf = parseGLTF(path.dirname(gltfPath), data);
+    var gltf = JSON.parse(data);
+    gltf = loadGltfUris(path.dirname(gltfPath), gltf);
     var stats = new OptimizationStatistics();
 
     addDefaults(gltf, stats);
