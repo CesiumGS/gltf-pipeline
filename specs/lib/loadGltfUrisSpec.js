@@ -3,19 +3,14 @@
 var fs = require('fs');
 var loadGltfUris = require('../../lib/loadGltfUris');
 var fragmentShaderPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest0FS.glsl';
-var vertexShaderPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest0VS.glsl';
 
 describe('loadGltfUris', function() {
-    it('loads two shaders', function(done) {
+    it('loads an external shader', function(done) {
         var gltf = {
             "shaders": {
                 "CesiumTexturedBoxTest0FS": {
                     "type": 35632,
                     "uri": "CesiumTexturedBoxTest0FS.glsl"
-                },
-                "CesiumTexturedBoxTest0VS": {
-                    "type": 35633,
-                    "uri": "CesiumTexturedBoxTest0VS.glsl"
                 }
             }
         };
@@ -24,61 +19,55 @@ describe('loadGltfUris', function() {
             if (err) {
                 throw err;
             }
-
-            fs.readFile(vertexShaderPath, function (err, vertexShaderData) {
-                if (err) {
-                    throw err;
-                }
-
-                gltf = loadGltfUris('./specs/data/boxTexturedUnoptimized', gltf, function(uri) {
-                    if (uri === 'CesiumTexturedBoxTest0FS.glsl') {
-                        expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras.source).toBeDefined();
-                        expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras.source).toEqual(fragmentShaderData);
-                    }
-                    if (uri === 'CesiumTexturedBoxTest0VS.glsl') {
-                        expect(gltf.shaders.CesiumTexturedBoxTest0VS.extras.source).toBeDefined();
-                        expect(gltf.shaders.CesiumTexturedBoxTest0VS.extras.source).toEqual(vertexShaderData);
-                    }
-
-                    done();
-                });
+            gltf = loadGltfUris('./specs/data/boxTexturedUnoptimized', gltf, function() {
+                expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras.source).toBeDefined();
+                expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras.source).toEqual(fragmentShaderData);
+                done();
             });
         });
     });
 
-    // it('throws an error', function(done) {
-    //     var gltf = {
-    //         "shaders": {
-    //             "CesiumTexturedBoxTest0FS": {
-    //                 "type": 35632,
-    //                 "uri": "CesiumTexturedBoxTestError.glsl"
-    //             },
-    //         }
-    //     };
+    it('loads an embedded shader', function(done) {
+        var gltf = {
+            "shaders": {
+                "box0FS": {
+                    "type": 35632,
+                    "uri": "data:text/plain;base64,cHJlY2lzaW9uIGhpZ2hwIGZsb2F0Owp2YXJ5aW5nIHZlYzMgdl9ub3JtYWw7CnZhcnlpbmcgdmVjMiB2X3RleGNvb3JkMDsKdW5pZm9ybSBzYW1wbGVyMkQgdV9kaWZmdXNlOwp1bmlmb3JtIHZlYzQgdV9zcGVjdWxhcjsKdW5pZm9ybSBmbG9hdCB1X3NoaW5pbmVzczsKdm9pZCBtYWluKHZvaWQpIHsKdmVjMyBub3JtYWwgPSBub3JtYWxpemUodl9ub3JtYWwpOwp2ZWM0IGNvbG9yID0gdmVjNCgwLiwgMC4sIDAuLCAwLik7CnZlYzQgZGlmZnVzZSA9IHZlYzQoMC4sIDAuLCAwLiwgMS4pOwp2ZWM0IHNwZWN1bGFyOwpkaWZmdXNlID0gdGV4dHVyZTJEKHVfZGlmZnVzZSwgdl90ZXhjb29yZDApOwpzcGVjdWxhciA9IHVfc3BlY3VsYXI7CmRpZmZ1c2UueHl6ICo9IG1heChkb3Qobm9ybWFsLHZlYzMoMC4sMC4sMS4pKSwgMC4pOwpjb2xvci54eXogKz0gZGlmZnVzZS54eXo7CmNvbG9yID0gdmVjNChjb2xvci5yZ2IgKiBkaWZmdXNlLmEsIGRpZmZ1c2UuYSk7CmdsX0ZyYWdDb2xvciA9IGNvbG9yOwp9Cg=="
+                }
+            }
+        };
+        
+        fs.readFile(fragmentShaderPath, function (err, fragmentShaderData) {
+            if (err) {
+                throw err;
+            }
+            gltf = loadGltfUris('./specs/data/boxTexturedUnoptimized', gltf, function() {
+                expect(gltf.shaders.box0FS.extras.source).toBeDefined();
+                expect(gltf.shaders.box0FS.extras.source.toString()).toEqual(fragmentShaderData.toString());
+                done();
+            });
+        });
+    });
 
-    //     // loadGltfUris('./specs/data/boxTexturedUnoptimized', gltf);
-    //     // expect(function() {
-    //     //     loadGltfUris('./specs/data/boxTexturedUnoptimized', gltf, function() {
-    //     //         process.stdout.write('DONE\n');
-    //     //         // throw new Error();
-    //     //         throw new Error("Unexpected error!");
-    //     //         done();
-    //     //     });
-    //     // }).toThrow(new Error("Unexpected error!"));
+    function throwException(error) {
+        throw error;
+    }
 
-    //     // expect(loadGltfUris.bind('./specs/data/boxTexturedUnoptimized', gltf);
-    //     // ).toThrow();
-    //     // done();
-    //     // try {
-    //     //     loadGltfUris('./specs/data/boxTexturedUnoptimized', gltf);
-    //     // }
-    //     // catch (err) {
-    //     //     process.stdout.write('CAUGHT\n');
-    //     //     done();
-    //     // }
+    it('throws an error', function(done) {
+        var gltf = {
+            "shaders": {
+                "CesiumTexturedBoxTest0FS": {
+                    "type": 35632,
+                    "uri": "CesiumTexturedBoxTestError.glsl"
+                },
+            }
+        };
 
-    //     loadGltfUris('./specs/data/boxTexturedUnoptimized', gltf, function() {
-    //         done();
-    //     });
-    // });
+        loadGltfUris('./specs/data/boxTexturedUnoptimized', gltf, function(err) {
+            expect(function() {
+                throwException(err);
+            }).toThrow();
+            done();
+        });
+    });
 });
