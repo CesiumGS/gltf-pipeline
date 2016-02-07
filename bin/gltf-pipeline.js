@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 'use strict';
+
 var fs = require('fs');
 var path = require('path');
 var argv = require('minimist')(process.argv.slice(2));
@@ -40,7 +41,7 @@ fs.readFile(gltfPath, function (err, data) {
     }
 
     var gltf = JSON.parse(data);
-    gltf = loadGltfUris(path.dirname(gltfPath), gltf);
+    gltf = loadGltfUris(gltf, path.dirname(gltfPath));
     var stats = new OptimizationStatistics();
 
     addDefaults(gltf, stats);

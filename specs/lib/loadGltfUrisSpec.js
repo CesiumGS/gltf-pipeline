@@ -5,6 +5,18 @@ var loadGltfUris = require('../../lib/loadGltfUris');
 var fragmentShaderPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest0FS.glsl';
 
 describe('loadGltfUris', function() {
+    var fragmentShaderData;
+
+    beforeAll(function(done) {
+        fs.readFile(fragmentShaderPath, function (err, data) {
+            if (err) {
+                throw err;
+            }
+            fragmentShaderData = data;
+            done();
+        });
+    });
+    
     it('loads an external shader', function(done) {
         var gltf = {
             "shaders": {
@@ -15,15 +27,10 @@ describe('loadGltfUris', function() {
             }
         };
         
-        fs.readFile(fragmentShaderPath, function (err, fragmentShaderData) {
-            if (err) {
-                throw err;
-            }
-            gltf = loadGltfUris('./specs/data/boxTexturedUnoptimized', gltf, function() {
-                expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras.source).toBeDefined();
-                expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras.source).toEqual(fragmentShaderData);
-                done();
-            });
+        gltf = loadGltfUris(gltf, './specs/data/boxTexturedUnoptimized', function() {
+            expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras.source).toBeDefined();
+            expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras.source).toEqual(fragmentShaderData);
+            done();
         });
     });
 
@@ -37,15 +44,10 @@ describe('loadGltfUris', function() {
             }
         };
         
-        fs.readFile(fragmentShaderPath, function (err, fragmentShaderData) {
-            if (err) {
-                throw err;
-            }
-            gltf = loadGltfUris('./specs/data/boxTexturedUnoptimized', gltf, function() {
-                expect(gltf.shaders.box0FS.extras.source).toBeDefined();
-                expect(gltf.shaders.box0FS.extras.source.toString()).toEqual(fragmentShaderData.toString());
-                done();
-            });
+        gltf = loadGltfUris(gltf, './specs/data/boxTexturedUnoptimized', function() {
+            expect(gltf.shaders.box0FS.extras.source).toBeDefined();
+            expect(gltf.shaders.box0FS.extras.source.toString()).toEqual(fragmentShaderData.toString());
+            done();
         });
     });
 
@@ -63,7 +65,7 @@ describe('loadGltfUris', function() {
             }
         };
 
-        loadGltfUris('./specs/data/boxTexturedUnoptimized', gltf, function(err) {
+        loadGltfUris(gltf, './specs/data/boxTexturedUnoptimized', function(err) {
             expect(function() {
                 throwException(err);
             }).toThrow();
