@@ -41,8 +41,9 @@ fs.readFile(gltfPath, function (err, data) {
     }
 
     var gltf = JSON.parse(data);
-    gltf = loadGltfUris(gltf, path.dirname(gltfPath)).then(function(gltf) {
+    gltf = loadGltfUris(gltf, path.dirname(gltfPath), function() {
         var stats = new OptimizationStatistics();
+
         addDefaults(gltf, stats);
 
         // TODO: custom pipeline based on arguments / config
@@ -52,15 +53,21 @@ fs.readFile(gltfPath, function (err, data) {
 
         var outputPath = argv.o;
         outputPath = undefined;
+        
         if (!defined(outputPath)) {
             // Default output.  For example, path/asset.gltf becomes path/asset-optimized.gltf
             var fileExtension = path.extname(gltfPath);
-            var fileName = path.basename(gltfPath, fileExtension);
+            var filename = path.basename(gltfPath, fileExtension);
             var filePath = path.dirname(gltfPath);
-            outputPath = path.join(filePath, fileName + '-optimized' + fileExtension);
+            outputPath = path.join(filePath, filename + '-optimized' + fileExtension);
         }
 
         writeGltf(gltf, path.dirname(outputPath), false);
+        fs.writeFile(outputPath, JSON.stringify(gltf, undefined, 2), function (err) {
+            if (err) {
+                throw err;
+            }
+        });    
     });
 });
 
