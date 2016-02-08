@@ -41,30 +41,31 @@ fs.readFile(gltfPath, function (err, data) {
     }
 
     var gltf = JSON.parse(data);
-    gltf = loadGltfUris(gltf, path.dirname(gltfPath));
-    var stats = new OptimizationStatistics();
+    gltf = loadGltfUris(gltf, path.dirname(gltfPath), function() {
+        var stats = new OptimizationStatistics();
 
-    addDefaults(gltf, stats);
+        addDefaults(gltf, stats);
 
-    // TODO: custom pipeline based on arguments / config
-    removeUnused(gltf, stats);
+        // TODO: custom pipeline based on arguments / config
+        removeUnused(gltf, stats);
 
-    printStats(stats);
+        printStats(stats);
 
-    var outputPath = argv.o;
-    if (!defined(outputPath)) {
-        // Default output.  For example, path/asset.gltf becomes path/asset-optimized.gltf
-        var fileExtension = path.extname(gltfPath);
-        var filename = path.basename(gltfPath, fileExtension);
-        var filePath = path.dirname(gltfPath);
-        outputPath = path.join(filePath, filename + '-optimized' + fileExtension);
-    }
-
-    fs.writeFile(outputPath, JSON.stringify(gltf, undefined, 2), function (err) {
-        if (err) {
-            throw err;
+        var outputPath = argv.o;
+        if (!defined(outputPath)) {
+            // Default output.  For example, path/asset.gltf becomes path/asset-optimized.gltf
+            var fileExtension = path.extname(gltfPath);
+            var filename = path.basename(gltfPath, fileExtension);
+            var filePath = path.dirname(gltfPath);
+            outputPath = path.join(filePath, filename + '-optimized' + fileExtension);
         }
-    });        
+
+        fs.writeFile(outputPath, JSON.stringify(gltf, undefined, 2), function (err) {
+            if (err) {
+                throw err;
+            }
+        });    
+    });
 });
 
 function printStats(stats) {
