@@ -35,6 +35,7 @@
   "dependencies": {
     "cesium": "^1.17.0",
     "data-uri-to-buffer": "0.0.4",
+    "datauri": "^1.0.0-alpha.5",
     "minimist": "1.1.0"
   },
   "devDependencies": {

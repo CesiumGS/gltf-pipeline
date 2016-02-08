@@ -1,5 +1,4 @@
 'use strict';
-
 var fs = require('fs');
 var loadGltfUris = require('../../lib/loadGltfUris');
 var fragmentShaderPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest0FS.glsl';
