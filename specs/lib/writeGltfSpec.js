@@ -40,7 +40,7 @@ describe('writeGltf', function() {
                 if (err) {
                     throw err;
                 }
-                expect(outputData).toEqual(fragmentShaderData);
+                expect(outputData.toString()).toEqual(fragmentShaderData.toString());
                 done();
             });
         });

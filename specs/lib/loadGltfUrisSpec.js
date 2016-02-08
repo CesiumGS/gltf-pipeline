@@ -28,7 +28,7 @@ describe('loadGltfUris', function() {
         
         gltf = loadGltfUris(gltf, './specs/data/boxTexturedUnoptimized', function() {
             expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras.source).toBeDefined();
-            expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras.source).toEqual(fragmentShaderData);
+            expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras.source.toString()).toEqual(fragmentShaderData.toString());
             done();
         });
     });
