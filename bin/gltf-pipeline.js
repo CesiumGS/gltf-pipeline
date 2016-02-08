@@ -52,8 +52,6 @@ fs.readFile(gltfPath, function (err, data) {
         printStats(stats);
 
         var outputPath = argv.o;
-        outputPath = undefined;
-        
         if (!defined(outputPath)) {
             // Default output.  For example, path/asset.gltf becomes path/asset-optimized.gltf
             var fileExtension = path.extname(gltfPath);
@@ -62,12 +60,7 @@ fs.readFile(gltfPath, function (err, data) {
             outputPath = path.join(filePath, filename + '-optimized' + fileExtension);
         }
 
-        writeGltf(gltf, path.dirname(outputPath), false);
-        fs.writeFile(outputPath, JSON.stringify(gltf, undefined, 2), function (err) {
-            if (err) {
-                throw err;
-            }
-        });    
+        writeGltf(gltf, outputPath, false);
     });
 });
 
