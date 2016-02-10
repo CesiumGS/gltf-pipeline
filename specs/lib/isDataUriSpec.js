@@ -12,4 +12,8 @@ describe('isDataUri', function() {
         var fileUri = "CesiumTexturedBoxTest0FS.glsl";
         expect(isDataUri(fileUri)).toBe(false);
     });
+
+    it('is undefined', function() {
+        expect(isDataUri(undefined)).toBe(false);
+    });
 });

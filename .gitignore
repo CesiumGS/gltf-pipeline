@@ -4,6 +4,8 @@ npm-debug.log
 Thumbs.db
 /coverage
 output.gltf
+CesiumTexturedBoxTest0FS.glsl
+CesiumTexturedBoxTest0VS.glsl
 .git-credentials
 .gitconfig
 .idea/workspace.xml
