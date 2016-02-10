@@ -33,7 +33,7 @@ describe('writeGltf', function() {
             }
         };
 
-        writeGltf(gltf, outputPath, false, function() {
+        writeGltf(gltf, outputPath, false, false, function() {
             expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras.source).not.toBeDefined();
             expect(gltf.shaders.CesiumTexturedBoxTest0FS.uri).toEqual('CesiumTexturedBoxTest0FS.glsl');
             fs.readFile(outputFragmentShaderPath, function(err, outputData) {
@@ -59,15 +59,11 @@ describe('writeGltf', function() {
             }
         };
         
-        writeGltf(gltf, outputPath, true);
+        writeGltf(gltf, outputPath, true, false);
         expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras.source).not.toBeDefined();
         expect(gltf.shaders.CesiumTexturedBoxTest0FS.uri).toEqual(fragmentShaderDataUri);
         done();
     });
-
-    function throwException(error) {
-        throw error;
-    }
 
     it('throws an error', function(done) {
         var gltf = {
@@ -82,10 +78,8 @@ describe('writeGltf', function() {
             }
         };
 
-        writeGltf(gltf, './specs/errorFilePath/output.gltf', false, function(err) {
-            expect(function() {
-                throwException(err);
-            }).toThrow();
+        writeGltf(gltf, './specs/errorFilePath/output.gltf', false, false, function(err) {
+            expect(err).toBeDefined();
             done();
         });
     });

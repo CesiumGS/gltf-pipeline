@@ -60,7 +60,7 @@ fs.readFile(gltfPath, function (err, data) {
             outputPath = path.join(filePath, filename + '-optimized' + fileExtension);
         }
 
-        writeGltf(gltf, outputPath, false);
+        writeGltf(gltf, outputPath, false, true);
     });
 });
 
