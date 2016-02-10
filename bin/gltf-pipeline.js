@@ -41,9 +41,9 @@ fs.readFile(gltfPath, function (err, data) {
     }
 
     var gltf = JSON.parse(data);
-    gltf = loadGltfUris(gltf, path.dirname(gltfPath), function(loadError) {
-        if (loadError) {
-            throw loadError;
+    gltf = loadGltfUris(gltf, path.dirname(gltfPath), function(err) {
+        if (err) {
+            throw err;
         }
 
         var stats = new OptimizationStatistics();
