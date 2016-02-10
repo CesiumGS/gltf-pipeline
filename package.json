@@ -22,8 +22,8 @@
   "scripts": {
     "jsHint": "gulp jsHint",
     "jsHint-watch": "gulp jsHint-watch",
-    "jasmine": "./node_modules/.bin/jasmine-node specs",
-    "coverage": "./node_modules/istanbul/lib/cli.js cover -x **/specs/** ./node_modules/jasmine-node/bin/jasmine-node specs",
+    "jasmine": "./node_modules/.bin/jasmine",
+    "coverage": "./node_modules/istanbul/lib/cli.js cover -x **/specs/** ./node_modules/jasmine/bin/jasmine.js",
     "build": "browserify index.js --standalone gltfPipeline -o build/gltf-pipeline.js",
     "test": "npm run jsHint && npm run coverage",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
@@ -33,7 +33,9 @@
     "lib": "./lib"
   },
   "dependencies": {
+    "async": "^1.5.2",
     "cesium": "^1.17.0",
+    "data-uri-to-buffer": "0.0.4",
     "minimist": "1.1.0"
   },
   "devDependencies": {
@@ -41,6 +43,7 @@
     "gulp": "3.9.0",
     "gulp-jshint": "2.0.0",
     "istanbul": "^0.4.1",
+    "jasmine": "^2.4.1",
     "jasmine-node": "^1.14.5",
     "jshint": "2.8.0",
     "jshint-stylish": "2.1.0"

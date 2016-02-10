@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 'use strict';
+
 var fs = require('fs');
 var path = require('path');
 var argv = require('minimist')(process.argv.slice(2));
@@ -19,6 +20,7 @@ var removeUnusedMeshes = require('../').removeUnusedMeshes;
 var removeUnusedNodes = require('../').removeUnusedNodes;
 var removeUnusedAccessors = require('../').removeUnusedAccessors;
 var removeUnused = require('../').removeUnused;
+var loadGltfUris = require('../').loadGltfUris;
 var OptimizationStatistics = require('../').OptimizationStatistics;
 var Cesium = require('cesium');
 var defined = Cesium.defined;
@@ -39,29 +41,35 @@ fs.readFile(gltfPath, function (err, data) {
     }
 
     var gltf = JSON.parse(data);
-    var stats = new OptimizationStatistics();
-
-    addDefaults(gltf, stats);
-
-    // TODO: custom pipeline based on arguments / config
-    removeUnused(gltf, stats);
-
-    printStats(stats);
-
-    var outputPath = argv.o;
-    if (!defined(outputPath)) {
-        // Default output.  For example, path/asset.gltf becomes path/asset-optimized.gltf
-        var fileExtension = path.extname(gltfPath);
-        var filename = path.basename(gltfPath, fileExtension);
-        var filePath = path.dirname(gltfPath);
-        outputPath = path.join(filePath, filename + '-optimized' + fileExtension);
-    }
-
-    fs.writeFile(outputPath, JSON.stringify(gltf, undefined, 2), function (err) {
+    gltf = loadGltfUris(gltf, path.dirname(gltfPath), function(err) {
         if (err) {
             throw err;
         }
-    });        
+
+        var stats = new OptimizationStatistics();
+
+        addDefaults(gltf, stats);
+
+        // TODO: custom pipeline based on arguments / config
+        removeUnused(gltf, stats);
+
+        printStats(stats);
+
+        var outputPath = argv.o;
+        if (!defined(outputPath)) {
+            // Default output.  For example, path/asset.gltf becomes path/asset-optimized.gltf
+            var fileExtension = path.extname(gltfPath);
+            var filename = path.basename(gltfPath, fileExtension);
+            var filePath = path.dirname(gltfPath);
+            outputPath = path.join(filePath, filename + '-optimized' + fileExtension);
+        }
+
+        fs.writeFile(outputPath, JSON.stringify(gltf, undefined, 2), function (err) {
+            if (err) {
+                throw err;
+            }
+        });    
+    });
 });
 
 function printStats(stats) {
