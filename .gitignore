@@ -3,9 +3,8 @@ npm-debug.log
 .DS_Store
 Thumbs.db
 /coverage
-output.gltf
-CesiumTexturedBoxTest0FS.glsl
-CesiumTexturedBoxTest0VS.glsl
+/output
+/specs/data/boxTexturedUnoptimized/output
 .git-credentials
 .gitconfig
 .idea/workspace.xml
