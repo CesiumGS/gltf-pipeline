@@ -1,5 +1,4 @@
 'use strict';
-
 var fs = require('fs');
 var loadGltfUris = require('../../lib/loadGltfUris');
 var fragmentShaderPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest0FS.glsl';
@@ -30,7 +29,7 @@ describe('loadGltfUris', function() {
         
         gltf = loadGltfUris(gltf, filePath, function() {
             expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras.source).toBeDefined();
-            expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras.source).toEqual(fragmentShaderData);
+            expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras.source.toString()).toEqual(fragmentShaderData.toString());
             done();
         });
     });

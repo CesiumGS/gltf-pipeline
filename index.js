@@ -18,5 +18,6 @@ module.exports = {
     removeUnusedAccessors : require('./lib/removeUnusedAccessors'),
     removeUnused : require('./lib/removeUnused'),
     loadGltfUris : require('./lib/loadGltfUris'),
+    writeGltf : require('./lib/writeGltf'),
     OptimizationStatistics : require('./lib/OptimizationStatistics')
 };

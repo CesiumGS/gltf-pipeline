@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 'use strict';
-
 var fs = require('fs');
 var path = require('path');
 var argv = require('minimist')(process.argv.slice(2));
@@ -21,6 +20,7 @@ var removeUnusedNodes = require('../').removeUnusedNodes;
 var removeUnusedAccessors = require('../').removeUnusedAccessors;
 var removeUnused = require('../').removeUnused;
 var loadGltfUris = require('../').loadGltfUris;
+var writeGltf = require('../').writeGltf;
 var OptimizationStatistics = require('../').OptimizationStatistics;
 var Cesium = require('cesium');
 var defined = Cesium.defined;
@@ -64,11 +64,7 @@ fs.readFile(gltfPath, function (err, data) {
             outputPath = path.join(filePath, filename + '-optimized' + fileExtension);
         }
 
-        fs.writeFile(outputPath, JSON.stringify(gltf, undefined, 2), function (err) {
-            if (err) {
-                throw err;
-            }
-        });    
+        writeGltf(gltf, outputPath, false, true);
     });
 });
 

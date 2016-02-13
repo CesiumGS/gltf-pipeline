@@ -36,7 +36,9 @@
     "async": "^1.5.2",
     "cesium": "^1.17.0",
     "data-uri-to-buffer": "0.0.4",
-    "minimist": "1.1.0"
+    "datauri": "^1.0.0-alpha.5",
+    "minimist": "1.1.0",
+    "mkdirp": "^0.5.1"
   },
   "devDependencies": {
     "coveralls": "^2.11.6",
