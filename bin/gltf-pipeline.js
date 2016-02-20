@@ -39,21 +39,18 @@ fs.readFile(gltfPath, function (err, data) {
     if (err) {
         throw err;
     }
-
     var gltf = JSON.parse(data);
+    var stats = new OptimizationStatistics();
+
+    addDefaults(gltf, stats);
+    // TODO: custom pipeline based on arguments / config
+    removeUnused(gltf, stats);
+    printStats(stats);
+
     gltf = loadGltfUris(gltf, path.dirname(gltfPath), function(err) {
         if (err) {
             throw err;
         }
-
-        var stats = new OptimizationStatistics();
-
-        addDefaults(gltf, stats);
-
-        // TODO: custom pipeline based on arguments / config
-        removeUnused(gltf, stats);
-
-        printStats(stats);
 
         var outputPath = argv.o;
         if (!defined(outputPath)) {
@@ -64,7 +61,7 @@ fs.readFile(gltfPath, function (err, data) {
             outputPath = path.join(filePath, fileName + '-optimized' + fileExtension);
         }
 
-        writeGltf(gltf, outputPath, false, true);
+        writeGltf(gltf, outputPath, true, true);
     });
 });
 
