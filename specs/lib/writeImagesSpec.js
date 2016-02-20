@@ -4,7 +4,7 @@ var fs = require('fs');
 var bufferEqual = require('buffer-equal');
 var writeGltf = require('../../lib/writeGltf');
 var imagePath = './specs/data/boxTexturedUnoptimized/Cesium_Logo_Flat_Low.png';
-var imageDataUri = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADTSURBVBhXAcgAN/8B49/cCAQAyukB2vAB+vz/Ig7+QR0B+PwAAezj3LDfAqnZ/wMB/xwPBwUEAiMK91Uj/gLN6wGj1fs9IyEwGxoUCPotFQC75g7rASECvd/6KxwkVCHFUiTX9P4Xq9L8ZjUD+vWyAaHK+CUX+pujFBYRH1NR2vUAANrLX8zXyAJCHOWnsj3d7frR4+XLymz24Y6ZuKI7LGUE/vcBEAglAQTR/P/9nbmV8fUAYURiTjRqAeXi6AgFDMDWptPiwP///isdPEIsXvr8+Tj0Y5s8qCp8AAAAAElFTkSuQmCC';
+var imageUri = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADTSURBVBhXAcgAN/8B49/cCAQAyukB2vAB+vz/Ig7+QR0B+PwAAezj3LDfAqnZ/wMB/xwPBwUEAiMK91Uj/gLN6wGj1fs9IyEwGxoUCPotFQC75g7rASECvd/6KxwkVCHFUiTX9P4Xq9L8ZjUD+vWyAaHK+CUX+pujFBYRH1NR2vUAANrLX8zXyAJCHOWnsj3d7frR4+XLymz24Y6ZuKI7LGUE/vcBEAglAQTR/P/9nbmV8fUAYURiTjRqAeXi6AgFDMDWptPiwP///isdPEIsXvr8+Tj0Y5s8qCp8AAAAAElFTkSuQmCC';
 var outputPath = './specs/data/boxTexturedUnoptimized/output.gltf';
 var outputImagePath = './specs/data/boxTexturedUnoptimized/output/Cesium_Logo_Flat_Low.png';
 
@@ -21,12 +21,12 @@ describe('writeImages', function() {
         });
     });
 
-    it('writes an external shader', function(done) {
+    it('writes an external buffer', function(done) {
         var gltf = {
             "images": {
                 "Cesium_Logo_Flat_Low": {
                     "type": 35632,
-                    "uri": imageDataUri,
+                    "uri": imageUri,
                     "extras": {
                         "source": imageData
                     }
@@ -47,7 +47,7 @@ describe('writeImages', function() {
         });
     });
 
-    it('writes an embedded shader', function(done) {
+    it('writes an embedded buffer', function(done) {
         var gltf = {
             "images": {
                 "Cesium_Logo_Flat_Low": {
@@ -62,7 +62,7 @@ describe('writeImages', function() {
         
         writeGltf(gltf, outputPath, true, true, function() {
             expect(gltf.images.Cesium_Logo_Flat_Low.extras.source).not.toBeDefined();
-            expect(gltf.images.Cesium_Logo_Flat_Low.uri).toEqual(imageDataUri);
+            expect(gltf.images.Cesium_Logo_Flat_Low.uri).toEqual(imageUri);
             done();
         });
     });

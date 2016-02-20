@@ -22,7 +22,6 @@ describe('loadBufferUris', function() {
         var gltf = {
             "buffers": {
                 "CesiumTexturedBoxTest": {
-                    "type": 35632,
                     "uri": "CesiumTexturedBoxTest.bin"
                 }
             }
@@ -39,7 +38,6 @@ describe('loadBufferUris', function() {
         var gltf = {
             "buffers": {
                 "CesiumTexturedBoxTest": {
-                    "type": 35632,
                     "uri": bufferUri
                 }
             }
@@ -56,11 +54,9 @@ describe('loadBufferUris', function() {
         var gltf = {
             "buffers": {
                 "embeddedBox": {
-                    "type": 35632,
                     "uri": bufferUri
                 },
                 "externalBox": {
-                    "type": 35632,
                     "uri": "CesiumTexturedBoxTest.bin"
                 }
             }
@@ -79,7 +75,6 @@ describe('loadBufferUris', function() {
         var gltf = {
             "buffers": {
                 "CesiumTexturedBoxTest": {
-                    "type": 35632,
                     "uri": "CesiumTexturedBoxTestError.bin"
                 },
             }
