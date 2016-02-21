@@ -28,7 +28,8 @@ describe('writeShaders', function() {
                     "type": 35632,
                     "uri": fragmentShaderUri,
                     "extras": {
-                        "source": fragmentShaderData
+                        "source": fragmentShaderData,
+                        "extension": '.glsl'
                     }
                 }
             }
@@ -54,7 +55,8 @@ describe('writeShaders', function() {
                     "type": 35632,
                     "uri": "CesiumTexturedBoxTest0FS.glsl",
                     "extras": {
-                        "source": fragmentShaderData
+                        "source": fragmentShaderData,
+                        "extension": '.glsl'
                     }
                 }
             }
@@ -74,7 +76,8 @@ describe('writeShaders', function() {
                     "type": 35632,
                     "uri": "CesiumTexturedBoxTest0FS.glsl",
                     "extras": {
-                        "source": fragmentShaderData
+                        "source": fragmentShaderData,
+                        "extension": '.glsl'
                     }
                 }
             }

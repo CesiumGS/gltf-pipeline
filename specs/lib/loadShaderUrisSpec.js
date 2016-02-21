@@ -32,6 +32,7 @@ describe('loadShaderUris', function() {
         gltf = loadGltfUris(gltf, filePath, function() {
             expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras.source).toBeDefined();
             expect(bufferEqual(gltf.shaders.CesiumTexturedBoxTest0FS.extras.source, fragmentShaderData)).toBe(true);
+            expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras.extension).toEqual('.glsl');
             done();
         });
     });
@@ -49,6 +50,7 @@ describe('loadShaderUris', function() {
         gltf = loadGltfUris(gltf, filePath, function() {
             expect(gltf.shaders.box0FS.extras.source).toBeDefined();
             expect(bufferEqual(gltf.shaders.box0FS.extras.source, fragmentShaderData)).toBe(true);
+            expect(gltf.shaders.box0FS.extras.extension).toEqual('.glsl');
             done();
         });
     });
@@ -70,8 +72,10 @@ describe('loadShaderUris', function() {
         gltf = loadGltfUris(gltf, filePath, function() {
             expect(gltf.shaders.embeddedBox0FS.extras.source).toBeDefined();
             expect(bufferEqual(gltf.shaders.embeddedBox0FS.extras.source, fragmentShaderData)).toBe(true);
+            expect(gltf.shaders.embeddedBox0FS.extras.extension).toEqual('.glsl');
             expect(gltf.shaders.externalBox0FS.extras.source).toBeDefined();
             expect(bufferEqual(gltf.shaders.externalBox0FS.extras.source, fragmentShaderData)).toBe(true);
+            expect(gltf.shaders.externalBox0FS.extras.extension).toEqual('.glsl');
             done();
         });
     });

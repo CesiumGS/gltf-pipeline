@@ -30,6 +30,7 @@ describe('loadBufferUris', function() {
         gltf = loadGltfUris(gltf, filePath, function() {
             expect(gltf.buffers.CesiumTexturedBoxTest.extras.source).toBeDefined();
             expect(gltf.buffers.CesiumTexturedBoxTest.extras.source.toString()).toEqual(bufferData.toString());
+            expect(gltf.buffers.CesiumTexturedBoxTest.extras.extension).toEqual('.bin');
             done();
         });
     });
@@ -46,6 +47,7 @@ describe('loadBufferUris', function() {
         gltf = loadGltfUris(gltf, filePath, function() {
             expect(gltf.buffers.CesiumTexturedBoxTest.extras.source).toBeDefined();
             expect(gltf.buffers.CesiumTexturedBoxTest.extras.source.toString()).toEqual(bufferData.toString());
+            expect(gltf.buffers.CesiumTexturedBoxTest.extras.extension).toEqual('.bin');
             done();
         });
     });
@@ -65,8 +67,10 @@ describe('loadBufferUris', function() {
         gltf = loadGltfUris(gltf, filePath, function() {
             expect(gltf.buffers.embeddedBox.extras.source).toBeDefined();
             expect(gltf.buffers.embeddedBox.extras.source.toString()).toEqual(bufferData.toString());
+            expect(gltf.buffers.embeddedBox.extras.extension).toEqual('.bin');
             expect(gltf.buffers.externalBox.extras.source).toBeDefined();
             expect(gltf.buffers.externalBox.extras.source.toString()).toEqual(bufferData.toString());
+            expect(gltf.buffers.externalBox.extras.extension).toEqual('.bin');
             done();
         });
     });

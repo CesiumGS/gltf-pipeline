@@ -28,7 +28,8 @@ describe('writeImages', function() {
                     "type": 35632,
                     "uri": imageUri,
                     "extras": {
-                        "source": imageData
+                        "source": imageData,
+                        "extension": '.png'
                     }
                 }
             }
@@ -54,7 +55,8 @@ describe('writeImages', function() {
                     "type": 35632,
                     "uri": "Cesium_Logo_Flat_Low.png",
                     "extras": {
-                        "source": imageData
+                        "source": imageData,
+                        "extension": '.png'
                     }
                 }
             }
@@ -74,7 +76,8 @@ describe('writeImages', function() {
                     "type": 35632,
                     "uri": "Cesium_Logo_Flat_Low.png",
                     "extras": {
-                        "source": imageData
+                        "source": imageData,
+                        "extension": '.png'
                     }
                 }
             }

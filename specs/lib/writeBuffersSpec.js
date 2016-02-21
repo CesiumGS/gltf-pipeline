@@ -27,7 +27,8 @@ describe('writeBuffers', function() {
                 "CesiumTexturedBoxTest": {
                     "uri": "CesiumTexturedBoxTest.bin",
                     "extras": {
-                        "source": bufferData
+                        "source": bufferData,
+                        "extension": '.bin'
                     }
                 }
             }
@@ -52,7 +53,8 @@ describe('writeBuffers', function() {
                 "CesiumTexturedBoxTest": {
                     "uri": "CesiumTexturedBoxTest.bin",
                     "extras": {
-                        "source": bufferData
+                        "source": bufferData,
+                        "extension": '.bin'
                     }
                 }
             }
@@ -71,7 +73,8 @@ describe('writeBuffers', function() {
                 "CesiumTexturedBoxTest": {
                     "uri": "CesiumTexturedBoxTest.bin",
                     "extras": {
-                        "source": bufferData
+                        "source": bufferData,
+                        "extension": '.bin'
                     }
                 }
             }
