@@ -31,6 +31,7 @@ describe('loadImageUris', function() {
         gltf = loadGltfUris(gltf, filePath, function() {
             expect(gltf.images.Image0001.extras.source).toBeDefined();
             expect(bufferEqual(gltf.images.Image0001.extras.source, imageData)).toBe(true);
+            expect(gltf.images.Image0001.extras.extension).toEqual('.png');
             done();
         });
     });
@@ -47,13 +48,14 @@ describe('loadImageUris', function() {
         gltf = loadGltfUris(gltf, filePath, function() {
             expect(gltf.images.Image0001.extras.source).toBeDefined();
             expect(bufferEqual(gltf.images.Image0001.extras.source, imageData)).toBe(true);
+            expect(gltf.images.Image0001.extras.extension).toEqual('.png');
             done();
         });
     });
 
     it('loads an external and an embedded image', function(done) {
         var gltf = {
-            "shaders": {
+            "images": {
                 "embeddedImage0001": {
                     "uri": imageUri
                 },
@@ -64,10 +66,12 @@ describe('loadImageUris', function() {
         };
         
         gltf = loadGltfUris(gltf, filePath, function() {
-            expect(gltf.shaders.embeddedImage0001.extras.source).toBeDefined();
-            expect(bufferEqual(gltf.shaders.embeddedImage0001.extras.source, imageData)).toBe(true);
-            expect(gltf.shaders.externalImage0001.extras.source).toBeDefined();
-            expect(bufferEqual(gltf.shaders.externalImage0001.extras.source, imageData)).toBe(true);
+            expect(gltf.images.embeddedImage0001.extras.source).toBeDefined();
+            expect(bufferEqual(gltf.images.embeddedImage0001.extras.source, imageData)).toBe(true);
+            expect(gltf.images.embeddedImage0001.extras.extension).toEqual('.png');
+            expect(gltf.images.externalImage0001.extras.source).toBeDefined();
+            expect(bufferEqual(gltf.images.externalImage0001.extras.source, imageData)).toBe(true);
+            expect(gltf.images.externalImage0001.extras.extension).toEqual('.png');
             done();
         });
     });
