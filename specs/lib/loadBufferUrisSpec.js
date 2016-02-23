@@ -23,7 +23,6 @@ describe('loadBufferUris', function() {
         var gltf = {
             "buffers": {
                 "CesiumTexturedBoxTest": {
-                    "type": 35632,
                     "uri": "CesiumTexturedBoxTest.bin"
                 }
             }
@@ -32,6 +31,7 @@ describe('loadBufferUris', function() {
         gltf = loadGltfUris(gltf, filePath, function() {
             expect(gltf.buffers.CesiumTexturedBoxTest.extras.source).toBeDefined();
             expect(bufferEqual(gltf.buffers.CesiumTexturedBoxTest.extras.source, bufferData)).toBe(true);
+            expect(gltf.buffers.CesiumTexturedBoxTest.extras.extension).toEqual('.bin');
             done();
         });
     });
@@ -40,7 +40,6 @@ describe('loadBufferUris', function() {
         var gltf = {
             "buffers": {
                 "CesiumTexturedBoxTest": {
-                    "type": 35632,
                     "uri": bufferUri
                 }
             }
@@ -49,6 +48,7 @@ describe('loadBufferUris', function() {
         gltf = loadGltfUris(gltf, filePath, function() {
             expect(gltf.buffers.CesiumTexturedBoxTest.extras.source).toBeDefined();
             expect(bufferEqual(gltf.buffers.CesiumTexturedBoxTest.extras.source, bufferData)).toBe(true);
+            expect(gltf.buffers.CesiumTexturedBoxTest.extras.extension).toEqual('.bin');
             done();
         });
     });
@@ -57,11 +57,9 @@ describe('loadBufferUris', function() {
         var gltf = {
             "buffers": {
                 "embeddedBox": {
-                    "type": 35632,
                     "uri": bufferUri
                 },
                 "externalBox": {
-                    "type": 35632,
                     "uri": "CesiumTexturedBoxTest.bin"
                 }
             }
@@ -71,7 +69,7 @@ describe('loadBufferUris', function() {
             expect(gltf.buffers.embeddedBox.extras.source).toBeDefined();
             expect(bufferEqual(gltf.buffers.embeddedBox.extras.source, bufferData)).toBe(true);
             expect(gltf.buffers.externalBox.extras.source).toBeDefined();
-            expect(bufferEqual(gltf.buffers.externalBox.extras.source, bufferData)).toBe(true);
+            expect(gltf.buffers.externalBox.extras.extension).toEqual('.bin');
             done();
         });
     });
@@ -80,7 +78,6 @@ describe('loadBufferUris', function() {
         var gltf = {
             "buffers": {
                 "CesiumTexturedBoxTest": {
-                    "type": 35632,
                     "uri": "CesiumTexturedBoxTestError.bin"
                 },
             }
