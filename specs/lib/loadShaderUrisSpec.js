@@ -70,11 +70,8 @@ describe('loadShaderUris', function() {
         };
         
         gltf = loadGltfUris(gltf, filePath, function() {
-            expect(gltf.shaders.embeddedBox0FS.extras.source).toBeDefined();
-            expect(bufferEqual(gltf.shaders.embeddedBox0FS.extras.source, fragmentShaderData)).toBe(true);
-            expect(gltf.shaders.embeddedBox0FS.extras.extension).toEqual('.glsl');
             expect(gltf.shaders.externalBox0FS.extras.source).toBeDefined();
-            expect(bufferEqual(gltf.shaders.externalBox0FS.extras.source, fragmentShaderData)).toBe(true);
+            expect(bufferEqual(gltf.shaders.embeddedBox0FS.extras.source, fragmentShaderData)).toBe(true);
             expect(gltf.shaders.externalBox0FS.extras.extension).toEqual('.glsl');
             done();
         });
