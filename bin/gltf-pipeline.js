@@ -39,32 +39,29 @@ fs.readFile(gltfPath, function (err, data) {
     if (err) {
         throw err;
     }
-
     var gltf = JSON.parse(data);
+    var stats = new OptimizationStatistics();
+
+    addDefaults(gltf, stats);
+    // TODO: custom pipeline based on arguments / config
+    removeUnused(gltf, stats);
+    printStats(stats);
+
     gltf = loadGltfUris(gltf, path.dirname(gltfPath), function(err) {
         if (err) {
             throw err;
         }
 
-        var stats = new OptimizationStatistics();
-
-        addDefaults(gltf, stats);
-
-        // TODO: custom pipeline based on arguments / config
-        removeUnused(gltf, stats);
-
-        printStats(stats);
-
         var outputPath = argv.o;
         if (!defined(outputPath)) {
             // Default output.  For example, path/asset.gltf becomes path/asset-optimized.gltf
             var fileExtension = path.extname(gltfPath);
-            var filename = path.basename(gltfPath, fileExtension);
+            var fileName = path.basename(gltfPath, fileExtension);
             var filePath = path.dirname(gltfPath);
-            outputPath = path.join(filePath, filename + '-optimized' + fileExtension);
+            outputPath = path.join(filePath, fileName + '-optimized' + fileExtension);
         }
 
-        writeGltf(gltf, outputPath, false, true);
+        writeGltf(gltf, outputPath, true, true);
     });
 });
 
