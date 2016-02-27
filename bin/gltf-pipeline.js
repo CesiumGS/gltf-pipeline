@@ -21,6 +21,7 @@ var removeUnusedAccessors = require('../').removeUnusedAccessors;
 var removeUnused = require('../').removeUnused;
 var loadGltfUris = require('../').loadGltfUris;
 var writeGltf = require('../').writeGltf;
+var parseBinaryGltf = require('../').parseBinaryGltf;
 var OptimizationStatistics = require('../').OptimizationStatistics;
 var Cesium = require('cesium');
 var defined = Cesium.defined;
@@ -39,15 +40,31 @@ fs.readFile(gltfPath, function (err, data) {
     if (err) {
         throw err;
     }
-    var gltf = JSON.parse(data);
+
+    var fileExtension = path.extname(gltfPath);
+    var fileName = path.basename(gltfPath, fileExtension);
+    var filePath = path.dirname(gltfPath);
+
+    var gltf = undefined;
+    if (fileExtension === '.glb') {
+        gltf = parseBinaryGltf(data);
+    }
+    else if (fileExtension === '.gltf') {
+        gltf = JSON.parse(data);
+    }
+    else {
+        throw new Error('Invalid glTF file.');
+    }
+    
     var stats = new OptimizationStatistics();
 
     addDefaults(gltf, stats);
+
     // TODO: custom pipeline based on arguments / config
     removeUnused(gltf, stats);
     printStats(stats);
 
-    gltf = loadGltfUris(gltf, path.dirname(gltfPath), function(err) {
+    gltf = loadGltfUris(gltf, filePath, function(err) {
         if (err) {
             throw err;
         }
@@ -55,9 +72,6 @@ fs.readFile(gltfPath, function (err, data) {
         var outputPath = argv.o;
         if (!defined(outputPath)) {
             // Default output.  For example, path/asset.gltf becomes path/asset-optimized.gltf
-            var fileExtension = path.extname(gltfPath);
-            var fileName = path.basename(gltfPath, fileExtension);
-            var filePath = path.dirname(gltfPath);
             outputPath = path.join(filePath, fileName + '-optimized' + fileExtension);
         }
 

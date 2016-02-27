@@ -4,7 +4,7 @@ var bufferEqual = require('buffer-equal');
 var loadGltfUris = require('../../lib/loadGltfUris');
 var imagePath = './specs/data/boxTexturedUnoptimized/Cesium_Logo_Flat_Low.png';
 var imageUri = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADTSURBVBhXAcgAN/8B49/cCAQAyukB2vAB+vz/Ig7+QR0B+PwAAezj3LDfAqnZ/wMB/xwPBwUEAiMK91Uj/gLN6wGj1fs9IyEwGxoUCPotFQC75g7rASECvd/6KxwkVCHFUiTX9P4Xq9L8ZjUD+vWyAaHK+CUX+pujFBYRH1NR2vUAANrLX8zXyAJCHOWnsj3d7frR4+XLymz24Y6ZuKI7LGUE/vcBEAglAQTR/P/9nbmV8fUAYURiTjRqAeXi6AgFDMDWptPiwP///isdPEIsXvr8+Tj0Y5s8qCp8AAAAAElFTkSuQmCC';
-var filePath = './specs/data/boxTexturedUnoptimized/';
+var basePath = './specs/data/boxTexturedUnoptimized/';
 
 describe('loadImageUris', function() {
     var imageData;
@@ -28,7 +28,7 @@ describe('loadImageUris', function() {
             }
         };
 
-        gltf = loadGltfUris(gltf, filePath, function() {
+        gltf = loadGltfUris(gltf, basePath, function() {
             expect(gltf.images.Image0001.extras.source).toBeDefined();
             expect(bufferEqual(gltf.images.Image0001.extras.source, imageData)).toBe(true);
             expect(gltf.images.Image0001.extras.extension).toEqual('.png');
@@ -45,7 +45,7 @@ describe('loadImageUris', function() {
             }
         };
 
-        gltf = loadGltfUris(gltf, filePath, function() {
+        gltf = loadGltfUris(gltf, basePath, function() {
             expect(gltf.images.Image0001.extras.source).toBeDefined();
             expect(bufferEqual(gltf.images.Image0001.extras.source, imageData)).toBe(true);
             expect(gltf.images.Image0001.extras.extension).toEqual('.png');
@@ -65,7 +65,7 @@ describe('loadImageUris', function() {
             }
         };
         
-        gltf = loadGltfUris(gltf, filePath, function() {
+        gltf = loadGltfUris(gltf, basePath, function() {
             expect(gltf.images.embeddedImage0001.extras.source).toBeDefined();
             expect(bufferEqual(gltf.images.embeddedImage0001.extras.source, imageData)).toBe(true);
             expect(gltf.images.embeddedImage0001.extras.extension).toEqual('.png');
@@ -85,7 +85,7 @@ describe('loadImageUris', function() {
             }
         };
 
-        loadGltfUris(gltf, filePath, function(err) {
+        loadGltfUris(gltf, basePath, function(err) {
             expect(err).toBeDefined();
             done();
         });
