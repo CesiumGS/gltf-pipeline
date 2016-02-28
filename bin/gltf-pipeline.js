@@ -45,7 +45,7 @@ fs.readFile(gltfPath, function (err, data) {
     var fileName = path.basename(gltfPath, fileExtension);
     var filePath = path.dirname(gltfPath);
 
-    var gltf = undefined;
+    var gltf;
     if (fileExtension === '.glb') {
         gltf = parseBinaryGltf(data);
     }
