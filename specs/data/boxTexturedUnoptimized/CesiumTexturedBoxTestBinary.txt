@@ -69,39 +69,39 @@
       "api": "WebGL",
       "version": "1.0.2"
     },
-    "version": 1
+    "version": "1.0"
   },
   "bufferViews": {
     "bufferView_29": {
-      "buffer": "KHR_binary_glTF",
+      "buffer": "binary_glTF",
       "byteLength": 72,
       "byteOffset": 0,
       "target": 34963
     },
     "bufferView_30": {
-      "buffer": "KHR_binary_glTF",
+      "buffer": "binary_glTF",
       "byteLength": 768,
       "byteOffset": 72,
       "target": 34962
     },
     "binary_bufferView0": {
-      "buffer": "KHR_binary_glTF",
+      "buffer": "binary_glTF",
       "byteLength": 529,
       "byteOffset": 840
     },
     "binary_bufferView1": {
-      "buffer": "KHR_binary_glTF",
+      "buffer": "binary_glTF",
       "byteLength": 439,
       "byteOffset": 1369
     },
     "binary_bufferView2": {
-      "buffer": "KHR_binary_glTF",
+      "buffer": "binary_glTF",
       "byteLength": 11982,
       "byteOffset": 1808
     }
   },
   "buffers": {
-    "KHR_binary_glTF": {
+    "binary_glTF": {
       "type": "arraybuffer",
       "byteLength": 13790,
       "uri": "data:,"
