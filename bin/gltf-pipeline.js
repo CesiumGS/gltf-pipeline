@@ -68,14 +68,14 @@ fs.readFile(gltfPath, function (err, data) {
         if (err) {
             throw err;
         }
-        
+
         var outputPath = argv.o;
         if (!defined(outputPath)) {
             // Default output.  For example, path/asset.gltf becomes path/asset-optimized.gltf
             outputPath = path.join(filePath, fileName + '-optimized' + fileExtension);
         }
 
-        var isEmbedded = false;
+        var isEmbedded = true;
         writeGltf(gltf, outputPath, isEmbedded, true);
     });
 });

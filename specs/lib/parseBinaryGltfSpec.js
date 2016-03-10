@@ -3,8 +3,11 @@ var fs = require('fs');
 var async = require('async');
 var bufferEqual = require('buffer-equal');
 var parseBinaryGltf = require('../../lib/parseBinaryGltf');
+var Cesium = require('cesium');
+var DeveloperError = Cesium.DeveloperError;
 var binaryGltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.glb';
 var gltfScenePath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestBinary.txt';
+var bufferPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxBuffer.bin';
 var fragmentShaderPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest0FS_Binary.glsl';
 var imagePath = './specs/data/boxTexturedUnoptimized/Cesium_Logo_Flat_Binary.png';
 
@@ -12,6 +15,7 @@ describe('parseBinaryGltf', function() {
     var testData = {
         binary: binaryGltfPath,
         gltf: gltfScenePath,
+        buffer: bufferPath,
         shader: fragmentShaderPath,
         image: imagePath
     };
@@ -54,12 +58,14 @@ describe('parseBinaryGltf', function() {
         delete gltf.shaders.CesiumTexturedBoxTest0FS.extras;
         delete gltf.shaders.CesiumTexturedBoxTest0VS.extras;
 
-        fs.writeFile('./specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestBinary.txt', JSON.stringify(gltf, undefined, 2), function (err) {
-            if (err) {
-                throw err;
-            }
-        });    
-        // expect(gltf).toEqual(JSON.parse(testData.gltf));
+        expect(gltf).toEqual(JSON.parse(testData.gltf));
+    });
+
+    it('loads an embedded buffer', function() {
+        var gltf = parseBinaryGltf(testData.binary);
+
+        expect(gltf.buffers.bufferView_30_buffer.extras.source).toBeDefined();
+        expect(bufferEqual(gltf.buffers.bufferView_30_buffer.extras.source, testData.buffer)).toBe(true);
     });
 
     it('loads an embedded image', function() {
@@ -75,4 +81,49 @@ describe('parseBinaryGltf', function() {
         expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras.source).toBeDefined();
         expect(bufferEqual(gltf.shaders.CesiumTexturedBoxTest0FS.extras.source, testData.shader)).toBe(true);
     });
+
+    it('throws an error', function() {
+        var magicError = new Buffer(testData.binary);
+        magicError.fill(0, 0, 4);
+        expect(function() {
+            try {
+                parseBinaryGltf(magicError);
+            }
+            catch (err) {
+                expect(err).toBeDefined();
+                expect(err.message).toEqual('File is not valid binary glTF');
+                throw err;
+            }
+        }).toThrow();
+    })
+
+    it('throws a version error', function() {
+        var versionError = new Buffer(testData.binary);
+        versionError.fill(0, 4, 8);
+        expect(function() {
+            try {
+                parseBinaryGltf(versionError);
+            }
+            catch (err) {
+                expect(err).toBeDefined();
+                expect(err.message).toEqual('Binary glTF version is not 1');
+                throw err;
+            }
+        }).toThrow();
+    })
+
+    it('throws a format error', function() {
+        var formatError = new Buffer(testData.binary);
+        formatError.fill(1, 16, 20);
+        expect(function() {
+            try {
+                parseBinaryGltf(formatError);
+            }
+            catch (err) {
+                expect(err).toBeDefined();
+                expect(err.message).toEqual('Binary glTF scene format is not JSON');
+                throw err;
+            }
+        }).toThrow();
+    })
 });
