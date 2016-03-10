@@ -38,35 +38,41 @@ describe('parseBinaryGltf', function() {
 
     it('loads a glTF scene', function() {
         var gltf = parseBinaryGltf(testData.binary);
-        console.log(gltf.bufferViews);
-        console.log(gltf.buffers);
-        console.log(gltf.images);
-        console.log(gltf.shaders);
 
-        // expect(gltf).toBeDefined();
-        // expect(gltf.buffers.binary_glTF).toBeDefined();
-        // expect(gltf.images.Image0001).toBeDefined();
-        // expect(gltf.shaders.CesiumTexturedBoxTest0FS).toBeDefined();
-        // expect(gltf.shaders.CesiumTexturedBoxTest0VS).toBeDefined();
-        // delete gltf.buffers.binary_glTF.extras;
-        // delete gltf.images.Image0001.extras;
-        // delete gltf.shaders.CesiumTexturedBoxTest0FS.extras;
-        // delete gltf.shaders.CesiumTexturedBoxTest0VS.extras;
+        expect(gltf).toBeDefined();
+        expect(gltf.buffers.bufferView_29_buffer).toBeDefined();
+        expect(gltf.buffers.bufferView_30_buffer).toBeDefined();
+        expect(gltf.images.Image0001).toBeDefined();
+        expect(gltf.shaders.CesiumTexturedBoxTest0FS).toBeDefined();
+        expect(gltf.shaders.CesiumTexturedBoxTest0VS).toBeDefined();
 
+        delete gltf.bufferViews.bufferView_29.extras;
+        delete gltf.bufferViews.bufferView_30.extras;
+        delete gltf.buffers.bufferView_29_buffer.extras;
+        delete gltf.buffers.bufferView_30_buffer.extras;
+        delete gltf.images.Image0001.extras;
+        delete gltf.shaders.CesiumTexturedBoxTest0FS.extras;
+        delete gltf.shaders.CesiumTexturedBoxTest0VS.extras;
+
+        fs.writeFile('./specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestBinary.txt', JSON.stringify(gltf, undefined, 2), function (err) {
+            if (err) {
+                throw err;
+            }
+        });    
         // expect(gltf).toEqual(JSON.parse(testData.gltf));
     });
 
-    // it('loads an embedded image', function() {
-    //     var gltf = parseBinaryGltf(testData.binary);
+    it('loads an embedded image', function() {
+        var gltf = parseBinaryGltf(testData.binary);
 
-    //     expect(gltf.images.Image0001.extras.source).toBeDefined();
-    //     expect(bufferEqual(gltf.images.Image0001.extras.source, testData.image)).toBe(true);
-    // });
+        expect(gltf.images.Image0001.extras.source).toBeDefined();
+        expect(bufferEqual(gltf.images.Image0001.extras.source, testData.image)).toBe(true);
+    });
 
-    // it('loads an embedded shader', function() {
-    //     var gltf = parseBinaryGltf(testData.binary);
+    it('loads an embedded shader', function() {
+        var gltf = parseBinaryGltf(testData.binary);
 
-    //     expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras.source).toBeDefined();
-    //     expect(bufferEqual(gltf.shaders.CesiumTexturedBoxTest0FS.extras.source, testData.shader)).toBe(true);
-    // });
+        expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras.source).toBeDefined();
+        expect(bufferEqual(gltf.shaders.CesiumTexturedBoxTest0FS.extras.source, testData.shader)).toBe(true);
+    });
 });
