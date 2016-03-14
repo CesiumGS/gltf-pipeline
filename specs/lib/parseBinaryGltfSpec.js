@@ -1,11 +1,13 @@
 'use strict';
 var fs = require('fs');
 var async = require('async');
+var crypto = require('crypto');
 var bufferEqual = require('buffer-equal');
 var parseBinaryGltf = require('../../lib/parseBinaryGltf');
 var Cesium = require('cesium');
 var DeveloperError = Cesium.DeveloperError;
 var binaryGltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.glb';
+var overlapGltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestOverlap.glb';
 var gltfScenePath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestBinary.txt';
 var bufferPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxBuffer.bin';
 var fragmentShaderPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest0FS_Binary.glsl';
@@ -17,7 +19,8 @@ describe('parseBinaryGltf', function() {
         gltf: gltfScenePath,
         buffer: bufferPath,
         shader: fragmentShaderPath,
-        image: imagePath
+        image: imagePath,
+        overlap: overlapGltfPath
     };
 
     beforeAll(function(done) {
@@ -36,6 +39,7 @@ describe('parseBinaryGltf', function() {
             if (err) {
                 throw err;
             }
+
             done();
         });
     });
@@ -59,6 +63,37 @@ describe('parseBinaryGltf', function() {
         delete gltf.shaders.CesiumTexturedBoxTest0VS.extras;
 
         expect(gltf).toEqual(JSON.parse(testData.gltf));
+    });
+
+    it('loads a glTF scene with overlapping buffer views', function() {
+        var gltf = parseBinaryGltf(testData.overlap);
+        var noOverlapGltf = parseBinaryGltf(testData.binary);
+
+        expect(gltf).toBeDefined();
+        expect(gltf.bufferViews.bufferView_29).toBeDefined();
+        expect(gltf.bufferViews.bufferView_29_a).toBeDefined();
+        expect(gltf.bufferViews.bufferView_30).toBeDefined();
+        expect(gltf.bufferViews.bufferView_30_a).toBeDefined();
+
+        expect (gltf.bufferViews.bufferView_29.buffer).toEqual('bufferView_29_buffer');
+        expect (gltf.bufferViews.bufferView_29_a.buffer).toEqual('bufferView_29_buffer');
+        expect (gltf.bufferViews.bufferView_30.buffer).toEqual('bufferView_30_buffer');
+        expect (gltf.bufferViews.bufferView_30.buffer).toEqual('bufferView_30_buffer');
+
+        expect (gltf.bufferViews.bufferView_29.byteOffset).toEqual(0);
+        expect (gltf.bufferViews.bufferView_29.byteLength).toEqual(72);
+        expect (gltf.bufferViews.bufferView_29_a.byteOffset).toEqual(12);
+        expect (gltf.bufferViews.bufferView_29_a.byteLength).toEqual(12);
+        expect (gltf.bufferViews.bufferView_30.byteOffset).toEqual(0);
+        expect (gltf.bufferViews.bufferView_30.byteLength).toEqual(528);
+        expect (gltf.bufferViews.bufferView_30_a.byteOffset).toEqual(468);
+        expect (gltf.bufferViews.bufferView_30_a.byteLength).toEqual(300);
+
+        expect(gltf.buffers.bufferView_29_buffer).toBeDefined();
+        expect(gltf.buffers.bufferView_30_buffer).toBeDefined();
+
+        expect(bufferEqual(gltf.buffers.bufferView_29_buffer.extras.source, noOverlapGltf.buffers.bufferView_29_buffer.extras.source)).toBe(true);
+        expect(bufferEqual(gltf.buffers.bufferView_30_buffer.extras.source, noOverlapGltf.buffers.bufferView_30_buffer.extras.source)).toBe(true);
     });
 
     it('loads an embedded buffer', function() {
