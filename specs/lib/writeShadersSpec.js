@@ -28,15 +28,17 @@ describe('writeShaders', function() {
                     "type": 35632,
                     "uri": fragmentShaderUri,
                     "extras": {
-                        "source": fragmentShaderData,
-                        "extension": '.glsl'
+                        "_pipeline": {
+                            "source": fragmentShaderData,
+                            "extension": '.glsl'
+                        }
                     }
                 }
             }
         };
 
         writeGltf(gltf, outputPath, false, true, function() {
-            expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras.source).not.toBeDefined();
+            expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras).not.toBeDefined();
             expect(gltf.shaders.CesiumTexturedBoxTest0FS.uri).toEqual('CesiumTexturedBoxTest0FS.glsl');
             fs.readFile(outputFragmentShaderPath, function(err, outputData) {
                 if (err) {
@@ -55,15 +57,17 @@ describe('writeShaders', function() {
                     "type": 35632,
                     "uri": "CesiumTexturedBoxTest0FS.glsl",
                     "extras": {
-                        "source": fragmentShaderData,
-                        "extension": '.glsl'
+                        "_pipeline": {
+                            "source": fragmentShaderData,
+                            "extension": '.glsl'
+                        }
                     }
                 }
             }
         };
         
         writeGltf(gltf, outputPath, true, true, function() {
-            expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras.source).not.toBeDefined();
+            expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras).not.toBeDefined();
             expect(gltf.shaders.CesiumTexturedBoxTest0FS.uri).toEqual(fragmentShaderUri);
             done();
         });
@@ -76,8 +80,10 @@ describe('writeShaders', function() {
                     "type": 35632,
                     "uri": "CesiumTexturedBoxTest0FS.glsl",
                     "extras": {
-                        "source": fragmentShaderData,
-                        "extension": '.glsl'
+                        "_pipeline": {
+                            "source": fragmentShaderData,
+                            "extension": '.glsl'
+                        }
                     }
                 }
             }

@@ -1,11 +1,11 @@
 'use strict';
 var fs = require('fs');
 var async = require('async');
-var crypto = require('crypto');
 var bufferEqual = require('buffer-equal');
 var parseBinaryGltf = require('../../lib/parseBinaryGltf');
 var Cesium = require('cesium');
 var DeveloperError = Cesium.DeveloperError;
+var removePipelineExtras = require('../../lib/removePipelineExtras');
 var binaryGltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.glb';
 var overlapGltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestOverlap.glb';
 var gltfScenePath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestBinary.txt';
@@ -54,14 +54,7 @@ describe('parseBinaryGltf', function() {
         expect(gltf.shaders.CesiumTexturedBoxTest0FS).toBeDefined();
         expect(gltf.shaders.CesiumTexturedBoxTest0VS).toBeDefined();
 
-        delete gltf.bufferViews.bufferView_29.extras;
-        delete gltf.bufferViews.bufferView_30.extras;
-        delete gltf.buffers.bufferView_29_buffer.extras;
-        delete gltf.buffers.bufferView_30_buffer.extras;
-        delete gltf.images.Image0001.extras;
-        delete gltf.shaders.CesiumTexturedBoxTest0FS.extras;
-        delete gltf.shaders.CesiumTexturedBoxTest0VS.extras;
-
+        removePipelineExtras(gltf);
         expect(gltf).toEqual(JSON.parse(testData.gltf));
     });
 
@@ -92,29 +85,29 @@ describe('parseBinaryGltf', function() {
         expect(gltf.buffers.bufferView_29_buffer).toBeDefined();
         expect(gltf.buffers.bufferView_30_buffer).toBeDefined();
 
-        expect(bufferEqual(gltf.buffers.bufferView_29_buffer.extras.source, noOverlapGltf.buffers.bufferView_29_buffer.extras.source)).toBe(true);
-        expect(bufferEqual(gltf.buffers.bufferView_30_buffer.extras.source, noOverlapGltf.buffers.bufferView_30_buffer.extras.source)).toBe(true);
+        expect(bufferEqual(gltf.buffers.bufferView_29_buffer.extras._pipeline.source, noOverlapGltf.buffers.bufferView_29_buffer.extras._pipeline.source)).toBe(true);
+        expect(bufferEqual(gltf.buffers.bufferView_30_buffer.extras._pipeline.source, noOverlapGltf.buffers.bufferView_30_buffer.extras._pipeline.source)).toBe(true);
     });
 
     it('loads an embedded buffer', function() {
         var gltf = parseBinaryGltf(testData.binary);
 
-        expect(gltf.buffers.bufferView_30_buffer.extras.source).toBeDefined();
-        expect(bufferEqual(gltf.buffers.bufferView_30_buffer.extras.source, testData.buffer)).toBe(true);
+        expect(gltf.buffers.bufferView_30_buffer.extras._pipeline.source).toBeDefined();
+        expect(bufferEqual(gltf.buffers.bufferView_30_buffer.extras._pipeline.source, testData.buffer)).toBe(true);
     });
 
     it('loads an embedded image', function() {
         var gltf = parseBinaryGltf(testData.binary);
 
-        expect(gltf.images.Image0001.extras.source).toBeDefined();
-        expect(bufferEqual(gltf.images.Image0001.extras.source, testData.image)).toBe(true);
+        expect(gltf.images.Image0001.extras._pipeline.source).toBeDefined();
+        expect(bufferEqual(gltf.images.Image0001.extras._pipeline.source, testData.image)).toBe(true);
     });
 
     it('loads an embedded shader', function() {
         var gltf = parseBinaryGltf(testData.binary);
 
-        expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras.source).toBeDefined();
-        expect(bufferEqual(gltf.shaders.CesiumTexturedBoxTest0FS.extras.source, testData.shader)).toBe(true);
+        expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras._pipeline.source).toBeDefined();
+        expect(bufferEqual(gltf.shaders.CesiumTexturedBoxTest0FS.extras._pipeline.source, testData.shader)).toBe(true);
     });
 
     it('throws an error', function() {

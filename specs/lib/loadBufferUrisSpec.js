@@ -29,9 +29,9 @@ describe('loadBufferUris', function() {
         };
         
         gltf = loadGltfUris(gltf, basePath, function() {
-            expect(gltf.buffers.CesiumTexturedBoxTest.extras.source).toBeDefined();
-            expect(bufferEqual(gltf.buffers.CesiumTexturedBoxTest.extras.source, bufferData)).toBe(true);
-            expect(gltf.buffers.CesiumTexturedBoxTest.extras.extension).toEqual('.bin');
+            expect(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline.source).toBeDefined();
+            expect(bufferEqual(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline.source, bufferData)).toBe(true);
+            expect(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline.extension).toEqual('.bin');
             done();
         });
     });
@@ -46,9 +46,9 @@ describe('loadBufferUris', function() {
         };
         
         gltf = loadGltfUris(gltf, basePath, function() {
-            expect(gltf.buffers.CesiumTexturedBoxTest.extras.source).toBeDefined();
-            expect(bufferEqual(gltf.buffers.CesiumTexturedBoxTest.extras.source, bufferData)).toBe(true);
-            expect(gltf.buffers.CesiumTexturedBoxTest.extras.extension).toEqual('.bin');
+            expect(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline.source).toBeDefined();
+            expect(bufferEqual(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline.source, bufferData)).toBe(true);
+            expect(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline.extension).toEqual('.bin');
             done();
         });
     });
@@ -66,10 +66,10 @@ describe('loadBufferUris', function() {
         };
         
         gltf = loadGltfUris(gltf, basePath, function() {
-            expect(gltf.buffers.embeddedBox.extras.source).toBeDefined();
-            expect(bufferEqual(gltf.buffers.embeddedBox.extras.source, bufferData)).toBe(true);
-            expect(gltf.buffers.externalBox.extras.source).toBeDefined();
-            expect(gltf.buffers.externalBox.extras.extension).toEqual('.bin');
+            expect(gltf.buffers.embeddedBox.extras._pipeline.source).toBeDefined();
+            expect(bufferEqual(gltf.buffers.embeddedBox.extras._pipeline.source, bufferData)).toBe(true);
+            expect(gltf.buffers.externalBox.extras._pipeline.source).toBeDefined();
+            expect(gltf.buffers.externalBox.extras._pipeline.extension).toEqual('.bin');
             done();
         });
     });

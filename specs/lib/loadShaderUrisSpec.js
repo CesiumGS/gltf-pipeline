@@ -30,9 +30,9 @@ describe('loadShaderUris', function() {
         };
         
         gltf = loadGltfUris(gltf, basePath, function() {
-            expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras.source).toBeDefined();
-            expect(bufferEqual(gltf.shaders.CesiumTexturedBoxTest0FS.extras.source, fragmentShaderData)).toBe(true);
-            expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras.extension).toEqual('.glsl');
+            expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras._pipeline.source).toBeDefined();
+            expect(bufferEqual(gltf.shaders.CesiumTexturedBoxTest0FS.extras._pipeline.source, fragmentShaderData)).toBe(true);
+            expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras._pipeline.extension).toEqual('.glsl');
             done();
         });
     });
@@ -48,9 +48,9 @@ describe('loadShaderUris', function() {
         };
         
         gltf = loadGltfUris(gltf, basePath, function() {
-            expect(gltf.shaders.box0FS.extras.source).toBeDefined();
-            expect(bufferEqual(gltf.shaders.box0FS.extras.source, fragmentShaderData)).toBe(true);
-            expect(gltf.shaders.box0FS.extras.extension).toEqual('.glsl');
+            expect(gltf.shaders.box0FS.extras._pipeline.source).toBeDefined();
+            expect(bufferEqual(gltf.shaders.box0FS.extras._pipeline.source, fragmentShaderData)).toBe(true);
+            expect(gltf.shaders.box0FS.extras._pipeline.extension).toEqual('.glsl');
             done();
         });
     });
@@ -70,9 +70,9 @@ describe('loadShaderUris', function() {
         };
         
         gltf = loadGltfUris(gltf, basePath, function() {
-            expect(gltf.shaders.externalBox0FS.extras.source).toBeDefined();
-            expect(bufferEqual(gltf.shaders.embeddedBox0FS.extras.source, fragmentShaderData)).toBe(true);
-            expect(gltf.shaders.externalBox0FS.extras.extension).toEqual('.glsl');
+            expect(gltf.shaders.externalBox0FS.extras._pipeline.source).toBeDefined();
+            expect(bufferEqual(gltf.shaders.embeddedBox0FS.extras._pipeline.source, fragmentShaderData)).toBe(true);
+            expect(gltf.shaders.externalBox0FS.extras._pipeline.extension).toEqual('.glsl');
             done();
         });
     });
