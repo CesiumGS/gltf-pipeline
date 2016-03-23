@@ -19,5 +19,6 @@ module.exports = {
     removeUnused : require('./lib/removeUnused'),
     loadGltfUris : require('./lib/loadGltfUris'),
     writeGltf : require('./lib/writeGltf'),
+    parseBinaryGltf : require('./lib/parseBinaryGltf'),
     OptimizationStatistics : require('./lib/OptimizationStatistics')
 };
