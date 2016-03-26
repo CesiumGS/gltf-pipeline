@@ -10,7 +10,7 @@ var outputBufferPath = './specs/data/boxTexturedUnoptimized/output/CesiumTexture
 
 describe('writeBuffers', function() {
     var bufferData;
-
+    
     beforeAll(function(done) {
         fs.readFile(bufferPath, function (err, data) {
             if (err) {
@@ -27,15 +27,17 @@ describe('writeBuffers', function() {
                 "CesiumTexturedBoxTest": {
                     "uri": "CesiumTexturedBoxTest.bin",
                     "extras": {
-                        "source": bufferData,
-                        "extension": '.bin'
+                        "_pipeline": {
+                            "source": bufferData,
+                            "extension": '.bin'
+                        }
                     }
                 }
             }
         };
 
         writeGltf(gltf, outputPath, false, true, function() {
-            expect(gltf.buffers.CesiumTexturedBoxTest.extras.source).not.toBeDefined();
+            expect(gltf.buffers.CesiumTexturedBoxTest.extras).not.toBeDefined();
             expect(gltf.buffers.CesiumTexturedBoxTest.uri).toEqual('CesiumTexturedBoxTest.bin');
             fs.readFile(outputBufferPath, function(err, outputData) {
                 if (err) {
@@ -53,15 +55,17 @@ describe('writeBuffers', function() {
                 "CesiumTexturedBoxTest": {
                     "uri": "CesiumTexturedBoxTest.bin",
                     "extras": {
-                        "source": bufferData,
-                        "extension": '.bin'
+                        "_pipeline": {
+                            "source": bufferData,
+                            "extension": '.bin'
+                        }
                     }
                 }
             }
         };
         
         writeGltf(gltf, outputPath, true, true, function() {
-            expect(gltf.buffers.CesiumTexturedBoxTest.extras.source).not.toBeDefined();
+            expect(gltf.buffers.CesiumTexturedBoxTest.extras).not.toBeDefined();
             expect(gltf.buffers.CesiumTexturedBoxTest.uri).toEqual(bufferUri);
             done();
         });
@@ -73,8 +77,10 @@ describe('writeBuffers', function() {
                 "CesiumTexturedBoxTest": {
                     "uri": "CesiumTexturedBoxTest.bin",
                     "extras": {
-                        "source": bufferData,
-                        "extension": '.bin'
+                        "_pipeline": {
+                            "source": bufferData,
+                            "extension": '.bin'
+                        }
                     }
                 }
             }

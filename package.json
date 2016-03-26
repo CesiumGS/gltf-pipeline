@@ -39,7 +39,8 @@
     "data-uri-to-buffer": "0.0.4",
     "datauri": "^1.0.0-alpha.5",
     "minimist": "1.1.0",
-    "mkdirp": "^0.5.1"
+    "mkdirp": "^0.5.1",
+    "object-values": "^1.0.0"
   },
   "devDependencies": {
     "coveralls": "^2.11.6",

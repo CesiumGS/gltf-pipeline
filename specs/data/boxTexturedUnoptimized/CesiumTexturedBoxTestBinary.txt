@@ -69,41 +69,29 @@
       "api": "WebGL",
       "version": "1.0.2"
     },
-    "version": 1
+    "version": "1.0"
   },
   "bufferViews": {
     "bufferView_29": {
-      "buffer": "KHR_binary_glTF",
+      "buffer": "bufferView_29_buffer",
       "byteLength": 72,
       "byteOffset": 0,
       "target": 34963
     },
     "bufferView_30": {
-      "buffer": "KHR_binary_glTF",
+      "buffer": "bufferView_30_buffer",
       "byteLength": 768,
-      "byteOffset": 72,
+      "byteOffset": 0,
       "target": 34962
-    },
-    "binary_bufferView0": {
-      "buffer": "KHR_binary_glTF",
-      "byteLength": 529,
-      "byteOffset": 840
-    },
-    "binary_bufferView1": {
-      "buffer": "KHR_binary_glTF",
-      "byteLength": 439,
-      "byteOffset": 1369
-    },
-    "binary_bufferView2": {
-      "buffer": "KHR_binary_glTF",
-      "byteLength": 11982,
-      "byteOffset": 1808
     }
   },
   "buffers": {
-    "KHR_binary_glTF": {
-      "type": "arraybuffer",
-      "byteLength": 13790,
+    "bufferView_29_buffer": {
+      "byteLength": 72,
+      "uri": "data:,"
+    },
+    "bufferView_30_buffer": {
+      "byteLength": 768,
       "uri": "data:,"
     }
   },
@@ -111,14 +99,7 @@
     "Image0001": {
       "name": "Image0001",
       "uri": "data:,",
-      "extensions": {
-        "KHR_binary_glTF": {
-          "bufferView": "binary_bufferView2",
-          "mimeType": "image/jpeg",
-          "width": 211,
-          "height": 211
-        }
-      }
+      "extensions": {}
     }
   },
   "materials": {
@@ -283,20 +264,12 @@
     "CesiumTexturedBoxTest0FS": {
       "type": 35632,
       "uri": "data:,",
-      "extensions": {
-        "KHR_binary_glTF": {
-          "bufferView": "binary_bufferView0"
-        }
-      }
+      "extensions": {}
     },
     "CesiumTexturedBoxTest0VS": {
       "type": 35633,
       "uri": "data:,",
-      "extensions": {
-        "KHR_binary_glTF": {
-          "bufferView": "binary_bufferView1"
-        }
-      }
+      "extensions": {}
     }
   },
   "skins": {},

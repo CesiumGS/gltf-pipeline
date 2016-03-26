@@ -75,7 +75,8 @@ fs.readFile(gltfPath, function (err, data) {
             outputPath = path.join(filePath, fileName + '-optimized' + fileExtension);
         }
 
-        writeGltf(gltf, outputPath, true, true);
+        var isEmbedded = true;
+        writeGltf(gltf, outputPath, isEmbedded, true);
     });
 });
 

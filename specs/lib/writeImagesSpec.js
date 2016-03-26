@@ -25,18 +25,19 @@ describe('writeImages', function() {
         var gltf = {
             "images": {
                 "Cesium_Logo_Flat_Low": {
-                    "type": 35632,
                     "uri": imageUri,
                     "extras": {
-                        "source": imageData,
-                        "extension": '.png'
+                        "_pipeline": {
+                            "source": imageData,
+                            "extension": '.png'
+                        }
                     }
                 }
             }
         };
 
         writeGltf(gltf, outputPath, false, true, function() {
-            expect(gltf.images.Cesium_Logo_Flat_Low.extras.source).not.toBeDefined();
+            expect(gltf.images.Cesium_Logo_Flat_Low.extras).not.toBeDefined();
             expect(gltf.images.Cesium_Logo_Flat_Low.uri).toEqual('Cesium_Logo_Flat_Low.png');
             fs.readFile(outputImagePath, function(err, outputData) {
                 if (err) {
@@ -52,18 +53,19 @@ describe('writeImages', function() {
         var gltf = {
             "images": {
                 "Cesium_Logo_Flat_Low": {
-                    "type": 35632,
                     "uri": "Cesium_Logo_Flat_Low.png",
                     "extras": {
-                        "source": imageData,
-                        "extension": '.png'
+                        "_pipeline": {
+                            "source": imageData,
+                            "extension": '.png'
+                        }
                     }
                 }
             }
         };
         
         writeGltf(gltf, outputPath, true, true, function() {
-            expect(gltf.images.Cesium_Logo_Flat_Low.extras.source).not.toBeDefined();
+            expect(gltf.images.Cesium_Logo_Flat_Low.extras).not.toBeDefined();
             expect(gltf.images.Cesium_Logo_Flat_Low.uri).toEqual(imageUri);
             done();
         });
@@ -73,11 +75,12 @@ describe('writeImages', function() {
         var gltf = {
             "images": {
                 "Cesium_Logo_Flat_Low": {
-                    "type": 35632,
                     "uri": "Cesium_Logo_Flat_Low.png",
                     "extras": {
-                        "source": imageData,
-                        "extension": '.png'
+                        "_pipeline": {
+                            "source": imageData,
+                            "extension": '.png'
+                        }
                     }
                 }
             }
