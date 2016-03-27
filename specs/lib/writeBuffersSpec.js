@@ -29,7 +29,8 @@ describe('writeBuffers', function() {
                     "extras": {
                         "_pipeline": {
                             "source": bufferData,
-                            "extension": '.bin'
+                            "extension": '.bin',
+                            "deleteExtras": true
                         }
                     }
                 }
@@ -57,7 +58,8 @@ describe('writeBuffers', function() {
                     "extras": {
                         "_pipeline": {
                             "source": bufferData,
-                            "extension": '.bin'
+                            "extension": '.bin',
+                            "deleteExtras": true
                         }
                     }
                 }
@@ -79,7 +81,8 @@ describe('writeBuffers', function() {
                     "extras": {
                         "_pipeline": {
                             "source": bufferData,
-                            "extension": '.bin'
+                            "extension": '.bin',
+                            "deleteExtras": true
                         }
                     }
                 }

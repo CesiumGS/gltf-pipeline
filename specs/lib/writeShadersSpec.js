@@ -30,7 +30,8 @@ describe('writeShaders', function() {
                     "extras": {
                         "_pipeline": {
                             "source": fragmentShaderData,
-                            "extension": '.glsl'
+                            "extension": '.glsl',
+                            "deleteExtras": true
                         }
                     }
                 }
@@ -59,7 +60,8 @@ describe('writeShaders', function() {
                     "extras": {
                         "_pipeline": {
                             "source": fragmentShaderData,
-                            "extension": '.glsl'
+                            "extension": '.glsl',
+                            "deleteExtras": true
                         }
                     }
                 }
@@ -82,7 +84,8 @@ describe('writeShaders', function() {
                     "extras": {
                         "_pipeline": {
                             "source": fragmentShaderData,
-                            "extension": '.glsl'
+                            "extension": '.glsl',
+                            "deleteExtras": true
                         }
                     }
                 }

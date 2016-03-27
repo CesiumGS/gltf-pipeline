@@ -10,7 +10,8 @@ describe('removePipelineExtras', function() {
                     "uri": "CesiumTexturedBoxTest.bin",
                     "extras": {
                         "_pipeline": {
-                            "extension": '.bin'
+                            "extension": '.bin',
+                            "deleteExtras": true
                         },
                         "misc": {}
                     }
@@ -21,7 +22,8 @@ describe('removePipelineExtras', function() {
                     "uri": "Cesium_Logo_Flat_Low.png",
                     "extras": {
                         "_pipeline": {
-                            "extension": '.png'
+                            "extension": '.png',
+                            "deleteExtras": true
                         },
                         "misc": {}
                     }
@@ -43,7 +45,8 @@ describe('removePipelineExtras', function() {
                     "uri": "CesiumTexturedBoxTest.bin",
                     "extras": {
                         "_pipeline": {
-                            "extension": '.bin'
+                            "extension": '.bin',
+                            "deleteExtras": true
                         }
                     }
                 }
@@ -53,7 +56,8 @@ describe('removePipelineExtras', function() {
                     "uri": "Cesium_Logo_Flat_Low.png",
                     "extras": {
                         "_pipeline": {
-                            "extension": '.png'
+                            "extension": '.png',
+                            "deleteExtras": true
                         }
                     }
                 }

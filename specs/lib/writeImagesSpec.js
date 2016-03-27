@@ -29,7 +29,8 @@ describe('writeImages', function() {
                     "extras": {
                         "_pipeline": {
                             "source": imageData,
-                            "extension": '.png'
+                            "extension": '.png',
+                            "deleteExtras": true
                         }
                     }
                 }
@@ -57,7 +58,8 @@ describe('writeImages', function() {
                     "extras": {
                         "_pipeline": {
                             "source": imageData,
-                            "extension": '.png'
+                            "extension": '.png',
+                            "deleteExtras": true
                         }
                     }
                 }
@@ -79,7 +81,8 @@ describe('writeImages', function() {
                     "extras": {
                         "_pipeline": {
                             "source": imageData,
-                            "extension": '.png'
+                            "extension": '.png',
+                            "deleteExtras": true
                         }
                     }
                 }
