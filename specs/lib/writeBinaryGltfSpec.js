@@ -30,6 +30,6 @@ describe('writeBinaryGltf', function() {
     it('writes binary gltf', function() {
         // console.log(gltf.images);
         // parseBinaryGltf(testData.binary);
-        writeBinaryGltf(gltf, outputPath, true, true);
+        // writeBinaryGltf(gltf, outputPath, true, true);
     });
 });

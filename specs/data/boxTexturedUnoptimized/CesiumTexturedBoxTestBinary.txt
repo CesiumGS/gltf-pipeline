@@ -98,8 +98,7 @@
   "images": {
     "Image0001": {
       "name": "Image0001",
-      "uri": "data:,",
-      "extensions": {}
+      "uri": "data:,"
     }
   },
   "materials": {
@@ -263,13 +262,11 @@
   "shaders": {
     "CesiumTexturedBoxTest0FS": {
       "type": 35632,
-      "uri": "data:,",
-      "extensions": {}
+      "uri": "data:,"
     },
     "CesiumTexturedBoxTest0VS": {
       "type": 35633,
-      "uri": "data:,",
-      "extensions": {}
+      "uri": "data:,"
     }
   },
   "skins": {},
@@ -341,8 +338,5 @@
       "target": 3553,
       "type": 5121
     }
-  },
-  "extensionsUsed": [
-    "KHR_binary_glTF"
-  ]
+  }
 }
