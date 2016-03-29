@@ -59,13 +59,6 @@
                 0
             ],
             "type": "VEC2"
-        },
-        "unusedAccessorId": {
-            "bufferView": "bufferView_43",
-            "byteOffset": 128,
-            "componentType": 5126,
-            "count": 3,
-            "type": "SCALAR"
         }
     },
     "animations": {},
@@ -90,12 +83,6 @@
             "byteLength": 768,
             "byteOffset": 72,
             "target": 34962
-        },
-        "unusedBufferViewId": {
-            "buffer": "CesiumTexturedBoxTest",
-            "byteLength": 768,
-            "byteOffset": 72,
-            "target": 34962
         }
     },
     "buffers": {
@@ -103,41 +90,12 @@
             "byteLength": 840,
             "type": "arraybuffer",
             "uri": "CesiumTexturedBoxTest.bin"
-        },
-        "unusedBufferId": {
-            "byteLength": 840,
-            "type": "arraybuffer",
-            "uri": "CesiumTexturedBoxTest.bin"
-        }
-    },
-    "cameras": {
-        "camera_0": {
-            "perspective": {
-                "aspectRatio": 1.5,
-                "yfov": 0.660593,
-                "zfar": 100,
-                "znear": 0.01
-            },
-            "type": "perspective"
-        },
-        "unusedCameraId": {
-            "perspective": {
-                "aspectRatio": 1.5,
-                "yfov": 0.660593,
-                "zfar": 100,
-                "znear": 0.01
-            },
-            "type": "perspective"
         }
     },
     "images": {
         "Image0001": {
             "name": "Image0001",
-            "uri": "Cesium_Logo_Flat.png"
-        },
-        "unusedId": {
-            "name": "An unused image for testing removal",
-            "uri": "unused.png"
+            "uri": "Cesium_Logo_Flat_Binary.png"
         }
     },
     "materials": {
@@ -153,14 +111,6 @@
                     0.2,
                     1
                 ]
-            }
-        },
-        "unusedMaterialId": {
-            "name": "Texture",
-            "technique": "technique0",
-            "values": {
-                "diffuse": "texture_Image0001",
-                "shininess": 256
             }
         }
     },
@@ -179,8 +129,7 @@
                     "mode": 4
                 }
             ]
-        },
-        "unusedMeshId": {}
+        }
     },
     "nodes": {
         "Geometry-mesh002Node": {
@@ -233,7 +182,6 @@
             "name": "Texture_Group"
         },
         "node_3": {
-            "camera": "camera_0",
             "children": [
                 "Geometry-mesh002Node",
                 "groupLocator030Node"
@@ -279,8 +227,6 @@
                 1
             ],
             "name": "Cesium_Logo_Flat__Image___Texture_"
-        },
-        "unusedNodeId": {
         }
     },
     "programs": {
@@ -292,23 +238,10 @@
             ],
             "fragmentShader": "CesiumTexturedBoxTest0FS",
             "vertexShader": "CesiumTexturedBoxTest0VS"
-        },
-        "unusedProgramId": {
-            "attributes": [
-                "a_position"
-            ],
-            "fragmentShader": "CesiumTexturedBoxTest0FS",
-            "vertexShader": "CesiumTexturedBoxTest0VS"
         }
     },
     "samplers": {
         "sampler_0": {
-            "magFilter": 9729,
-            "minFilter": 9987,
-            "wrapS": 10497,
-            "wrapT": 10497
-        },
-        "unusedSamplerId": {
             "magFilter": 9729,
             "minFilter": 9987,
             "wrapS": 10497,
@@ -326,15 +259,11 @@
     "shaders": {
         "CesiumTexturedBoxTest0FS": {
             "type": 35632,
-            "uri": "CesiumTexturedBoxTest0FS.glsl"
+            "uri": "CesiumTexturedBoxTest0FS_Binary.glsl"
         },
         "CesiumTexturedBoxTest0VS": {
             "type": 35633,
-            "uri": "CesiumTexturedBoxTest0VS.glsl"
-        },
-        "unusedShaderId": {
-            "type": 35633,
-            "uri": "CesiumTexturedBoxTest0VS.glsl"
+            "uri": "CesiumTexturedBoxTest0VS_Binary.glsl"
         }
     },
     "skins": {},
@@ -395,32 +324,6 @@
                 "u_shininess": "shininess",
                 "u_specular": "specular"
             }
-        },
-        "unusedTechniqueId": {
-            "attributes": {
-                "a_position": "position"
-            },
-            "parameters": {
-                "modelViewMatrix": {
-                    "semantic": "MODELVIEW",
-                    "type": 35676
-                },
-                "projectionMatrix": {
-                    "semantic": "PROJECTION",
-                    "type": 35676
-                }
-            },
-            "program": "program_0",
-            "states": {
-                "enable": [
-                    2929,
-                    2884
-                ]
-            },
-            "uniforms": {
-                "u_modelViewMatrix": "modelViewMatrix",
-                "u_projectionMatrix": "projectionMatrix"
-            }
         }
     },
     "textures": {
@@ -431,10 +334,6 @@
             "source": "Image0001",
             "target": 3553,
             "type": 5121
-        },
-        "unusedTextureId": {
-            "sampler": "sampler_0",
-            "source": "Image0001"
         }
     }
 }

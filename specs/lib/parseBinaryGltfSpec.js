@@ -9,7 +9,7 @@ var removePipelineExtras = require('../../lib/removePipelineExtras');
 var binaryGltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.glb';
 var overlapGltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestOverlap.glb';
 var gltfScenePath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestBinary.txt';
-var bufferPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxBuffer.bin';
+var bufferPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxBuffer_Binary.bin';
 var fragmentShaderPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest0FS_Binary.glsl';
 var imagePath = './specs/data/boxTexturedUnoptimized/Cesium_Logo_Flat_Binary.png';
 

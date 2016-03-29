@@ -3,7 +3,7 @@
 var fs = require('fs');
 var removeUnused = require('../../').removeUnused;
 var OptimizationStatistics = require('../../').OptimizationStatistics;
-var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestUnused.gltf';
+var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestUnusedTree.gltf';
 
 describe('removeUnused', function() {
     it('removes a tree of objects', function(done) {

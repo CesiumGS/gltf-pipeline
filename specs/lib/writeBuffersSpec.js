@@ -1,6 +1,7 @@
 'use strict';
 
 var fs = require('fs');
+var clone = require('clone');
 var bufferEqual = require('buffer-equal');
 var writeGltf = require('../../lib/writeGltf');
 var bufferPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.bin';
@@ -10,32 +11,34 @@ var outputBufferPath = './specs/data/boxTexturedUnoptimized/output/CesiumTexture
 
 describe('writeBuffers', function() {
     var bufferData;
-    
+    var testGltf;
+
     beforeAll(function(done) {
         fs.readFile(bufferPath, function (err, data) {
             if (err) {
                 throw err;
             }
             bufferData = data;
+            testGltf = {
+                "buffers": {
+                    "CesiumTexturedBoxTest": {
+                        "uri": "CesiumTexturedBoxTest.bin",
+                        "extras": {
+                            "_pipeline": {
+                                "source": bufferData,
+                                "extension": '.bin',
+                                "deleteExtras": true
+                            }
+                        }
+                    }
+                }
+            };
             done();
         });
     });
 
     it('writes an external buffer', function(done) {
-        var gltf = {
-            "buffers": {
-                "CesiumTexturedBoxTest": {
-                    "uri": "CesiumTexturedBoxTest.bin",
-                    "extras": {
-                        "_pipeline": {
-                            "source": bufferData,
-                            "extension": '.bin',
-                            "deleteExtras": true
-                        }
-                    }
-                }
-            }
-        };
+        var gltf = clone(testGltf);
 
         writeGltf(gltf, outputPath, false, true, function() {
             expect(gltf.buffers.CesiumTexturedBoxTest.extras).not.toBeDefined();
@@ -51,20 +54,7 @@ describe('writeBuffers', function() {
     });
 
     it('writes an embedded buffer', function(done) {
-        var gltf = {
-            "buffers": {
-                "CesiumTexturedBoxTest": {
-                    "uri": "CesiumTexturedBoxTest.bin",
-                    "extras": {
-                        "_pipeline": {
-                            "source": bufferData,
-                            "extension": '.bin',
-                            "deleteExtras": true
-                        }
-                    }
-                }
-            }
-        };
+        var gltf = clone(testGltf);
         
         writeGltf(gltf, outputPath, true, true, function() {
             expect(gltf.buffers.CesiumTexturedBoxTest.extras).not.toBeDefined();
@@ -74,20 +64,7 @@ describe('writeBuffers', function() {
     });
 
     it('throws an error', function(done) {
-        var gltf = {
-            "buffers": {
-                "CesiumTexturedBoxTest": {
-                    "uri": "CesiumTexturedBoxTest.bin",
-                    "extras": {
-                        "_pipeline": {
-                            "source": bufferData,
-                            "extension": '.bin',
-                            "deleteExtras": true
-                        }
-                    }
-                }
-            }
-        };
+        var gltf = clone(testGltf);
 
         writeGltf(gltf, './specs/errorFilePath/output.gltf', false, false, function(err) {
             expect(err).toBeDefined();
