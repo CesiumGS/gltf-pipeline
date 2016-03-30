@@ -20,5 +20,6 @@ module.exports = {
     loadGltfUris : require('./lib/loadGltfUris'),
     writeGltf : require('./lib/writeGltf'),
     parseBinaryGltf : require('./lib/parseBinaryGltf'),
+    writeBinaryGltf : require('./lib/writeBinaryGltf'),
     OptimizationStatistics : require('./lib/OptimizationStatistics')
 };
