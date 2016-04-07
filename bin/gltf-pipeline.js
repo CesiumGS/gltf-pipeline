@@ -22,6 +22,7 @@ var removeUnused = require('../').removeUnused;
 var loadGltfUris = require('../').loadGltfUris;
 var writeGltf = require('../').writeGltf;
 var parseBinaryGltf = require('../').parseBinaryGltf;
+var addPipelineExtras = require('../').addPipelineExtras;
 var OptimizationStatistics = require('../').OptimizationStatistics;
 var Cesium = require('cesium');
 var defined = Cesium.defined;
