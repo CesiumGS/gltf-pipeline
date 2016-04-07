@@ -1,7 +1,7 @@
 'use strict';
 var fs = require('fs');
 var removePipelineExtras = require('../../lib/removePipelineExtras');
-var gltfExtrasPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestExtras.gltf';
+var gltfExtrasPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestRemoveExtras.gltf';
 
 describe('removePipelineExtras', function() {
     var gltf;
