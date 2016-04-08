@@ -1,6 +1,7 @@
 'use strict';
 
 var fs = require('fs');
+var clone = require('clone');
 var bufferEqual = require('buffer-equal');
 var writeGltf = require('../../lib/writeGltf');
 var fragmentShaderPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest0FS.glsl';
@@ -10,6 +11,7 @@ var outputFragmentShaderPath = './specs/data/boxTexturedUnoptimized/output/Cesiu
 
 describe('writeShaders', function() {
     var fragmentShaderData;
+    var testGltf;
 
     beforeAll(function(done) {
         fs.readFile(fragmentShaderPath, function (err, data) {
@@ -17,25 +19,27 @@ describe('writeShaders', function() {
                 throw err;
             }
             fragmentShaderData = data;
+            testGltf = {
+                "shaders": {
+                    "CesiumTexturedBoxTest0FS": {
+                        "type": 35632,
+                        "uri": fragmentShaderUri,
+                        "extras": {
+                            "_pipeline": {
+                                "source": fragmentShaderData,
+                                "extension": '.glsl',
+                                "deleteExtras": true
+                            }
+                        }
+                    }
+                }
+            };
             done();
         });
     });
 
     it('writes an external shader', function(done) {
-        var gltf = {
-            "shaders": {
-                "CesiumTexturedBoxTest0FS": {
-                    "type": 35632,
-                    "uri": fragmentShaderUri,
-                    "extras": {
-                        "_pipeline": {
-                            "source": fragmentShaderData,
-                            "extension": '.glsl'
-                        }
-                    }
-                }
-            }
-        };
+        var gltf = clone(testGltf);
 
         writeGltf(gltf, outputPath, false, true, function() {
             expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras).not.toBeDefined();
@@ -51,20 +55,7 @@ describe('writeShaders', function() {
     });
 
     it('writes an embedded shader', function(done) {
-        var gltf = {
-            "shaders": {
-                "CesiumTexturedBoxTest0FS": {
-                    "type": 35632,
-                    "uri": "CesiumTexturedBoxTest0FS.glsl",
-                    "extras": {
-                        "_pipeline": {
-                            "source": fragmentShaderData,
-                            "extension": '.glsl'
-                        }
-                    }
-                }
-            }
-        };
+        var gltf = clone(testGltf);
         
         writeGltf(gltf, outputPath, true, true, function() {
             expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras).not.toBeDefined();
@@ -74,20 +65,7 @@ describe('writeShaders', function() {
     });
 
     it('throws an error', function(done) {
-        var gltf = {
-            "shaders": {
-                "CesiumTexturedBoxTest0FS": {
-                    "type": 35632,
-                    "uri": "CesiumTexturedBoxTest0FS.glsl",
-                    "extras": {
-                        "_pipeline": {
-                            "source": fragmentShaderData,
-                            "extension": '.glsl'
-                        }
-                    }
-                }
-            }
-        };
+        var gltf = clone(testGltf);
 
         writeGltf(gltf, './specs/errorFilePath/output.gltf', false, false, function(err) {
             expect(err).toBeDefined();

@@ -1,0 +1,215 @@
+{
+    "accessors": {
+        "accessor_21": {
+            "bufferView": "bufferView_29",
+            "byteOffset": 0,
+            "componentType": 5123,
+            "count": 36,
+            "type": "SCALAR"
+        }
+    },
+    "animations": {
+        "animation_0": {
+            "channels": [
+                {
+                    "sampler": "animation_0_scale_sampler",
+                    "target": {
+                        "id": "Bone",
+                        "path": "scale"
+                    }
+                }
+            ],
+            "samplers": {
+                "sampler": {
+                    "input": "TIME",
+                    "interpolation": "LINEAR",
+                    "output": "rotation"
+                }
+            }
+        }
+    },
+    "asset": {
+        "generator": "collada2gltf@ceec062e3d5793f2f249f53cbd843aee382ad40b",
+        "premultipliedAlpha": true,
+        "profile": {
+            "api": "WebGL",
+            "version": "1.0.2"
+        },
+        "version": 1
+    },
+    "bufferViews": {
+        "bufferView_29": {
+            "buffer": "CesiumTexturedBoxTest",
+            "byteLength": 72,
+            "byteOffset": 0,
+            "target": 34963
+        }
+    },
+    "buffers": {
+        "CesiumTexturedBoxTest": {
+            "byteLength": 840,
+            "type": "arraybuffer",
+            "uri": "CesiumTexturedBoxTest.bin"
+        }
+    },
+    "cameras": {
+        "camera_0": {
+            "orthographic": {
+                "xmag": 1.0,
+                "ymag": 1.0,
+                "zfar": 100,
+                "znear": 0.01
+            },
+            "perspective": {
+                "aspectRatio": 1.5,
+                "yfov": 0.660593,
+                "zfar": 100,
+                "znear": 0.01
+            },
+            "type": "perspective"
+        }
+    },
+    "images": {
+        "Image0001": {
+            "uri": "Cesium_Logo_Flat.png"
+        }
+    },
+    "materials": {
+        "EffectTexture": {
+            "name": "Texture",
+            "technique": "technique0",
+            "values": {
+                "diffuse": "texture_Image0001",
+                "shininess": 256
+            },
+            "extras": {}
+        }
+    },
+    "meshes": {
+        "mesh002": {
+            "name": "Mesh",
+            "primitives": [
+                {
+                    "attributes": {
+                        "NORMAL": "accessor_25",
+                        "POSITION": "accessor_23",
+                        "TEXCOORD_0": "accessor_27"
+                    },
+                    "indices": "accessor_21",
+                    "material": "Effect-Texture",
+                    "mode": 4,
+                    "extras": {}
+                }
+            ],
+            "extras": {
+                "_pipeline": {}
+            }
+        }
+    },
+    "nodes": {
+        "mesh002Node": {
+            "children": [],
+            "meshes": [
+                "Geometry-mesh002"
+            ],
+            "name": "Mesh",
+            "extras": {}
+        }
+    },
+    "programs": {
+        "program_0": {
+            "attributes": [
+                "a_normal",
+                "a_position",
+                "a_texcoord0"
+            ],
+            "fragmentShader": "CesiumTexturedBoxTest0FS",
+            "vertexShader": "CesiumTexturedBoxTest0VS",
+            "extras": {}
+        }
+    },
+    "samplers": {
+        "sampler_0": {
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapS": 10497,
+            "wrapT": 10497,
+            "extras": {}
+        }
+    },
+    "scene": "defaultScene",
+    "scenes": {
+        "defaultScene": {
+            "nodes": [
+                "node_3"
+            ],
+            "extras": {}
+        }
+    },
+    "shaders": {
+        "CesiumTexturedBoxTest0FS": {
+            "type": 35632,
+            "uri": "CesiumTexturedBoxTest0FS.glsl",
+            "extras": {
+                "misc": {}
+            }
+        }
+    },
+    "skins": {
+        "Armature_Cylinder_skin": {
+            "inverseBindMatrices": "IBM_Armature_Cylinder-skin",
+            "jointNames": [
+                "Bone",
+                "Bone_001"
+            ],
+            "name": "Armature",
+            "extras": {
+                "misc": {}
+            }
+        }
+    },
+    "techniques": {
+        "technique0": {
+            "parameters": {
+                "diffuse": {
+                    "type": 35678,
+                    "extras": {
+                        "misc": {}
+                    }
+                }
+            },
+            "program": "program_0",
+            "states": {
+                "enable": [
+                    2929,
+                    2884
+                ],
+                "functions": {
+                    "blendColor": [0, 0, 0, 0],
+                    "extras": {
+                        "misc": {}
+                    }
+                },
+                "extras": {
+                    "misc": {}
+                }
+            },
+            "extras": {
+                "misc": {}
+            }
+        }
+    },
+    "textures": {
+        "texture_Image0001": {
+            "format": 6408,
+            "internalFormat": 6408,
+            "sampler": "sampler_0",
+            "source": "Image0001",
+            "target": 3553,
+            "type": 5121,
+            "extras": {
+                "misc": {}
+            }
+        }
+    }
+}

@@ -73,32 +73,52 @@
   },
   "bufferViews": {
     "bufferView_29": {
-      "buffer": "bufferView_29_buffer",
+      "buffer": "binary_glTF",
       "byteLength": 72,
       "byteOffset": 0,
       "target": 34963
     },
     "bufferView_30": {
-      "buffer": "bufferView_30_buffer",
+      "buffer": "binary_glTF",
       "byteLength": 768,
-      "byteOffset": 0,
+      "byteOffset": 72,
       "target": 34962
+    },
+    "binary_bufferView0": {
+      "buffer": "binary_glTF",
+      "byteLength": 529,
+      "byteOffset": 840
+    },
+    "binary_bufferView1": {
+      "buffer": "binary_glTF",
+      "byteLength": 439,
+      "byteOffset": 1369
+    },
+    "binary_bufferView2": {
+      "buffer": "binary_glTF",
+      "byteLength": 11982,
+      "byteOffset": 1808
     }
   },
   "buffers": {
-    "bufferView_29_buffer": {
-      "byteLength": 72,
-      "uri": "data:,"
-    },
-    "bufferView_30_buffer": {
-      "byteLength": 768,
+    "binary_glTF": {
+      "type": "arraybuffer",
+      "byteLength": 13790,
       "uri": "data:,"
     }
   },
   "images": {
     "Image0001": {
       "name": "Image0001",
-      "uri": "data:,"
+      "uri": "data:,",
+      "extensions": {
+        "KHR_binary_glTF": {
+          "bufferView": "binary_bufferView2",
+          "mimeType": "image/png",
+          "width": 211,
+          "height": 211
+        }
+      }
     }
   },
   "materials": {
@@ -262,11 +282,21 @@
   "shaders": {
     "CesiumTexturedBoxTest0FS": {
       "type": 35632,
-      "uri": "data:,"
+      "uri": "data:,",
+      "extensions": {
+        "KHR_binary_glTF": {
+          "bufferView": "binary_bufferView0"
+        }
+      }
     },
     "CesiumTexturedBoxTest0VS": {
       "type": 35633,
-      "uri": "data:,"
+      "uri": "data:,",
+      "extensions": {
+        "KHR_binary_glTF": {
+          "bufferView": "binary_bufferView1"
+        }
+      }
     }
   },
   "skins": {},
@@ -338,5 +368,8 @@
       "target": 3553,
       "type": 5121
     }
-  }
+  },
+  "extensionsUsed": [
+    "KHR_binary_glTF"
+  ]
 }

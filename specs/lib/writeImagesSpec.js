@@ -1,6 +1,7 @@
 'use strict';
 
 var fs = require('fs');
+var clone = require('clone');
 var bufferEqual = require('buffer-equal');
 var writeGltf = require('../../lib/writeGltf');
 var imagePath = './specs/data/boxTexturedUnoptimized/Cesium_Logo_Flat_Low.png';
@@ -10,6 +11,7 @@ var outputImagePath = './specs/data/boxTexturedUnoptimized/output/Cesium_Logo_Fl
 
 describe('writeImages', function() {
     var imageData;
+    var testGltf;
 
     beforeAll(function(done) {
         fs.readFile(imagePath, function (err, data) {
@@ -17,24 +19,26 @@ describe('writeImages', function() {
                 throw err;
             }
             imageData = data;
+            testGltf = {
+                "images": {
+                    "Cesium_Logo_Flat_Low": {
+                        "uri": imageUri,
+                        "extras": {
+                            "_pipeline": {
+                                "source": imageData,
+                                "extension": '.png',
+                                "deleteExtras": true
+                            }
+                        }
+                    }
+                }
+            };
             done();
         });
     });
 
     it('writes an external buffer', function(done) {
-        var gltf = {
-            "images": {
-                "Cesium_Logo_Flat_Low": {
-                    "uri": imageUri,
-                    "extras": {
-                        "_pipeline": {
-                            "source": imageData,
-                            "extension": '.png'
-                        }
-                    }
-                }
-            }
-        };
+        var gltf = clone(testGltf);
 
         writeGltf(gltf, outputPath, false, true, function() {
             expect(gltf.images.Cesium_Logo_Flat_Low.extras).not.toBeDefined();
@@ -50,19 +54,7 @@ describe('writeImages', function() {
     });
 
     it('writes an embedded buffer', function(done) {
-        var gltf = {
-            "images": {
-                "Cesium_Logo_Flat_Low": {
-                    "uri": "Cesium_Logo_Flat_Low.png",
-                    "extras": {
-                        "_pipeline": {
-                            "source": imageData,
-                            "extension": '.png'
-                        }
-                    }
-                }
-            }
-        };
+        var gltf = clone(testGltf);
         
         writeGltf(gltf, outputPath, true, true, function() {
             expect(gltf.images.Cesium_Logo_Flat_Low.extras).not.toBeDefined();
@@ -72,19 +64,7 @@ describe('writeImages', function() {
     });
 
     it('throws an error', function(done) {
-        var gltf = {
-            "images": {
-                "Cesium_Logo_Flat_Low": {
-                    "uri": "Cesium_Logo_Flat_Low.png",
-                    "extras": {
-                        "_pipeline": {
-                            "source": imageData,
-                            "extension": '.png'
-                        }
-                    }
-                }
-            }
-        };
+        var gltf = clone(testGltf);
 
         writeGltf(gltf, './specs/errorFilePath/output.gltf', false, false, function(err) {
             expect(err).toBeDefined();
