@@ -1,0 +1,39 @@
+{
+    "nodes": {
+        "B": {
+            "children": [
+                "D"
+            ]
+        },
+        "C": {
+            "children": [
+                "D"
+            ]
+        },
+        "D": {
+            "children": [
+                "E",
+                "F"
+            ]
+        },
+        "E": {
+            "children": [
+                "G"
+            ]
+        },
+        "F": {
+            "children": [
+                "G"
+            ]
+        },
+        "G": {}
+    },
+    "scenes": {
+        "defaultScene": {
+            "nodes": [
+                "B",
+                "C"
+            ]
+        }
+    }
+}
