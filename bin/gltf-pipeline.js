@@ -23,6 +23,7 @@ var loadGltfUris = require('../').loadGltfUris;
 var writeGltf = require('../').writeGltf;
 var parseBinaryGltf = require('../').parseBinaryGltf;
 var addPipelineExtras = require('../').addPipelineExtras;
+var convertDagToTree = require('../').convertDagToTree;
 var OptimizationStatistics = require('../').OptimizationStatistics;
 var Cesium = require('cesium');
 var defined = Cesium.defined;
@@ -64,6 +65,9 @@ fs.readFile(gltfPath, function (err, data) {
     // TODO: custom pipeline based on arguments / config
     removeUnused(gltf, stats);
     printStats(stats);
+
+    addPipelineExtras(gltf);
+    convertDagToTree(gltf);
 
     gltf = loadGltfUris(gltf, filePath, function(err) {
         if (err) {

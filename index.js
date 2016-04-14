@@ -21,5 +21,7 @@ module.exports = {
     writeGltf : require('./lib/writeGltf'),
     parseBinaryGltf : require('./lib/parseBinaryGltf'),
     writeBinaryGltf : require('./lib/writeBinaryGltf'),
+    addPipelineExtras : require('./lib/addPipelineExtras'),
+    convertDagToTree : require('./lib/convertDagToTree'),
     OptimizationStatistics : require('./lib/OptimizationStatistics')
 };

@@ -51,7 +51,6 @@
     "gulp-jshint": "2.0.0",
     "istanbul": "^0.4.1",
     "jasmine": "^2.4.1",
-    "jasmine-node": "^1.14.5",
     "jshint": "2.8.0",
     "jshint-stylish": "2.1.0"
   }
