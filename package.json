@@ -22,8 +22,8 @@
   "scripts": {
     "jsHint": "gulp jsHint",
     "jsHint-watch": "gulp jsHint-watch",
-    "jasmine": "./node_modules/.bin/jasmine",
-    "coverage": "./node_modules/istanbul/lib/cli.js cover -x **/specs/** ./node_modules/jasmine/bin/jasmine.js",
+    "jasmine": "jasmine",
+    "coverage": "istanbul cover -x **/specs/** ./node_modules/jasmine/bin/jasmine.js",
     "build": "browserify index.js --standalone gltfPipeline -o build/gltf-pipeline.js",
     "test": "npm run jsHint && npm run coverage",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
