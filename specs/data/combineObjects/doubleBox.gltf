@@ -178,19 +178,9 @@
         }
     },
     "meshes": {
-        "Geometry-mesh019": {
+        "meshTest": {
             "name": "box",
             "primitives": [
-                {
-                    "attributes": {
-                        "NORMAL": "accessor_33",
-                        "POSITION": "accessor_31",
-                        "TEXCOORD_0": "accessor_35"
-                    },
-                    "indices": "accessor_29",
-                    "material": "Effect_outer",
-                    "mode": 4
-                },
                 {
                     "attributes": {
                         "NORMAL": "accessor_60",
@@ -198,6 +188,16 @@
                         "TEXCOORD_0": "accessor_62"
                     },
                     "indices": "accessor_56",
+                    "material": "Effect_outer",
+                    "mode": 4
+                },
+                {
+                    "attributes": {
+                        "NORMAL": "accessor_33",
+                        "POSITION": "accessor_31",
+                        "TEXCOORD_0": "accessor_35"
+                    },
+                    "indices": "accessor_29",
                     "material": "Effect_outer",
                     "mode": 4
                 }
@@ -249,7 +249,7 @@
                 1
             ],
             "meshes": [
-                "Geometry-mesh019"
+                "meshTest"
             ],
             "name": "box"
         },
