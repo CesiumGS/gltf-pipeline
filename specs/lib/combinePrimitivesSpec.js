@@ -4,21 +4,30 @@ var clone = require('clone');
 var addPipelineExtras = require('../../lib/addPipelineExtras');
 var combinePrimitives = require('../../lib/combinePrimitives');
 var writeGltf = require('../../lib/writeGltf');
+var loadGltfUris = require('../../lib/loadGltfUris');
 var boxPath = './specs/data/combineObjects/box.gltf';
-var doubleBoxPath = './specs/data/combineObjects/doubleBox.gltf';
+var doubleBoxToCombinePath = './specs/data/combineObjects/doubleBoxToCombine.gltf';
+var doubleBoxNotCombinedPath = './specs/data/combineObjects/doubleBoxNotCombined.gltf';
 
 describe('addPipelineExtras', function() {
-    var box, doubleBox, doubleBoxError;
+    var box, doubleBoxToCombine, doubleBoxNotCombined, doubleBoxError;
 
     beforeAll(function(done) {
-        fs.readFile(doubleBoxPath, function(err, data) {
-            doubleBox = JSON.parse(data);
-            addPipelineExtras(doubleBox);
-            doubleBoxError = clone(doubleBox);
+        fs.readFile(doubleBoxToCombinePath, function(err, data) {
+            doubleBoxToCombine = JSON.parse(data);
+            addPipelineExtras(doubleBoxToCombine);
+            loadGltfUris(doubleBoxToCombine);
+            doubleBoxError = clone(doubleBoxToCombine);
 
-            fs.readFile(boxPath, function(err, data) {
-                box = JSON.parse(data);
-                done();
+            fs.readFile(doubleBoxNotCombinedPath, function(err, data) {
+                doubleBoxNotCombined = JSON.parse(data);
+                loadGltfUris(doubleBoxNotCombined);
+
+                fs.readFile(boxPath, function(err, data) {
+                    box = JSON.parse(data);
+                    loadGltfUris(box);
+                    done();
+                });
             });
         });
     });
@@ -32,19 +41,28 @@ describe('addPipelineExtras', function() {
         });
     });
 
-    it('combines two primitives referencing the same bufferView', function() {
-        combinePrimitives(doubleBox);
-        writeGltf(doubleBox, './doubleBoxOutput.gltf', false, true, function() {
-            expect(doubleBox.meshes.meshTest.primitives.length).toEqual(1);
-            expect(doubleBox.meshes.meshTest.primitives[0].material).toEqual('Effect_outer');
-            expect(doubleBox.meshes.meshTest.primitives[0].mode).toEqual(4);
-            expect(doubleBox.meshes.meshTest.primitives[0].indices).toEqual('meshTest_INDEX_accessor_0');
-            expect(doubleBox.meshes.meshTest.primitives[0].attributes).toEqual({
+    it('does not combine two primitives', function() {
+        var copy = clone(doubleBoxNotCombined);
+        addPipelineExtras(doubleBoxNotCombined);
+        combinePrimitives(doubleBoxNotCombined);
+        writeGltf(doubleBoxNotCombined, './doubleBoxNotCombinedOutput.gltf', false, true, function() {
+            expect(copy).toEqual(doubleBoxNotCombined);
+        });
+    });
+
+    it('combines two primitives', function() {
+        combinePrimitives(doubleBoxToCombine);
+        writeGltf(doubleBoxToCombine, './doubleBoxToCombineOutput.gltf', false, true, function() {
+            expect(doubleBoxToCombine.meshes.meshTest.primitives.length).toEqual(1);
+            expect(doubleBoxToCombine.meshes.meshTest.primitives[0].material).toEqual('Effect_outer');
+            expect(doubleBoxToCombine.meshes.meshTest.primitives[0].mode).toEqual(4);
+            expect(doubleBoxToCombine.meshes.meshTest.primitives[0].indices).toEqual('meshTest_INDEX_accessor_0');
+            expect(doubleBoxToCombine.meshes.meshTest.primitives[0].attributes).toEqual({
                 "NORMAL": 'meshTest_NORMAL_accessor_0',
                 "POSITION": 'meshTest_POSITION_accessor_0',
                 "TEXCOORD_0": 'meshTest_TEXCOORD_0_accessor_0'
             });
-            expect(doubleBox.accessors['meshTest_INDEX_accessor_0']).toEqual({
+            expect(doubleBoxToCombine.accessors['meshTest_INDEX_accessor_0']).toEqual({
                 "bufferView": "meshTest_INDEX_bufferView_0",
                 "byteOffset": 0,
                 "byteStride": 0,
@@ -52,7 +70,7 @@ describe('addPipelineExtras', function() {
                 "type": "SCALAR",
                 "count": 516
             });
-            expect(doubleBox.accessors['meshTest_POSITION_accessor_0']).toEqual({
+            expect(doubleBoxToCombine.accessors['meshTest_POSITION_accessor_0']).toEqual({
                 "bufferView": "meshTest_POSITION_bufferView_0",
                 "byteOffset": 0,
                 "byteStride": 12,
@@ -62,7 +80,7 @@ describe('addPipelineExtras', function() {
                 "max": [0.5, 0.5, 0.5],
                 "min": [-0.5, -0.5, -0.5]
             });
-            expect(doubleBox.bufferViews['meshTest_INDEX_bufferView_0'].buffer).toEqual('meshTest_INDEX_buffer_0');
+            expect(doubleBoxToCombine.bufferViews['meshTest_INDEX_bufferView_0'].buffer).toEqual('meshTest_INDEX_buffer_0');
         });
     });
 

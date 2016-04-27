@@ -74,6 +74,8 @@ fs.readFile(gltfPath, function (err, data) {
             throw err;
         }
 
+        combinePrimitives(gltf);
+        
         var outputPath = argv.o;
         if (!defined(outputPath)) {
             // Default output.  For example, path/asset.gltf becomes path/asset-optimized.gltf
