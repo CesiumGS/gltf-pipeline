@@ -55,6 +55,23 @@ describe('addPipelineExtras', function() {
         writeGltf(doubleBoxNotCombined, './doubleBoxNotCombinedOutput.gltf', false, true, function() {
             expect(copy).toEqual(doubleBoxNotCombined);
         });
+
+        var oneAttribute = clone(doubleBoxError);
+        oneAttribute.meshes.meshTest.primitives[0].attributes = {
+            "POSITION": 'accessor_58'
+        };
+        combinePrimitives(oneAttribute);
+        expect(oneAttribute.meshes.meshTest.primitives.length).toEqual(2);
+
+        var differentAttributes = clone(doubleBoxError);
+        differentAttributes.meshes.meshTest.primitives[0].attributes = {
+            "NORMAL": 'accessor_60',
+            "POS": 'accessor_58',
+            "TEXCOORD_0": 'accessor_62'
+        };
+        combinePrimitives(differentAttributes);
+        expect(differentAttributes.meshes.meshTest.primitives.length).toEqual(2);
+
     });
 
     it('combines two primitives', function() {
