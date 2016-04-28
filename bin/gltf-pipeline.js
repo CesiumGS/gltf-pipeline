@@ -24,6 +24,7 @@ var writeGltf = require('../').writeGltf;
 var parseBinaryGltf = require('../').parseBinaryGltf;
 var addPipelineExtras = require('../').addPipelineExtras;
 var convertDagToTree = require('../').convertDagToTree;
+var combinePrimitives = require('../').combinePrimitives;
 var OptimizationStatistics = require('../').OptimizationStatistics;
 var Cesium = require('cesium');
 var defined = Cesium.defined;
@@ -75,7 +76,7 @@ fs.readFile(gltfPath, function (err, data) {
         }
 
         combinePrimitives(gltf);
-        
+
         var outputPath = argv.o;
         if (!defined(outputPath)) {
             // Default output.  For example, path/asset.gltf becomes path/asset-optimized.gltf
