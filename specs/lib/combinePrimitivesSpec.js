@@ -8,9 +8,10 @@ var loadGltfUris = require('../../lib/loadGltfUris');
 var boxPath = './specs/data/combineObjects/box.gltf';
 var doubleBoxToCombinePath = './specs/data/combineObjects/doubleBoxToCombine.gltf';
 var doubleBoxNotCombinedPath = './specs/data/combineObjects/doubleBoxNotCombined.gltf';
+var fiveBoxPath = './specs/data/combineObjects/fiveBox.gltf';
 
 describe('addPipelineExtras', function() {
-    var box, doubleBoxToCombine, doubleBoxNotCombined, doubleBoxError;
+    var box, doubleBoxToCombine, doubleBoxNotCombined, doubleBoxError, fiveBox;
 
     beforeAll(function(done) {
         fs.readFile(doubleBoxToCombinePath, function(err, data) {
@@ -23,10 +24,16 @@ describe('addPipelineExtras', function() {
                 doubleBoxNotCombined = JSON.parse(data);
                 loadGltfUris(doubleBoxNotCombined);
 
-                fs.readFile(boxPath, function(err, data) {
-                    box = JSON.parse(data);
-                    loadGltfUris(box);
-                    done();
+                fs.readFile(fiveBoxPath, function(err, data) {
+                    fiveBox = JSON.parse(data);
+                    addPipelineExtras(fiveBox);
+                    loadGltfUris(fiveBox);
+
+                    fs.readFile(boxPath, function(err, data) {
+                        box = JSON.parse(data);
+                        loadGltfUris(box);
+                        done();
+                    });
                 });
             });
         });
@@ -81,6 +88,29 @@ describe('addPipelineExtras', function() {
                 "min": [-0.5, -0.5, -0.5]
             });
             expect(doubleBoxToCombine.bufferViews['meshTest_INDEX_bufferView_0'].buffer).toEqual('meshTest_INDEX_buffer_0');
+        });
+    });
+
+    it('combines some primitives', function() {
+        combinePrimitives(fiveBox);
+        writeGltf(fiveBox, './fiveBoxOutput.gltf', false, true, function() {
+            expect(fiveBox.meshes.meshTest.primitives.length).toEqual(3);
+
+            expect(Object.keys(fiveBox.accessors).indexOf('meshTest_INDEX_accessor_0')).not.toEqual(-1);
+            expect(Object.keys(fiveBox.accessors).indexOf('meshTest_POSITION_accessor_0')).not.toEqual(-1);
+            expect(Object.keys(fiveBox.accessors).indexOf('meshTest_INDEX_accessor_1')).not.toEqual(-1);
+            expect(Object.keys(fiveBox.accessors).indexOf('meshTest_POSITION_accessor_1')).not.toEqual(-1);
+            expect(Object.keys(fiveBox.bufferViews).indexOf('meshTest_INDEX_bufferView_0')).not.toEqual(-1);
+            expect(Object.keys(fiveBox.bufferViews).indexOf('meshTest_POSITION_bufferView_0')).not.toEqual(-1);
+            expect(Object.keys(fiveBox.bufferViews).indexOf('meshTest_INDEX_bufferView_1')).not.toEqual(-1);
+            expect(Object.keys(fiveBox.bufferViews).indexOf('meshTest_POSITION_bufferView_1')).not.toEqual(-1);
+            expect(Object.keys(fiveBox.buffers).indexOf('meshTest_INDEX_buffer_0')).not.toEqual(-1);
+            expect(Object.keys(fiveBox.buffers).indexOf('meshTest_POSITION_buffer_0')).not.toEqual(-1);
+            expect(Object.keys(fiveBox.buffers).indexOf('meshTest_INDEX_buffer_1')).not.toEqual(-1);
+            expect(Object.keys(fiveBox.buffers).indexOf('meshTest_POSITION_buffer_1')).not.toEqual(-1);
+
+            expect(fiveBox.accessors['meshTest_INDEX_accessor_1'].bufferView).toEqual('meshTest_INDEX_bufferView_1');
+            expect(fiveBox.bufferViews['meshTest_INDEX_bufferView_1'].buffer).toEqual('meshTest_INDEX_buffer_1');
         });
     });
 
