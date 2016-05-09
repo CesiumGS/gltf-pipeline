@@ -83,6 +83,9 @@ fs.readFile(gltfPath, function (err, data) {
             outputPath = path.join(filePath, fileName + '-optimized' + fileExtension);
         }
 
+        //Run removeUnused stage again after all pipeline stages have been run to remove objects that become unused
+        removeUnused(gltf);
+
         var isEmbedded = true;
         writeGltf(gltf, outputPath, isEmbedded, true);
     });
