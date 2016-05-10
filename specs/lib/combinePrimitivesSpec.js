@@ -10,7 +10,7 @@ var doubleBoxToCombinePath = './specs/data/combineObjects/doubleBoxToCombine.glt
 var doubleBoxNotCombinedPath = './specs/data/combineObjects/doubleBoxNotCombined.gltf';
 var fiveBoxPath = './specs/data/combineObjects/fiveBox.gltf';
 
-describe('addPipelineExtras', function() {
+describe('combinePrimitives', function() {
     var box, doubleBoxToCombine, doubleBoxNotCombined, doubleBoxError, fiveBox;
 
     beforeAll(function(done) {
