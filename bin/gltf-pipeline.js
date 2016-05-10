@@ -24,6 +24,7 @@ var writeGltf = require('../').writeGltf;
 var parseBinaryGltf = require('../').parseBinaryGltf;
 var addPipelineExtras = require('../').addPipelineExtras;
 var convertDagToTree = require('../').convertDagToTree;
+var combinePrimitives = require('../').combinePrimitives;
 var OptimizationStatistics = require('../').OptimizationStatistics;
 var Cesium = require('cesium');
 var defined = Cesium.defined;
@@ -74,11 +75,16 @@ fs.readFile(gltfPath, function (err, data) {
             throw err;
         }
 
+        combinePrimitives(gltf);
+
         var outputPath = argv.o;
         if (!defined(outputPath)) {
             // Default output.  For example, path/asset.gltf becomes path/asset-optimized.gltf
             outputPath = path.join(filePath, fileName + '-optimized' + fileExtension);
         }
+
+        //Run removeUnused stage again after all pipeline stages have been run to remove objects that become unused
+        removeUnused(gltf);
 
         var isEmbedded = true;
         writeGltf(gltf, outputPath, isEmbedded, true);
