@@ -24,6 +24,7 @@ var writeGltf = require('../').writeGltf;
 var parseBinaryGltf = require('../').parseBinaryGltf;
 var addPipelineExtras = require('../').addPipelineExtras;
 var convertDagToTree = require('../').convertDagToTree;
+var combineMeshes = require('../').combineMeshes;
 var combinePrimitives = require('../').combinePrimitives;
 var OptimizationStatistics = require('../').OptimizationStatistics;
 var Cesium = require('cesium');
@@ -75,6 +76,7 @@ fs.readFile(gltfPath, function (err, data) {
             throw err;
         }
 
+        combineMeshes(gltf);
         combinePrimitives(gltf);
 
         var outputPath = argv.o;
