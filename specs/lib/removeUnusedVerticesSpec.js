@@ -181,7 +181,7 @@ describe('removeUnusedVertices', function() {
 
         delete testGltf.buffers.buffer_0.extras._pipeline.offset;
         delete testGltf.buffers.buffer_0.extras._pipeline.end;
-        expect(testGltf.buffers.buffer_0.extras._pipeline.source).toEqual(Buffer.concat([testBuffer.slice(120, 240), testBuffer.slice(360, 600), testBuffer.slice(720, 800)], 440));
+        expect(bufferEqual(testGltf.buffers.buffer_0.extras._pipeline.source, Buffer.concat([testBuffer.slice(120, 240), testBuffer.slice(360, 600), testBuffer.slice(720, 800)], 440))).toBe(true);
         expect(testGltf.buffers.buffer_0.byteLength).toEqual(440);
     });
 
