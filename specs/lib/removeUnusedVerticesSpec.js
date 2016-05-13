@@ -1,5 +1,6 @@
 'use strict';
 var clone = require('clone');
+var bufferEqual = require('buffer-equal');
 var removeUnusedVertices = require('../../lib/removeUnusedVertices');
 
 describe('removeUnusedVertices', function() {
@@ -32,7 +33,7 @@ describe('removeUnusedVertices', function() {
 
         delete testGltf.buffers.buffer_0.extras._pipeline.offset;
         delete testGltf.buffers.buffer_0.extras._pipeline.end;
-        expect(testGltf.buffers).toEqual(gltf.buffers);
+        expect(bufferEqual(testGltf.buffers.buffer_0.extras._pipeline.source, testBuffer)).toBe(true);
     });
 
     it('does not remove any data with overlapping buffer views', function() {
@@ -54,7 +55,7 @@ describe('removeUnusedVertices', function() {
 
         delete testGltf.buffers.buffer_0.extras._pipeline.offset;
         delete testGltf.buffers.buffer_0.extras._pipeline.end;
-        expect(testGltf.buffers).toEqual(gltf.buffers);
+        expect(bufferEqual(testGltf.buffers.buffer_0.extras._pipeline.source, testBuffer)).toBe(true);
     });
 
     it('removes the beginning of a buffer', function() {
@@ -76,7 +77,7 @@ describe('removeUnusedVertices', function() {
 
         delete testGltf.buffers.buffer_0.extras._pipeline.offset;
         delete testGltf.buffers.buffer_0.extras._pipeline.end;
-        expect(testGltf.buffers.buffer_0.extras._pipeline.source).toEqual(testBuffer.slice(120));
+        expect(bufferEqual(testGltf.buffers.buffer_0.extras._pipeline.source, testBuffer.slice(120))).toBe(true);
         expect(testGltf.buffers.buffer_0.byteLength).toEqual(720);
     });
 
@@ -99,7 +100,8 @@ describe('removeUnusedVertices', function() {
 
         delete testGltf.buffers.buffer_0.extras._pipeline.offset;
         delete testGltf.buffers.buffer_0.extras._pipeline.end;
-        expect(testGltf.buffers.buffer_0.extras._pipeline.source).toEqual(Buffer.concat([testBuffer.slice(0, 360), testBuffer.slice(480)], 720));
+        expect(bufferEqual(testGltf.buffers.buffer_0.extras._pipeline.source, 
+            Buffer.concat([testBuffer.slice(0, 360), testBuffer.slice(480)], 720))).toBe(true);
         expect(testGltf.buffers.buffer_0.byteLength).toEqual(720);
     });
 
@@ -122,7 +124,7 @@ describe('removeUnusedVertices', function() {
 
         delete testGltf.buffers.buffer_0.extras._pipeline.offset;
         delete testGltf.buffers.buffer_0.extras._pipeline.end;
-        expect(testGltf.buffers.buffer_0.extras._pipeline.source).toEqual(testBuffer.slice(0, 720));
+        expect(bufferEqual(testGltf.buffers.buffer_0.extras._pipeline.source, testBuffer.slice(0, 720))).toBe(true);
         expect(testGltf.buffers.buffer_0.byteLength).toEqual(720);
     });
 
@@ -150,7 +152,8 @@ describe('removeUnusedVertices', function() {
 
         delete testGltf.buffers.buffer_0.extras._pipeline.offset;
         delete testGltf.buffers.buffer_0.extras._pipeline.end;
-        expect(testGltf.buffers.buffer_0.extras._pipeline.source).toEqual(Buffer.concat([testBuffer.slice(120, 600), testBuffer.slice(720, 800)], 560));
+        expect(bufferEqual(testGltf.buffers.buffer_0.extras._pipeline.source, 
+            Buffer.concat([testBuffer.slice(120, 600), testBuffer.slice(720, 800)], 560))).toBe(true);
         expect(testGltf.buffers.buffer_0.byteLength).toEqual(560);
     });
 
@@ -214,8 +217,10 @@ describe('removeUnusedVertices', function() {
         delete testGltf.buffers.buffer_0.extras._pipeline.end;
         delete testGltf.buffers.buffer_1.extras._pipeline.offset;
         delete testGltf.buffers.buffer_1.extras._pipeline.end;
+        expect(bufferEqual(testGltf.buffers.buffer_0.extras._pipeline.source, testBuffer.slice(120, 840))).toBe(true);
         expect(testGltf.buffers.buffer_0.extras._pipeline.source).toEqual(testBuffer.slice(120, 840));
         expect(testGltf.buffers.buffer_0.byteLength).toEqual(720);
+        expect(bufferEqual(testGltf.buffers.buffer_1.extras._pipeline.source, testBuffer_1.slice(0, 720))).toBe(true);
         expect(testGltf.buffers.buffer_1.extras._pipeline.source).toEqual(testBuffer_1.slice(0, 720));
         expect(testGltf.buffers.buffer_1.byteLength).toEqual(720);
     });
@@ -243,7 +248,7 @@ describe('removeUnusedVertices', function() {
         removeUnusedVertices(testGltf);
 
         expect(testGltf.buffers.buffer_1).not.toBeDefined();
-        expect(testGltf.buffers.buffer_0.extras._pipeline.source).toEqual(testBuffer.slice(120, 840));
+        expect(bufferEqual(testGltf.buffers.buffer_0.extras._pipeline.source, testBuffer.slice(120, 840))).toBe(true);
         expect(testGltf.buffers.buffer_0.byteLength).toEqual(720);
     });
 });
