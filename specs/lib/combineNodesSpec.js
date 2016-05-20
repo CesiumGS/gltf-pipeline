@@ -71,6 +71,23 @@ describe('combineNodes', function() {
         });
     });
 
+    it('preserves a node with a skin', function(done) {
+        var entireTreeCopy = clone(entireTree);
+        entireTreeCopy.nodes['Geometry-mesh002Node_0'].skin = "testSkin";
+        combineNodes(entireTreeCopy, false);
+        writeGltf(entireTreeCopy, './combinedOutputEntireTreeSkin.gltf', true, true, function() {
+            expect(Object.keys(entireTreeCopy.nodes).length).toEqual(2);
+            expect(entireTreeCopy.nodes.node_3).toBeDefined();
+            expect(entireTreeCopy.nodes['Geometry-mesh002Node_0']).toBeDefined();
+            expect(entireTreeCopy.nodes.node_3.children).toEqual(['Geometry-mesh002Node_0']);
+            expect(entireTreeCopy.nodes.node_3.matrix).toEqual([1,0,0,0,0,0,-1,0,0,1,0,0,0,0,0,1]);
+            expect(entireTreeCopy.nodes.node_3.meshes.length).toEqual(1);
+            expect(entireTreeCopy.nodes.node_3.meshes).toEqual(["Geometry-mesh002_0"]);
+
+            done();
+        });
+    });
+
     it('combines a tree with an animated root', function(done) {
         combineNodes(animatedRoot, false);
         writeGltf(animatedRoot, './combinedOutputAnimatedRoot.gltf', true, true, function() {
