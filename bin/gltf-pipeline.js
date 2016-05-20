@@ -27,6 +27,7 @@ var convertDagToTree = require('../').convertDagToTree;
 var combineMeshes = require('../').combineMeshes;
 var combinePrimitives = require('../').combinePrimitives;
 var combineNodes = require('../').combineNodes;
+var removeUnusedVertices = require('../').removeUnusedVertices;
 var OptimizationStatistics = require('../').OptimizationStatistics;
 var Cesium = require('cesium');
 var defined = Cesium.defined;
@@ -80,6 +81,8 @@ fs.readFile(gltfPath, function (err, data) {
         combineMeshes(gltf);
         combinePrimitives(gltf);
         combineNodes(gltf);
+
+        removeUnusedVertices(gltf);
 
         var outputPath = argv.o;
         if (!defined(outputPath)) {
