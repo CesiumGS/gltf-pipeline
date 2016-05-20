@@ -48,13 +48,9 @@ describe('combineNodes', function() {
             expect(Object.keys(entireTreeCopy.nodes).length).toEqual(1);
             expect(entireTreeCopy.nodes.node_3).toBeDefined();
             expect(entireTreeCopy.nodes.node_3.children).toEqual([]);
-            expect(entireTreeCopy.nodes.node_3.meshes).toEqual(["Geometry-mesh002", "Geometry-mesh002_0"]);
             expect(entireTreeCopy.nodes.node_3.matrix).toEqual([1,0,0,0,0,0,-1,0,0,1,0,0,0,0,0,1]);
-
-            expect(entireTreeCopy.meshes['Geometry-mesh002_0']).toBeDefined();
-            expect(entireTreeCopy.accessors['Geometry-mesh002_POSITION_accessor_0']).toBeDefined();
-            expect(entireTreeCopy.bufferViews['Geometry-mesh002_POSITION_bufferView_0']).toBeDefined();
-            expect(entireTreeCopy.buffers['Geometry-mesh002_POSITION_buffer_0']).toBeDefined();
+            expect(entireTreeCopy.nodes.node_3.meshes.length).toEqual(1);
+            expect(entireTreeCopy.meshes['node_3_mesh_0']).toBeDefined();
             done();
         });
     });
@@ -67,8 +63,9 @@ describe('combineNodes', function() {
             expect(entireTreeCopy.nodes.node_3).toBeDefined();
             expect(entireTreeCopy.nodes['Geometry-mesh002Node_0']).toBeDefined();
             expect(entireTreeCopy.nodes.node_3.children).toEqual(['Geometry-mesh002Node_0']);
-            expect(entireTreeCopy.nodes.node_3.meshes).toEqual(["Geometry-mesh002_0"]);
             expect(entireTreeCopy.nodes.node_3.matrix).toEqual([1,0,0,0,0,0,-1,0,0,1,0,0,0,0,0,1]);
+            expect(entireTreeCopy.nodes.node_3.meshes.length).toEqual(1);
+            expect(entireTreeCopy.nodes.node_3.meshes).toEqual(["Geometry-mesh002_0"]);
 
             done();
         });
@@ -84,13 +81,7 @@ describe('combineNodes', function() {
             expect(animatedRoot.nodes['Geometry-mesh020Node_3']).not.toBeDefined();
             expect(animatedRoot.nodes['Geometry-mesh020Node_4']).not.toBeDefined();
             expect(animatedRoot.nodes['Geometry-mesh020Node'].children).toEqual([]);
-            expect(animatedRoot.nodes['Geometry-mesh020Node'].meshes).toEqual([
-                "Geometry-mesh020",
-                "Geometry-mesh020_0",
-                "Geometry-mesh020_1",
-                "Geometry-mesh020_2",
-                "Geometry-mesh020_3"
-            ]);
+            expect(animatedRoot.nodes['Geometry-mesh020Node'].meshes).toEqual(["Geometry-mesh020Node_mesh_0"]);
 
             done();
         });
@@ -108,17 +99,9 @@ describe('combineNodes', function() {
             expect(twoSubtrees.nodes['Geometry-mesh020Node_translation']).toBeDefined();
 
             expect(twoSubtrees.nodes['Geometry-mesh020Node_rotation'].children).toEqual([]);
-            expect(twoSubtrees.nodes['Geometry-mesh020Node_rotation'].meshes).toEqual([
-                "Geometry-mesh020",
-                "Geometry-mesh020_0",
-                "Geometry-mesh020_1"
-            ]);
+            expect(twoSubtrees.nodes['Geometry-mesh020Node_rotation'].meshes).toEqual(["Geometry-mesh020Node_rotation_mesh_0"]);
             expect(twoSubtrees.nodes['Geometry-mesh020Node_translation'].children).toEqual([]);
-            expect(twoSubtrees.nodes['Geometry-mesh020Node_translation'].meshes).toEqual([
-                "Geometry-mesh020",
-                "Geometry-mesh020_2",
-                "Geometry-mesh020_3"
-            ]);
+            expect(twoSubtrees.nodes['Geometry-mesh020Node_translation'].meshes).toEqual(["Geometry-mesh020Node_translation_mesh_0"]);
 
             done();
         });
@@ -135,13 +118,11 @@ describe('combineNodes', function() {
             expect(separateAncestors.nodes['Geometry-mesh020Node']).toBeDefined();
 
             expect(separateAncestors.nodes['Geometry-mesh019Node'].children).toEqual(['ancestor']);
-            expect(separateAncestors.nodes['Geometry-mesh019Node'].meshes).toEqual([
-                "Geometry-mesh019",
-                "Geometry-mesh019_0"
-            ]);
+            expect(separateAncestors.nodes['Geometry-mesh019Node'].meshes).toEqual(["Geometry-mesh019Node_mesh_0"]);
 
             expect(separateAncestors.nodes.ancestor.children).toEqual(['Geometry-mesh020Node']);
             expect(separateAncestors.nodes.ancestor.meshes).toEqual(["Geometry-mesh019"]);
+
             done();
         });
     });
