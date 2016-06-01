@@ -26,5 +26,6 @@ module.exports = {
     combineMeshes : require('./lib/combineMeshes'),
     combinePrimitives : require('./lib/combinePrimitives'),
     removeUnusedVertices : require('./lib/removeUnusedVertices'),
-    OptimizationStatistics : require('./lib/OptimizationStatistics')
+    OptimizationStatistics : require('./lib/OptimizationStatistics'),
+    gltfPipeline : require('./lib/gltfPipeline')
 };
