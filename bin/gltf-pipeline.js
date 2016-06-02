@@ -10,7 +10,7 @@ var writeGltf = require('./writeGltf');
 var writeBinaryGltf = require('./writeBinaryGltf');
 var gltfPipeline = require('../lib/gltfPipeline');
 
-if (!defined(argv._[0]) || defined(argv.h) || defined(argv.help)) {
+if (process.argv.length < 3 || defined(argv.h) || defined(argv.help)) {
     var help =
         'Usage: node ' + path.basename(__filename) + ' [path-to.gltf or path-to.bgltf] [OPTIONS]\n' +
         '  -i, input=PATH Read unoptimized glTF from the specified file.\n ' +
