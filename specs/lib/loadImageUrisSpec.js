@@ -28,7 +28,7 @@ describe('loadImageUris', function() {
             }
         };
 
-        gltf = loadGltfUris(gltf, basePath, function() {
+        loadGltfUris(gltf, basePath, function(err, gltf) {
             expect(gltf.images.Image0001.extras._pipeline.source).toBeDefined();
             expect(bufferEqual(gltf.images.Image0001.extras._pipeline.source, imageData)).toBe(true);
             expect(gltf.images.Image0001.extras._pipeline.extension).toEqual('.png');
@@ -45,7 +45,7 @@ describe('loadImageUris', function() {
             }
         };
 
-        gltf = loadGltfUris(gltf, basePath, function() {
+        loadGltfUris(gltf, basePath, function(err, gltf) {
             expect(gltf.images.Image0001.extras._pipeline.source).toBeDefined();
             expect(bufferEqual(gltf.images.Image0001.extras._pipeline.source, imageData)).toBe(true);
             expect(gltf.images.Image0001.extras._pipeline.extension).toEqual('.png');
@@ -65,7 +65,7 @@ describe('loadImageUris', function() {
             }
         };
         
-        gltf = loadGltfUris(gltf, basePath, function() {
+        loadGltfUris(gltf, basePath, function(err, gltf) {
             expect(gltf.images.embeddedImage0001.extras._pipeline.source).toBeDefined();
             expect(bufferEqual(gltf.images.embeddedImage0001.extras._pipeline.source, imageData)).toBe(true);
             expect(gltf.images.embeddedImage0001.extras._pipeline.extension).toEqual('.png');
@@ -85,7 +85,7 @@ describe('loadImageUris', function() {
             }
         };
 
-        loadGltfUris(gltf, basePath, function(err) {
+        loadGltfUris(gltf, basePath, function(err, gltf) {
             expect(err).toBeDefined();
             done();
         });

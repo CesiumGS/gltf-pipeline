@@ -20,7 +20,7 @@ describe('loadShaderUris', function() {
             done();
         });
     });
-    
+
     it('loads an external shader', function(done) {
         var gltf = {
             "shaders": {
@@ -30,8 +30,8 @@ describe('loadShaderUris', function() {
                 }
             }
         };
-        
-        gltf = loadGltfUris(gltf, basePath, function() {
+
+        loadGltfUris(gltf, basePath, function(err, gltf) {
             expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras._pipeline.source).toBeDefined();
             expect(bufferEqual(gltf.shaders.CesiumTexturedBoxTest0FS.extras._pipeline.source, fragmentShaderData)).toBe(true);
             expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras._pipeline.extension).toEqual('.glsl');
@@ -49,7 +49,7 @@ describe('loadShaderUris', function() {
             }
         };
         
-        gltf = loadGltfUris(gltf, basePath, function() {
+        loadGltfUris(gltf, basePath, function(err, gltf) {
             expect(gltf.shaders.box0FS.extras._pipeline.source).toBeDefined();
             expect(bufferEqual(gltf.shaders.box0FS.extras._pipeline.source, fragmentShaderData)).toBe(true);
             expect(gltf.shaders.box0FS.extras._pipeline.extension).toEqual('.glsl');
@@ -71,7 +71,7 @@ describe('loadShaderUris', function() {
             }
         };
         
-        gltf = loadGltfUris(gltf, basePath, function() {
+        loadGltfUris(gltf, basePath, function(err, gltf) {
             expect(gltf.shaders.externalBox0FS.extras._pipeline.source).toBeDefined();
             expect(bufferEqual(gltf.shaders.embeddedBox0FS.extras._pipeline.source, fragmentShaderData)).toBe(true);
             expect(gltf.shaders.externalBox0FS.extras._pipeline.extension).toEqual('.glsl');
@@ -89,7 +89,7 @@ describe('loadShaderUris', function() {
             }
         };
 
-        loadGltfUris(gltf, basePath, function(err) {
+        loadGltfUris(gltf, basePath, function(err, gltf) {
             expect(err).toBeDefined();
             done();
         });
