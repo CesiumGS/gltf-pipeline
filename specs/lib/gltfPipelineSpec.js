@@ -9,7 +9,7 @@ var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf';
 var glbPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.glb';
 
 describe('gltfPipeline', function() {
-    it('optimizes a gltf file, checks that a new gltf is defined when passing in a gltf file', function(done) {
+    it('optimizes a gltf file', function(done) {
         readGltf(gltfPath, function(gltf) {
             var stringCopy = JSON.stringify(gltf);
             gltfPipeline(gltf, function(gltf) {
@@ -20,7 +20,7 @@ describe('gltfPipeline', function() {
         });
     });
     
-    it('optimizes a binary glTF file, checks that a new gltf is defined when passing in a glb file', function(done) {
+    it('optimizes a binary glTF file', function(done) {
         readGltf(glbPath, function(gltf) {
             var stringCopy = JSON.stringify(gltf);
             gltfPipeline(gltf, function(gltf) {

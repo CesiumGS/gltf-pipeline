@@ -22,32 +22,14 @@ describe('readGltf', function() {
 
     it('throws error when an input path is undefined', function(done) {
         expect(function() {
-            try {
-                readGltf(undefined, function() {
-                    done();
-                });
-            }
-            catch (err) {
-                expect(err).toBeDefined();
-                expect(err.message).toEqual('Input path is undefined.');
-                throw err;
-            }
+            readGltf(undefined);
         }).toThrow();
         done();
     });
 
     it('throws error when file extension of input file is invalid', function(done) {
         expect(function() {
-            try {
-                readGltf(invalidPath, function() {
-                    done();
-                });
-            }
-            catch (err) {
-                expect(err).toBeDefined();
-                expect(err.message).toEqual('Invalid glTF file.');
-                throw err;
-            }
+            readGltf(invalidPath);
         }).toThrow();
         done();
     });
