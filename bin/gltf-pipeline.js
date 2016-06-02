@@ -9,6 +9,7 @@ var writeBinaryGltf = require('../lib/writeBinaryGltf');
 var gltfPipeline = require('../lib/gltfPipeline');
 var addPipelineExtras = require('../lib/addPipelineExtras');
 var readGltf = require('../lib/readGltf');
+var DeveloperError = Cesium.DeveloperError;
 
 if (process.argv.length < 3 || defined(argv.h) || defined(argv.help)) {
     var help =
