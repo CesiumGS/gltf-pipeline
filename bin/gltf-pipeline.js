@@ -6,8 +6,8 @@ var path = require('path');
 var Cesium = require('cesium');
 var defaultValue = Cesium.defaultValue;
 var defined = Cesium.defined;
-var writeGltf = require('./writeGltf');
-var writeBinaryGltf = require('./writeBinaryGltf');
+var writeGltf = require('../lib/writeGltf');
+var writeBinaryGltf = require('../lib/writeBinaryGltf');
 var gltfPipeline = require('../lib/gltfPipeline');
 
 if (process.argv.length < 3 || defined(argv.h) || defined(argv.help)) {
