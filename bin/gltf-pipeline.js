@@ -1,6 +1,4 @@
-#!/usr/bin/env node
 'use strict';
-var fs = require('fs');
 var argv = require('yargs').argv;
 var path = require('path');
 var Cesium = require('cesium');
@@ -9,6 +7,8 @@ var defined = Cesium.defined;
 var writeGltf = require('../lib/writeGltf');
 var writeBinaryGltf = require('../lib/writeBinaryGltf');
 var gltfPipeline = require('../lib/gltfPipeline');
+var addPipelineExtras = require('../lib/addPipelineExtras');
+var readGltf = require('../lib/readGltf');
 
 if (process.argv.length < 3 || defined(argv.h) || defined(argv.help)) {
     var help =
@@ -25,27 +25,30 @@ var gltfPath = defaultValue(argv._[0], argv.i);
 var fileExtension = path.extname(gltfPath);
 var fileName = path.basename(gltfPath, fileExtension);
 var filePath = path.dirname(gltfPath);
+
 var outputPath = defaultValue(argv._[1], argv.o);
+var isSeparate = defaultValue(argv.s, false);
+var exportBinary = defaultValue(argv.b, false);
+
+if (!defined(gltfPath)) {
+    throw new DeveloperError('Input path is undefined.');
+}
+
+if (fileExtension !== '.glb' && fileExtension !== '.gltf') {
+    throw new DeveloperError('Invalid glTF file.');
+}
 
 if (!defined(outputPath)) {
     // Default output.  For example, path/asset.gltf becomes path/asset-optimized.gltf
     outputPath = path.join(filePath, fileName + '-optimized' + fileExtension);
 }
 
-var isSeparate = defaultValue(argv.s, false);
-var exportBinary = defaultValue(argv.b, false);
-
-var options = {
-    inputPath : gltfPath
-};
-
-gltfPipeline(options, function(gltf) {
-    if (exportBinary) {
-        writeBinaryGltf(gltf, outputPath, true);
-    } else {
-        writeGltf(gltf, outputPath, !isSeparate, true);
-    }
+readGltf(gltfPath, function(gltf) {
+    gltfPipeline(gltf, function(gltf) {
+        if (exportBinary) {
+            writeBinaryGltf(gltf, outputPath, true);
+        } else {
+            writeGltf(gltf, outputPath, !isSeparate, true);
+        }
+    });
 });
-
-
-
