@@ -8,22 +8,24 @@ var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf';
 var glbPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.glb';
 
 describe('gltfPipeline', function() {
-    it('checks that gltf is defined when passing in a gltf file', function(done) {
+    it('optimizes a gltf file, checks that gltf is defined when passing in a gltf file', function(done) {
         gltfPipeline({
             inputPath : gltfPath,
             separate : false
         }, function(gltf) {
-            expect(defined(gltf)).toEqual(true);
+            expect(gltf).toBeDefined();
+            expect(gltf).not.toBe(gltfPath);
             done();
         });
     });
 
-    it('checks that gltf is defined when passing in a glb file', function(done) {
+    it('optimizes a binary glTF file, checks that gltf is defined when passing in a glb file', function(done) {
         gltfPipeline({
             inputPath : glbPath,
             separate : false
         }, function(gltf) {
-            expect(defined(gltf)).toEqual(true);
+            expect(gltf).toBeDefined();
+            expect(gltf).not.toBe(glbPath);
             done();
         });
     });
