@@ -1,7 +1,8 @@
 'use strict';
 
-var addDefaults = require('../../').addDefaults;
+var addDefaults = require('../../lib/addDefaults');
 var Cesium = require('cesium');
+var clone = require('clone');
 var WebGLConstants = Cesium.WebGLConstants;
 
 describe('addDefaults', function() {
@@ -101,7 +102,113 @@ describe('addDefaults', function() {
         expect(gltf.buffers.bufferId.type).toEqual('arraybuffer');
     });
 
-    // TODO: tests for materialDefaults()
+    it('does not change the material if the material has a technique', function() {
+        var gltf = {
+            "materials": {
+                "blinn-1": {
+                    "technique": "technique1",
+                    "values": {
+                        "ambient": [0, 0, 0, 1],
+                        "diffuse": "texture_file2",
+                        "emission": [0, 0, 0, 1],
+                        "shininess": 38.4,
+                        "specular": [0, 0, 0, 1]
+                    },
+                    "name": "blinn1"
+                }
+            }
+        };
+        var materialsCopy = clone(gltf.materials);
+        addDefaults(gltf);
+        expect(gltf.materials).toEqual(materialsCopy);
+    });
+
+    it('do not change if the material has a non-KHR_materials_common extension', function() {
+        var gltf = {
+            "materials": {
+                "lambert1": {
+                    "extensions": {
+                        "not_KHR_materials_common" : {
+                            "technique" : "LAMBERT",
+                            "values": {
+                                "diffuse": [0.5, 0.5, 0.5, 1.0]
+                            }
+                        }
+                    }
+                }
+            },
+            "extensionsUsed": [
+                "not_KHR_materials_common"
+            ]
+        };
+        var materialsCopy = clone(gltf.materials);
+        addDefaults(gltf);
+        expect(gltf.materials).toEqual(materialsCopy);
+    });
+
+    it('generates a material with a lambert if no technique, extension, or specular/shininess values are given', function() {
+        var gltf = {
+            "materials": {
+                "lambert-1": {
+                    "values": {
+                        "ambient": [0, 0, 0, 1],
+                        "diffuse": "texture_file2",
+                        "emission": [1, 0, 0, 1]
+                    }
+                }
+            }
+        };
+        var expectValues = {
+            "ambient": [0, 0, 0, 1],
+            "diffuse": "texture_file2",
+            "doubleSided": false,
+            "emission": [1, 0, 0, 1],
+            "specular": [0, 0, 0, 1],
+            "shininess": 0.0,
+            "transparency": 1.0,
+            "transparent": false
+        };
+        addDefaults(gltf);
+        expect(gltf.materials).toBeDefined();
+        for (var materialID in gltf.materials) {
+            if (gltf.materials.hasOwnProperty(materialID)) {
+                expect(gltf.materials[materialID].values).toEqual(expectValues);
+            }
+        }
+    });
+
+    it('generates a material with a blinn if no technique or extension is given', function() {
+        var gltf = {
+            "materials": {
+                "lambert-1": {
+                    "values": {
+                        "ambient": [0, 0, 0, 1],
+                        "diffuse": "texture_file2",
+                        "emission": [1, 0, 0, 1],
+                        "shininess": 10.0
+                    }
+                }
+            }
+        };
+        var expectValues = {
+            "ambient": [0, 0, 0, 1],
+            "diffuse": "texture_file2",
+            "doubleSided": false,
+            "emission": [1, 0, 0, 1],
+            "specular": [0, 0, 0, 1],
+            "shininess": 10.0,
+            "transparency": 1.0,
+            "transparent": false
+        };
+        addDefaults(gltf);
+        expect(gltf.materials).toBeDefined();
+        for (var materialID in gltf.materials) {
+            if (gltf.materials.hasOwnProperty(materialID)) {
+                expect(gltf.materials[materialID].values).toEqual(expectValues);
+            }
+        }
+    });
+
 
     it('Adds mesh properties', function() {
         var gltf = {
