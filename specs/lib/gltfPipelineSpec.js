@@ -1,6 +1,7 @@
 'use strict';
 var clone = require('clone');
 var gltfPipeline = require('../../lib/gltfPipeline');
+var processJSON = gltfPipeline.processJSON;
 var readGltf = require('../../lib/readGltf');
 var writeBinaryGltf = require('../../lib/writeBinaryGltf');
 
@@ -11,7 +12,7 @@ describe('gltfPipeline', function() {
     it('optimizes a gltf file', function(done) {
         readGltf(gltfPath, function(gltf) {
             var gltfCopy = clone(gltf);
-            gltfPipeline(gltf, function(gltf) {
+            processJSON(gltf, function(gltf) {
                 expect(gltf).toBeDefined();
                 expect(gltf).not.toBe(gltfCopy);
                 done();
@@ -22,7 +23,7 @@ describe('gltfPipeline', function() {
     it('optimizes a binary glTF file', function(done) {
         readGltf(glbPath, function(gltf) {
             var gltfCopy = clone(gltf);
-            gltfPipeline(gltf, function(gltf) {
+            processJSON(gltf, function(gltf) {
                 expect(gltf).toBeDefined();
                 expect(gltf).not.toBe(gltfCopy);
                 done();

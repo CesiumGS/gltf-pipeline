@@ -1,6 +1,6 @@
 'use strict';
 
-var addDefaults = require('../../').addDefaults;
+var addDefaults = require('../../lib/addDefaults');
 var Cesium = require('cesium');
 var WebGLConstants = Cesium.WebGLConstants;
 

@@ -8,6 +8,7 @@ var DeveloperError = Cesium.DeveloperError;
 var writeGltf = require('../lib/writeGltf');
 var writeBinaryGltf = require('../lib/writeBinaryGltf');
 var gltfPipeline = require('../lib/gltfPipeline');
+var processFileToDisk = gltfPipeline.processFileToDisk;
 var addPipelineExtras = require('../lib/addPipelineExtras');
 var readGltf = require('../lib/readGltf');
 
@@ -44,12 +45,4 @@ if (!defined(outputPath)) {
     outputPath = path.join(filePath, fileName + '-optimized' + fileExtension);
 }
 
-readGltf(gltfPath, function(gltf) {
-    gltfPipeline(gltf, function(gltf) {
-        if (exportBinary) {
-            writeBinaryGltf(gltf, outputPath, true);
-        } else {
-            writeGltf(gltf, outputPath, !isSeparate, true);
-        }
-    });
-});
+processFileToDisk(gltfPath, outputPath, exportBinary, !isSeparate);
