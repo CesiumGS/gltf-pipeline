@@ -45,4 +45,9 @@ if (!defined(outputPath)) {
     outputPath = path.join(filePath, fileName + '-optimized' + fileExtension);
 }
 
-processFileToDisk(gltfPath, outputPath, exportBinary, !isSeparate);
+var options = {
+    isBinary : exportBinary,
+    isEmbedded : !isSeparate
+};
+
+processFileToDisk(gltfPath, outputPath, options);
