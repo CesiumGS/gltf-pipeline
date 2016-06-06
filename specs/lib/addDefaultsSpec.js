@@ -146,10 +146,10 @@ describe('addDefaults', function() {
         expect(gltf.materials).toEqual(materialsCopy);
     });
 
-    it('generates a material with a lambert if no technique, extension, or specular/shininess values are given', function() {
+    it('generates a material if no technique or extension values are given', function() {
         var gltf = {
             "materials": {
-                "lambert-1": {
+                "material1": {
                     "values": {
                         "ambient": [0, 0, 0, 1],
                         "diffuse": "texture_file2",
@@ -168,17 +168,35 @@ describe('addDefaults', function() {
             "transparency": 1.0,
             "transparent": false
         };
-        addDefaults(gltf);
-        expect(gltf.materials).toBeDefined();
-        for (var materialID in gltf.materials) {
+
+        var options = {
+            specularTechnique: 'PHONG',
+            diffuseTechnique: 'CONSTANT'
+        };
+
+        // default lambert
+        var gltfClone = clone(gltf);
+        addDefaults(gltfClone);
+        expect(Object.keys(gltfClone.materials).length > 0).toEqual(true);
+        expect(Object.keys(gltfClone.techniques).length > 0).toEqual(true);
+        for (var materialID in gltfClone.materials) {
             if (gltf.materials.hasOwnProperty(materialID)) {
-                expect(gltf.materials[materialID].values).toEqual(expectValues);
+                expect(gltfClone.materials[materialID].values).toEqual(expectValues);
             }
         }
-    });
 
-    it('generates a material with a blinn if no technique or extension is given', function() {
-        var gltf = {
+        // constant
+        var gltfClone = clone(gltf);
+        addDefaults(gltfClone, options);
+        expect(Object.keys(gltfClone.materials).length > 0).toEqual(true);
+        expect(Object.keys(gltfClone.techniques).length > 0).toEqual(true);
+        for (var materialID in gltfClone.materials) {
+            if (gltf.materials.hasOwnProperty(materialID)) {
+                expect(gltfClone.materials[materialID].values).toEqual(expectValues);
+            }
+        }
+
+        gltf = {
             "materials": {
                 "lambert-1": {
                     "values": {
@@ -190,7 +208,8 @@ describe('addDefaults', function() {
                 }
             }
         };
-        var expectValues = {
+
+        expectValues = {
             "ambient": [0, 0, 0, 1],
             "diffuse": "texture_file2",
             "doubleSided": false,
@@ -200,8 +219,149 @@ describe('addDefaults', function() {
             "transparency": 1.0,
             "transparent": false
         };
+
+        // default blinn
+        gltfClone = clone(gltf);
+        addDefaults(gltfClone);
+        expect(Object.keys(gltfClone.materials).length > 0).toEqual(true);
+        expect(Object.keys(gltfClone.techniques).length > 0).toEqual(true);
+        for (var materialID in gltfClone.materials) {
+            if (gltfClone.materials.hasOwnProperty(materialID)) {
+                expect(gltfClone.materials[materialID].values).toEqual(expectValues);
+            }
+        }
+
+        // phong
+        gltfClone = clone(gltf);
+        addDefaults(gltfClone, options);
+        expect(Object.keys(gltfClone.materials).length > 0).toEqual(true);
+        expect(Object.keys(gltfClone.techniques).length > 0).toEqual(true);
+        for (var materialID in gltfClone.materials) {
+            if (gltf.materials.hasOwnProperty(materialID)) {
+                expect(gltfClone.materials[materialID].values).toEqual(expectValues);
+            }
+        }
+    });
+
+    it('generates techniques and nodes for KHR_materials_common lights', function() {
+        var gltf = {
+            "materials": {
+                "material1": {
+                    "values": {
+                        "ambient": [0, 0, 0, 1],
+                        "diffuse": [0, 0, 0, 1],
+                        "emission": [0, 0, 0, 1]
+                    }
+                }
+            },
+            "nodes": {
+                "node1": {
+                    "children": [],
+                    "extensions": {
+                        "KHR_materials_common": {
+                            "light": "ambientLight",
+                        }
+                    }
+                },
+                "node2": {
+                    "children": [],
+                    "extensions": {
+                        "KHR_materials_common": {
+                            "light": "directionalLight",
+                        }
+                    }
+                },
+                "node3": {
+                    "children": [],
+                    "extensions": {
+                        "KHR_materials_common": {
+                            "light": "pointLight",
+                        }
+                    }
+                },
+                "node4": {
+                    "children": [],
+                    "extensions": {
+                        "KHR_materials_common": {
+                            "light": "spotLight",
+                        }
+                    }
+                },
+
+            },
+            "extensionsUsed": [
+                "KHR_materials_common"
+            ],
+            "extensions": {
+                "KHR_materials_common" : {
+                    "lights": {
+                        "ambientLight": {
+                            "ambient": {
+                                "color": [
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "type": "ambient"
+                        },
+                        "directionalLight": {
+                            "directional": {
+                                "color": [
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "type": "directional"
+                        },
+                        "pointLight": {
+                            "point": {
+                                "color": [
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "constantAttenuation": 0.0,
+                            "distance": 0.0,
+                            "linearAttenuation": 1.0,
+                            "quadraticAttenuation":1.0,
+                            "type": "point"
+                        },
+                        "spotLight": {
+                            "spot": {
+                                "spot": [
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "constantAttenuation": 0.0,
+                            "distance": 0.0,
+                            "linearAttenuation": 1.0,
+                            "quadraticAttenuation":1.0,
+                            "falloffAngle": 1.5,
+                            "falloffExponent": 0.0,
+                            "type": "spot"
+                        }
+                    }
+                }
+            }
+        };
+        var expectValues = {
+            "ambient": [0, 0, 0, 1],
+            "diffuse": [0, 0, 0, 1],
+            "doubleSided": false,
+            "emission": [0, 0, 0, 1],
+            "specular": [0, 0, 0, 1],
+            "shininess": 0.0,
+            "transparency": 1.0,
+            "transparent": false
+        };
         addDefaults(gltf);
-        expect(gltf.materials).toBeDefined();
+        expect(Object.keys(gltf.materials).length > 0).toEqual(true);
+        expect(Object.keys(gltf.techniques).length > 0).toEqual(true);
         for (var materialID in gltf.materials) {
             if (gltf.materials.hasOwnProperty(materialID)) {
                 expect(gltf.materials[materialID].values).toEqual(expectValues);
