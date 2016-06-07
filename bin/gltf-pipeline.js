@@ -30,7 +30,7 @@ var filePath = path.dirname(gltfPath);
 
 var outputPath = defaultValue(argv._[1], argv.o);
 var isSeparate = defaultValue(argv.s, false);
-var exportBinary = defaultValue(argv.b, false);
+var isBinary = defaultValue(argv.b, false);
 
 if (!defined(gltfPath)) {
     throw new DeveloperError('Input path is undefined.');
@@ -46,7 +46,7 @@ if (!defined(outputPath)) {
 }
 
 var options = {
-    isBinary : exportBinary,
+    isBinary : isBinary,
     isEmbedded : !isSeparate
 };
 
