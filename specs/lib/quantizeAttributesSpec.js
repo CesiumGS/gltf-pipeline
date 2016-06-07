@@ -125,6 +125,16 @@ describe('quantizeAttributes', function() {
         expect(gltf.buffers.buffer.byteLength + size).toEqual(buffer.length);
     });
 
+    it('Reduces the decimal places in decode matrix using options.precision', function() {
+        var gltf = clone(testGltf);
+        gltf.buffers.buffer.extras._pipeline.source = buffer;
+        var precision = 6;
+        quantizeAttributes(gltf, {precision: precision});
+        var matrixEntry = '' + gltf.accessors.accessor_0.extensions.WEB3D_quantized_attributes.decodeMatrix[0];
+        var calculatedPrecision = matrixEntry.substring(matrixEntry.indexOf('.')).length;
+        expect(precision).toEqual(calculatedPrecision);
+    });
+
     it('Doesn\'t quantize non-float attribute', function() {
         var gltf = clone(testGltf);
         gltf.buffers.buffer.extras._pipeline.source = buffer;
