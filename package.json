@@ -33,6 +33,7 @@
     "lib": "./lib"
   },
   "dependencies": {
+    "array-equal": "^1.0.0",
     "async": "^1.5.2",
     "buffer-equal": "^1.0.0",
     "cesium": "^1.17.0",

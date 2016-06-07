@@ -25,6 +25,7 @@ module.exports = {
     convertDagToTree : require('./lib/convertDagToTree'),
     combineMeshes : require('./lib/combineMeshes'),
     combinePrimitives : require('./lib/combinePrimitives'),
+    combineNodes : require('./lib/combineNodes'),
     removeUnusedVertices : require('./lib/removeUnusedVertices'),
     OptimizationStatistics : require('./lib/OptimizationStatistics')
 };
