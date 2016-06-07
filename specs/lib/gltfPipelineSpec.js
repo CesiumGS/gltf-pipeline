@@ -5,6 +5,7 @@ var clone = require('clone');
 var gltfPipeline = require('../../lib/gltfPipeline');
 var processJSON = gltfPipeline.processJSON;
 var processJSONWithExtras = gltfPipeline.processJSONWithExtras;
+var processJSONToDisk = gltfPipeline.processJSONToDisk;
 var processFile = gltfPipeline.processFile;
 var processFileToDisk = gltfPipeline.processFileToDisk;
 var readGltf = require('../../lib/readGltf');
@@ -14,7 +15,7 @@ var writeBinaryGltf = require('../../lib/writeBinaryGltf');
 
 var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf';
 var glbPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.glb';
-var outputPath = './output/test.gltf';
+var outputPath = './output/';
 
 describe('gltfPipeline', function() {
     it('optimizes a gltf JSON given an embedded JSON', function() {
@@ -77,10 +78,10 @@ describe('gltfPipeline', function() {
         var options = {};
         readGltf(gltfPath, function(gltf) {
             gltfCopy = gltf;
-        });
-        processFile(gltfPath, options, function(gltf) {
-            expect(gltf).toBeDefined();
-            expect(gltf).not.toBe(gltfCopy);
+            processFile(gltfPath, options, function (gltf) {
+                expect(gltf).toBeDefined();
+                expect(gltf).not.toBe(gltfCopy);
+            });
         });
     });
 
@@ -89,10 +90,46 @@ describe('gltfPipeline', function() {
         var options = {};
         readGltf(glbPath, function(gltf) {
             gltfCopy = gltf;
+            processFile(glbPath, options, function (gltf) {
+                expect(gltf).toBeDefined();
+                expect(gltf).not.toBe(gltfCopy);
+            });
         });
-        processFile(glbPath, options, function(gltf) {
-            expect(gltf).toBeDefined();
-            expect(gltf).not.toBe(gltfCopy);
+    });
+
+    it('will write a file to the correct directory', function(done) {
+        var spy = spyOn(fs, 'writeFile').and.callFake(function(file, data, callback) {
+            callback();
+        });
+        var options = {};
+        processFileToDisk(gltfPath, outputPath, options, function() {
+            expect(spy).toHaveBeenCalled();
+            done();
+        });
+    });
+
+    it('will write a file', function(done) {
+        var spy = spyOn(fs, 'writeFile').and.callFake(function(file, data, callback) {
+            callback();
+        });
+        var options = {};
+        processFileToDisk(gltfPath, outputPath, options, function() {
+            expect(spy).toHaveBeenCalled();
+            done();
+        });
+    });
+
+    
+    it('will write a file from JSON', function(done) {
+        var spy = spyOn(fs, 'writeFile').and.callFake(function(file, data, callback) {
+            callback();
+        });
+        var options = {};
+        readGltf(gltfPath, function(gltf) {
+            processJSONToDisk(gltf, outputPath, options, function() {
+                expect(spy).toHaveBeenCalled();
+                done();
+            });
         });
     });
 });
