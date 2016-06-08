@@ -1,0 +1,9 @@
+/.npmignore
+/.travis.yml
+/build
+/coverage
+/doc
+/gulpfile.js
+/output
+/spec
+/specs
