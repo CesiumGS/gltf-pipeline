@@ -18,7 +18,7 @@ var glbPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.glb';
 var outputPath = './output/';
 
 describe('gltfPipeline', function() {
-    it('optimizes a gltf JSON given an embedded JSON', function() {
+    it('optimizes a gltf JSON with embedded resources', function(done) {
         var gltfCopy;
         var options = {};
         readGltf(gltfPath, function(gltf) {
@@ -26,11 +26,12 @@ describe('gltfPipeline', function() {
             processJSON(gltf, options, function(gltf) {
                 expect(gltf).toBeDefined();
                 expect(gltf).not.toBe(gltfCopy);
+                done();
             });
         });
     });
     
-    it('optimizes a gltf JSON given a resourcePath', function() {
+    it('optimizes a gltf JSON with external resources', function(done) {
         var gltf;
         var gltfCopy;
         var options = { 'resourcePath' : path.dirname(gltfPath) };
@@ -45,54 +46,33 @@ describe('gltfPipeline', function() {
             processJSON(gltf, options, function(gltf) {
                 expect(gltf).toBeDefined();
                 expect(gltf).not.toBe(gltfCopy);
+                done();
             });
         });
     });
 
-    it('optimizes a gltf JSON with extras', function() {
+    it('optimizes a glTF file', function(done) {
         var gltfCopy;
         var options = {};
         readGltf(gltfPath, function(gltf) {
             gltfCopy = clone(gltf);
-            processJSONWithExtras(gltf, options, function(gltf) {
-                expect(gltf).toBeDefined();
-                expect(gltf).not.toBe(gltfCopy);
-            });
-        });
-    });
-    
-    it('optimizes a binary glTF JSON with extras', function() {
-        var gltfCopy;
-        var options = {};
-        readGltf(glbPath, function(gltf) {
-            gltfCopy = clone(gltf);
-            processJSONWithExtras(gltf, options, function(gltf) {
-                expect(gltf).toBeDefined();
-                expect(gltf).not.toBe(gltfCopy);
-            });
-        });
-    });
-
-    it('optimizes a glTF file', function() {
-        var gltfCopy;
-        var options = {};
-        readGltf(gltfPath, function(gltf) {
-            gltfCopy = gltf;
             processFile(gltfPath, options, function (gltf) {
                 expect(gltf).toBeDefined();
                 expect(gltf).not.toBe(gltfCopy);
+                done();
             });
         });
     });
 
-    it('optimizes a glb file', function() {
+    it('optimizes a glb file', function(done) {
         var gltfCopy;
         var options = {};
         readGltf(glbPath, function(gltf) {
-            gltfCopy = gltf;
+            gltfCopy = clone(gltf);
             processFile(glbPath, options, function (gltf) {
                 expect(gltf).toBeDefined();
                 expect(gltf).not.toBe(gltfCopy);
+                done();
             });
         });
     });
@@ -112,22 +92,21 @@ describe('gltfPipeline', function() {
         var spy = spyOn(fs, 'writeFile').and.callFake(function(file, data, callback) {
             callback();
         });
-        var options = {};
+        var options = { 'createDirectory' : false };
         processFileToDisk(gltfPath, outputPath, options, function() {
-            expect(spy).toHaveBeenCalled();
+            expect(spy).toHaveBeenCalledWith('./output/', jasmine.any(String), jasmine.any(Function));
             done();
         });
     });
-
     
     it('will write a file from JSON', function(done) {
         var spy = spyOn(fs, 'writeFile').and.callFake(function(file, data, callback) {
             callback();
         });
-        var options = {};
+        var options = { 'createDirectory' : false };
         readGltf(gltfPath, function(gltf) {
             processJSONToDisk(gltf, outputPath, options, function() {
-                expect(spy).toHaveBeenCalled();
+                expect(spy).toHaveBeenCalledWith('./output/', jasmine.any(String), jasmine.any(Function));
                 done();
             });
         });

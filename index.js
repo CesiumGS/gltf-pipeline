@@ -5,5 +5,4 @@ module.exports = {
     readGltf : require('./lib/readGltf'),
     writeBinaryGltf : require('./lib/writeBinaryGltf'),
     writeGltf : require('./lib/writeGltf'),
-    writeSource : require('./lib/writeSource')
 };
