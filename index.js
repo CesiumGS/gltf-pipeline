@@ -26,5 +26,10 @@ module.exports = {
     combineMeshes : require('./lib/combineMeshes'),
     combinePrimitives : require('./lib/combinePrimitives'),
     removeUnusedVertices : require('./lib/removeUnusedVertices'),
+    uninterleaveAndPackBuffers : require('./lib/uninterleaveAndPackBuffers'),
+    byteLengthForComponentType : require('./lib/byteLengthForComponentType'),
+    numberOfComponentsForType : require('./lib/numberOfComponentsForType'),
+    getAccessorByteStride : require('./lib/getAccessorByteStride',
+
     OptimizationStatistics : require('./lib/OptimizationStatistics')
 };
