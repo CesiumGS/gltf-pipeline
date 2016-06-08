@@ -29,7 +29,6 @@ module.exports = {
     uninterleaveAndPackBuffers : require('./lib/uninterleaveAndPackBuffers'),
     byteLengthForComponentType : require('./lib/byteLengthForComponentType'),
     numberOfComponentsForType : require('./lib/numberOfComponentsForType'),
-    getAccessorByteStride : require('./lib/getAccessorByteStride',
-
+    getAccessorByteStride : require('./lib/getAccessorByteStride'),
     OptimizationStatistics : require('./lib/OptimizationStatistics')
 };
