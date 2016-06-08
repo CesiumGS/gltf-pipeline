@@ -14,8 +14,8 @@ describe('removeUnusedVertices', function() {
     var indices = new Uint16Array([0, 1, 2]);
     var indicesOneUnused = new Uint16Array([0, 2]);
     var indicesTwoUnused = new Uint16Array([1]);
-    var attributeOne = new Buffer(Float32Array.from([0, 1, 2, 3, 4, 5, 6, 7, 8]).buffer);
-    var attributeTwo = new Buffer(Uint16Array.from([0, 1, 2, 3, 4, 5]).buffer);
+    var attributeOne = new Buffer(new Float32Array([0, 1, 2, 3, 4, 5, 6, 7, 8]).buffer);
+    var attributeTwo = new Buffer(new Uint16Array([0, 1, 2, 3, 4, 5]).buffer);
     var attributesBuffer = Buffer.concat([attributeOne, attributeTwo]);
 
     var testGltf = {
