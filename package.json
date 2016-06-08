@@ -25,7 +25,7 @@
     "jasmine": "jasmine",
     "coverage": "istanbul cover -x **/specs/** ./node_modules/jasmine/bin/jasmine.js",
     "build": "browserify index.js --standalone gltfPipeline -o build/gltf-pipeline.js",
-    "test": "npm run jsHint && npm run coverage",
+    "test": "gulp test && npm run jsHint && npm run coverage",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
   },
   "directories": {
@@ -51,6 +51,7 @@
     "gulp-jshint": "2.0.0",
     "istanbul": "^0.4.1",
     "jasmine": "^2.4.1",
+    "jasmine-spec-reporter": "^2.4.0",
     "jshint": "2.8.0",
     "jshint-stylish": "2.1.0"
   }
