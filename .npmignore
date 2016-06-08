@@ -1,3 +1,5 @@
+/.idea
+/.jshintrc
 /.npmignore
 /.travis.yml
 /build
