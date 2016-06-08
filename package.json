@@ -49,7 +49,7 @@
     "coveralls": "^2.11.6",
     "gulp": "3.9.0",
     "gulp-jshint": "2.0.0",
-    "istanbul": "^0.4.1",
+    "istanbul": "^0.4.3",
     "jasmine": "^2.4.1",
     "jshint": "2.8.0",
     "jshint-stylish": "2.1.0"
