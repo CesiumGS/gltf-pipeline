@@ -11,9 +11,9 @@ var numberOfComponentsForType = require('../../lib/numberOfComponentsForType');
 
 
 describe('removeUnusedVertices', function() {
-    var indices = Uint16Array.from([0, 1, 2]);
-    var indicesOneUnused = Uint16Array.from([0, 2]);
-    var indicesTwoUnused = Uint16Array.from([1]);
+    var indices = new Uint16Array([0, 1, 2]);
+    var indicesOneUnused = new Uint16Array([0, 2]);
+    var indicesTwoUnused = new Uint16Array([1]);
     var attributeOne = new Buffer(Float32Array.from([0, 1, 2, 3, 4, 5, 6, 7, 8]).buffer);
     var attributeTwo = new Buffer(Uint16Array.from([0, 1, 2, 3, 4, 5]).buffer);
     var attributesBuffer = Buffer.concat([attributeOne, attributeTwo]);
