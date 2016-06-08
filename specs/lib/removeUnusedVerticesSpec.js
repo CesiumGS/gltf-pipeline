@@ -26,7 +26,7 @@ describe('removeUnusedVertices', function() {
             else {
                 boxGltf = JSON.parse(data);
                 addPipelineExtras(boxGltf);
-                loadGltfUris(boxGltf, path.dirname(gltfPath), function(err) {
+                loadGltfUris(boxGltf, path.dirname(gltfPath), function(err, gltf) {
                     if (err) {
                         throw err;
                     }

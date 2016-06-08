@@ -1,7 +1,7 @@
 'use strict';
 
 var removeObject = require('../../lib/removeObject');
-var OptimizationStatistics = require('../../').OptimizationStatistics;
+var OptimizationStatistics = require('../../lib/OptimizationStatistics');
 
 describe('removeObject', function() {
     it('removes an object', function() {

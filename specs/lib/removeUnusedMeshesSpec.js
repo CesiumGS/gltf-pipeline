@@ -1,7 +1,7 @@
 'use strict';
 
-var removeUnusedMeshes = require('../../').removeUnusedMeshes;
-var OptimizationStatistics = require('../../').OptimizationStatistics;
+var removeUnusedMeshes = require('../../lib/removeUnusedMeshes');
+var OptimizationStatistics = require('../../lib/OptimizationStatistics');
 
 describe('removeUnusedMeshes', function() {
     it('removes a mesh', function() {

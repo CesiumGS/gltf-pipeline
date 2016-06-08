@@ -1,7 +1,7 @@
 'use strict';
 
-var removeUnusedTechniques = require('../../').removeUnusedTechniques;
-var OptimizationStatistics = require('../../').OptimizationStatistics;
+var removeUnusedTechniques = require('../../lib/removeUnusedTechniques');
+var OptimizationStatistics = require('../../lib/OptimizationStatistics');
 
 describe('removeUnusedTechniques', function() {
     it('removes a technique', function() {

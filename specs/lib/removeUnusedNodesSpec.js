@@ -1,7 +1,7 @@
 'use strict';
 
-var removeUnusedNodes = require('../../').removeUnusedNodes;
-var OptimizationStatistics = require('../../').OptimizationStatistics;
+var removeUnusedNodes = require('../../lib/removeUnusedNodes');
+var OptimizationStatistics = require('../../lib/OptimizationStatistics');
 
 describe('removeUnusedNodes', function() {
     it('removes an isolated node', function() {

@@ -1,7 +1,7 @@
 'use strict';
 
-var removeUnusedTextures = require('../../').removeUnusedTextures;
-var OptimizationStatistics = require('../../').OptimizationStatistics;
+var removeUnusedTextures = require('../../lib/removeUnusedTextures');
+var OptimizationStatistics = require('../../lib/OptimizationStatistics');
 
 describe('removeUnusedTextures', function() {
     it('removes a texture', function() {

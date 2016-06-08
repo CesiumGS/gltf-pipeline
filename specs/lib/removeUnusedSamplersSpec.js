@@ -1,7 +1,7 @@
 'use strict';
 
-var removeUnusedSamplers = require('../../').removeUnusedSamplers;
-var OptimizationStatistics = require('../../').OptimizationStatistics;
+var removeUnusedSamplers = require('../../lib/removeUnusedSamplers');
+var OptimizationStatistics = require('../../lib/OptimizationStatistics');
 
 describe('removeUnusedSamplers', function() {
     it('removes a sampler', function() {
