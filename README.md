@@ -81,7 +81,7 @@ npm run build
 
 ## Limitations
 
-This tool is still in development. We plan on adding additional features like gzip compression, AO baking, and other functionality.
+This tool is still in development. We plan on adding additional features such as AO baking, and other functionality.
 
 
 ## Contributions
