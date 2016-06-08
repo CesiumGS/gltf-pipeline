@@ -25,7 +25,7 @@ describe('gltfPipeline', function() {
             gltfCopy = clone(gltf);
             processJSON(gltf, options, function(gltf) {
                 expect(gltf).toBeDefined();
-                expect(gltf).not.toBe(gltfCopy);
+                expect(gltf).not.toEqual(gltfCopy);
                 done();
             });
         });
@@ -45,7 +45,7 @@ describe('gltfPipeline', function() {
             
             processJSON(gltf, options, function(gltf) {
                 expect(gltf).toBeDefined();
-                expect(gltf).not.toBe(gltfCopy);
+                expect(gltf).not.toEqual(gltfCopy);
                 done();
             });
         });
@@ -58,7 +58,7 @@ describe('gltfPipeline', function() {
             gltfCopy = clone(gltf);
             processFile(gltfPath, options, function (gltf) {
                 expect(gltf).toBeDefined();
-                expect(gltf).not.toBe(gltfCopy);
+                expect(gltf).not.toEqual(gltfCopy);
                 done();
             });
         });
@@ -71,7 +71,7 @@ describe('gltfPipeline', function() {
             gltfCopy = clone(gltf);
             processFile(glbPath, options, function (gltf) {
                 expect(gltf).toBeDefined();
-                expect(gltf).not.toBe(gltfCopy);
+                expect(gltf).not.toEqual(gltfCopy);
                 done();
             });
         });
@@ -94,7 +94,7 @@ describe('gltfPipeline', function() {
         });
         var options = { 'createDirectory' : false };
         processFileToDisk(gltfPath, outputPath, options, function() {
-            expect(spy).toHaveBeenCalledWith('./output/', jasmine.any(String), jasmine.any(Function));
+            expect(spy.calls.first().args[0]).toEqual('./output/');
             done();
         });
     });
@@ -106,7 +106,7 @@ describe('gltfPipeline', function() {
         var options = { 'createDirectory' : false };
         readGltf(gltfPath, function(gltf) {
             processJSONToDisk(gltf, outputPath, options, function() {
-                expect(spy).toHaveBeenCalledWith('./output/', jasmine.any(String), jasmine.any(Function));
+                expect(spy.calls.first().args[0]).toEqual('./output/');
                 done();
             });
         });
