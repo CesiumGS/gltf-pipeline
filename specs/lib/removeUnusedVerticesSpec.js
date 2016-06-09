@@ -2,7 +2,6 @@
 var fs = require('fs');
 var path = require('path');
 var clone = require('clone');
-var bufferEqual = require('buffer-equal');
 var loadGltfUris = require('../../lib/loadGltfUris');
 var addPipelineExtras = require('../../lib/addPipelineExtras');
 var removeUnusedVertices = require('../../lib/removeUnusedVertices');
@@ -144,7 +143,7 @@ describe('removeUnusedVertices', function() {
         }
     });
 
-    it ('removes two unused attributes', function() {
+    it('removes two unused attributes', function() {
         var gltf = clone(testGltf);
         var gltfIndexBuffer = gltf.buffers.indexBuffer;
         var indexBuffer = new Buffer(indicesTwoUnused.slice(0).buffer);
@@ -184,7 +183,7 @@ describe('removeUnusedVertices', function() {
         }
     });
 
-    it ('handles when primitives use the same accessors with different indices', function() {
+    it('handles when primitives use the same accessors with different indices', function() {
         var gltf = clone(testGltf);
         var gltfIndexBuffer = gltf.buffers.indexBuffer;
         var indexBuffer = new Buffer(indicesTwoUnused.slice(0).buffer);
