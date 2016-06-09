@@ -11,7 +11,7 @@ var outputFragmentShaderPath = './specs/data/boxTexturedUnoptimized/output/Cesiu
 
 describe('writeShaders', function() {
     var fragmentShaderData;
-    var fragmentShaderUri
+    var fragmentShaderUri;
     var testGltf;
 
     beforeAll(function(done) {
