@@ -83,22 +83,11 @@ describe('gltfPipeline', function() {
         });
         var options = {};
         processFileToDisk(gltfPath, outputPath, options, function() {
-            expect(spy).toHaveBeenCalled();
+            expect(spy.calls.first().args[0]).toEqual('output/output');
             done();
         });
     });
 
-    it('will write a file', function(done) {
-        var spy = spyOn(fs, 'writeFile').and.callFake(function(file, data, callback) {
-            callback();
-        });
-        var options = { 'createDirectory' : false };
-        processFileToDisk(gltfPath, outputPath, options, function() {
-            expect(spy.calls.first().args[0]).toEqual('./output/');
-            done();
-        });
-    });
-    
     it('will write a file from JSON', function(done) {
         var spy = spyOn(fs, 'writeFile').and.callFake(function(file, data, callback) {
             callback();
