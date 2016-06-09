@@ -83,9 +83,7 @@ describe('findAccessorMinMax', function() {
         var minMax = findAccessorMinMax(gltf, gltfAccessor);
         var min = minMax.min;
         var max = minMax.max;
-        for (var i = 0; i < min.length; i++) {
-            expect(min[i]).toEqual(expectMin[i]);
-            expect(max[i]).toEqual(expectMax[i]);
-        }
+        expect(min).toEqual(expectMin);
+        expect(max).toEqual(expectMax);
     });
 });
