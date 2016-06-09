@@ -18,7 +18,7 @@ if (process.argv.length < 3 || defined(argv.h) || defined(argv.help)) {
         '  -i, input=PATH Read unoptimized glTF from the specified file.\n ' +
         '  -o, output=PATH write optimized glTF to the specified file.\n' +
         '  -b, write binary glTF file.\n' +
-        '  -s, writes out separate geometry/animation data files, shader files and textures instead of embedding them in the glTF file.\n'
+        '  -s, writes out separate geometry/animation data files, shader files and textures instead of embedding them in the glTF file.\n' + 
         '  -q, quantize the attributes of this model.\n';
     process.stdout.write(help);
     return;
