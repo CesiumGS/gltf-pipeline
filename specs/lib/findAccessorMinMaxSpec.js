@@ -47,7 +47,7 @@ describe('findAccessorMinMax', function() {
         var gltfAccessor = gltf.accessors.accessor;
         gltfAccessor.byteStride = 0;
 
-        var minMax = findAccessorMinMax(gltf, 'accessor');
+        var minMax = findAccessorMinMax(gltf, gltfAccessor);
         var min = minMax.min;
         var max = minMax.max;
         for (var i = 0; i < min.length; i++) {
@@ -80,7 +80,7 @@ describe('findAccessorMinMax', function() {
         var gltfAccessor = gltf.accessors.accessor;
         gltfAccessor.byteStride = 24;
 
-        var minMax = findAccessorMinMax(gltf, 'accessor');
+        var minMax = findAccessorMinMax(gltf, gltfAccessor);
         var min = minMax.min;
         var max = minMax.max;
         for (var i = 0; i < min.length; i++) {
