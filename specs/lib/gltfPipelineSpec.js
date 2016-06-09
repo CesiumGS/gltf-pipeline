@@ -88,6 +88,17 @@ describe('gltfPipeline', function() {
         });
     });
 
+    it('will write a binary file', function(done) {
+        var spy = spyOn(fs, 'writeFile').and.callFake(function(file, data, callback) {
+            callback();
+        });
+        var options = { 'binary' : true };
+        processFileToDisk(gltfPath, outputPath, options, function() {
+            expect(spy.calls.first().args[0]).toEqual('output/output.glb');
+            done();
+        });
+    });
+
     it('will write a file from JSON', function(done) {
         var spy = spyOn(fs, 'writeFile').and.callFake(function(file, data, callback) {
             callback();
