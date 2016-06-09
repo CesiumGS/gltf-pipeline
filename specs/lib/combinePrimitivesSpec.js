@@ -5,6 +5,7 @@ var addPipelineExtras = require('../../lib/addPipelineExtras');
 var combinePrimitives = require('../../lib/combinePrimitives');
 var writeGltf = require('../../lib/writeGltf');
 var loadGltfUris = require('../../lib/loadGltfUris');
+var removePipelineExtras = require('../../lib/removePipelineExtras');
 
 var boxPath = './specs/data/combineObjects/box.gltf';
 var doubleBoxToCombinePath = './specs/data/combineObjects/doubleBoxToCombine.gltf';
@@ -58,6 +59,8 @@ describe('combinePrimitives', function(){
             var doubleBoxToCombine = gltf;
 
             combinePrimitives(doubleBoxToCombine);
+            removePipelineExtras(doubleBoxToCombine);
+            
             expect(doubleBoxToCombine.meshes.meshTest.primitives.length).toEqual(1);
             expect(doubleBoxToCombine.meshes.meshTest.primitives[0].material).toEqual('Effect_outer');
             expect(doubleBoxToCombine.meshes.meshTest.primitives[0].mode).toEqual(4);
@@ -75,8 +78,7 @@ describe('combinePrimitives', function(){
                 "byteStride": 0,
                 "componentType": 5123,
                 "type": "SCALAR",
-                "count": 516,
-                "extras": { "_pipeline": { "deleteExtras": true } }
+                "count": 516
             });
 
             expect(doubleBoxToCombine.accessors['meshTest_POSITION_accessor_0']).toEqual({
@@ -87,8 +89,7 @@ describe('combinePrimitives', function(){
                 "type": "VEC3",
                 "count": 320,
                 "max": [0.5, 0.5, 0.5],
-                "min": [-0.5, -0.5, -0.5],
-                "extras": { "_pipeline": { "deleteExtras": true } }
+                "min": [-0.5, -0.5, -0.5]
             });
             expect(doubleBoxToCombine.bufferViews['meshTest_INDEX_bufferView_0'].buffer).toEqual('meshTest_INDEX_buffer_0');
         });
