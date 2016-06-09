@@ -1,8 +1,8 @@
 'use strict';
 
 var fs = require('fs');
-var removeUnused = require('../../').removeUnused;
-var OptimizationStatistics = require('../../').OptimizationStatistics;
+var removeUnused = require('../../lib/removeUnused');
+var OptimizationStatistics = require('../../lib/OptimizationStatistics');
 var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestUnusedTree.gltf';
 
 describe('removeUnused', function() {

@@ -1,7 +1,7 @@
 'use strict';
 
-var removeUnusedCameras = require('../../').removeUnusedCameras;
-var OptimizationStatistics = require('../../').OptimizationStatistics;
+var removeUnusedCameras = require('../../lib/removeUnusedCameras');
+var OptimizationStatistics = require('../../lib/OptimizationStatistics');
 
 describe('removeUnusedCameras', function() {
     it('removes a camera', function() {

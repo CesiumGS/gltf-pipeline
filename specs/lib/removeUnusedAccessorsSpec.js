@@ -1,7 +1,7 @@
 'use strict';
 
-var removeUnusedAccessors = require('../../').removeUnusedAccessors;
-var OptimizationStatistics = require('../../').OptimizationStatistics;
+var removeUnusedAccessors = require('../../lib/removeUnusedAccessors');
+var OptimizationStatistics = require('../../lib/OptimizationStatistics');
 
 describe('removeUnusedAccessors', function() {
     it('removes an accessor', function() {

@@ -1,7 +1,7 @@
 'use strict';
 
-var removeUnusedMaterials = require('../../').removeUnusedMaterials;
-var OptimizationStatistics = require('../../').OptimizationStatistics;
+var removeUnusedMaterials = require('../../lib/removeUnusedMaterials');
+var OptimizationStatistics = require('../../lib/OptimizationStatistics');
 
 describe('removeUnusedMaterials', function() {
     it('removes a material', function() {
