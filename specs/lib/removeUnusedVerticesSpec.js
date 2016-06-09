@@ -412,6 +412,5 @@ describe('removeUnusedVertices', function() {
 
         removeUnusedVertices(testGltf);
         expect(testGltf.buffers["buffer_0"].byteLength).toEqual(6 + 4 * 3 * 4);
-
     });
 });
