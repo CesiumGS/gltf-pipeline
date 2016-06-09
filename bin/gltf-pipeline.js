@@ -15,7 +15,7 @@ var readGltf = require('../lib/readGltf');
 if (process.argv.length < 3 || defined(argv.h) || defined(argv.help)) {
     var help =
         'Usage: node ' + path.basename(__filename) + ' [path-to.gltf or path-to.bgltf] [OPTIONS]\n' +
-        '  -i, input=PATH Read unoptimized glTF from the specified file.\n ' +
+        '  -i, input=PATH Read unoptimized glTF from the specified file.\n' +
         '  -o, output=PATH write optimized glTF to the specified file.\n' +
         '  -b, write binary glTF file.\n' +
         '  -s, writes out separate geometry/animation data files, shader files and textures instead of embedding them in the glTF file.\n' +
