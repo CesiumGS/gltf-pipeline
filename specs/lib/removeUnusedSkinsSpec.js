@@ -1,7 +1,7 @@
 'use strict';
 
-var removeUnusedSkins = require('../../').removeUnusedSkins;
-var OptimizationStatistics = require('../../').OptimizationStatistics;
+var removeUnusedSkins = require('../../lib/removeUnusedSkins');
+var OptimizationStatistics = require('../../lib/OptimizationStatistics');
 
 describe('removeUnusedSkins', function() {
     it('removes a skin', function() {

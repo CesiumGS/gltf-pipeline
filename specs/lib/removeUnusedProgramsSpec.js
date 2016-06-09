@@ -1,7 +1,7 @@
 'use strict';
 
-var removeUnusedPrograms = require('../../').removeUnusedPrograms;
-var OptimizationStatistics = require('../../').OptimizationStatistics;
+var removeUnusedPrograms = require('../../lib/removeUnusedPrograms');
+var OptimizationStatistics = require('../../lib/OptimizationStatistics');
 
 describe('removeUnusedPrograms', function() {
     it('removes a program', function() {

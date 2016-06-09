@@ -1,7 +1,7 @@
 'use strict';
 
-var removeUnusedShaders = require('../../').removeUnusedShaders;
-var OptimizationStatistics = require('../../').OptimizationStatistics;
+var removeUnusedShaders = require('../../lib/removeUnusedShaders');
+var OptimizationStatistics = require('../../lib/OptimizationStatistics');
 
 describe('removeUnusedShaders', function() {
     it('removes a shader', function() {

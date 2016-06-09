@@ -26,9 +26,22 @@ Command-line Example:
 node ./bin/gltf-pipeline.js ./specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf -o output.gltf
 ```
 
-## Using the JavaScript library
+## Usage
+
+### Using the JavaScript library
 
 Include `build/gltf-pipeline.js` it with a `script` tag.  For a simple example, see [build/index.html](build/index.html).
+
+
+###Command line flags:
+
+|Flag|Description|Required|
+|----|-----------|--------|
+|`-i`|Path to the input glTF file.| :white_check_mark: Yes|
+|`-o`|Directory or filename for the exported glTF file.|No|
+|`-b`|Write binary glTF file.|No, default `false`|
+|`-s`|Writes out separate geometry/animation data files, shader files and textures instead of embedding them in the glTF file.|No, default `false`|
+|`-h`|Display help|No|
 
 ## Build Instructions
 
@@ -66,6 +79,18 @@ To rebuild, run:
 npm run build
 ```
 
+## Limitations
+
+This tool is still in development. We plan on adding additional features such as AO baking, and other functionality.
+
+
 ## Contributions
 
 Pull requests are appreciated!  Please use the same [Contributor License Agreement (CLA)](https://github.com/AnalyticalGraphicsInc/cesium/blob/master/CONTRIBUTING.md) and [Coding Guide](https://github.com/AnalyticalGraphicsInc/cesium/blob/master/Documentation/Contributors/CodingGuide/README.md) used for [Cesium](http://cesiumjs.org/).
+
+---
+
+Developed by the Cesium team.
+<p align="center">
+<a href="http://cesiumjs.org/"><img src="doc/cesium.png" /></a>
+</p>

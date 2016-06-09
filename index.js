@@ -1,25 +1,8 @@
 'use strict';
 
 module.exports = {
-    addDefaults : require('./lib/addDefaults'),
-    removeUnusedImages : require('./lib/removeUnusedImages'),
-    removeUnusedSamplers : require('./lib/removeUnusedSamplers'),
-    removeUnusedShaders : require('./lib/removeUnusedShaders'),
-    removeUnusedTechniques : require('./lib/removeUnusedTechniques'),
-    removeUnusedPrograms : require('./lib/removeUnusedPrograms'),
-    removeUnusedBuffers : require('./lib/removeUnusedBuffers'),
-    removeUnusedBufferViews : require('./lib/removeUnusedBufferViews'),
-    removeUnusedMaterials : require('./lib/removeUnusedMaterials'),
-    removeUnusedSkins : require('./lib/removeUnusedSkins'),
-    removeUnusedCameras : require('./lib/removeUnusedCameras'),
-    removeUnusedTextures : require('./lib/removeUnusedTextures'),
-    removeUnusedMeshes : require('./lib/removeUnusedMeshes'),
-    removeUnusedNodes : require('./lib/removeUnusedNodes'),
-    removeUnusedAccessors : require('./lib/removeUnusedAccessors'),
-    removeUnused : require('./lib/removeUnused'),
-    loadGltfUris : require('./lib/loadGltfUris'),
-    writeGltf : require('./lib/writeGltf'),
-    parseBinaryGltf : require('./lib/parseBinaryGltf'),
+    gltfPipeline : require('./lib/gltfPipeline'),
+    readGltf : require('./lib/readGltf'),
     writeBinaryGltf : require('./lib/writeBinaryGltf'),
     addPipelineExtras : require('./lib/addPipelineExtras'),
     convertDagToTree : require('./lib/convertDagToTree'),
@@ -30,5 +13,6 @@ module.exports = {
     byteLengthForComponentType : require('./lib/byteLengthForComponentType'),
     numberOfComponentsForType : require('./lib/numberOfComponentsForType'),
     getAccessorByteStride : require('./lib/getAccessorByteStride'),
-    OptimizationStatistics : require('./lib/OptimizationStatistics')
+    OptimizationStatistics : require('./lib/OptimizationStatistics'),
+    writeGltf : require('./lib/writeGltf')
 };
