@@ -419,6 +419,199 @@ describe('removeUnusedVertices', function() {
             oldTextureBuffer.slice(96, 160)], 96))).toBe(true);
     });
 
+    it('removes parts of the buffer based on the attribute type if the stride is 0', function(){
+        var indices = [0,1,2,0,2,3];
+        var indicesBuffer = new Buffer(indices.length * 2);
+        for (var i = 0; i < indices.length; i++) {
+            indicesBuffer.writeUInt16LE(indices[i], i * 2);
+        }
+
+        var positions = [
+            0,0,0,
+            0,1,0,
+            1,1,0,
+            1,0,0,
+            2,2,2,
+            2,2,2,
+            2,2,2
+        ];
+        var positionsBuffer = new Buffer(positions.length * 4);
+        for (var i = 0; i < positions.length; i++) {
+            positionsBuffer.writeFloatLE(positions[i], i * 4);
+        }
+
+        var dataBuffer = Buffer.concat([indicesBuffer, positionsBuffer]);
+
+        var testGltf = {
+            "accessors": {
+                "accessor_index": {
+                    "bufferView": "index_view",
+                    "byteOffset": 0,
+                    "componentType": 5123,
+                    "count": 6,
+                    "type": "SCALAR",
+                    "extras": {
+                        "_pipeline": {}
+                    }
+                },
+                "accessor_position": {
+                    "bufferView": "position_view",
+                    "byteOffset": 0,
+                    "componentType": 5126,
+                    "count": 4,
+                    "type": "VEC3",
+                    "extras": {
+                        "_pipeline": {}
+                    }
+                }
+            },
+            "bufferViews": {
+                "position_view": {
+                    "buffer": "buffer_0",
+                    "byteOffset": 6 * 2,
+                    "byteLength": 7 * 3 * 4,
+                    "target": 34962,
+                    "extras": {
+                        "_pipeline": {}
+                    }
+                },
+                "index_view": {
+                    "buffer": "buffer_0",
+                    "byteOffset": 0,
+                    "byteLength": 6 * 2,
+                    "target": 34963,
+                    "extras": {
+                        "_pipeline": {}
+                    }
+                }
+            },
+            "buffers": {
+                "buffer_0": {
+                    "uri": "data:",
+                    "byteLength": indices.length * 2 + positions.length * 4,
+                    "extras": {
+                        "_pipeline": {
+                            "source": dataBuffer
+                        }
+                    }
+                }
+            },
+            "meshes": {
+                "mesh_square": {
+                    "name": "square",
+                    "primitives": [
+                        {
+                            "attributes": {
+                                "POSITION": "accessor_position"
+                            },
+                            "indices": "accessor_index"
+                        }
+                    ]
+                }
+            }
+        }
+
+        removeUnusedVertices(testGltf);
+        expect(testGltf.buffers["buffer_0"].byteLength).toEqual(6 * 2 + 4 * 3 * 4);
+    });
+
+    it('handles 8 bit indices', function(){
+        var indices = [0,1,2,0,2,3];
+        var indicesBuffer = new Buffer(indices.length);
+        for (var i = 0; i < indices.length; i++) {
+            indicesBuffer.writeUInt8(indices[i], i);
+        }
+
+        var positions = [
+            0,0,0,
+            0,1,0,
+            1,1,0,
+            1,0,0,
+            2,2,2,
+            2,2,2,
+            2,2,2
+        ];
+        var positionsBuffer = new Buffer(positions.length * 4);
+        for (var i = 0; i < positions.length; i++) {
+            positionsBuffer.writeFloatLE(positions[i], i * 4);
+        }
+
+        var dataBuffer = Buffer.concat([indicesBuffer, positionsBuffer]);
+
+        var testGltf = {
+            "accessors": {
+                "accessor_index": {
+                    "bufferView": "index_view",
+                    "byteOffset": 0,
+                    "componentType": 5121, // unsigned short
+                    "count": 6,
+                    "type": "SCALAR",
+                    "extras": {
+                        "_pipeline": {}
+                    }
+                },
+                "accessor_position": {
+                    "bufferView": "position_view",
+                    "byteOffset": 0,
+                    "componentType": 5126,
+                    "count": 4,
+                    "type": "VEC3",
+                    "extras": {
+                        "_pipeline": {}
+                    }
+                }
+            },
+            "bufferViews": {
+                "position_view": {
+                    "buffer": "buffer_0",
+                    "byteOffset": 6,
+                    "byteLength": 7 * 3 * 4,
+                    "target": 34962,
+                    "extras": {
+                        "_pipeline": {}
+                    }
+                },
+                "index_view": {
+                    "buffer": "buffer_0",
+                    "byteOffset": 0,
+                    "byteLength": 6,
+                    "target": 34963,
+                    "extras": {
+                        "_pipeline": {}
+                    }
+                }
+            },
+            "buffers": {
+                "buffer_0": {
+                    "uri": "data:",
+                    "byteLength": indices.length + positions.length * 4,
+                    "extras": {
+                        "_pipeline": {
+                            "source": dataBuffer
+                        }
+                    }
+                }
+            },
+            "meshes": {
+                "mesh_square": {
+                    "name": "square",
+                    "primitives": [
+                        {
+                            "attributes": {
+                                "POSITION": "accessor_position"
+                            },
+                            "indices": "accessor_index"
+                        }
+                    ]
+                }
+            }
+        }
+
+        removeUnusedVertices(testGltf);
+        expect(testGltf.buffers["buffer_0"].byteLength).toEqual(6 + 4 * 3 * 4);
+
+    });
+
     function createTestGltf() {
         var testGltf = {
             "accessors": {
