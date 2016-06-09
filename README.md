@@ -42,7 +42,8 @@ Include `build/gltf-pipeline.js` it with a `script` tag.  For a simple example, 
 |`-b`, `--binary`|Write binary glTF file.|No, default `false`|
 |`-s`, `--separate`|Writes out separate geometry/animation data files, shader files and textures instead of embedding them in the glTF file.|No, default `false`|
 |`-h`, `--help`|Display help|No|
-|`-t`, `--separateTexture`|Write out separate textures, but embed geometry/animation data files, and shader files.|No, default `false`|
+|`-t`,
+`--separateTexture`|Write out separate textures, but embed geometry/animation data files, and shader files.|No, default `false`|
 
 
 ## Build Instructions
