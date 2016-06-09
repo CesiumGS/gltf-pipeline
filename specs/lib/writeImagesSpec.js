@@ -63,6 +63,16 @@ describe('writeImages', function() {
         });
     });
 
+    it('writes an embedded buffer with external images', function(done) {
+        var gltf = clone(testGltf);
+
+        writeGltf(gltf, outputPath, true, false, true, function() {
+            expect(gltf.images.Cesium_Logo_Flat_Low.extras).not.toBeDefined();
+            expect(gltf.images.Cesium_Logo_Flat_Low.uri).toEqual('Cesium_Logo_Flat_Low.png');
+            done();
+        });
+    });
+
     it('throws an error', function(done) {
         var gltf = clone(testGltf);
 

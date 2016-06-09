@@ -19,7 +19,7 @@ if (process.argv.length < 3 || defined(argv.h) || defined(argv.help)) {
         '  -o --output, output=PATH write optimized glTF to the specified file.\n' +
         '  -b --binary, write binary glTF file.\n' +
         '  -s --separate, writes out separate geometry/animation data files, shader files and textures instead of embedding them in the glTF file.\n' +
-        '  -t --separateTexture, write out separate textures, but embed geometry/animation data files, and shader files.\n';
+        '  -t --separateImage, write out separate textures, but embed geometry/animation data files, and shader files.\n';
     process.stdout.write(help);
     return;
 }
@@ -30,9 +30,9 @@ var fileName = path.basename(gltfPath, fileExtension);
 var filePath = path.dirname(gltfPath);
 
 var outputPath = defaultValue(argv._[1], argv.o || argv.output);
-var isBinary = defaultValue(argv.b || argv.binary, false);
-var isSeparate = defaultValue(argv.s || argv.separate, false);
-var isTextureSeparate = defaultValue(argv.t || argv.separateTexture, false);
+var binary = defaultValue(argv.b || argv.binary, false);
+var separate = defaultValue(argv.s || argv.separate, false);
+var separateImage = defaultValue(argv.t || argv.separateImage, false);
 
 if (!defined(gltfPath)) {
     throw new DeveloperError('Input path is undefined.');
@@ -48,9 +48,9 @@ if (!defined(outputPath)) {
 }
 
 var options = {
-    isBinary : isBinary,
-    isEmbedded : !isSeparate,
-    isImageEmbedded : !isTextureSeparate
+    binary : binary,
+    embed : !separate,
+    embedImage : !separateImage
 };
 
 processFileToDisk(gltfPath, outputPath, options);
