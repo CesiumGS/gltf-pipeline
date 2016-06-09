@@ -29,8 +29,8 @@ var fileName = path.basename(gltfPath, fileExtension);
 var filePath = path.dirname(gltfPath);
 
 var outputPath = defaultValue(argv._[1], argv.o);
-var isSeparate = defaultValue(argv.s, false);
-var isBinary = defaultValue(argv.b, false);
+var binary = defaultValue(argv.b, false);
+var embed = !defaultValue(argv.s, false);
 
 if (!defined(gltfPath)) {
     throw new DeveloperError('Input path is undefined.');
@@ -46,8 +46,8 @@ if (!defined(outputPath)) {
 }
 
 var options = {
-    isBinary : isBinary,
-    isEmbedded : !isSeparate
+    binary : binary,
+    embed : embed
 };
 
 processFileToDisk(gltfPath, outputPath, options);

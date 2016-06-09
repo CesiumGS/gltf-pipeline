@@ -34,7 +34,7 @@ describe('gltfPipeline', function() {
     it('optimizes a gltf JSON with external resources', function(done) {
         var gltf;
         var gltfCopy;
-        var options = { 'resourcePath' : path.dirname(gltfPath) };
+        var options = { basePath : path.dirname(gltfPath) };
         fs.readFile(gltfPath, function(err, data) {
             if (err) {
                 throw err;
