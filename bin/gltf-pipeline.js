@@ -34,8 +34,6 @@ var isSeparate = defaultValue(argv.s, false);
 var isBinary = defaultValue(argv.b, false);
 var isImageSeparate = defaultValue(argv.separateImage, false);
 
-console.log(isImageSeparate);
-
 if (!defined(gltfPath)) {
     throw new DeveloperError('Input path is undefined.');
 }
@@ -52,7 +50,7 @@ if (!defined(outputPath)) {
 var options = {
     isBinary : isBinary,
     isEmbedded : !isSeparate,
-    isImageSeparate : isImageSeparate
+    isImageEmbedded : !isImageSeparate
 };
 
 processFileToDisk(gltfPath, outputPath, options);
