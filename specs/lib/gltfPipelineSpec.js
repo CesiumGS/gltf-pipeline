@@ -83,7 +83,7 @@ describe('gltfPipeline', function() {
         });
         var options = {};
         processFileToDisk(gltfPath, outputPath, options, function() {
-            expect(spy.calls.first().args[0]).toEqual('output/output');
+            expect(path.normalize(spy.calls.first().args[0])).toEqual(path.normalize('output/output'));
             done();
         });
     });
@@ -95,7 +95,7 @@ describe('gltfPipeline', function() {
         var options = { 'createDirectory' : false };
         readGltf(gltfPath, function(gltf) {
             processJSONToDisk(gltf, outputPath, options, function() {
-                expect(spy.calls.first().args[0]).toEqual('./output/');
+                expect(path.normalize(spy.calls.first().args[0])).toEqual(path.normalize('./output/'));
                 done();
             });
         });

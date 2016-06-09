@@ -20,7 +20,10 @@ describe('addDefaults', function() {
         };
 
         addDefaults(gltf, undefined);
-        expect(gltf.accessors.accessorId.byteStride).toEqual(0);
+        var accessor = gltf.accessors.accessorId;
+        expect(accessor.byteStride).toEqual(0);
+        expect(accessor.min).toBeDefined();
+        expect(accessor.max).toBeDefined();
     });
 
     it('Adds animation properties', function() {
