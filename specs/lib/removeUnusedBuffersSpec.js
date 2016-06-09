@@ -1,7 +1,7 @@
 'use strict';
 
-var removeUnusedBuffers = require('../../').removeUnusedBuffers;
-var OptimizationStatistics = require('../../').OptimizationStatistics;
+var removeUnusedBuffers = require('../../lib/removeUnusedBuffers');
+var OptimizationStatistics = require('../../lib/OptimizationStatistics');
 
 describe('removeUnusedBuffers', function() {
     it('removes a buffer', function() {

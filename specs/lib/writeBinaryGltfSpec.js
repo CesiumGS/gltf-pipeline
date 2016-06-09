@@ -30,7 +30,7 @@ describe('writeBinaryGltf', function() {
             if (err) {
                 throw err;
             }
-            testData.gltf = loadGltfUris(removeUnused(JSON.parse(data)), path.dirname(gltfPath), function(err) {
+            loadGltfUris(removeUnused(JSON.parse(data)), path.dirname(gltfPath), function(err, gltf) {
                 if (err) {
                     throw err;
                 }
@@ -38,6 +38,7 @@ describe('writeBinaryGltf', function() {
                     if (err) {
                         throw err;
                     }
+                    testData.gltf = gltf;
                     testData.scene = JSON.parse(data);
 
                     var names = ['image', 'buffer', 'fragmentShader', 'vertexShader'];
