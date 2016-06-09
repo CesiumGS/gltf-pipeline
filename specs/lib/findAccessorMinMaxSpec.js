@@ -48,12 +48,8 @@ describe('findAccessorMinMax', function() {
         gltfAccessor.byteStride = 0;
 
         var minMax = findAccessorMinMax(gltf, gltfAccessor);
-        var min = minMax.min;
-        var max = minMax.max;
-        for (var i = 0; i < min.length; i++) {
-            expect(min[i]).toEqual(expectMin[i]);
-            expect(max[i]).toEqual(expectMax[i]);
-        }
+        expect(minMax.min).toEqual(expectMin);
+        expect(minMax.max).toEqual(expectMax);
     });
 
     it('finds the min and max in a non-contiguous accessor', function() {
@@ -81,9 +77,7 @@ describe('findAccessorMinMax', function() {
         gltfAccessor.byteStride = 24;
 
         var minMax = findAccessorMinMax(gltf, gltfAccessor);
-        var min = minMax.min;
-        var max = minMax.max;
-        expect(min).toEqual(expectMin);
-        expect(max).toEqual(expectMax);
+        expect(minMax.min).toEqual(expectMin);
+        expect(minMax.max).toEqual(expectMax);
     });
 });
