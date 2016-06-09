@@ -107,7 +107,7 @@ describe('removeUnusedVertices', function() {
     it('removes one unused attribute', function() {
         var gltf = clone(testGltf);
         var gltfIndexBuffer = gltf.buffers.indexBuffer;
-        var indexBuffer = new Buffer(indicesOneUnused.buffer);
+        var indexBuffer = new Buffer(indicesOneUnused.slice(0).buffer);
         gltfIndexBuffer.extras._pipeline.source = indexBuffer;
         gltfIndexBuffer.byteLength = indexBuffer.length;
         gltf.bufferViews.indexBufferView.byteLength = indexBuffer.length;
@@ -147,7 +147,7 @@ describe('removeUnusedVertices', function() {
     it ('removes two unused attributes', function() {
         var gltf = clone(testGltf);
         var gltfIndexBuffer = gltf.buffers.indexBuffer;
-        var indexBuffer = new Buffer(indicesTwoUnused.buffer);
+        var indexBuffer = new Buffer(indicesTwoUnused.slice(0).buffer);
         gltfIndexBuffer.extras._pipeline.source = indexBuffer;
         gltfIndexBuffer.byteLength = indexBuffer.length;
         gltf.bufferViews.indexBufferView.byteLength = indexBuffer.length;
@@ -177,10 +177,48 @@ describe('removeUnusedVertices', function() {
         }
 
         var expectIndices = [0];
-        var indicesSource = Uint8Array.from(gltf.buffers.indexBuffer.extras._pipeline.source);
+        var indicesSource = Uint8Array.from(gltfIndexBuffer.extras._pipeline.source);
         var check = new Uint16Array(indicesSource.buffer, 0, expectIndices.length);
         for (i = 0; i < expectIndices.length; i++) {
             expect(expectIndices[i]).toEqual(check[i]);
         }
+    });
+
+    it ('handles when primitives use the same accessors with different indices', function() {
+        var gltf = clone(testGltf);
+        var gltfIndexBuffer = gltf.buffers.indexBuffer;
+        var indexBuffer = new Buffer(indicesTwoUnused.slice(0).buffer);
+        gltfIndexBuffer.extras._pipeline.source = indexBuffer;
+        gltfIndexBuffer.byteLength = indexBuffer.length;
+        var indexBufferView = gltf.bufferViews.indexBufferView;
+        indexBufferView.byteLength = indexBuffer.length;
+
+        var gltfIndexBuffer2 = clone(gltfIndexBuffer);
+        var indexBuffer2 = new Buffer(indicesOneUnused.slice(0).buffer);
+        gltfIndexBuffer2.extras._pipeline.source = indexBuffer2;
+        gltfIndexBuffer2.byteLength = indexBuffer2.length;
+        gltf.buffers.indexBuffer2 = gltfIndexBuffer2;
+
+        var gltfIndexBufferView2 = clone(indexBufferView);
+        gltfIndexBufferView2.buffer = 'indexBuffer2';
+        gltfIndexBufferView2.byteLength = indexBuffer2.length;
+        gltf.bufferViews.indexBufferView2 = gltfIndexBufferView2;
+
+        var gltfIndexAccessor = gltf.accessors.indexAccessor;
+        gltfIndexAccessor.count = indicesTwoUnused.length;
+        var gltfIndexAccessor2 = clone(gltfIndexAccessor);
+        gltfIndexAccessor2.count = indicesOneUnused.length;
+        gltfIndexAccessor2.bufferView = 'indexBufferView2';
+        gltf.accessors.indexAccessor2 = gltfIndexAccessor2;
+
+        var mesh2 = clone(gltf.meshes.mesh);
+        mesh2.primitives[0].indices = 'indexAccessor2';
+        gltf.meshes.mesh2 = mesh2;
+
+        // All indices are used, 0 and 2 by the first primitive and 1 by the other
+        var attributesBuffer = gltf.buffers.attributesBuffer;
+        var byteLength = attributesBuffer.byteLength;
+        removeUnusedVertices(gltf);
+        expect(attributesBuffer.byteLength).toEqual(byteLength);
     });
 });
