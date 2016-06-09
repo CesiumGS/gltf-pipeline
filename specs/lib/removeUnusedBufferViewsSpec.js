@@ -1,7 +1,7 @@
 'use strict';
 
-var removeUnusedBufferViews = require('../../').removeUnusedBufferViews;
-var OptimizationStatistics = require('../../').OptimizationStatistics;
+var removeUnusedBufferViews = require('../../lib/removeUnusedBufferViews');
+var OptimizationStatistics = require('../../lib/OptimizationStatistics');
 
 describe('removeUnusedBufferViews', function() {
     it('removes a bufferView', function() {

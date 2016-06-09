@@ -17,7 +17,7 @@ describe('writeBinaryGltf', function() {
         singleDuplicate: singleDuplicatePath,
         subgraphDuplicate: subgraphDuplicatePath,
         twoRoots: twoRootsPath
-    }
+    };
 
     beforeAll(function(done) {
         async.each(Object.keys(testDags), function(name, callback) {

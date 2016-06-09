@@ -1,7 +1,7 @@
 'use strict';
 
-var removeUnusedImages = require('../../').removeUnusedImages;
-var OptimizationStatistics = require('../../').OptimizationStatistics;
+var removeUnusedImages = require('../../lib/removeUnusedImages');
+var OptimizationStatistics = require('../../lib/OptimizationStatistics');
 
 describe('removeUnusedImages', function() {
     it('removes an image', function() {
