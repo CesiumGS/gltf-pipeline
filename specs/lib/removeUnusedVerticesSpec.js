@@ -135,6 +135,13 @@ describe('removeUnusedVertices', function() {
         for (i = 0; i < expectAttribute2.length; i++) {
             expect(expectAttribute2[i]).toEqual(check2[i]);
         }
+
+        var expectIndices = [0, 1];
+        var indicesSource = Uint8Array.from(gltf.buffers.indexBuffer.extras._pipeline.source);
+        var check = new Uint16Array(indicesSource.buffer, 0, expectIndices.length);
+        for (i = 0; i < expectIndices.length; i++) {
+            expect(expectIndices[i]).toEqual(check[i]);
+        }
     });
 
     it ('removes two unused attributes', function() {
@@ -167,6 +174,13 @@ describe('removeUnusedVertices', function() {
         }
         for (i = 0; i < expectAttribute2.length; i++) {
             expect(expectAttribute2[i]).toEqual(check2[i]);
+        }
+
+        var expectIndices = [0];
+        var indicesSource = Uint8Array.from(gltf.buffers.indexBuffer.extras._pipeline.source);
+        var check = new Uint16Array(indicesSource.buffer, 0, expectIndices.length);
+        for (i = 0; i < expectIndices.length; i++) {
+            expect(expectIndices[i]).toEqual(check[i]);
         }
     });
 });
