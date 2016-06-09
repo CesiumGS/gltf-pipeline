@@ -435,9 +435,9 @@ describe('removeUnusedVertices', function() {
             2,2,2,
             2,2,2
         ];
-        var positionsBuffer = new Buffer(positions.length * 2);
+        var positionsBuffer = new Buffer(positions.length * 4);
         for (var i = 0; i < positions.length; i++) {
-            positionsBuffer.writeUInt16LE(positions[i], i * 2);
+            positionsBuffer.writeUInt16LE(positions[i], i * 4);
         }
 
         var dataBuffer = Buffer.concat([indicesBuffer, positionsBuffer]);
@@ -469,7 +469,7 @@ describe('removeUnusedVertices', function() {
                 "position_view": {
                     "buffer": "buffer_0",
                     "byteOffset": 6 * 2,
-                    "byteLength": 4 * 3 * 2,
+                    "byteLength": 7 * 3 * 4,
                     "target": 34962,
                     "extras": {
                         "_pipeline": {}
@@ -488,7 +488,7 @@ describe('removeUnusedVertices', function() {
             "buffers": {
                 "buffer_0": {
                     "uri": "data:",
-                    "byteLength": indices.concat(positions).length * 2,
+                    "byteLength": indices.length * 2 + positions.length * 4,
                     "extras": {
                         "_pipeline": {
                             "source": dataBuffer
@@ -512,8 +512,7 @@ describe('removeUnusedVertices', function() {
         }
 
         removeUnusedVertices(testGltf);
-        expect(testGltf.buffers["buffer_0"].byteLength).toEqual(6 * 2 + 4 * 3 * 2);
-
+        expect(testGltf.buffers["buffer_0"].byteLength).toEqual(6 * 2 + 4 * 3 * 4);
     });
 
     it('handles 8 bit indices', function(){
@@ -532,9 +531,9 @@ describe('removeUnusedVertices', function() {
             2,2,2,
             2,2,2
         ];
-        var positionsBuffer = new Buffer(positions.length * 2);
+        var positionsBuffer = new Buffer(positions.length * 4);
         for (var i = 0; i < positions.length; i++) {
-            positionsBuffer.writeUInt16LE(positions[i], i * 2);
+            positionsBuffer.writeUInt16LE(positions[i], i * 4);
         }
 
         var dataBuffer = Buffer.concat([indicesBuffer, positionsBuffer]);
@@ -566,7 +565,7 @@ describe('removeUnusedVertices', function() {
                 "position_view": {
                     "buffer": "buffer_0",
                     "byteOffset": 6,
-                    "byteLength": 4 * 3 * 2,
+                    "byteLength": 7 * 3 * 4,
                     "target": 34962,
                     "extras": {
                         "_pipeline": {}
@@ -585,7 +584,7 @@ describe('removeUnusedVertices', function() {
             "buffers": {
                 "buffer_0": {
                     "uri": "data:",
-                    "byteLength": indices.length + positions.length * 2,
+                    "byteLength": indices.length + positions.length * 4,
                     "extras": {
                         "_pipeline": {
                             "source": dataBuffer
@@ -609,7 +608,7 @@ describe('removeUnusedVertices', function() {
         }
 
         removeUnusedVertices(testGltf);
-        expect(testGltf.buffers["buffer_0"].byteLength).toEqual(6 + 4 * 3 * 2);
+        expect(testGltf.buffers["buffer_0"].byteLength).toEqual(6 + 4 * 3 * 4);
 
     });
 
