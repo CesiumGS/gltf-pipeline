@@ -437,7 +437,7 @@ describe('removeUnusedVertices', function() {
         ];
         var positionsBuffer = new Buffer(positions.length * 4);
         for (var i = 0; i < positions.length; i++) {
-            positionsBuffer.writeUInt16LE(positions[i], i * 4);
+            positionsBuffer.writeFloatLE(positions[i], i * 4);
         }
 
         var dataBuffer = Buffer.concat([indicesBuffer, positionsBuffer]);
@@ -533,7 +533,7 @@ describe('removeUnusedVertices', function() {
         ];
         var positionsBuffer = new Buffer(positions.length * 4);
         for (var i = 0; i < positions.length; i++) {
-            positionsBuffer.writeUInt16LE(positions[i], i * 4);
+            positionsBuffer.writeFloatLE(positions[i], i * 4);
         }
 
         var dataBuffer = Buffer.concat([indicesBuffer, positionsBuffer]);
