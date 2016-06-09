@@ -37,12 +37,12 @@ Include `build/gltf-pipeline.js` it with a `script` tag.  For a simple example, 
 
 |Flag|Description|Required|
 |----|-----------|--------|
-|`-i, --input`|Path to the input glTF file.| :white_check_mark: Yes|
-|`-o, --output`|Directory or filename for the exported glTF file.|No|
-|`-b, --binary`|Write binary glTF file.|No, default `false`|
-|`-s, --separate`|Writes out separate geometry/animation data files, shader files and textures instead of embedding them in the glTF file.|No, default `false`|
-|`-h, --help`|Display help|No|
-|`-h, --separateImage`|Write out separate textures, but embed geometry/animation data files, and shader files.|No, default `false`|
+|`-i`, `--input`|Path to the input glTF file.| :white_check_mark: Yes|
+|`-o`, `--output`|Directory or filename for the exported glTF file.|No|
+|`-b`, `--binary`|Write binary glTF file.|No, default `false`|
+|`-s`, `--separate`|Writes out separate geometry/animation data files, shader files and textures instead of embedding them in the glTF file.|No, default `false`|
+|`-h`, `--help`|Display help|No|
+|`-t`, `--separateTexture`|Write out separate textures, but embed geometry/animation data files, and shader files.|No, default `false`|
 
 
 ## Build Instructions
