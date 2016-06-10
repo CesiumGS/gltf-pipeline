@@ -5,12 +5,8 @@ var Cesium = require('cesium');
 var defaultValue = Cesium.defaultValue;
 var defined = Cesium.defined;
 var DeveloperError = Cesium.DeveloperError;
-var writeGltf = require('../lib/writeGltf');
-var writeBinaryGltf = require('../lib/writeBinaryGltf');
 var gltfPipeline = require('../lib/gltfPipeline');
 var processFileToDisk = gltfPipeline.processFileToDisk;
-var addPipelineExtras = require('../lib/addPipelineExtras');
-var readGltf = require('../lib/readGltf');
 
 if (process.argv.length < 3 || defined(argv.h) || defined(argv.help)) {
     var help =
