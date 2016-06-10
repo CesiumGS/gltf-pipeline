@@ -59,24 +59,7 @@ npm run coverage
 ```
 For complete coverage details, open `coverage/lcov-report/index.html`.
 
-The tests and coverage covers the Node.js module; it does not cover the command-line interface (which is tiny) or the built JavaScript library (which is the same code just ran through browserify).
-
-## Experimental JavaScript library
-
-### Usage
-
-Include `build/gltf-pipeline.js` it with a `script` tag.  For a simple example, see [build/index.html](build/index.html).
-
-### Build Instructions
-
-A pre-built unminified `.js` file is in the `build` directory.  This is built with [browserify](http://browserify.org/).  Install it with:
-```
-npm install -g browserify
-```
-To rebuild, run:
-```
-npm run build
-```
+The tests and coverage covers the Node.js module; it does not cover the command-line interface, which is tiny.
 
 ## Contributions
 
