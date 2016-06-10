@@ -4,6 +4,7 @@ var clone = require('clone');
 var byteLengthForComponentType = require('../../lib/byteLengthForComponentType');
 var numberOfComponentsForType = require('../../lib/numberOfComponentsForType');
 var quantizeAttributes = require('../../lib/quantizeAttributes');
+var uninterleaveAndPackBuffers = require('../../lib/uninterleaveAndPackBuffers');
 
 describe('quantizeAttributes', function() {
     var buffer = new Buffer(new Uint8Array(120));
@@ -121,6 +122,7 @@ describe('quantizeAttributes', function() {
         var gltf = clone(testGltf);
         gltf.buffers.buffer.extras._pipeline.source = buffer;
         quantizeAttributes(gltf, {semantics: []});
+        uninterleaveAndPackBuffers(gltf);
         expect(gltf.buffers.buffer.byteLength).toEqual(buffer.length);
     });
 
@@ -133,6 +135,7 @@ describe('quantizeAttributes', function() {
         size = size/2.0;
         gltf.buffers.buffer.extras._pipeline.source = buffer;
         quantizeAttributes(gltf, {semantics: ['POSITION']});
+        uninterleaveAndPackBuffers(gltf);
         expect(gltf.buffers.buffer.byteLength + size).toEqual(buffer.length);
     });
 
@@ -141,6 +144,7 @@ describe('quantizeAttributes', function() {
         gltf.buffers.buffer.extras._pipeline.source = buffer;
         var precision = 6;
         quantizeAttributes(gltf, {precision: precision});
+        uninterleaveAndPackBuffers(gltf);
         var matrixEntry = '' + gltf.accessors.accessor_0.extensions.WEB3D_quantized_attributes.decodeMatrix[0];
         var calculatedPrecision = matrixEntry.substring(matrixEntry.indexOf('.')).length;
         expect(precision).toEqual(calculatedPrecision);
@@ -150,6 +154,7 @@ describe('quantizeAttributes', function() {
         var gltf = clone(testGltf);
         gltf.buffers.buffer.extras._pipeline.source = buffer;
         quantizeAttributes(gltf, {semantics: ['NORMAL']});
+        uninterleaveAndPackBuffers(gltf);
         expect(gltf.buffers.buffer.byteLength).toEqual(buffer.length);
     });
 
@@ -157,6 +162,7 @@ describe('quantizeAttributes', function() {
         var gltf = clone(testGltf);
         gltf.buffers.buffer.extras._pipeline.source = buffer;
         quantizeAttributes(gltf, {semantics: ['TEXCOORD']});
+        uninterleaveAndPackBuffers(gltf);
         expect(gltf.buffers.buffer.byteLength).toEqual(buffer.length);
     });
 
@@ -167,6 +173,7 @@ describe('quantizeAttributes', function() {
         size = size/2.0;
         gltf.buffers.buffer.extras._pipeline.source = buffer;
         quantizeAttributes(gltf, {semantics: ['SCALAR_TEST']});
+        uninterleaveAndPackBuffers(gltf);
         expect(gltf.buffers.buffer.byteLength + size).toEqual(buffer.length);
     });
 });
