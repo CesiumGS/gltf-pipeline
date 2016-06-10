@@ -26,7 +26,7 @@ Command-Line Example:
 node ./bin/gltf-pipeline.js ./specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf -o output.gltf
 ```
 
-### Command-Line Flags:
+### Command-Line Flags
 
 |Flag|Description|Required|
 |----|-----------|--------|
