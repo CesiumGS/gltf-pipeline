@@ -105,8 +105,8 @@ describe('bakeAmbientOcclusion', function() {
                 accessorIDtoData[accessorID] = readAccessor(accessor, testBoxGltf);
                 if (defined(accessor.min) && defined(accessor.max)) {
                     accessorIDtoMinMax[accessorID] = {
-                        "min" : accessor.min,
-                        "max" : accessor.max
+                        min : accessor.min,
+                        max : accessor.max
                     };
                 }
             }
