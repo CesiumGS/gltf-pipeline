@@ -4,9 +4,9 @@ var Matrix4 = Cesium.Matrix4;
 var CesiumMath = Cesium.Math;
 var clone = require('clone');
 
-var nodeHelpers = require('../../lib/nodeHelpers');
+var NodeHelpers = require('../../lib/NodeHelpers');
 
-describe('nodeHelpers', function() {
+describe('NodeHelpers', function() {
     var testScene = {
         "nodes": [
             "leftElbow",
@@ -110,9 +110,9 @@ describe('nodeHelpers', function() {
                 -0.0223165, 0.374196, -0.927081, 0,
                 -0.0115543, 0.194711, -0.478297, 1
             ]
-        }
+        };
         var expectedMatrix4 = Matrix4.fromArray(testNode.matrix);
-        var actualMatrix4 = nodeHelpers.getLocalMatrix4(testNode);
+        var actualMatrix4 = NodeHelpers.getLocalMatrix4(testNode);
         expect(Matrix4.equalsEpsilon(actualMatrix4, expectedMatrix4, CesiumMath.EPSILON7)).toEqual(true);
     });
 
@@ -121,14 +121,14 @@ describe('nodeHelpers', function() {
             "rotation": [0, 0, 0, 1],
             "scale": [1, 1, 1],
             "translation": [-17.7082, -11.4156, 2.0922]
-        }
+        };
         var expectedMatrix4 = Matrix4.fromArray([
             1, 0, 0, 0,
             0, 1, 0, 0,
             0, 0, 1, 0,
             -17.7082, -11.4156, 2.0922, 1
         ]);
-        var actualMatrix4 = nodeHelpers.getLocalMatrix4(testNode);
+        var actualMatrix4 = NodeHelpers.getLocalMatrix4(testNode);
         expect(Matrix4.equalsEpsilon(actualMatrix4, expectedMatrix4, CesiumMath.EPSILON7)).toEqual(true);
     });
 
@@ -140,18 +140,18 @@ describe('nodeHelpers', function() {
             0, 0, 1, 0,
             0, 0, 0, 1
         ]);
-        var actualMatrix4 = nodeHelpers.getLocalMatrix4(testNode);
+        var actualMatrix4 = NodeHelpers.getLocalMatrix4(testNode);
         expect(Matrix4.equalsEpsilon(actualMatrix4, expectedMatrix4, CesiumMath.EPSILON7)).toEqual(true);
     });
 
     it('gets all the nodes in a scene', function() {
-        var allNodes = nodeHelpers.getAllNodesInScene(testScene, testNodes);
+        var allNodes = NodeHelpers.getAllNodesInScene(testScene, testNodes);
         expect(allNodes.length).toEqual(7);
     });
 
     it('flattens the transformations in a scene', function() {
         var testNodesClone = clone(testNodes);
-        nodeHelpers.computeFlatTransformScene(testScene, testNodesClone);
+        NodeHelpers.computeFlatTransformScene(testScene, testNodesClone);
         var expectLeftPinkie = Matrix4.fromArray([
             1, 0, 0, 0,
             0, 1, 0, 0,
@@ -164,8 +164,8 @@ describe('nodeHelpers', function() {
             0, 0, 1, 0,
             -1, 0, 0, 1
         ]);
-        var actualLeftPinkie = testNodesClone["leftPinkie"].extras._pipeline.flatTransform;
-        var actualRightWrist = testNodesClone["rightWrist"].extras._pipeline.flatTransform;
+        var actualLeftPinkie = testNodesClone['leftPinkie'].extras._pipeline.flatTransform;
+        var actualRightWrist = testNodesClone['rightWrist'].extras._pipeline.flatTransform;
         expect(Matrix4.equalsEpsilon(actualLeftPinkie, expectLeftPinkie, CesiumMath.EPSILON7)).toEqual(true);
         expect(Matrix4.equalsEpsilon(actualRightWrist, expectRightWrist, CesiumMath.EPSILON7)).toEqual(true);
     });

@@ -37,47 +37,36 @@ describe('bakeAmbientOcclusion', function() {
     });
 
 
-    function fitsBounds(min, max, attributes) {
+    function testContainmentAndFit(min, max, attributes) {
         // check if the data in values is bounded by min and max precisely
-        var minInValues;
-        var maxInValues;
+        var minInValues = Array(min.length).fill(Number.POSITIVE_INFINITY);
+        var maxInValues = Array(max.length).fill(Number.NEGATIVE_INFINITY);
         var attributeToArray;
-        var numberValues = 0;
+        var scratchArray = [];
 
         switch(attributes.type) {
             case 'number':
                 attributeToArray = function(value) {
                     return [value];
                 };
-                maxInValues = [Number.NEGATIVE_INFINITY];
-                minInValues = [Number.POSITIVE_INFINITY];
-                numberValues = 1;
                 break;
             case 'Cartesian2':
                 attributeToArray = function(value) {
-                    return [value.x, value.y];
+                    Cartesian2.pack(value, scratchArray);
+                    return scratchArray;
                 };
-                maxInValues = [Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY];
-                minInValues = [Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY];
-                numberValues = 2;
                 break;
             case 'Cartesian3':
                 attributeToArray = function(value) {
-                    return [value.x, value.y, value.z];
+                    Cartesian3.pack(value, scratchArray);
+                    return scratchArray;
                 };
-                maxInValues = [Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY];
-                minInValues = [Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY];
-                numberValues = 3;
                 break;
             case 'Cartesian4':
                 attributeToArray = function(value) {
-                    return [value.x, value.y, value.z, value.w];
+                    Cartesian4.pack(value, scratchArray);
+                    return scratchArray;
                 };
-                maxInValues = [Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY,
-                    Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY];
-                minInValues = [Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY,
-                    Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY];
-                numberValues = 4;
                 break;
         }
 
@@ -85,7 +74,7 @@ describe('bakeAmbientOcclusion', function() {
 
         for (var i = 0; i < data.length; i++) {
             var values = attributeToArray(data[i]);
-            for (var j = 0; j < numberValues; j++) {
+            for (var j = 0; j < min.length; j++) {
                 if (values[j] > max[j] || values[j] < min[j]) {
                     return false;
                 }
@@ -93,7 +82,7 @@ describe('bakeAmbientOcclusion', function() {
                 maxInValues[j] = Math.max(maxInValues[j], values[j]);
             }
         }
-        for (var i = 0; i < numberValues; i++) {
+        for (var i = 0; i < min.length; i++) {
             if (!CesiumMath.equalsEpsilon(minInValues[i], min[i], CesiumMath.EPSILON7)) {
                 return false;
             }
@@ -128,10 +117,9 @@ describe('bakeAmbientOcclusion', function() {
             if (accessorIDtoMinMax.hasOwnProperty(accessorID)) {
                 if (accessorIDtoData.hasOwnProperty(accessorID)) {
                     var minMax = accessorIDtoMinMax[accessorID];
-                    expect(fitsBounds(minMax.min, minMax.max, accessorIDtoData[accessorID])).toEqual(true);
+                    expect(testContainmentAndFit(minMax.min, minMax.max, accessorIDtoData[accessorID])).toEqual(true);
                 }
             }
         }
     });
-
 });
