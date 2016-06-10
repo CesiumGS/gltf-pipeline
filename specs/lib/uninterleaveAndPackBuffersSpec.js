@@ -102,6 +102,8 @@ describe('uninterleaveAndPackBuffers', function() {
         delete gltf.accessors[deletedAccessorId];
         packBuffers(gltf);
         expect(gltf.buffers.buffer.byteLength + size).toEqual(testGltf.buffers.buffer.byteLength);
+        var bufferView1 = gltf.bufferViews.bufferView_1;
+        expect(bufferView1.byteLength).toEqual(gltf.buffers.buffer.byteLength - bufferView1.byteOffset);
     });
 
     it('removes unused bufferView', function() {
