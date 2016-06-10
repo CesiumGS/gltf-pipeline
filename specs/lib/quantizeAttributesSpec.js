@@ -6,7 +6,7 @@ var numberOfComponentsForType = require('../../lib/numberOfComponentsForType');
 var quantizeAttributes = require('../../lib/quantizeAttributes');
 
 describe('quantizeAttributes', function() {
-    var buffer = new Buffer(new Uint8Array(108));
+    var buffer = new Buffer(new Uint8Array(120));
     var testGltf = {
         accessors : {
             // Interleaved accessors in bufferView_0
@@ -47,8 +47,8 @@ describe('quantizeAttributes', function() {
                 byteOffset : 36,
                 componentType : 5126,
                 count : 3,
-                min : [0, 0, 0],
-                max : [65535, 65535, 65535],
+                min : [0, 0],
+                max : [65535, 65535],
                 type : 'VEC2',
                 extensions : {
                     WEB3D_quantized_attributes : {
@@ -61,6 +61,16 @@ describe('quantizeAttributes', function() {
                         decodeMax : [1.0, 1.0]
                     }
                 }
+            },
+            // SCALAR attribute
+            accessor_4 : {
+                bufferView : 'bufferView_1',
+                byteOffset : 60,
+                componentType : 5126,
+                count : 3,
+                min : [0],
+                max : [1],
+                type : 'SCALAR'
             }
         },
         bufferViews : {
@@ -72,7 +82,7 @@ describe('quantizeAttributes', function() {
             },
             bufferView_1 : {
                 buffer : 'buffer',
-                byteLength : 60,
+                byteLength : 72,
                 byteOffset : 48,
                 target : 34962
             }
@@ -98,7 +108,8 @@ describe('quantizeAttributes', function() {
                     {
                         attributes : {
                             POSITION : 'accessor_2',
-                            TEXCOORD : 'accessor_3'
+                            TEXCOORD : 'accessor_3',
+                            SCALAR_TEST : 'accessor_4'
                         }
                     }
                 ]
@@ -147,5 +158,15 @@ describe('quantizeAttributes', function() {
         gltf.buffers.buffer.extras._pipeline.source = buffer;
         quantizeAttributes(gltf, {semantics: ['TEXCOORD']});
         expect(gltf.buffers.buffer.byteLength).toEqual(buffer.length);
+    });
+
+    it('Quantizes scalar attribute', function() {
+        var gltf = clone(testGltf);
+        var accessor_4 = gltf.accessors.accessor_4;
+        var size = byteLengthForComponentType(accessor_4.componentType) * numberOfComponentsForType(accessor_4.type) * accessor_4.count;
+        size = size/2.0;
+        gltf.buffers.buffer.extras._pipeline.source = buffer;
+        quantizeAttributes(gltf, {semantics: ['SCALAR_TEST']});
+        expect(gltf.buffers.buffer.byteLength + size).toEqual(buffer.length);
     });
 });
