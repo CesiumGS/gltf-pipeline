@@ -41,6 +41,7 @@ Include `build/gltf-pipeline.js` it with a `script` tag.  For a simple example, 
 |`-o`|Directory or filename for the exported glTF file.|No|
 |`-b`|Write binary glTF file.|No, default `false`|
 |`-s`|Writes out separate geometry/animation data files, shader files and textures instead of embedding them in the glTF file.|No, default `false`|
+|`-q`|Quantize attributes using WEB3D_quantized_attributes extension.|No, default `false`|
 |`-h`|Display help|No|
 
 ## Build Instructions
