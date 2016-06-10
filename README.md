@@ -10,7 +10,7 @@
 
 Content pipeline tools for optimizing [glTF](https://www.khronos.org/gltf) assets by [Richard Lee](http://leerichard.net/) and the [Cesium team](http://cesiumjs.org/).
 
-See the [roadmap](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/issues/1).
+This project is under active development, see the [roadmap](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/issues/1).
 
 gltf-pipeline can be used as a command-line tool, Node.js module, or JavaScript library.
 
@@ -79,18 +79,12 @@ To rebuild, run:
 npm run build
 ```
 
-## Limitations
-
-This tool is still in development. We plan on adding additional features such as AO baking, and other functionality.
-
-
 ## Contributions
 
 Pull requests are appreciated!  Please use the same [Contributor License Agreement (CLA)](https://github.com/AnalyticalGraphicsInc/cesium/blob/master/CONTRIBUTING.md) and [Coding Guide](https://github.com/AnalyticalGraphicsInc/cesium/blob/master/Documentation/Contributors/CodingGuide/README.md) used for [Cesium](http://cesiumjs.org/).
 
 ---
 
-Developed by the Cesium team.
 <p align="center">
 <a href="http://cesiumjs.org/"><img src="doc/cesium.png" /></a>
 </p>
