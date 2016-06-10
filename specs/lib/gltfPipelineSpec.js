@@ -94,7 +94,7 @@ describe('gltfPipeline', function() {
         });
         var options = { 'binary' : true };
         processFileToDisk(gltfPath, outputPath, options, function() {
-            expect(spy.calls.first().args[0]).toEqual('output/output.glb');
+            expect(path.normalize(spy.calls.first().args[0])).toEqual(path.normalize('output/output.glb'));
             done();
         });
     });
