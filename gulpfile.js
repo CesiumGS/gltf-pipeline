@@ -2,6 +2,8 @@
 
 var jshint = require('gulp-jshint');
 var gulp = require('gulp');
+var Jasmine = require('jasmine');
+var JasmineSpecReporter = require('jasmine-spec-reporter');
 
 var jsHintFiles = ['index.js', 'bin/*.js', 'lib/*.js', 'specs/*.js', '!node_modules/**', '!build/**', '!coverage/**'];
 
@@ -21,5 +23,15 @@ gulp.task('jsHint-watch', function() {
             .pipe(jshint.extract('auto'))
             .pipe(jshint())
             .pipe(jshint.reporter('jshint-stylish'));
+    });
+});
+
+gulp.task('test', function (done) {
+    var jasmine = new Jasmine();
+    jasmine.loadConfigFile('spec/support/jasmine.json');
+    jasmine.addReporter(new JasmineSpecReporter());
+    jasmine.execute();
+    jasmine.onComplete(function() {
+        done();
     });
 });
