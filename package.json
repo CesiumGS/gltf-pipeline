@@ -34,7 +34,7 @@
   "dependencies": {
     "async": "^1.5.2",
     "buffer-equal": "^1.0.0",
-    "cesium": "^1.17.0",
+    "cesium": "^1.22.0",
     "data-uri-to-buffer": "0.0.4",
     "datauri": "^1.0.0-alpha.5",
     "image-size": "^0.5.0",
@@ -46,12 +46,12 @@
   "devDependencies": {
     "clone": "^1.0.2",
     "coveralls": "^2.11.6",
-    "gulp": "3.9.0",
-    "gulp-jshint": "2.0.0",
+    "gulp": "^3.9.0",
+    "gulp-jshint": "^2.0.0",
     "istanbul": "^0.4.3",
     "jasmine": "^2.4.1",
     "jasmine-spec-reporter": "^2.4.0",
-    "jshint": "2.8.0",
-    "jshint-stylish": "2.1.0"
+    "jshint": "^2.8.0",
+    "jshint-stylish": "^2.1.0"
   }
 }
