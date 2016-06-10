@@ -24,15 +24,15 @@ if (process.argv.length < 3 || defined(argv.h) || defined(argv.help)) {
     return;
 }
 
-var gltfPath = defaultValue(argv._[0], argv.i || argv.input);
+var gltfPath = defaultValue(argv._[0], defaultValue(argv.i, argv.input));
 var fileExtension = path.extname(gltfPath);
 var fileName = path.basename(gltfPath, fileExtension);
 var filePath = path.dirname(gltfPath);
 
-var outputPath = defaultValue(argv._[1], argv.o || argv.output);
-var binary = defaultValue(argv.b || argv.binary, false);
-var separate = defaultValue(argv.s || argv.separate, false);
-var separateImage = defaultValue(argv.t || argv.separateImage, false);
+var outputPath = defaultValue(argv._[1], defaultValue(argv.o, argv.output));
+var binary = defaultValue(argv.b, defaultValue(argv.binary, false));
+var separate = defaultValue(argv.s, defaultValue(argv.separate, false));
+var separateImage = defaultValue(argv.t, defaultValue(argv.separateImage, false));
 
 if (!defined(gltfPath)) {
     throw new DeveloperError('Input path is undefined.');
