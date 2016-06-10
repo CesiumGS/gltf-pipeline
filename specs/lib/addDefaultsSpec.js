@@ -250,8 +250,10 @@ describe('addDefaults', function() {
         var shaders = gltfClone.shaders;
         expect(Object.keys(shaders).length > 0).toEqual(true);
         for (var shaderID in shaders) {
-            var shader = shaders[shaderID];
-            expect(defined(shader.extras._pipeline.source)).toEqual(true);
+            if (shaders.hasOwnProperty(shaderID)) {
+                var shader = shaders[shaderID];
+                expect(shader.extras._pipeline.source).toBeDefined();
+            }
         }
     });
 
