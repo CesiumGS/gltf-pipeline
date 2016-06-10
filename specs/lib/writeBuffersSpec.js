@@ -40,7 +40,7 @@ describe('writeBuffers', function() {
     it('writes an external buffer', function(done) {
         var gltf = clone(testGltf);
 
-        writeGltf(gltf, outputPath, false, true, function() {
+        writeGltf(gltf, outputPath, false, false, true, function() {
             expect(gltf.buffers.CesiumTexturedBoxTest.extras).not.toBeDefined();
             expect(gltf.buffers.CesiumTexturedBoxTest.uri).toEqual('CesiumTexturedBoxTest.bin');
             fs.readFile(outputBufferPath, function(err, outputData) {
@@ -56,7 +56,7 @@ describe('writeBuffers', function() {
     it('writes an embedded buffer', function(done) {
         var gltf = clone(testGltf);
         
-        writeGltf(gltf, outputPath, true, true, function() {
+        writeGltf(gltf, outputPath, true, true, true, function() {
             expect(gltf.buffers.CesiumTexturedBoxTest.extras).not.toBeDefined();
             expect(gltf.buffers.CesiumTexturedBoxTest.uri).toEqual(bufferUri);
             done();
@@ -66,7 +66,7 @@ describe('writeBuffers', function() {
     it('throws an error', function(done) {
         var gltf = clone(testGltf);
 
-        writeGltf(gltf, './specs/errorFilePath/output.gltf', false, false, function(err) {
+        writeGltf(gltf, './specs/errorFilePath/output.gltf', false, false, false, function(err) {
             expect(err).toBeDefined();
             done();
         });
