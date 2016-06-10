@@ -11,7 +11,7 @@ var outputFragmentShaderPath = './specs/data/boxTexturedUnoptimized/output/Cesiu
 
 describe('writeShaders', function() {
     var fragmentShaderData;
-    var fragmentShaderUri
+    var fragmentShaderUri;
     var testGltf;
 
     beforeAll(function(done) {
@@ -43,7 +43,7 @@ describe('writeShaders', function() {
     it('writes an external shader', function(done) {
         var gltf = clone(testGltf);
 
-        writeGltf(gltf, outputPath, false, true, function() {
+        writeGltf(gltf, outputPath, false, false, true, function() {
             expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras).not.toBeDefined();
             expect(gltf.shaders.CesiumTexturedBoxTest0FS.uri).toEqual('CesiumTexturedBoxTest0FS.glsl');
             fs.readFile(outputFragmentShaderPath, function(err, outputData) {
@@ -59,7 +59,7 @@ describe('writeShaders', function() {
     it('writes an embedded shader', function(done) {
         var gltf = clone(testGltf);
         
-        writeGltf(gltf, outputPath, true, true, function() {
+        writeGltf(gltf, outputPath, true, true, true, function() {
             expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras).not.toBeDefined();
             expect(gltf.shaders.CesiumTexturedBoxTest0FS.uri).toEqual(fragmentShaderUri);
             done();
@@ -69,7 +69,7 @@ describe('writeShaders', function() {
     it('throws an error', function(done) {
         var gltf = clone(testGltf);
 
-        writeGltf(gltf, './specs/errorFilePath/output.gltf', false, false, function(err) {
+        writeGltf(gltf, './specs/errorFilePath/output.gltf', false, false, false, function(err) {
             expect(err).toBeDefined();
             done();
         });
