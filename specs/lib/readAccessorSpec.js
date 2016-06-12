@@ -16,7 +16,7 @@ var readGltf = require('../../lib/readGltf');
 
 var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf';
 
-describe('bakeAmbientOcclusion', function() {
+describe('readAccessor', function() {
     var boxGltf;
 
     beforeAll(function(done) {
@@ -92,7 +92,7 @@ describe('bakeAmbientOcclusion', function() {
         for (var accessorID in allAccessors) {
             if (allAccessors.hasOwnProperty(accessorID)) {
                 var accessor = allAccessors[accessorID];
-                accessorIDtoData[accessorID] = readAccessor(accessor, testBoxGltf);
+                accessorIDtoData[accessorID] = readAccessor(testBoxGltf, accessor);
                 if (defined(accessor.min) && defined(accessor.max)) {
                     accessorIDtoMinMax[accessorID] = {
                         min : accessor.min,
