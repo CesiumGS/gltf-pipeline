@@ -1,9 +1,7 @@
 'use strict';
 var clone = require('clone');
-var diff = require('diff');
 var tipsifyGltf = require('../../lib/tipsifyGltf');
 var addDefaults = require('../../lib/addDefaults');
-var readAccessor = require('../../lib/readAccessor');
 var readGltf = require('../../lib/readgltf');
 
 var gltfPath = './specs/data/tipsifyGltf/Cesium_Ground.gltf';
