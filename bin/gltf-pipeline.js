@@ -27,10 +27,10 @@ var fileName = path.basename(gltfPath, fileExtension);
 var filePath = path.dirname(gltfPath);
 
 var outputPath = defaultValue(argv._[1], defaultValue(argv.o, argv.output));
-var binary = defaultValue(argv.b, defaultValue(argv.binary, false));
-var separate = defaultValue(argv.s, defaultValue(argv.separate, false));
-var separateImage = defaultValue(argv.t, defaultValue(argv.separateImage, false));
-var quantize = defaultValue(argv.q, defaultValue(argv.quantize, false));
+var binary = defaultValue(defaultValue(argv.b, argv.binary), false);
+var separate = defaultValue(defaultValue(argv.s, argv.separate), false);
+var separateImage = defaultValue(defaultValue(argv.t, argv.separateImage), false);
+var quantize = defaultValue(defaultValue(argv.q, argv.quantize), false);
 
 if (!defined(gltfPath)) {
     throw new DeveloperError('Input path is undefined.');
