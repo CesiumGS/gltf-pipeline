@@ -63,6 +63,11 @@ For complete coverage details, open `coverage/lcov-report/index.html`.
 
 The tests and coverage covers the Node.js module; it does not cover the command-line interface, which is tiny.
 
+### Debugging
+
+* To debug the tests in Webstorm, open the Gulp tab, right click the `test` task, and click `Debug 'test'`.
+* To run a single test, change the test function from `it` to `fit`.
+
 ## Contributions
 
 Pull requests are appreciated!  Please use the same [Contributor License Agreement (CLA)](https://github.com/AnalyticalGraphicsInc/cesium/blob/master/CONTRIBUTING.md) and [Coding Guide](https://github.com/AnalyticalGraphicsInc/cesium/blob/master/Documentation/Contributors/CodingGuide/README.md) used for [Cesium](http://cesiumjs.org/).
