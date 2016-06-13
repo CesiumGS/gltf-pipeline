@@ -27,7 +27,7 @@ describe('gltfPipeline', function() {
             var gltfCopy = clone(gltf);
             processJSON(gltf, options, function (gltf) {
                 expect(gltf).toBeDefined();
-                expect(gltf).not.toEqual(gltfCopy);
+                expect(clone(gltf)).not.toEqual(gltfCopy);
                 done();
             });
         });
@@ -45,7 +45,7 @@ describe('gltfPipeline', function() {
             
             processJSON(gltf, options, function(gltf) {
                 expect(gltf).toBeDefined();
-                expect(gltf).not.toEqual(gltfCopy);
+                expect(clone(gltf)).not.toEqual(gltfCopy);
                 done();
             });
         });
@@ -58,7 +58,7 @@ describe('gltfPipeline', function() {
             gltfCopy = clone(gltf);
             processFile(gltfPath, options, function (gltf) {
                 expect(gltf).toBeDefined();
-                expect(gltf).not.toEqual(gltfCopy);
+                expect(clone(gltf)).not.toEqual(gltfCopy);
                 done();
             });
         });
@@ -70,7 +70,7 @@ describe('gltfPipeline', function() {
             var gltfCopy = clone(gltf);
             processFile(glbPath, options, function (gltf) {
                 expect(gltf).toBeDefined();
-                expect(gltf).not.toEqual(gltfCopy);
+                expect(clone(gltf)).not.toEqual(gltfCopy);
                 done();
             });
         });
