@@ -5,7 +5,7 @@ var readGltf = require('../../lib/readGltf');
 var writeAccessor = require('../../lib/writeAccessor');
 var readAccessor = require('../../lib/readAccessor');
 
-var gltfPath = './specs/data/boxTexturedUnoptimized/chinesedragon.gltf';
+var gltfPath = './specs/data/tipsifyGltf/chinesedragon.gltf';
 
 describe('tipsifyGltf', function() {
     it('reorders indices', function(done) {
