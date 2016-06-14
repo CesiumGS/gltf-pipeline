@@ -4,7 +4,7 @@ var addDefaults = require('../../lib/addDefaults');
 var readGltf = require('../../lib/readGltf');
 var readAccessor = require('../../lib/readAccessor');
 
-var gltfPath = './specs/data/tipsifyGltf/chinesedragon.gltf';
+var gltfPath = './specs/data/cacheOptimizeIndices/chinesedragon.gltf';
 
 describe('cacheOptimizeIndices', function() {
     it('reorders indices', function(done) {
