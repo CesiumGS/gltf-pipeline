@@ -1,6 +1,6 @@
 'use strict';
+var clone = require('clone');
 var fs = require('fs');
-var bufferEqual = require('buffer-equal');
 var readGltf = require('../../lib/readGltf');
 var generateNormals = require('../../lib/generateNormals');
 
@@ -24,10 +24,9 @@ describe('generateNormals', function(){
 
     it('does not generate normals if they already exist', function(done) {
         readGltf(gltfNormalsPath, function(gltf){
-            var bufferBefore = gltf.buffers[Object.keys(gltf.buffers)[0]].extras._pipeline.source;
+            var gltfCopy = clone(gltf);
             generateNormals(gltf);
-            var bufferAfter = gltf.buffers[Object.keys(gltf.buffers)[0]].extras._pipeline.source;
-            expect(bufferBefore.equals(bufferAfter)).toBe(true);
+            expect(clone(gltf)).toEqual(gltfCopy);
             done();
         });
     })
