@@ -12,49 +12,28 @@ var doubleBoxToCombinePath = './specs/data/combineObjects/doubleBoxToCombine.glt
 var doubleBoxNotCombinedPath = './specs/data/combineObjects/doubleBoxNotCombined.gltf';
 var fiveBoxPath = './specs/data/combineObjects/fiveBox.gltf';
 
-describe('combinePrimitives', function(){
-    it('does not affect single primitives', function(){
+describe('combinePrimitives', function() {
+    it('does not affect single primitives', function(done){
         readGltf(boxPath, function(gltf) {
             var box = gltf;
             var stringBox = JSON.stringify(box);
             combinePrimitives(box);
             expect(stringBox).toEqual(JSON.stringify(box));
+            done();
         });
     });
 
-    it('does not combine two primitives', function(){
+    it('does not combine two primitives', function(done) {
         readGltf(doubleBoxNotCombinedPath, function(gltf){
             var doubleBoxNotCombined = gltf;
             var stringDoubleBoxNotCombined = JSON.stringify(doubleBoxNotCombined);
             combinePrimitives(doubleBoxNotCombined);
             expect(stringDoubleBoxNotCombined).toEqual(JSON.stringify(doubleBoxNotCombined));
-
-
-        });
-
-        readGltf(doubleBoxToCombinePath, function(gltf){
-            var oneAttribute = gltf;
-
-            oneAttribute.meshes.meshTest.primitives[0].attributes = {
-                "POSITION": 'accessor_58'
-            };
-            combinePrimitives(oneAttribute);
-            expect(oneAttribute.meshes.meshTest.primitives.length).toEqual(2);
-        });
-
-        readGltf(doubleBoxToCombinePath, function(gltf){
-            var differentAttributes = gltf;
-            differentAttributes.meshes.meshTest.primitives[0].attributes = {
-                "NORMAL": 'accessor_60',
-                "POS": 'accessor_58',
-                "TEXCOORD_0": 'accessor_62'
-            };
-            combinePrimitives(differentAttributes);
-            expect(differentAttributes.meshes.meshTest.primitives.length).toEqual(2);
+            done();
         });
     });
 
-    it('combines two primitives', function(){
+    it('combines two primitives', function(done) {
         readGltf(doubleBoxToCombinePath, function(gltf){
             var doubleBoxToCombine = gltf;
 
@@ -69,7 +48,7 @@ describe('combinePrimitives', function(){
             expect(doubleBoxToCombine.meshes.meshTest.primitives[0].attributes).toEqual({
                 "NORMAL": 'meshTest_NORMAL_accessor_0',
                 "POSITION": 'meshTest_POSITION_accessor_0',
-                "TEXCOORD_0": 'meshTest_TEXCOORD_0_accessor_0'
+                "TEXCOORD_0": 'meshTest_TEXCOORD_0_accessor_0',
             });
 
             expect(doubleBoxToCombine.accessors['meshTest_INDEX_accessor_0']).toEqual({
@@ -78,7 +57,9 @@ describe('combinePrimitives', function(){
                 "byteStride": 0,
                 "componentType": 5123,
                 "type": "SCALAR",
-                "count": 516
+                "count": 516,
+                "max": [319],
+                "min": [0]
             });
 
             expect(doubleBoxToCombine.accessors['meshTest_POSITION_accessor_0']).toEqual({
@@ -92,10 +73,11 @@ describe('combinePrimitives', function(){
                 "min": [-0.5, -0.5, -0.5]
             });
             expect(doubleBoxToCombine.bufferViews['meshTest_INDEX_bufferView_0'].buffer).toEqual('meshTest_INDEX_buffer_0');
+            done();
         });
     });
 
-    it('combines some primitives', function(){
+    it('combines some primitives', function(done){
         readGltf(fiveBoxPath, function(gltf){
             var fiveBox = gltf;
             combinePrimitives(fiveBox);
@@ -116,24 +98,29 @@ describe('combinePrimitives', function(){
 
             expect(fiveBox.accessors['meshTest_INDEX_accessor_1'].bufferView).toEqual('meshTest_INDEX_bufferView_1');
             expect(fiveBox.bufferViews['meshTest_INDEX_bufferView_1'].buffer).toEqual('meshTest_INDEX_buffer_1');
+            done();
         });
     });
 
-    it('throws an error', function() {
-        readGltf(doubleBoxToCombinePath, function(gltf) {
+    it('throws a type error', function(done) {
+        readGltf(doubleBoxToCombinePath, function (gltf) {
             var typeError = gltf;
             typeError.accessors.accessor_29.type = 'VEC3';
             expect(function () {
                 combinePrimitives(typeError);
             }).toThrow();
+            done();
         });
+    });
 
+    it ('throws a componentType error', function(done) {
         readGltf(doubleBoxToCombinePath, function(gltf){
             var componentTypeError = gltf;
             componentTypeError.accessors.accessor_29.componentType = 5126;
             expect(function () {
                 combinePrimitives(componentTypeError);
             }).toThrow();
+            done();
         });
     });
 });
