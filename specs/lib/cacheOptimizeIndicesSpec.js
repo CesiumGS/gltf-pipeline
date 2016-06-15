@@ -11,8 +11,6 @@ var optimizedIndices = [ 0, 1, 2, 3, 2, 1, 4, 5, 6, 7, 6, 5, 8, 9, 10, 11, 10, 9
 
 describe('cacheOptimizeIndices', function() {
     it('reorders indices', function(done) {
-
-
         readGltf(gltfPath, function(gltf) {
             addDefaults(gltf);
             var indexAccessorId = gltf.meshes[Object.keys(gltf.meshes)[0]].primitives[0].indices;
