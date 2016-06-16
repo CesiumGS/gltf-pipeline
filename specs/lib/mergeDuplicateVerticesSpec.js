@@ -92,7 +92,10 @@ describe('mergeDuplicateVertices', function() {
             }
         };
         mergeDuplicateVertices(gltf);
-        var indices = new Uint16Array(gltf.buffers.bufferC.extras._pipeline.source.buffer);
-        expect(indices).toEqual(new Uint16Array([0, 1, 0, 3, 0, 3, 0, 1, 0]));
+        var source = new Uint8Array(gltf.buffers.bufferC.extras._pipeline.source);
+        var indices = new Uint16Array(source.buffer);
+        expect(indices).toEqual(new Uint16Array([0, 1, 0, 2, 0, 2, 0, 1, 0]));
+        expect(gltf.buffers.bufferA.byteLength).toEqual(A.length - 24);
+        expect(gltf.buffers.bufferB.byteLength).toEqual(B.length - 8);
     });
 });
