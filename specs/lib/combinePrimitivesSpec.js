@@ -48,7 +48,7 @@ describe('combinePrimitives', function() {
             expect(doubleBoxToCombine.meshes.meshTest.primitives[0].attributes).toEqual({
                 "NORMAL": 'meshTest_NORMAL_accessor_0',
                 "POSITION": 'meshTest_POSITION_accessor_0',
-                "TEXCOORD_0": 'meshTest_TEXCOORD_0_accessor_0',
+                "TEXCOORD_0": 'meshTest_TEXCOORD_0_accessor_0'
             });
 
             expect(doubleBoxToCombine.accessors['meshTest_INDEX_accessor_0']).toEqual({
