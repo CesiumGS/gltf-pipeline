@@ -4,6 +4,7 @@ var addDefaults = require('../../lib/addDefaults');
 var Cesium = require('cesium');
 var clone = require('clone');
 var WebGLConstants = Cesium.WebGLConstants;
+var defined = Cesium.defined;
 
 describe('addDefaults', function() {
     it('Adds accessor properties', function() {
@@ -242,6 +243,16 @@ describe('addDefaults', function() {
         for (var materialID in gltfClone.materials) {
             if (gltf.materials.hasOwnProperty(materialID)) {
                 expect(gltfClone.materials[materialID].values).toEqual(expectValues);
+            }
+        }
+
+        // check that shader source is in extras._pipeline.source
+        var shaders = gltfClone.shaders;
+        expect(Object.keys(shaders).length > 0).toEqual(true);
+        for (var shaderID in shaders) {
+            if (shaders.hasOwnProperty(shaderID)) {
+                var shader = shaders[shaderID];
+                expect(shader.extras._pipeline.source).toBeDefined();
             }
         }
     });
