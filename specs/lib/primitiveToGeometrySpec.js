@@ -1,11 +1,11 @@
 'use strict';
-var readGltfGeometry = require('../../lib/readGltfGeometry');
+var readGltfGeometry = require('../../lib/primitiveToGeometry');
 var readGltf = require('../../lib/readGltf');
-var addDefaults = require('../../lib/addDefaults')
+var addDefaults = require('../../lib/addDefaults');
 
 var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf';
 
-describe('readGltfGeometry', function() {
+describe('primitiveToGeometry', function() {
     it('returns a geometry', function(done) {
         readGltf(gltfPath, function(gltf) {
             addDefaults(gltf);
