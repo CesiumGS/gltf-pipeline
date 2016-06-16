@@ -90,4 +90,48 @@ describe('loadImageUris', function() {
             done();
         });
     });
+
+    it('does not load a jimp of the image if imageProcess is undefined', function(done) {
+        var gltf = {
+            "images": {
+                "Image0001": {
+                    "uri": imageUri
+                }
+            },
+            "extras": {
+                "_pipeline": {}
+            }
+        };
+
+        loadGltfUris(gltf, basePath, function(err, gltf) {
+            expect(gltf.images.Image0001.extras._pipeline.jimpImage).not.toBeDefined();
+            done();
+        });
+    });
+
+    it('adds jimpScratch and loads a jimp of the image if imageProcess is true', function(done) {
+        var gltf = {
+            "images": {
+                "Image0001": {
+                    "uri": imageUri
+                }
+            },
+            "extras": {
+                "_pipeline": {}
+            }
+        };
+
+        loadGltfUris(gltf, basePath, function(err, gltf) {
+            var jimpImage = gltf.images.Image0001.extras._pipeline.jimpImage;
+            expect(jimpImage).toBeDefined();
+            expect(jimpImage.bitmap.width).toEqual(8);
+            expect(jimpImage.bitmap.height).toEqual(8);
+
+            var jimpScratch = gltf.extras._pipeline.jimpScratch;
+            expect(jimpScratch).toBeDefined();
+            expect(jimpScratch.bitmap.width).toEqual(1);
+            expect(jimpScratch.bitmap.height).toEqual(1);
+            done();
+        }, true);
+    });
 });

@@ -1,6 +1,7 @@
 'use strict';
 var fs = require('fs');
 var path = require('path');
+var bufferEqual = require('buffer-equal');
 var clone = require('clone');
 var gltfPipeline = require('../../lib/gltfPipeline');
 var processJSON = gltfPipeline.processJSON;
@@ -109,6 +110,29 @@ describe('gltfPipeline', function() {
         readGltf(gltfPath, function(gltf) {
             processJSONToDisk(gltf, outputPath, options, function() {
                 expect(path.normalize(spy.calls.first().args[0])).toEqual(path.normalize('./output/'));
+                done();
+            });
+        });
+    });
+
+    it('will rewrite each image source if this is a pipeline with image processing', function(done) {
+        var options = {
+            imageProcess: true
+        };
+        readGltf(gltfEmbeddedPath, function(gltf) {
+            var gltfCopy = clone(gltf);
+            processJSON(gltf, options, function (gltf) {
+                expect(gltf).toBeDefined();
+                expect(clone(gltf)).not.toEqual(gltfCopy);
+                var images = gltf.images;
+                for (var imageID in images) {
+                    if (images.hasOwnProperty(imageID)) {
+                        var imageBuffer = images[imageID].extras._pipeline.source;
+                        var cloneImageBuffer = gltfCopy.images[imageID].extras._pipeline.source;
+                        expect(cloneImageBuffer.length > 0).toBe(true);
+                        expect(bufferEqual(imageBuffer, cloneImageBuffer)).toBe(false);
+                    }
+                }
                 done();
             });
         });
