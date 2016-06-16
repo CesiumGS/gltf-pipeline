@@ -122,25 +122,19 @@ describe('removeUnusedVertices', function() {
         removeUnusedVertices(gltf);
         expect(attributesBuffer.byteLength + expectBytesDropped).toEqual(byteLength);
 
-        var expectAttribute1 = [0, 1, 2, 6, 7, 8];
-        var expectAttribute2 = [0, 1, 4, 5];
+        var expectAttribute1 = new Float32Array([0, 1, 2, 6, 7, 8]);
+        var expectAttribute2 = new Uint16Array([0, 1, 4, 5]);
         var attributesSource = Uint8Array.from(attributesBuffer.extras._pipeline.source);
         var check1 = new Float32Array(attributesSource.buffer, attributeAccessor1.byteOffset, expectAttribute1.length);
         var check2 = new Uint16Array(attributesSource.buffer, attributeAccessor2.byteOffset, expectAttribute2.length);
         var i;
-        for (i = 0; i < expectAttribute1.length; i++) {
-            expect(expectAttribute1[i]).toEqual(check1[i]);
-        }
-        for (i = 0; i < expectAttribute2.length; i++) {
-            expect(expectAttribute2[i]).toEqual(check2[i]);
-        }
+        expect(check1).toEqual(expectAttribute1);
+        expect(check2).toEqual(expectAttribute2);
 
-        var expectIndices = [0, 1];
+        var expectIndices = new Uint16Array([0, 1]);
         var indicesSource = Uint8Array.from(gltf.buffers.indexBuffer.extras._pipeline.source);
         var check = new Uint16Array(indicesSource.buffer, 0, expectIndices.length);
-        for (i = 0; i < expectIndices.length; i++) {
-            expect(expectIndices[i]).toEqual(check[i]);
-        }
+        expect(check).toEqual(expectIndices);
     });
 
     it('removes two unused attributes', function() {
