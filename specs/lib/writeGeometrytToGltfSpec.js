@@ -31,8 +31,6 @@ var geometry = new Geometry({
     'primitiveType' : 4
 });
 
-
-
 describe('writeGeometryToGltfSpec', function() {
    it('writes geometry data to a glTF', function(done) {
        readGltf(gltfPath, function(gltf) {
