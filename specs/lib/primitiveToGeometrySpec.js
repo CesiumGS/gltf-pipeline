@@ -2,10 +2,6 @@
 var primitiveToGeometry = require('../../lib/primitiveToGeometry');
 var readGltf = require('../../lib/readGltf');
 var addDefaults = require('../../lib/addDefaults');
-var readAccessor = require('../../lib/readAccessor');
-var Cesium = require('cesium');
-var Cartesian3 = Cesium.Cartesian3;
-
 
 var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf';
 var positions = new Float64Array([ -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 
@@ -27,10 +23,9 @@ describe('primitiveToGeometry', function() {
             var geometry = primitiveToGeometry(gltf, primitive);
             
             expect(geometry.attributes.position.values).toEqual(positions);
-            expect(geometry.attributes.normal).toEqual(normals);
+            expect(geometry.attributes.normal.values).toEqual(normals);
             expect(geometry.indices).toEqual(indices);
             expect(geometry.primitiveType).toEqual(primitiveType);
-            expect(geometry).toBeDefined();
             done();
         });
     });
