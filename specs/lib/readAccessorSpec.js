@@ -14,7 +14,6 @@ var addPipelineExtras = require('../../lib/addPipelineExtras');
 var readAccessor = require('../../lib/readAccessor');
 var readGltf = require('../../lib/readGltf');
 
-var basePath = './specs/data/boxTexturedUnoptimized/';
 var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf';
 
 describe('readAccessor', function() {

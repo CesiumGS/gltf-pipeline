@@ -1,11 +1,9 @@
 'use strict';
 var fs = require('fs');
 var path = require('path');
-var bufferEqual = require('buffer-equal');
 var clone = require('clone');
 var gltfPipeline = require('../../lib/gltfPipeline');
 var processJSON = gltfPipeline.processJSON;
-var processJSONWithExtras = gltfPipeline.processJSONWithExtras;
 var processJSONToDisk = gltfPipeline.processJSONToDisk;
 var processFile = gltfPipeline.processFile;
 var processFileToDisk = gltfPipeline.processFileToDisk;

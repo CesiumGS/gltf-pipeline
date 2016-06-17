@@ -1,7 +1,6 @@
 'use strict';
 var readGltf = require('../../lib/readGltf');
 
-var basePath = './specs/data/boxTexturedUnoptimized/';
 var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf';
 var glbPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.glb';
 var invalidPath = './specs/data/boxTexturedUnoptimized/README.md';

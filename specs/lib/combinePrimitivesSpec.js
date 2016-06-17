@@ -8,7 +8,6 @@ var loadGltfUris = require('../../lib/loadGltfUris');
 var removePipelineExtras = require('../../lib/removePipelineExtras');
 
 var boxPath = './specs/data/combineObjects/box.gltf';
-var basePath = './specs/data/combineObjects/';
 var doubleBoxToCombinePath = './specs/data/combineObjects/doubleBoxToCombine.gltf';
 var doubleBoxNotCombinedPath = './specs/data/combineObjects/doubleBoxNotCombined.gltf';
 var fiveBoxPath = './specs/data/combineObjects/fiveBox.gltf';
