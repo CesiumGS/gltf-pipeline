@@ -40,7 +40,8 @@ var geometry = new Geometry({
 
 describe('geometryToPrimitive', function() {
    it('writes geometry data to a glTF', function(done) {
-       readGltf(gltfPath, function(gltf) {
+       var options = {};
+       readGltf(gltfPath, options, function(gltf) {
            addDefaults(gltf);
            var primitive = gltf.meshes[Object.keys(gltf.meshes)[0]].primitives[0];
 

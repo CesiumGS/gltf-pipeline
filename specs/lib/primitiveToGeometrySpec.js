@@ -17,7 +17,8 @@ var primitiveType = 4;
 
 describe('primitiveToGeometry', function() {
     it('returns a geometry', function(done) {
-        readGltf(gltfPath, function(gltf) {
+        var options = {};
+        readGltf(gltfPath, options, function(gltf) {
             addDefaults(gltf);
             var primitive = gltf.meshes[Object.keys(gltf.meshes)[0]].primitives[0];
             var geometry = primitiveToGeometry(gltf, primitive);
