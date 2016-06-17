@@ -16,7 +16,13 @@ if (process.argv.length < 3 || defined(argv.h) || defined(argv.help)) {
         '  -b --binary, write binary glTF file.\n' +
         '  -s --separate, writes out separate geometry/animation data files, shader files and textures instead of embedding them in the glTF file.\n' +
         '  -t --separateImage, write out separate textures, but embed geometry/animation data files, and shader files.\n' +
-        '  -q, quantize the attributes of this model.\n';
+        '  -q, quantize the attributes of this model.\n' +
+        '  --ao_diffuse, bake ambient occlusion into the diffuse texture.\n' +
+        '  --ao_separate, bake ambient occlusion into a separate texture and modify the shader to use it.\n' +
+        '  --ao_scene, specify which scene to bake AO for.\n' +
+        '  --ao_rayDepth, ray distance for raytraced ambient occlusion.\n' +
+        '  --ao_resolution, resolution along one dimension for each AO texture.\n' +
+        '  --ao_samples, sample count for ambient occlusion\n';
     process.stdout.write(help);
     return;
 }
@@ -31,6 +37,12 @@ var binary = defaultValue(defaultValue(argv.b, argv.binary), false);
 var separate = defaultValue(defaultValue(argv.s, argv.separate), false);
 var separateImage = defaultValue(defaultValue(argv.t, argv.separateImage), false);
 var quantize = defaultValue(defaultValue(argv.q, argv.quantize), false);
+
+var ao_diffuse = defaultValue(argv.ao_diffuse, false);
+var ao_scene = argv.ao_scene;
+var ao_rayDepth = defaultValue(argv.ao_rayDepth, 1.0);
+var ao_resolution = defaultValue(argv.ao_resolution, 128);
+var ao_samples = defaultValue(argv.ao_samples, 16);
 
 if (!defined(gltfPath)) {
     throw new DeveloperError('Input path is undefined.');
@@ -49,7 +61,13 @@ var options = {
     binary : binary,
     embed : !separate,
     embedImage : !separateImage,
-    quantize : quantize
+    quantize : quantize,
+    ao_diffuse : ao_diffuse,
+    ao_scene : ao_scene,
+    ao_rayDepth : ao_rayDepth,
+    ao_resolution : ao_resolution,
+    ao_samples : ao_samples,
+    imageProcess : ao_diffuse
 };
 
 processFileToDisk(gltfPath, outputPath, options);
