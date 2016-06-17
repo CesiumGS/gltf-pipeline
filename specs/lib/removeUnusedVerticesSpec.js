@@ -15,7 +15,8 @@ describe('removeUnusedVertices', function() {
     var indicesTwoUnused = new Uint16Array([1]);
     var attributeOne = new Buffer(new Float32Array([0, 1, 2, 3, 4, 5, 6, 7, 8]).buffer);
     var attributeTwo = new Buffer(new Uint16Array([0, 1, 2, 3, 4, 5]).buffer);
-    var attributesBuffer = Buffer.concat([attributeOne, attributeTwo]);
+    var attributeThree = new Buffer(new Uint16Array([9, 10, 11, 12, 13, 14, 15, 16, 17]).buffer);
+    var attributesBuffer = Buffer.concat([attributeOne, attributeTwo, attributeThree]);
 
     var testGltf = {
         accessors : {
@@ -41,6 +42,14 @@ describe('removeUnusedVertices', function() {
                 count : 3,
                 byteOffset : attributeOne.length,
                 type : 'VEC2'
+            },
+            attributeAccessor3 : {
+                byteStride : 0,
+                bufferView : 'attributesBufferView',
+                componentType : 5123,
+                count : 3,
+                byteOffset : 0,
+                type : 'VEC3'
             }
         },
         buffers : {
@@ -122,25 +131,19 @@ describe('removeUnusedVertices', function() {
         removeUnusedVertices(gltf);
         expect(attributesBuffer.byteLength + expectBytesDropped).toEqual(byteLength);
 
-        var expectAttribute1 = [0, 1, 2, 6, 7, 8];
-        var expectAttribute2 = [0, 1, 4, 5];
+        var expectAttribute1 = new Float32Array([0, 1, 2, 6, 7, 8]);
+        var expectAttribute2 = new Uint16Array([0, 1, 4, 5]);
         var attributesSource = Uint8Array.from(attributesBuffer.extras._pipeline.source);
         var check1 = new Float32Array(attributesSource.buffer, attributeAccessor1.byteOffset, expectAttribute1.length);
         var check2 = new Uint16Array(attributesSource.buffer, attributeAccessor2.byteOffset, expectAttribute2.length);
         var i;
-        for (i = 0; i < expectAttribute1.length; i++) {
-            expect(expectAttribute1[i]).toEqual(check1[i]);
-        }
-        for (i = 0; i < expectAttribute2.length; i++) {
-            expect(expectAttribute2[i]).toEqual(check2[i]);
-        }
+        expect(check1).toEqual(expectAttribute1);
+        expect(check2).toEqual(expectAttribute2);
 
-        var expectIndices = [0, 1];
+        var expectIndices = new Uint16Array([0, 1]);
         var indicesSource = Uint8Array.from(gltf.buffers.indexBuffer.extras._pipeline.source);
         var check = new Uint16Array(indicesSource.buffer, 0, expectIndices.length);
-        for (i = 0; i < expectIndices.length; i++) {
-            expect(expectIndices[i]).toEqual(check[i]);
-        }
+        expect(check).toEqual(expectIndices);
     });
 
     it('removes two unused attributes', function() {
@@ -212,6 +215,46 @@ describe('removeUnusedVertices', function() {
 
         var mesh2 = clone(gltf.meshes.mesh);
         mesh2.primitives[0].indices = 'indexAccessor2';
+        gltf.meshes.mesh2 = mesh2;
+
+        // All indices are used, 0 and 2 by the first primitive and 1 by the other
+        var attributesBuffer = gltf.buffers.attributesBuffer;
+        var byteLength = attributesBuffer.byteLength;
+        removeUnusedVertices(gltf);
+        expect(attributesBuffer.byteLength).toEqual(byteLength);
+    });
+
+    it('handles when primitives use the same accessors along with different accessors with different indices', function() {
+        var gltf = clone(testGltf);
+        var gltfIndexBuffer = gltf.buffers.indexBuffer;
+        var indexBuffer = new Buffer(indicesTwoUnused.slice(0).buffer);
+        gltfIndexBuffer.extras._pipeline.source = indexBuffer;
+        gltfIndexBuffer.byteLength = indexBuffer.length;
+        var indexBufferView = gltf.bufferViews.indexBufferView;
+        indexBufferView.byteLength = indexBuffer.length;
+
+        var gltfIndexBuffer2 = clone(gltfIndexBuffer);
+        var indexBuffer2 = new Buffer(indicesOneUnused.slice(0).buffer);
+        gltfIndexBuffer2.extras._pipeline.source = indexBuffer2;
+        gltfIndexBuffer2.byteLength = indexBuffer2.length;
+        gltf.buffers.indexBuffer2 = gltfIndexBuffer2;
+
+        var gltfIndexBufferView2 = clone(indexBufferView);
+        gltfIndexBufferView2.buffer = 'indexBuffer2';
+        gltfIndexBufferView2.byteLength = indexBuffer2.length;
+        gltf.bufferViews.indexBufferView2 = gltfIndexBufferView2;
+
+        var gltfIndexAccessor = gltf.accessors.indexAccessor;
+        gltfIndexAccessor.count = indicesTwoUnused.length;
+        var gltfIndexAccessor2 = clone(gltfIndexAccessor);
+        gltfIndexAccessor2.count = indicesOneUnused.length;
+        gltfIndexAccessor2.bufferView = 'indexBufferView2';
+        gltf.accessors.indexAccessor2 = gltfIndexAccessor2;
+
+        var mesh2 = clone(gltf.meshes.mesh);
+        var primitive = mesh2.primitives[0];
+        primitive.attributes.POSITION = 'attributeAccessor3';
+        primitive.indices = 'indexAccessor2';
         gltf.meshes.mesh2 = mesh2;
 
         // All indices are used, 0 and 2 by the first primitive and 1 by the other
