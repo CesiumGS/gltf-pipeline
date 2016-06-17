@@ -10,7 +10,6 @@ var clone = require('clone');
 var Jimp = require('jimp');
 
 describe('encodeImages', function() {
-    var imageData;
     var imageBuffer = dataUriToBuffer(imageUri);
     var options = {
         basePath: basePath,
@@ -43,7 +42,7 @@ describe('encodeImages', function() {
                 expect(bufferEqual(pipelineExtras0002.source, imageBuffer)).toBe(true);
                 done();
             });
-        }, true);
+        });
     });
 
     it('re-encodes any jimp images and replaces the existing source', function(done) {
@@ -80,6 +79,6 @@ describe('encodeImages', function() {
                     });
                 });
             });
-        }, true);
+        });
     });
 });

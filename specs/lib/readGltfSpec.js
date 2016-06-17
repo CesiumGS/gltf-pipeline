@@ -7,9 +7,7 @@ var glbPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.glb';
 var invalidPath = './specs/data/boxTexturedUnoptimized/README.md';
 
 describe('readGltf', function() {
-    var options = {
-        basePath: basePath
-    };
+    var options = {};
 
     it('parses a .gltf input path, checks that a gltf JSON is defined', function(done) {
         readGltf(gltfPath, options, function(gltf) {

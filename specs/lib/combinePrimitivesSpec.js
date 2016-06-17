@@ -14,9 +14,7 @@ var doubleBoxNotCombinedPath = './specs/data/combineObjects/doubleBoxNotCombined
 var fiveBoxPath = './specs/data/combineObjects/fiveBox.gltf';
 
 describe('combinePrimitives', function() {
-    var options = {
-        basePath: basePath
-    };
+    var options = {};
 
     it('does not affect single primitives', function(done){
         readGltf(boxPath, options, function(gltf) {
