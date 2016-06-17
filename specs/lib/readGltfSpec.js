@@ -6,15 +6,17 @@ var glbPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.glb';
 var invalidPath = './specs/data/boxTexturedUnoptimized/README.md';
 
 describe('readGltf', function() {
+    var options = {};
+
     it('parses a .gltf input path, checks that a gltf JSON is defined', function(done) {
-        readGltf(gltfPath, function(gltf) {
+        readGltf(gltfPath, options, function(gltf) {
             expect(gltf).toBeDefined();
             done();
         });
     });
 
     it('parses a .glb input path, checks that a gltf JSON is defined', function(done) {
-        readGltf(glbPath, function(gltf) {
+        readGltf(glbPath, options, function(gltf) {
             expect(gltf).toBeDefined();
             done();
         });

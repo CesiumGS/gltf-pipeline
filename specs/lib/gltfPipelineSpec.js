@@ -4,7 +4,6 @@ var path = require('path');
 var clone = require('clone');
 var gltfPipeline = require('../../lib/gltfPipeline');
 var processJSON = gltfPipeline.processJSON;
-var processJSONWithExtras = gltfPipeline.processJSONWithExtras;
 var processJSONToDisk = gltfPipeline.processJSONToDisk;
 var processFile = gltfPipeline.processFile;
 var processFileToDisk = gltfPipeline.processFileToDisk;
@@ -23,7 +22,7 @@ var outputPath = './output/';
 describe('gltfPipeline', function() {
     it('optimizes a gltf JSON with embedded resources', function(done) {
         var options = {};
-        readGltf(gltfEmbeddedPath, function(gltf) {
+        readGltf(gltfEmbeddedPath, options, function(gltf) {
             var gltfCopy = clone(gltf);
             processJSON(gltf, options, function (gltf) {
                 expect(gltf).toBeDefined();
@@ -35,7 +34,7 @@ describe('gltfPipeline', function() {
     
     it('optimizes a gltf JSON with external resources', function(done) {
         var options = { basePath : path.dirname(gltfPath) };
-        fs.readFile(gltfPath, function(err, data) {
+        fs.readFile(gltfPath, options, function(err, data) {
             if (err) {
                 throw err;
             }
@@ -54,7 +53,7 @@ describe('gltfPipeline', function() {
     it('optimizes a glTF file', function(done) {
         var gltfCopy;
         var options = {};
-        readGltf(gltfPath, function(gltf) {
+        readGltf(gltfPath, options, function(gltf) {
             gltfCopy = clone(gltf);
             processFile(gltfPath, options, function (gltf) {
                 expect(gltf).toBeDefined();
@@ -66,7 +65,7 @@ describe('gltfPipeline', function() {
 
     it('optimizes a glb file', function(done) {
         var options = {};
-        readGltf(glbPath, function(gltf) {
+        readGltf(glbPath, options, function(gltf) {
             var gltfCopy = clone(gltf);
             processFile(glbPath, options, function (gltf) {
                 expect(gltf).toBeDefined();
@@ -91,7 +90,9 @@ describe('gltfPipeline', function() {
         var spy = spyOn(fs, 'writeFile').and.callFake(function(file, data, callback) {
             callback();
         });
-        var options = { 'binary' : true };
+        var options = {
+            binary : true
+        };
         processFileToDisk(gltfPath, outputPath, options, function() {
             expect(path.normalize(spy.calls.first().args[0])).toEqual(path.normalize('output/output.glb'));
             done();
@@ -103,12 +104,32 @@ describe('gltfPipeline', function() {
             callback();
         });
         var options = {
-            createDirectory : false,
-            basePath : path.dirname(gltfPath)
+            createDirectory : false
         };
-        readGltf(gltfPath, function(gltf) {
+        readGltf(gltfPath, options, function(gltf) {
             processJSONToDisk(gltf, outputPath, options, function() {
                 expect(path.normalize(spy.calls.first().args[0])).toEqual(path.normalize('./output/'));
+                done();
+            });
+        });
+    });
+
+    it('will add image processing extras if this is a pipeline with image processing', function(done) {
+        var options = {
+            imageProcess: true
+        };
+        readGltf(gltfEmbeddedPath, options, function(gltf) {
+            var gltfCopy = clone(gltf);
+            processJSON(gltf, options, function (gltf) {
+                expect(gltf).toBeDefined();
+                var images = gltf.images;
+                for (var imageID in images) {
+                    if (images.hasOwnProperty(imageID)) {
+                        var extras = images[imageID].extras._pipeline;
+                        expect(extras.jimpImage).toBeDefined();
+                        expect(extras.imageChanged).toBe(false);
+                    }
+                }
                 done();
             });
         });

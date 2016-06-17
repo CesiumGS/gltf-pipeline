@@ -8,6 +8,9 @@ var basePath = './specs/data/boxTexturedUnoptimized/';
 
 describe('loadBufferUris', function() {
     var bufferData;
+    var options = {
+        basePath: basePath
+    };
 
     beforeAll(function(done) {
         fs.readFile(bufferPath, function (err, data) {
@@ -28,7 +31,7 @@ describe('loadBufferUris', function() {
             }
         };
         
-        loadGltfUris(gltf, basePath, function(err, gltf) {
+        loadGltfUris(gltf, options, function(err, gltf) {
             expect(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline.source).toBeDefined();
             expect(bufferEqual(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline.source, bufferData)).toBe(true);
             expect(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline.extension).toEqual('.bin');
@@ -45,7 +48,7 @@ describe('loadBufferUris', function() {
             }
         };
         
-        loadGltfUris(gltf, basePath, function(err, gltf) {
+        loadGltfUris(gltf, options, function(err, gltf) {
             expect(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline.source).toBeDefined();
             expect(bufferEqual(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline.source, bufferData)).toBe(true);
             expect(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline.extension).toEqual('.bin');
@@ -65,7 +68,7 @@ describe('loadBufferUris', function() {
             }
         };
         
-        loadGltfUris(gltf, basePath, function(err, gltf) {
+        loadGltfUris(gltf, options, function(err, gltf) {
             expect(gltf.buffers.embeddedBox.extras._pipeline.source).toBeDefined();
             expect(bufferEqual(gltf.buffers.embeddedBox.extras._pipeline.source, bufferData)).toBe(true);
             expect(gltf.buffers.externalBox.extras._pipeline.source).toBeDefined();
@@ -83,7 +86,7 @@ describe('loadBufferUris', function() {
             }
         };
 
-        loadGltfUris(gltf, basePath, function(err, gltf) {
+        loadGltfUris(gltf, options, function(err, gltf) {
             expect(err).toBeDefined();
             done();
         });
