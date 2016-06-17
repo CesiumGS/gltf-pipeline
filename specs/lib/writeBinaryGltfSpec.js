@@ -30,7 +30,11 @@ describe('writeBinaryGltf', function() {
             if (err) {
                 throw err;
             }
-            loadGltfUris(removeUnused(JSON.parse(data)), path.dirname(gltfPath), function(err, gltf) {
+            var options = {
+                basePath: path.dirname(gltfPath)
+            };
+
+            loadGltfUris(removeUnused(JSON.parse(data)), options, function(err, gltf) {
                 if (err) {
                     throw err;
                 }

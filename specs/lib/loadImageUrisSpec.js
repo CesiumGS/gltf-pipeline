@@ -8,6 +8,9 @@ var basePath = './specs/data/boxTexturedUnoptimized/';
 
 describe('loadImageUris', function() {
     var imageData;
+    var options = {
+        basePath: basePath
+    };
 
     beforeAll(function(done) {
         fs.readFile(imagePath, function (err, data) {
@@ -28,7 +31,7 @@ describe('loadImageUris', function() {
             }
         };
 
-        loadGltfUris(gltf, basePath, function(err, gltf) {
+        loadGltfUris(gltf, options, function(err, gltf) {
             expect(gltf.images.Image0001.extras._pipeline.source).toBeDefined();
             expect(bufferEqual(gltf.images.Image0001.extras._pipeline.source, imageData)).toBe(true);
             expect(gltf.images.Image0001.extras._pipeline.extension).toEqual('.png');
@@ -45,7 +48,7 @@ describe('loadImageUris', function() {
             }
         };
 
-        loadGltfUris(gltf, basePath, function(err, gltf) {
+        loadGltfUris(gltf, options, function(err, gltf) {
             expect(gltf.images.Image0001.extras._pipeline.source).toBeDefined();
             expect(bufferEqual(gltf.images.Image0001.extras._pipeline.source, imageData)).toBe(true);
             expect(gltf.images.Image0001.extras._pipeline.extension).toEqual('.png');
@@ -65,7 +68,7 @@ describe('loadImageUris', function() {
             }
         };
         
-        loadGltfUris(gltf, basePath, function(err, gltf) {
+        loadGltfUris(gltf, options, function(err, gltf) {
             expect(gltf.images.embeddedImage0001.extras._pipeline.source).toBeDefined();
             expect(bufferEqual(gltf.images.embeddedImage0001.extras._pipeline.source, imageData)).toBe(true);
             expect(gltf.images.embeddedImage0001.extras._pipeline.extension).toEqual('.png');
@@ -85,7 +88,7 @@ describe('loadImageUris', function() {
             }
         };
 
-        loadGltfUris(gltf, basePath, function(err, gltf) {
+        loadGltfUris(gltf, options, function(err, gltf) {
             expect(err).toBeDefined();
             done();
         });
@@ -103,7 +106,7 @@ describe('loadImageUris', function() {
             }
         };
 
-        loadGltfUris(gltf, basePath, function(err, gltf) {
+        loadGltfUris(gltf, options, function(err, gltf) {
             expect(gltf.images.Image0001.extras._pipeline.jimpImage).not.toBeDefined();
             done();
         });
@@ -121,8 +124,15 @@ describe('loadImageUris', function() {
             }
         };
 
-        loadGltfUris(gltf, basePath, function(err, gltf) {
-            var jimpImage = gltf.images.Image0001.extras._pipeline.jimpImage;
+        var imageProcessOptions = {
+            basePath: basePath,
+            imageProcess: true
+        };
+
+        loadGltfUris(gltf, imageProcessOptions, function(err, gltf) {
+            var pipelineExtras = gltf.images.Image0001.extras._pipeline;
+            expect(pipelineExtras.imageChanged).toEqual(false);
+            var jimpImage = pipelineExtras.jimpImage;
             expect(jimpImage).toBeDefined();
             expect(jimpImage.bitmap.width).toEqual(8);
             expect(jimpImage.bitmap.height).toEqual(8);

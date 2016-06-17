@@ -12,6 +12,10 @@ var Jimp = require('jimp');
 describe('encodeImages', function() {
     var imageData;
     var imageBuffer = dataUriToBuffer(imageUri);
+    var options = {
+        basePath: basePath,
+        imageProcess: true
+    };
 
     var gltf = {
         "images": {
@@ -27,16 +31,33 @@ describe('encodeImages', function() {
         }
     };
 
+    it('does not re-encode if the images have not been changed', function(done) {
+        var gltfClone = clone(gltf);
+
+        loadGltfUris(gltfClone, options, function() {
+            var pipelineExtras0001 = gltfClone.images.Image0001.extras._pipeline;
+            var pipelineExtras0002 = gltfClone.images.Image0002.extras._pipeline;
+
+            encodeImages(gltfClone, function() {
+                expect(bufferEqual(pipelineExtras0001.source, imageBuffer)).toBe(true);
+                expect(bufferEqual(pipelineExtras0002.source, imageBuffer)).toBe(true);
+                done();
+            });
+        }, true);
+    });
+
     it('re-encodes any jimp images and replaces the existing source', function(done) {
         var gltfClone = clone(gltf);
 
-        loadGltfUris(gltfClone, basePath, function() {
+        loadGltfUris(gltfClone, options, function() {
             var pipelineExtras0001 = gltfClone.images.Image0001.extras._pipeline;
             var jimpImage001 = pipelineExtras0001.jimpImage;
             jimpImage001.resize(10, 10, Jimp.RESIZE_BEZIER);
+            pipelineExtras0001.imageChanged = true;
 
             var pipelineExtras0002 = gltfClone.images.Image0002.extras._pipeline;
             var jimpImage002 = pipelineExtras0002.jimpImage;
+            pipelineExtras0002.imageChanged = true;
 
             encodeImages(gltfClone, function() {
                 expect(jimpImage001.bitmap.width).toEqual(10);

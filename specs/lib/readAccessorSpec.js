@@ -14,13 +14,17 @@ var addPipelineExtras = require('../../lib/addPipelineExtras');
 var readAccessor = require('../../lib/readAccessor');
 var readGltf = require('../../lib/readGltf');
 
+var basePath = './specs/data/boxTexturedUnoptimized/';
 var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf';
 
 describe('readAccessor', function() {
     var boxGltf;
+    var options = {
+      basePath: basePath
+    };
 
     beforeAll(function(done) {
-        readGltf(gltfPath, function(gltf) {
+        readGltf(gltfPath, options, function(gltf) {
             boxGltf = gltf;
             done();
         });
