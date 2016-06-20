@@ -185,7 +185,10 @@ describe('bakeAmbientOcclusion', function() {
                             "NORMAL": "accessor_normal",
                             "TEXCOORD_0": "accessor_uv"
                         },
-                        "indices": "accessor_index"
+                        "indices": "accessor_index",
+                        "extras": {
+                            "_pipeline": {}
+                        }
                     }
                 ]
             }
@@ -277,7 +280,6 @@ describe('bakeAmbientOcclusion', function() {
         };
         var raytracerScene = bakeAmbientOcclusion.generateRaytracerScene(testGltf, scene, options);
         var triangleSoup = raytracerScene.triangleSoup;
-        var texelPoints = raytracerScene.texelPoints;
 
         // because of the uniform scale, expect triangles to be bigger
         var point0 = new Cartesian3(0.0, 0.0, 0.0);
@@ -286,41 +288,7 @@ describe('bakeAmbientOcclusion', function() {
         var point3 = new Cartesian3(2.0, 0.0, 0.0);
         var normal = new Cartesian3(0.0, 0.0, 1.0);
 
-        var expectedPixelIndices = {
-            22: 0, 23: 0, 24: 0, 25: 0, 26: 0, 27: 0,
-            32: 0, 33: 0, 34: 0, 35: 0, 36: 0, 37: 0,
-            42: 0, 43: 0, 44: 0, 45: 0, 46: 0, 47: 0,
-            52: 0, 53: 0, 54: 0, 55: 0, 56: 0, 57: 0,
-            62: 0, 63: 0, 64: 0, 65: 0, 66: 0, 67: 0,
-            72: 0, 73: 0, 74: 0, 75: 0, 76: 0, 77: 0
-        };
-
-        ////////// check texel points //////////
-        expect(texelPoints.length >= 36).toEqual(true); // barycentric coordinate precisions make this imprecise
-        expect(texelPoints.length <= 46).toEqual(true); // at most, all pixels on triangle diagonals are double sampled
-
-        // each texel point has a world position, world normal, pixel index, and buffer pointer
-        var cartesian3s = [];
-        for (var i = 0; i < texelPoints.length; i++) {
-            var texelPoint = texelPoints[i];
-            expect(Cartesian3.equalsEpsilon(texelPoint.normal, normal, CesiumMath.EPSILON7)).toEqual(true);
-            expect(texelPoint.buffer.resolution).toEqual(10);
-            expect(texelPoint.buffer.samples.length).toEqual(100);
-            expect(expectedPixelIndices.hasOwnProperty(texelPoint.index)).toEqual(true);
-            if (expectedPixelIndices.hasOwnProperty(texelPoint.index)) {
-                expectedPixelIndices[texelPoint.index]++;
-            }
-            cartesian3s.push(texelPoint.position);
-        }
-        expect(testContainmentAndFitCartesian3([0.0, 0.0, 0.0], [2.0, 2.0, 0.0], cartesian3s)).toEqual(true);
-        for (var id in expectedPixelIndices) {
-            if (expectedPixelIndices.hasOwnProperty(id)) {
-                expect(expectedPixelIndices[id] > 0).toEqual(true);
-            }
-        }
-
         ////////// check triangle soup //////////
-
         expect(triangleSoup.length).toEqual(2);
 
         var triangle0 = triangleSoup[0];
@@ -333,6 +301,12 @@ describe('bakeAmbientOcclusion', function() {
         expect(Cartesian3.equalsEpsilon(triangle1.positions[0], point0, CesiumMath.EPSILON7)).toEqual(true);
         expect(Cartesian3.equalsEpsilon(triangle1.positions[1], point2, CesiumMath.EPSILON7)).toEqual(true);
         expect(Cartesian3.equalsEpsilon(triangle1.positions[2], point3, CesiumMath.EPSILON7)).toEqual(true);
+
+        // check ao buffers
+        var aoBuffersByPrimitive = raytracerScene.aoBufferByPrimitive;
+        var aoBuffer = aoBuffersByPrimitive.mesh_square_0;
+        expect(aoBuffer).toBeDefined();
+        expect(aoBuffer.resolution).toEqual(10);
     });
 
     it('generates "all occluded (1.0)" for samples inside a closed tetrahedron', function() {
@@ -340,7 +314,7 @@ describe('bakeAmbientOcclusion', function() {
         for (var i = 0; i < 6; i++) {
             var values = [0.0, 0.0, 0.0];
             values[i % 3] = (i % 2) ? 1.0 : -1.0;
-            var newNormal = Cartesian3.fromArray(values);
+            var newNormal = new Cartesian3(values[0], values[1], values[2]);
             normals.push(newNormal);
         }
 
@@ -352,7 +326,7 @@ describe('bakeAmbientOcclusion', function() {
 
         var texelPoints = [];
 
-        for (i = 0; i < normals.length; i++) {
+        for (i = 0; i < 6; i++) {
             texelPoints.push({
                 position: Cartesian3.ZERO,
                 normal: normals[i],
@@ -361,15 +335,12 @@ describe('bakeAmbientOcclusion', function() {
             });
         }
 
-        var raytracerScene = {
-            numberSamples : 16,
-            rayDepth : 10.0,
-            triangleSoup : tetrahedron,
-            texelPoints : texelPoints,
-            nearCull: 0.001
-        };
-
-        bakeAmbientOcclusion.generateOcclusionData(raytracerScene);
+        for (var i = 0; i < 6; i++) {
+          var texel = texelPoints[i];
+          bakeAmbientOcclusion.computeAmbientOcclusionAt(
+            texel.position, texel.normal, 16,
+            tetrahedron, 0.001, 10.0, aoBuffer, texel.index);
+        }
 
         var samples = aoBuffer.samples;
         var counts = aoBuffer.count;
@@ -411,15 +382,12 @@ describe('bakeAmbientOcclusion', function() {
             }
         ];
 
-        var raytracerScene = {
-            numberSamples : 16,
-            rayDepth : 10.0,
-            triangleSoup : openTetrahedron,
-            texelPoints : texelPoints,
-            nearCull: 0.001
-        };
-
-        bakeAmbientOcclusion.generateOcclusionData(raytracerScene);
+        for (var i = 0; i < 3; i++) {
+          var texel = texelPoints[i];
+          bakeAmbientOcclusion.computeAmbientOcclusionAt(
+            texel.position, texel.normal, 16,
+            tetrahedron, 0.001, 10.0, aoBuffer, texel.index);
+        }
 
         var samples = aoBuffer.samples;
 
@@ -470,7 +438,7 @@ describe('bakeAmbientOcclusion', function() {
         expect(Object.keys(boxOverGroundGltfClone.textures).length).toEqual(2);
         expect(Object.keys(boxOverGroundGltfClone.materials).length).toEqual(2);
     });
-    
+
     it('adds additional textures as needed', function() {
         var boxOverGroundGltfClone = cloneGltfWithJimps(boxOverGroundGltf);
 
