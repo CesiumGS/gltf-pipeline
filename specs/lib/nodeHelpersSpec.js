@@ -181,18 +181,18 @@ describe('NodeHelpers', function() {
             var scene = gltf.scenes[gltf.scene];
 
             var functionParameters = {
-                meshes: gltf.meshes,
-                primitiveFunction: function(primitive, meshPrimitiveID, parameters) {
-                    parameters.numberPrimitives++;
-                    parameters.primitiveMeshIDs.push(meshPrimitiveID);
-                    parameters.materialIDs.push(primitive.material);
-                },
                 numberPrimitives: 0,
                 primitiveMeshIDs: [],
                 materialIDs: []
             };
 
-            NodeHelpers.forEachPrimitiveInScene(gltf, scene, functionParameters);
+            var primitiveFunction = function(primitive, meshPrimitiveID, parameters) {
+                parameters.numberPrimitives++;
+                parameters.primitiveMeshIDs.push(meshPrimitiveID);
+                parameters.materialIDs.push(primitive.material);
+            };
+
+            NodeHelpers.forEachPrimitiveInScene(gltf, scene, primitiveFunction, functionParameters);
 
             expect(functionParameters.numberPrimitives).toEqual(5);
             expect(functionParameters.primitiveMeshIDs[0]).toEqual('meshTest_0');

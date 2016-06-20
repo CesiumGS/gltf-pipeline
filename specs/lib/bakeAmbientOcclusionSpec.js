@@ -479,13 +479,11 @@ describe('bakeAmbientOcclusion', function() {
         var meshes = boxOverGroundGltfClone.meshes;
 
         var scene = boxOverGroundGltfClone.scenes[boxOverGroundGltfClone.scene];
-        var parameters = {
-            meshes : boxOverGroundGltfClone.meshes,
-            primitiveFunction : function(primitive) {
-                primitive.material = materialID;
-            }
+        var primitiveFunction = function(primitive) {
+            primitive.material = materialID;
         };
-        NodeHelpers.forEachPrimitiveInScene(boxOverGroundGltfClone, scene, parameters);
+
+        NodeHelpers.forEachPrimitiveInScene(boxOverGroundGltfClone, scene, primitiveFunction);
 
         var options = {
             numberSamples: 1,
