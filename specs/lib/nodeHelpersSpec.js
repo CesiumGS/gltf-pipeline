@@ -172,24 +172,27 @@ describe('NodeHelpers', function() {
         expect(Matrix4.equalsEpsilon(actualRightWrist, expectRightWrist, CesiumMath.EPSILON7)).toEqual(true);
     });
 
-    it('performs operations per primitive', function(done) {
+    it('performs operations per primitive in a scene', function(done) {
         fs.readFile(fiveBoxPath, function(err, data) {
             if (err) {
                 throw err;
             }
             var gltf = JSON.parse(data);
+            var scene = gltf.scenes[gltf.scene];
+
             var functionParameters = {
+                meshes: gltf.meshes,
+                primitiveFunction: function(primitive, meshPrimitiveID, parameters) {
+                    parameters.numberPrimitives++;
+                    parameters.primitiveMeshIDs.push(meshPrimitiveID);
+                    parameters.materialIDs.push(primitive.material);
+                },
                 numberPrimitives: 0,
                 primitiveMeshIDs: [],
                 materialIDs: []
             };
-            var countPrimitives = function(primitive, meshPrimitiveID, parameters) {
-                parameters.numberPrimitives++;
-                parameters.primitiveMeshIDs.push(meshPrimitiveID);
-                parameters.materialIDs.push(primitive.material);
-            };
 
-            NodeHelpers.forEachPrimitive(gltf, countPrimitives, functionParameters);
+            NodeHelpers.forEachPrimitiveInScene(gltf, scene, functionParameters);
 
             expect(functionParameters.numberPrimitives).toEqual(5);
             expect(functionParameters.primitiveMeshIDs[0]).toEqual('meshTest_0');

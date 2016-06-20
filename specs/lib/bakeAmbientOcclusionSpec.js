@@ -335,10 +335,10 @@ describe('bakeAmbientOcclusion', function() {
             });
         }
 
-        for (var i = 0; i < 6; i++) {
+        for (i = 0; i < 6; i++) {
           var texel = texelPoints[i];
           bakeAmbientOcclusion.computeAmbientOcclusionAt(
-            texel.position, texel.normal, 16,
+            texel.position, texel.normal, 16, 4,
             tetrahedron, 0.001, 10.0, aoBuffer, texel.index);
         }
 
@@ -385,7 +385,7 @@ describe('bakeAmbientOcclusion', function() {
         for (var i = 0; i < 3; i++) {
           var texel = texelPoints[i];
           bakeAmbientOcclusion.computeAmbientOcclusionAt(
-            texel.position, texel.normal, 16,
+            texel.position, texel.normal, 16, 4,
             tetrahedron, 0.001, 10.0, aoBuffer, texel.index);
         }
 
@@ -477,11 +477,15 @@ describe('bakeAmbientOcclusion', function() {
         boxOverGroundGltfClone.materials[materialID] = material;
 
         var meshes = boxOverGroundGltfClone.meshes;
-        var setPrimitiveMaterial = function(primitive) {
-            primitive.material = materialID;
-        };
 
-        NodeHelpers.forEachPrimitive(boxOverGroundGltfClone, setPrimitiveMaterial);
+        var scene = boxOverGroundGltfClone.scenes[boxOverGroundGltfClone.scene];
+        var parameters = {
+            meshes : boxOverGroundGltfClone.meshes,
+            primitiveFunction : function(primitive) {
+                primitive.material = materialID;
+            }
+        };
+        NodeHelpers.forEachPrimitiveInScene(boxOverGroundGltfClone, scene, parameters);
 
         var options = {
             numberSamples: 1,
