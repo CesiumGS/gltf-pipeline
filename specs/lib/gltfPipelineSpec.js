@@ -104,7 +104,7 @@ describe('gltfPipeline', function() {
             callback();
         });
         var options = {
-            createDirectory : false,
+            createDirectory : false
         };
         readGltf(gltfPath, options, function(gltf) {
             var options = { basePath : path.dirname(gltfPath) };
@@ -118,10 +118,10 @@ describe('gltfPipeline', function() {
     it('will write sources from JSON', function(done) {
         var options = {};
         readGltf(gltfPath, options, function (gltf) {
-            var initialSource = gltf['buffers'].CesiumTexturedBoxTest.extras._pipeline.source;
+            var initialUri = gltf['buffers'].CesiumTexturedBoxTest.uri;
             processJSON(gltf, options, function () {
-                var finalSource = gltf['buffers'].CesiumTexturedBoxTest.extras._pipeline.source;
-                expect(initialSource).not.toEqual(finalSource);
+                var finalUri = gltf['buffers'].CesiumTexturedBoxTest.uri;
+                expect(initialUri).not.toEqual(finalUri);
                 done();
             });
         });
@@ -130,10 +130,10 @@ describe('gltfPipeline', function() {
     it('will write sources from file', function(done) {
         var options = {};
         readGltf(gltfPath, options, function (gltf) {
-            var initialSource = gltf['buffers'].CesiumTexturedBoxTest.extras._pipeline.source;
+            var initialUri = gltf['buffers'].CesiumTexturedBoxTest.uri;
             processFile(gltfPath, options, function (gltfFinal) {
-                var finalSource = gltfFinal['buffers'].CesiumTexturedBoxTest.extras._pipeline.source;
-                expect(initialSource).not.toEqual(finalSource);
+                var finalUri = gltfFinal['buffers'].CesiumTexturedBoxTest.uri;
+                expect(initialUri).not.toEqual(finalUri);
                 done();
             });
         });
@@ -141,7 +141,7 @@ describe('gltfPipeline', function() {
 
     it('will add image processing extras if this is a pipeline with image processing', function(done) {
         var options = {
-            imageProcess : true,
+            imageProcess : true
         };
         readGltf(gltfEmbeddedPath, options, function(gltf) {
             processJSON(gltf, options, function (gltf) {
