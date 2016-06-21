@@ -24,7 +24,7 @@ describe('gltfPipeline', function() {
         var options = {};
         readGltf(gltfEmbeddedPath, options, function(gltf) {
             var gltfCopy = clone(gltf);
-            processJSON(gltf, outputPath, options, function (gltf) {
+            processJSON(gltf, options, function (gltf) {
                 expect(gltf).toBeDefined();
                 expect(clone(gltf)).not.toEqual(gltfCopy);
                 done();
@@ -42,7 +42,7 @@ describe('gltfPipeline', function() {
             var gltfCopy = clone(gltfCopy); 
             addPipelineExtras(gltf);
             
-            processJSON(gltf, outputPath, options, function(gltf) {
+            processJSON(gltf, options, function(gltf) {
                 expect(gltf).toBeDefined();
                 expect(clone(gltf)).not.toEqual(gltfCopy);
                 done();
@@ -55,7 +55,7 @@ describe('gltfPipeline', function() {
         var options = {};
         readGltf(gltfPath, options, function(gltf) {
             gltfCopy = clone(gltf);
-            processFile(gltfPath, outputPath, options, function (gltf) {
+            processFile(gltfPath, options, function (gltf) {
                 expect(gltf).toBeDefined();
                 expect(clone(gltf)).not.toEqual(gltfCopy);
                 done();
@@ -67,7 +67,7 @@ describe('gltfPipeline', function() {
         var options = {};
         readGltf(glbPath, options, function(gltf) {
             var gltfCopy = clone(gltf);
-            processFile(glbPath, outputPath, options, function (gltf) {
+            processFile(glbPath, options, function (gltf) {
                 expect(gltf).toBeDefined();
                 expect(clone(gltf)).not.toEqual(gltfCopy);
                 done();
@@ -104,57 +104,47 @@ describe('gltfPipeline', function() {
             callback();
         });
         var options = {
-            createDirectory : false
+            createDirectory : false,
         };
         readGltf(gltfPath, options, function(gltf) {
+            var options = { basePath : path.dirname(gltfPath) };
             processJSONToDisk(gltf, outputPath, options, function() {
-                expect(path.normalize(spy.calls.first().args[0])).toEqual(path.normalize('./output/'));
+                expect(path.normalize(spy.calls.first().args[0])).toEqual(path.normalize('output/output'));
                 done();
             });
         });
     });
 
     it('will write sources from JSON', function(done) {
-        var spy = spyOn(fs, 'writeFile').and.callFake(function(file, data, callback) {
-            callback();
-        });
-        var options = {
-            createDirectory : false,
-            embed : false
-        };
-        readGltf(gltfPath, options, function(gltf) {
-            processJSON(gltf, outputPath, options, function() {
-                process.nextTick(function() {
-                    expect(spy.calls.count()).toEqual(4);
-                    done();
-                });
+        var options = {};
+        readGltf(gltfPath, options, function (gltf) {
+            var initialSource = gltf['buffers'].CesiumTexturedBoxTest.extras._pipeline.source;
+            processJSON(gltf, options, function () {
+                var finalSource = gltf['buffers'].CesiumTexturedBoxTest.extras._pipeline.source;
+                expect(initialSource).not.toEqual(finalSource);
+                done();
             });
         });
     });
 
     it('will write sources from file', function(done) {
-        var spy = spyOn(fs, 'writeFile').and.callFake(function(file, data, callback) {
-            callback();
-        });
-        var options = {
-            createDirectory : false,
-            embed : false
-        };
-        processFile(gltfPath, outputPath, options, function() {
-            process.nextTick(function () {
-                expect(spy.calls.count()).toEqual(4);
+        var options = {};
+        readGltf(gltfPath, options, function (gltf) {
+            var initialSource = gltf['buffers'].CesiumTexturedBoxTest.extras._pipeline.source;
+            processFile(gltfPath, options, function (gltfFinal) {
+                var finalSource = gltfFinal['buffers'].CesiumTexturedBoxTest.extras._pipeline.source;
+                expect(initialSource).not.toEqual(finalSource);
                 done();
             });
         });
-        
     });
 
     it('will add image processing extras if this is a pipeline with image processing', function(done) {
         var options = {
-            imageProcess: true
+            imageProcess : true,
         };
         readGltf(gltfEmbeddedPath, options, function(gltf) {
-            processJSON(gltf, outputPath, options, function (gltf) {
+            processJSON(gltf, options, function (gltf) {
                 expect(gltf).toBeDefined();
                 var images = gltf.images;
                 for (var imageID in images) {
