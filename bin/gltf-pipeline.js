@@ -37,13 +37,15 @@ var separate = defaultValue(defaultValue(argv.s, argv.separate), false);
 var separateImage = defaultValue(defaultValue(argv.t, argv.separateImage), false);
 var quantize = defaultValue(defaultValue(argv.q, argv.quantize), false);
 
-var aoOptions = {
-    runAO : defaultValue(argv.ao_diffuse, false),
-    scene : argv.ao_scene,
-    rayDepth : defaultValue(argv.ao_rayDepth, 1.0),
-    resolution : defaultValue(argv.ao_resolution, 128),
-    numberSamples : defaultValue(argv.ao_samples, 16)
-};
+var aoOptions;
+if (argv.ao_diffuse) {
+    aoOptions = {
+        scene : argv.ao_scene,
+        rayDepth : defaultValue(argv.ao_rayDepth, 1.0),
+        resolution : defaultValue(argv.ao_resolution, 128),
+        numberSamples : defaultValue(argv.ao_samples, 16)
+    };
+}
 
 if (!defined(gltfPath)) {
     throw new DeveloperError('Input path is undefined.');
@@ -64,7 +66,7 @@ var options = {
     embedImage : !separateImage,
     quantize : quantize,
     aoOptions : aoOptions,
-    imageProcess : aoOptions.runAO
+    imageProcess : defined(aoOptions)
 };
 
 processFileToDisk(gltfPath, outputPath, options);

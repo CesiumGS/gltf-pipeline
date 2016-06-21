@@ -2,18 +2,11 @@
 var Cesium = require('cesium');
 var CesiumMath = Cesium.Math;
 var Cartesian3 = Cesium.Cartesian3;
-
-var fs = require('fs');
-var path = require('path');
-var clone = require('clone');
-var loadGltfUris = require('../../lib/loadGltfUris');
-var addPipelineExtras = require('../../lib/addPipelineExtras');
 var bakeAmbientOcclusion = require('../../lib/bakeAmbientOcclusion');
-var readAccessor = require('../../lib/readAccessor');
-var Jimp = require('jimp');
+var clone = require('clone');
 var NodeHelpers = require('../../lib/NodeHelpers');
+var readGltf = require('../../lib/readGltf');
 
-var boxGltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf';
 var boxOverGroundGltfPath = './specs/data/ambientOcclusion/cube_over_ground.gltf';
 
 function cloneGltfWithJimps(gltf) {
@@ -30,18 +23,11 @@ function cloneGltfWithJimps(gltf) {
             image.extras._pipeline.jimpImage = originalJimp.clone();
         }
     }
-
     return gltfClone;
 }
 
 describe('bakeAmbientOcclusion', function() {
-    var boxGltf;
     var boxOverGroundGltf;
-
-    var loadGltfUriOptions = {
-        basePath: path.dirname(boxGltfPath),
-        imageProcess: true
-    };
 
     var indices = [0,1,2,0,2,3];
     var indicesBuffer = new Buffer(indices.length * 2);
@@ -196,38 +182,12 @@ describe('bakeAmbientOcclusion', function() {
     };
 
     beforeAll(function(done) {
-        var loadModel2 = function () {
-            fs.readFile(boxOverGroundGltfPath, function (err, data) {
-                if (err) {
-                    throw err;
-                }
-                else {
-                    boxOverGroundGltf = JSON.parse(data);
-                    addPipelineExtras(boxOverGroundGltf);
-                    loadGltfUris(boxOverGroundGltf, loadGltfUriOptions, function (err, gltf) {
-                        if (err) {
-                            throw err;
-                        }
-                        done();
-                    });
-                }
-            });
+        var options = {
+            imageProcess: true
         };
-
-        fs.readFile(boxGltfPath, function(err, data) {
-            if (err) {
-                throw err;
-            }
-            else {
-                boxGltf = JSON.parse(data);
-                addPipelineExtras(boxGltf);
-                loadGltfUris(boxGltf, loadGltfUriOptions, function(err, gltf) {
-                    if (err) {
-                        throw err;
-                    }
-                    loadModel2();
-                });
-            }
+        readGltf(boxOverGroundGltfPath, options, function(gltf) {
+            boxOverGroundGltf = gltf;
+            done();
         });
     });
 
@@ -331,7 +291,7 @@ describe('bakeAmbientOcclusion', function() {
             count: new Array(4).fill(0.0)
         };
 
-        var bottomCenter = new Cartesian3(0.0, -0.99, 0.0);
+        var bottomCenter = new Cartesian3(0.0, -1.0, 0.0);
 
         var texelPoints = [
             {
@@ -364,7 +324,7 @@ describe('bakeAmbientOcclusion', function() {
         var samples = aoBuffer.samples;
 
         expect(samples[0]).toEqual(16);
-        expect(samples[1] < 4).toEqual(true); // randomized, but stratification should ensure this.
+        expect(samples[1]).toEqual(0); // randomized, but stratification should ensure this.
         expect(samples[2] > 6 && samples[2] < 10).toEqual(true); // randomized, but stratification should ensure this.
     });
 
