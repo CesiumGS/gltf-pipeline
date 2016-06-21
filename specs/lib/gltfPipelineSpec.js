@@ -117,7 +117,7 @@ describe('gltfPipeline', function() {
 
     it('will write sources from JSON', function(done) {
         var options = {};
-        readGltf(gltfPath, options, function (gltf) {
+        readGltf(gltfEmbeddedPath, options, function (gltf) {
             var initialUri = gltf['buffers'].CesiumTexturedBoxTest.uri;
             processJSON(gltf, options, function () {
                 var finalUri = gltf['buffers'].CesiumTexturedBoxTest.uri;
@@ -129,9 +129,9 @@ describe('gltfPipeline', function() {
 
     it('will write sources from file', function(done) {
         var options = {};
-        readGltf(gltfPath, options, function (gltf) {
+        readGltf(gltfEmbeddedPath, options, function (gltf) {
             var initialUri = gltf['buffers'].CesiumTexturedBoxTest.uri;
-            processFile(gltfPath, options, function (gltfFinal) {
+            processFile(gltfEmbeddedPath, options, function (gltfFinal) {
                 var finalUri = gltfFinal['buffers'].CesiumTexturedBoxTest.uri;
                 expect(initialUri).not.toEqual(finalUri);
                 done();
