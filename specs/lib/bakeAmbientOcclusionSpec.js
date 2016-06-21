@@ -195,9 +195,25 @@ describe('bakeAmbientOcclusion', function() {
         }
     };
 
-
-
     beforeAll(function(done) {
+        var loadModel2 = function () {
+            fs.readFile(boxOverGroundGltfPath, function (err, data) {
+                if (err) {
+                    throw err;
+                }
+                else {
+                    boxOverGroundGltf = JSON.parse(data);
+                    addPipelineExtras(boxOverGroundGltf);
+                    loadGltfUris(boxOverGroundGltf, loadGltfUriOptions, function (err, gltf) {
+                        if (err) {
+                            throw err;
+                        }
+                        done();
+                    });
+                }
+            });
+        };
+
         fs.readFile(boxGltfPath, function(err, data) {
             if (err) {
                 throw err;
@@ -209,23 +225,7 @@ describe('bakeAmbientOcclusion', function() {
                     if (err) {
                         throw err;
                     }
-                    done();
-                });
-            }
-        });
-
-        fs.readFile(boxOverGroundGltfPath, function(err, data) {
-            if (err) {
-                throw err;
-            }
-            else {
-                boxOverGroundGltf = JSON.parse(data);
-                addPipelineExtras(boxOverGroundGltf);
-                loadGltfUris(boxOverGroundGltf, loadGltfUriOptions, function(err, gltf) {
-                    if (err) {
-                        throw err;
-                    }
-                    done();
+                    loadModel2();
                 });
             }
         });
@@ -244,39 +244,11 @@ describe('bakeAmbientOcclusion', function() {
         {positions: [point2, point0, point3]}
     ];
 
-    function testContainmentAndFitCartesian3(min, max, cartesian3s) {
-        // check if the data in values is bounded by min and max precisely
-        var minInValues = new Array(min.length).fill(Number.POSITIVE_INFINITY);
-        var maxInValues = new Array(max.length).fill(Number.NEGATIVE_INFINITY);
-
-        var data = cartesian3s;
-
-        for (var i = 0; i < data.length; i++) {
-            var values = [data[i].x, data[i].y, data[i].z];
-            for (var j = 0; j < min.length; j++) {
-                if (values[j] > max[j] || values[j] < min[j]) {
-                    return false;
-                }
-                minInValues[j] = Math.min(minInValues[j], values[j]);
-                maxInValues[j] = Math.max(maxInValues[j], values[j]);
-            }
-        }
-        for (i = 0; i < min.length; i++) {
-            if (!CesiumMath.equalsEpsilon(minInValues[i], min[i], CesiumMath.EPSILON7)) {
-                return false;
-            }
-            if (!CesiumMath.equalsEpsilon(maxInValues[i], max[i], CesiumMath.EPSILON7)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     it('correctly processes a basic 2-triangle square primitive', function() {
         var scene = testGltf.scenes[testGltf.scene];
         var options = {
-            "rayDepth" : 0.1,
-            "resolution" : 10
+            rayDepth : 0.1,
+            resolution : 10
         };
         var raytracerScene = bakeAmbientOcclusion.generateRaytracerScene(testGltf, scene, options);
         var triangleSoup = raytracerScene.triangleSoup;
@@ -309,7 +281,7 @@ describe('bakeAmbientOcclusion', function() {
         expect(aoBuffer.resolution).toEqual(10);
     });
 
-    it('generates "all occluded (1.0)" for samples inside a closed tetrahedron', function() {
+    it('generates all occluded (1.0) for samples inside a closed tetrahedron', function() {
         var normals = [];
         for (var i = 0; i < 6; i++) {
             var values = [0.0, 0.0, 0.0];
@@ -336,10 +308,10 @@ describe('bakeAmbientOcclusion', function() {
         }
 
         for (i = 0; i < 6; i++) {
-          var texel = texelPoints[i];
-          bakeAmbientOcclusion.computeAmbientOcclusionAt(
-            texel.position, texel.normal, 16, 4,
-            tetrahedron, 0.001, 10.0, aoBuffer, texel.index);
+            var texel = texelPoints[i];
+            bakeAmbientOcclusion.computeAmbientOcclusionAt(
+                texel.position, texel.normal, 16, 4,
+                tetrahedron, 0.001, 10.0, aoBuffer, texel.index);
         }
 
         var samples = aoBuffer.samples;
@@ -359,7 +331,7 @@ describe('bakeAmbientOcclusion', function() {
             count: new Array(4).fill(0.0)
         };
 
-        var bottomCenter = new Cartesian3(0.0, -1.0, 0.0);
+        var bottomCenter = new Cartesian3(0.0, -0.99, 0.0);
 
         var texelPoints = [
             {
@@ -383,16 +355,16 @@ describe('bakeAmbientOcclusion', function() {
         ];
 
         for (var i = 0; i < 3; i++) {
-          var texel = texelPoints[i];
-          bakeAmbientOcclusion.computeAmbientOcclusionAt(
-            texel.position, texel.normal, 16, 4,
-            tetrahedron, 0.001, 10.0, aoBuffer, texel.index);
+            var texel = texelPoints[i];
+            bakeAmbientOcclusion.computeAmbientOcclusionAt(
+                texel.position, texel.normal, 16, 4,
+                openTetrahedron, 0.001, 10.0, aoBuffer, texel.index);
         }
 
         var samples = aoBuffer.samples;
 
         expect(samples[0]).toEqual(16);
-        expect(samples[1]).toEqual(0);
+        expect(samples[1] < 4).toEqual(true); // randomized, but stratification should ensure this.
         expect(samples[2] > 6 && samples[2] < 10).toEqual(true); // randomized, but stratification should ensure this.
     });
 
@@ -428,6 +400,7 @@ describe('bakeAmbientOcclusion', function() {
         }
 
         var options = {
+            runAO: true,
             numberSamples: 1,
             rayDepth: 1.0,
             resolution: 4
@@ -456,6 +429,7 @@ describe('bakeAmbientOcclusion', function() {
         }
 
         var options = {
+            runAO: true,
             numberSamples: 1,
             rayDepth: 1.0,
             resolution: 4
@@ -486,6 +460,7 @@ describe('bakeAmbientOcclusion', function() {
         NodeHelpers.forEachPrimitiveInScene(boxOverGroundGltfClone, scene, primitiveFunction);
 
         var options = {
+            runAO: true,
             numberSamples: 1,
             rayDepth: 1.0,
             resolution: 4
@@ -512,6 +487,7 @@ describe('bakeAmbientOcclusion', function() {
         }
 
         var options = {
+            runAO: true,
             numberSamples: 1,
             rayDepth: 1.0,
             resolution: 4
