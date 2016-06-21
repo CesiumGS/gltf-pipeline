@@ -65,13 +65,4 @@ describe('writeShaders', function() {
             done();
         });
     });
-
-    it('throws an error', function(done) {
-        var gltf = clone(testGltf);
-
-        writeGltf(gltf, './specs/errorFilePath/output.gltf', false, false, false, function(err) {
-            expect(err).toBeDefined();
-            done();
-        });
-    });
 });
