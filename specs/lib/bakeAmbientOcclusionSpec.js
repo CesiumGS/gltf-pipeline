@@ -31,7 +31,8 @@ describe('bakeAmbientOcclusion', function() {
 
     var indices = [0,1,2,0,2,3];
     var indicesBuffer = new Buffer(indices.length * 2);
-    for (var i = 0; i < indices.length; i++) {
+    var indicesLength = indices.length;
+    for (var i = 0; i < indicesLength; i++) {
         indicesBuffer.writeUInt16LE(indices[i], i * 2);
     }
     var positions = [
@@ -52,16 +53,19 @@ describe('bakeAmbientOcclusion', function() {
         0.75,0.75,
         0.25,0.75
     ];
-    var positionsBuffer = new Buffer(positions.length * 4);
-    for (i = 0; i < positions.length; i++) {
+    var positionsLength = positions.length;
+    var positionsBuffer = new Buffer(positionsLength * 4);
+    for (i = 0; i < positionsLength; i++) {
         positionsBuffer.writeFloatLE(positions[i], i * 4);
     }
-    var normalsBuffer = new Buffer(normals.length * 4);
-    for (i = 0; i < normals.length; i++) {
+    var normalsLength = normals.length;
+    var normalsBuffer = new Buffer(normalsLength * 4);
+    for (i = 0; i < normalsLength; i++) {
         normalsBuffer.writeFloatLE(normals[i], i * 4);
     }
-    var uvsBuffer = new Buffer(uvs.length * 4);
-    for (i = 0; i < uvs.length; i++) {
+    var uvsLength = uvs.length;
+    var uvsBuffer = new Buffer(uvsLength * 4);
+    for (i = 0; i < uvsLength; i++) {
         uvsBuffer.writeFloatLE(uvs[i], i * 4);
     }
 
@@ -127,7 +131,7 @@ describe('bakeAmbientOcclusion', function() {
         "buffers": {
             "buffer_0": {
                 "uri": "data:",
-                "byteLength": indices.length * 2 + (positions.length + normals.length + uvs.length) * 4,
+                "byteLength": indicesLength * 2 + (positionsLength + normalsLength + uvsLength) * 4,
                 "extras": {
                     "_pipeline": {
                         "source": dataBuffer
