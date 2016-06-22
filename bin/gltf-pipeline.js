@@ -16,7 +16,12 @@ if (process.argv.length < 3 || defined(argv.h) || defined(argv.help)) {
         '  -b --binary, write binary glTF file.\n' +
         '  -s --separate, writes out separate geometry/animation data files, shader files and textures instead of embedding them in the glTF file.\n' +
         '  -t --separateImage, write out separate textures, but embed geometry/animation data files, and shader files.\n' +
-        '  -q, quantize the attributes of this model.\n';
+        '  -q, quantize the attributes of this model.\n' +
+        '  --ao.diffuse, bake ambient occlusion into the diffuse texture. Defaults to false.\n' +
+        '  --ao.scene, specify which scene to bake AO for. Defaults to the gltf default scene.\n' +
+        '  --ao.rayDepth, ray distance for raytraced ambient occlusion. Defaults to 1.0 units in world space.\n' +
+        '  --ao.resolution, number of texel samples along one dimension for each AO texture. Defaults to 128.\n' +
+        '  --ao.samples, sample count for ambient occlusion texel. Clamps to the nearest smaller perfect square. Defaults to 16.\n';
     process.stdout.write(help);
     return;
 }
@@ -31,6 +36,16 @@ var binary = defaultValue(defaultValue(argv.b, argv.binary), false);
 var separate = defaultValue(defaultValue(argv.s, argv.separate), false);
 var separateImage = defaultValue(defaultValue(argv.t, argv.separateImage), false);
 var quantize = defaultValue(defaultValue(argv.q, argv.quantize), false);
+
+var aoOptions;
+if (argv.ao.diffuse) {
+    aoOptions = {
+        scene : argv.ao.scene,
+        rayDepth : defaultValue(argv.ao.rayDepth, 1.0),
+        resolution : defaultValue(argv.ao.resolution, 128),
+        numberSamples : defaultValue(argv.ao.samples, 16)
+    };
+}
 
 if (!defined(gltfPath)) {
     throw new DeveloperError('Input path is undefined.');
@@ -49,7 +64,9 @@ var options = {
     binary : binary,
     embed : !separate,
     embedImage : !separateImage,
-    quantize : quantize
+    quantize : quantize,
+    aoOptions : aoOptions,
+    imageProcess : defined(aoOptions)
 };
 
 processFileToDisk(gltfPath, outputPath, options);
