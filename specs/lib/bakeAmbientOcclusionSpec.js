@@ -336,7 +336,7 @@ describe('bakeAmbientOcclusion', function() {
         var boxOverGroundGltfClone = cloneGltfWithJimps(boxOverGroundGltf);
 
         var options = {
-            numberSamples: 1,
+            numberSamples: 0,
             rayDepth: 1.0,
             resolution: 4
         };
@@ -344,7 +344,7 @@ describe('bakeAmbientOcclusion', function() {
 
         expect(Object.keys(boxOverGroundGltfClone.images).length).toEqual(2);
         expect(Object.keys(boxOverGroundGltfClone.textures).length).toEqual(2);
-        expect(Object.keys(boxOverGroundGltfClone.materials).length).toEqual(2);
+        expect(Object.keys(boxOverGroundGltfClone.materials).length).toEqual(3);
     });
 
     it('adds additional images as needed', function() {
@@ -365,7 +365,7 @@ describe('bakeAmbientOcclusion', function() {
 
         var options = {
             runAO: true,
-            numberSamples: 1,
+            numberSamples: 0,
             rayDepth: 1.0,
             resolution: 4
         };
@@ -373,7 +373,7 @@ describe('bakeAmbientOcclusion', function() {
 
         expect(Object.keys(boxOverGroundGltfClone.images).length).toEqual(2);
         expect(Object.keys(boxOverGroundGltfClone.textures).length).toEqual(2);
-        expect(Object.keys(boxOverGroundGltfClone.materials).length).toEqual(2);
+        expect(Object.keys(boxOverGroundGltfClone.materials).length).toEqual(3);
     });
 
     it('adds additional textures as needed', function() {
@@ -394,7 +394,7 @@ describe('bakeAmbientOcclusion', function() {
 
         var options = {
             runAO: true,
-            numberSamples: 1,
+            numberSamples: 0,
             rayDepth: 1.0,
             resolution: 4
         };
@@ -402,7 +402,7 @@ describe('bakeAmbientOcclusion', function() {
 
         expect(Object.keys(boxOverGroundGltfClone.images).length).toEqual(3); // 1 unused image and 2 images with AO
         expect(Object.keys(boxOverGroundGltfClone.textures).length).toEqual(2);
-        expect(Object.keys(boxOverGroundGltfClone.materials).length).toEqual(2);
+        expect(Object.keys(boxOverGroundGltfClone.materials).length).toEqual(3);
     });
 
     it ('adds additional materials as needed', function() {
@@ -425,7 +425,7 @@ describe('bakeAmbientOcclusion', function() {
 
         var options = {
             runAO: true,
-            numberSamples: 1,
+            numberSamples: 0,
             rayDepth: 1.0,
             resolution: 4
         };
@@ -452,7 +452,7 @@ describe('bakeAmbientOcclusion', function() {
 
         var options = {
             runAO: true,
-            numberSamples: 1,
+            numberSamples: 0,
             rayDepth: 1.0,
             resolution: 4
         };
@@ -460,6 +460,50 @@ describe('bakeAmbientOcclusion', function() {
 
         expect(Object.keys(boxOverGroundGltfClone.images).length).toEqual(3); // 1 unused image and 2 images with AO
         expect(Object.keys(boxOverGroundGltfClone.textures).length).toEqual(3); // 1 unused texture, 2 with AO
-        expect(Object.keys(boxOverGroundGltfClone.materials).length).toEqual(3); // 1 unused material, 2 with AO
+        expect(Object.keys(boxOverGroundGltfClone.materials).length).toEqual(4); // 1 unused material, 2 with AO
+    });
+
+    it ('adds a buffer, bufferView, and an accessor for each primitive when baking AO to vertices', function() {
+        var boxOverGroundGltfClone = clone(boxOverGroundGltf);
+
+        var options = {
+            numberSamples: 0,
+            rayDepth: 1.0,
+            toVertex: true
+        };
+        bakeAmbientOcclusion.bakeAmbientOcclusion(boxOverGroundGltfClone, options);
+
+        expect(Object.keys(boxOverGroundGltfClone.accessors).length).toEqual(10);
+        var cubeMeshPrimitives = boxOverGroundGltfClone.meshes.Cube_mesh.primitives;
+        expect(cubeMeshPrimitives[0].attributes.VERTEX_AO).toEqual('accessor_Cube_mesh_0_AO');
+
+        expect(boxOverGroundGltfClone.buffers.aoBuffer).toBeDefined();
+        expect(boxOverGroundGltfClone.bufferViews.aoBufferView).toBeDefined();
+        expect(boxOverGroundGltfClone.bufferViews.aoBufferView.byteLength).toEqual(72 * 4);
+    });
+
+    it ('clones the shading chain as needed for primitives that should not have AO', function() {
+        var boxOverGroundGltfClone = clone(boxOverGroundGltf);
+
+        var options = {
+            numberSamples: 0,
+            rayDepth: 1.0,
+            toVertex: true
+        };
+        bakeAmbientOcclusion.bakeAmbientOcclusion(boxOverGroundGltfClone, options);
+
+        expect(Object.keys(boxOverGroundGltfClone.materials).length).toEqual(4);
+        expect(Object.keys(boxOverGroundGltfClone.techniques).length).toEqual(2);
+        expect(Object.keys(boxOverGroundGltfClone.programs).length).toEqual(2);
+        expect(Object.keys(boxOverGroundGltfClone.shaders).length).toEqual(4);
+
+        var usedPrimitives = boxOverGroundGltfClone.meshes.Cube_mesh.primitives;
+        expect(usedPrimitives[0].material).toEqual('Material-effect');
+
+        var unusedPrimitives = boxOverGroundGltfClone.meshes.useless_mesh.primitives;
+        expect(unusedPrimitives[0].material).toEqual('Material_001-effect_noAO');
+        expect(unusedPrimitives[1].material).toEqual('Material_001-effect_noAO');
+        expect(unusedPrimitives[2].material).toEqual('useless-material');
+        expect(unusedPrimitives[3].material).toEqual('useless-material');
     });
 });

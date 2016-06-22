@@ -17,7 +17,8 @@ if (process.argv.length < 3 || defined(argv.h) || defined(argv.help)) {
         '  -s --separate, writes out separate geometry/animation data files, shader files and textures instead of embedding them in the glTF file.\n' +
         '  -t --separateImage, write out separate textures, but embed geometry/animation data files, and shader files.\n' +
         '  -q, quantize the attributes of this model.\n' +
-        '  --ao.diffuse, bake ambient occlusion into the diffuse texture. Defaults to false.\n' +
+        '  --ao.vertex, bake ambient occlusion to vertices instead of the diffuse texture and modify the shader. Defaults to false.\n' +
+        '  --ao.triangleAverage, bake ambient occlusion averaged over triangles to vertices and modify the shader. Defaults to false.\n' +
         '  --ao.scene, specify which scene to bake AO for. Defaults to the gltf default scene.\n' +
         '  --ao.rayDepth, ray distance for raytraced ambient occlusion. Defaults to 1.0 units in world space.\n' +
         '  --ao.resolution, number of texel samples along one dimension for each AO texture. Defaults to 128.\n' +
@@ -38,8 +39,10 @@ var separateImage = defaultValue(defaultValue(argv.t, argv.separateImage), false
 var quantize = defaultValue(defaultValue(argv.q, argv.quantize), false);
 
 var aoOptions;
-if (argv.ao.diffuse) {
+if (argv.ao) {
     aoOptions = {
+        toVertex : defaultValue(argv.ao.vertex, false),
+        triangleAverage : defaultValue(argv.ao.triangleAverage, false),
         scene : argv.ao.scene,
         rayDepth : defaultValue(argv.ao.rayDepth, 1.0),
         resolution : defaultValue(argv.ao.resolution, 128),

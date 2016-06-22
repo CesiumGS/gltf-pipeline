@@ -190,10 +190,24 @@
 				  1
 				]
 			  }
+        },
+        "useless-material": {
+            "name": "useless",
+            "technique": "technique0",
+			   "values": {
+				"diffuse": "texture_Untitled_001",
+				"shininess": 256,
+				"specular": [
+				  0.2,
+				  0.2,
+				  0.2,
+				  1
+				]
+			  }
         }
     },
     "meshes": {
-        "Cube-mesh": {
+        "Cube_mesh": {
             "name": "Cube",
             "primitives": [
                 {
@@ -208,7 +222,7 @@
                 }
             ]
         },
-        "Cube_001-mesh": {
+        "Cube_001_mesh": {
             "name": "Cube.001",
             "primitives": [
                 {
@@ -219,6 +233,51 @@
                     },
                     "indices": "accessor_48",
                     "material": "Material_001-effect",
+                    "mode": 4
+                }
+            ]
+        },
+        "useless_mesh": {
+            "name": "Cube.001",
+            "primitives": [
+                {
+                    "attributes": {
+                        "NORMAL": "accessor_52",
+                        "POSITION": "accessor_50",
+                        "TEXCOORD_0": "accessor_54"
+                    },
+                    "indices": "accessor_48",
+                    "material": "Material_001-effect",
+                    "mode": 4
+                },
+				{
+                    "attributes": {
+                        "NORMAL": "accessor_52",
+                        "POSITION": "accessor_50",
+                        "TEXCOORD_0": "accessor_54"
+                    },
+                    "indices": "accessor_48",
+                    "material": "Material_001-effect",
+                    "mode": 4
+                },
+				{
+                    "attributes": {
+                        "NORMAL": "accessor_52",
+                        "POSITION": "accessor_50",
+                        "TEXCOORD_0": "accessor_54"
+                    },
+                    "indices": "accessor_48",
+                    "material": "useless-material",
+                    "mode": 4
+                },
+				{
+                    "attributes": {
+                        "NORMAL": "accessor_52",
+                        "POSITION": "accessor_50",
+                        "TEXCOORD_0": "accessor_54"
+                    },
+                    "indices": "accessor_48",
+                    "material": "useless-material",
                     "mode": 4
                 }
             ]
@@ -246,7 +305,7 @@
                 1
             ],
             "meshes": [
-                "Cube-mesh"
+                "Cube_mesh"
             ],
             "name": "Cube"
         },
@@ -271,7 +330,7 @@
                 1
             ],
             "meshes": [
-                "Cube_001-mesh"
+                "Cube_001_mesh"
             ],
             "name": "Cube_001"
         },
@@ -299,6 +358,31 @@
                 1
             ],
             "name": "Y_UP_Transform"
+        },
+		"useless_node": {
+            "children": [],
+            "matrix": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1
+            ],
+            "meshes": [
+                "useless_mesh"
+            ],
+            "name": "useless Cube"
         }
     },
     "programs": {
@@ -325,6 +409,12 @@
         "defaultScene": {
             "nodes": [
                 "node_2"
+            ],
+            "node": []
+        },
+		"uselessScene": {
+            "nodes": [
+                "useless_node"
             ],
             "node": []
         }
