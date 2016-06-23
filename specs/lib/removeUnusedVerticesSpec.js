@@ -264,7 +264,144 @@ describe('removeUnusedVertices', function() {
         expect(attributesBuffer.byteLength).toEqual(byteLength);
     });
 
-    it('removes parts of the buffer based on the attribute type if the stride is 0', function(){
+    it('handles when there is a cross-dependency between two groups of primitives', function() {
+        var attributeData1 = new Float32Array([0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0]);
+        var attributeDataBuffer1 = new Buffer(attributeData1.buffer);
+        var attributeData2 = new Float32Array([15.0, 16.0, 17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0]);
+        var attributeDataBuffer2 = new Buffer(attributeData2.buffer);
+        var indexData1 = new Uint16Array([0, 1, 2, 4, 2, 1, 0, 1, 2]);
+        var indexDataBuffer1 = new Buffer(indexData1.buffer);
+        var indexData2 = new Uint16Array([0, 1, 3, 4, 3, 1, 0]);
+        var indexDataBuffer2 = new Buffer(indexData2.buffer);
+        var gltf = {
+            accessors : {
+                attributeAccessor1 : {
+                    bufferView : 'attributeBufferView1',
+                    byteStride : 0,
+                    byteOffset : 0,
+                    componentType : 5126,
+                    count : 5,
+                    type : 'VEC3'
+                },
+                attributeAccessor2 : {
+                    bufferView : 'attributeBufferView2',
+                    byteStride : 0,
+                    byteOffset : 0,
+                    componentType : 5126,
+                    count : 5,
+                    type : 'VEC3'
+                },
+                indexAccessor1 : {
+                    bufferView : 'indexBufferView1',
+                    byteStride : 0,
+                    byteOffset : 0,
+                    componentType : 5123,
+                    count : 9,
+                    type : 'SCALAR'
+                },
+                indexAccessor2 : {
+                    bufferView : 'indexBufferView2',
+                    byteStride : 0,
+                    byteOffset : 0,
+                    componentType : 5123,
+                    count : 7,
+                    type : 'SCALAR'
+                }
+            },
+            bufferViews : {
+                attributeBufferView1 : {
+                    buffer : 'attributeBuffer1',
+                    byteOffset : 0,
+                    byteLength : attributeDataBuffer1.length,
+                    target : 34962
+                },
+                attributeBufferView2 : {
+                    buffer : 'attributeBuffer2',
+                    byteOffset : 0,
+                    byteLength : attributeDataBuffer2.length,
+                    target : 34962
+                },
+                indexBufferView1 : {
+                    buffer : 'indexBuffer1',
+                    byteOffset : 0,
+                    byteLength : indexDataBuffer1.length,
+                    target : 34963
+                },
+                indexBufferView2 : {
+                    buffer : 'indexBuffer2',
+                    byteOffset : 0,
+                    byteLength : indexDataBuffer2.length,
+                    target : 34963
+                }
+            },
+            buffers : {
+                attributeBuffer1 : {
+                    byteLength : attributeDataBuffer1.length,
+                    extras : {
+                        _pipeline : {
+                            source : attributeDataBuffer1.slice(0)
+                        }
+                    }
+                },
+                attributeBuffer2 : {
+                    byteLength : attributeDataBuffer2.length,
+                    extras : {
+                        _pipeline : {
+                            source : attributeDataBuffer2.slice(0)
+                        }
+                    }
+                },
+                indexBuffer1 : {
+                    byteLength : indexDataBuffer1.length,
+                    extras : {
+                        _pipeline : {
+                            source : indexDataBuffer1.slice(0)
+                        }
+                    }
+                },
+                indexBuffer2 : {
+                    byteLength : indexDataBuffer2.length,
+                    extras : {
+                        _pipeline : {
+                            source : indexDataBuffer2.slice(0)
+                        }
+                    }
+                }
+            },
+            meshes : {
+                mesh : {
+                    primitives: [
+                        {
+                            attributes : {
+                                TEST : 'attributeAccessor1'
+                            },
+                            indices : 'indexAccessor1'
+                        },
+                        {
+                            attributes : {
+                                TEST : 'attributeAccessor1'
+                            },
+                            indices : 'indexAccessor2'
+                        },
+                        {
+                            attributes : {
+                                TEST : 'attributeAccessor2'
+                            },
+                            indices : 'indexAccessor2'
+                        }
+                    ]
+                }
+            }
+        };
+        removeUnusedVertices(gltf);
+        var buffers = gltf.buffers;
+        expect(buffers.indexBuffer1.extras._pipeline.source).toEqual(indexDataBuffer1);
+        expect(buffers.indexBuffer2.extras._pipeline.source).toEqual(indexDataBuffer2);
+        expect(buffers.attributeBuffer1.extras._pipeline.source).toEqual(attributeDataBuffer1);
+        expect(buffers.attributeBuffer2.extras._pipeline.source).toEqual(attributeDataBuffer2);
+    });
+
+    it('removes parts of the buffer based on the attribute type if the stride is 0', function() {
         var indices = [0,1,2,0,2,3];
         var indicesBuffer = new Buffer(indices.length * 2);
         for (var i = 0; i < indices.length; i++) {
