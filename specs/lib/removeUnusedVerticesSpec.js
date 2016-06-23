@@ -379,13 +379,13 @@ describe('removeUnusedVertices', function() {
                         },
                         {
                             attributes : {
-                                TEST : 'attributeAccessor1'
+                                TEST : 'attributeAccessor2'
                             },
                             indices : 'indexAccessor2'
                         },
                         {
                             attributes : {
-                                TEST : 'attributeAccessor2'
+                                TEST : 'attributeAccessor1'
                             },
                             indices : 'indexAccessor2'
                         }
