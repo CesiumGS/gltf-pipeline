@@ -18,6 +18,8 @@ if (process.argv.length < 3 || defined(argv.h) || defined(argv.help)) {
         '  -t --separateImage, write out separate textures, but embed geometry/animation data files, and shader files.\n' +
         '  -q, quantize the attributes of this model.\n' +
         '  --ao.vertex, bake ambient occlusion to vertices instead of the diffuse texture and modify the shader. Defaults to false.\n' +
+        '  --ao.shaderMode, for displaying vertex-baked occlusion. Valid settings are multiply, replace, and blend. Defaults to blend.\n' +
+        '  --ao.blendAmount, for displaying vertex-baked occlusion by blending with the original shader output. Defaults to 50%.\n' +
         '  --ao.triangleAverage, bake ambient occlusion averaged over triangles to vertices and modify the shader. Defaults to false.\n' +
         '  --ao.scene, specify which scene to bake AO for. Defaults to the gltf default scene.\n' +
         '  --ao.rayDepth, ray distance for raytraced ambient occlusion. Defaults to 1.0 units in world space.\n' +
@@ -41,8 +43,12 @@ var quantize = defaultValue(defaultValue(argv.q, argv.quantize), false);
 var aoOptions;
 if (argv.ao) {
     aoOptions = {
+        // per-vertex options
         toVertex : defaultValue(argv.ao.vertex, false),
+        shaderMode : defaultValue(argv.ao.shaderMode, 'blend'),
+        blendAmount: defaultValue(argv.ao.blendAmount, 0.5),
         triangleAverage : defaultValue(argv.ao.triangleAverage, false),
+        // general options
         scene : argv.ao.scene,
         rayDepth : defaultValue(argv.ao.rayDepth, 1.0),
         resolution : defaultValue(argv.ao.resolution, 128),
