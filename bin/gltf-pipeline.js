@@ -21,6 +21,7 @@ if (process.argv.length < 3 || defined(argv.h) || defined(argv.help)) {
         '  --ao.shaderMode, for displaying vertex-baked occlusion. Valid settings are multiply, replace, and blend. Defaults to blend.\n' +
         '  --ao.blendAmount, for displaying vertex-baked occlusion by blending with the original shader output. Defaults to 50%.\n' +
         '  --ao.triangleAverage, bake ambient occlusion averaged over triangles to vertices and modify the shader. Defaults to false.\n' +
+        '  --ao.groundPlane, add a simulated ground plane to the scene for computing ambient occlusion. Defaults to false.\n' +
         '  --ao.scene, specify which scene to bake AO for. Defaults to the gltf default scene.\n' +
         '  --ao.rayDepth, ray distance for raytraced ambient occlusion. Defaults to 1.0 units in world space.\n' +
         '  --ao.resolution, number of texel samples along one dimension for each AO texture. Defaults to 128.\n' +
@@ -52,7 +53,8 @@ if (argv.ao) {
         scene : argv.ao.scene,
         rayDepth : defaultValue(argv.ao.rayDepth, 1.0),
         resolution : defaultValue(argv.ao.resolution, 128),
-        numberSamples : defaultValue(argv.ao.samples, 16)
+        numberSamples : defaultValue(argv.ao.samples, 16),
+        groundPlane : defaultValue(argv.ao.groundPlane, false)
     };
 }
 

@@ -202,10 +202,10 @@ describe('bakeAmbientOcclusion', function() {
     var point3 = new Cartesian3(0.0, 1.0, 0.0);
 
     var tetrahedron = [
-        {positions: [point0, point1, point2]},
-        {positions: [point0, point1, point3]},
-        {positions: [point1, point2, point3]},
-        {positions: [point2, point0, point3]}
+        [point0, point1, point2],
+        [point0, point1, point3],
+        [point1, point2, point3],
+        [point2, point0, point3]
     ];
 
     it('correctly processes a basic 2-triangle square primitive', function() {
@@ -222,7 +222,6 @@ describe('bakeAmbientOcclusion', function() {
         var point1 = new Cartesian3(0.0, 2.0, 0.0);
         var point2 = new Cartesian3(2.0, 2.0, 0.0);
         var point3 = new Cartesian3(2.0, 0.0, 0.0);
-        var normal = new Cartesian3(0.0, 0.0, 1.0);
 
         ////////// check triangle soup //////////
         expect(triangleSoup.length).toEqual(2);
@@ -230,19 +229,50 @@ describe('bakeAmbientOcclusion', function() {
         var triangle0 = triangleSoup[0];
         var triangle1 = triangleSoup[1];
 
-        expect(Cartesian3.equalsEpsilon(triangle0.positions[0], point0, CesiumMath.EPSILON7)).toEqual(true);
-        expect(Cartesian3.equalsEpsilon(triangle0.positions[1], point1, CesiumMath.EPSILON7)).toEqual(true);
-        expect(Cartesian3.equalsEpsilon(triangle0.positions[2], point2, CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian3.equalsEpsilon(triangle0[0], point0, CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian3.equalsEpsilon(triangle0[1], point1, CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian3.equalsEpsilon(triangle0[2], point2, CesiumMath.EPSILON7)).toEqual(true);
 
-        expect(Cartesian3.equalsEpsilon(triangle1.positions[0], point0, CesiumMath.EPSILON7)).toEqual(true);
-        expect(Cartesian3.equalsEpsilon(triangle1.positions[1], point2, CesiumMath.EPSILON7)).toEqual(true);
-        expect(Cartesian3.equalsEpsilon(triangle1.positions[2], point3, CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian3.equalsEpsilon(triangle1[0], point0, CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian3.equalsEpsilon(triangle1[1], point2, CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian3.equalsEpsilon(triangle1[2], point3, CesiumMath.EPSILON7)).toEqual(true);
 
         // check ao buffers
         var aoBuffersByPrimitive = raytracerScene.aoBufferByPrimitive;
         var aoBuffer = aoBuffersByPrimitive.mesh_square_0;
         expect(aoBuffer).toBeDefined();
         expect(aoBuffer.resolution).toEqual(10);
+    });
+
+    it('correctly generates a ground plane just below the minimum of the scene.', function() {
+        var scene = testGltf.scenes[testGltf.scene];
+        var options = {
+            rayDepth : 1.0,
+            resolution : 10,
+            groundPlane : true
+        };
+        var raytracerScene = bakeAmbientOcclusion.generateRaytracerScene(testGltf, scene, options);
+        var triangleSoup = raytracerScene.triangleSoup;
+
+        // ground plane size is based on the near culling distance, scene size, and maximum ray depth.
+        var point0 = new Cartesian3(-2.0, -0.075, -2.0);
+        var point1 = new Cartesian3(4.0, -0.075, -2.0);
+        var point2 = new Cartesian3(4.0, -0.075, 2.0);
+        var point3 = new Cartesian3(-2.0, -0.075, 2.0);
+
+        ////////// check triangle soup //////////
+        expect(triangleSoup.length).toEqual(4);
+
+        var groundPlane1 = triangleSoup[2];
+        var groundPlane2 = triangleSoup[3];
+
+        expect(Cartesian3.equalsEpsilon(groundPlane1[0], point0, CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian3.equalsEpsilon(groundPlane1[1], point1, CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian3.equalsEpsilon(groundPlane1[2], point2, CesiumMath.EPSILON7)).toEqual(true);
+
+        expect(Cartesian3.equalsEpsilon(groundPlane2[0], point0, CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian3.equalsEpsilon(groundPlane2[1], point2, CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian3.equalsEpsilon(groundPlane2[2], point3, CesiumMath.EPSILON7)).toEqual(true);
     });
 
     it('generates all occluded (1.0) for samples inside a closed tetrahedron', function() {
