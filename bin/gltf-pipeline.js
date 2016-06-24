@@ -16,7 +16,9 @@ if (process.argv.length < 3 || defined(argv.h) || defined(argv.help)) {
         '  -b --binary, write binary glTF file.\n' +
         '  -s --separate, writes out separate geometry/animation data files, shader files and textures instead of embedding them in the glTF file.\n' +
         '  -t --separateImage, write out separate textures, but embed geometry/animation data files, and shader files.\n' +
-        '  -q, quantize the attributes of this model.\n';
+        '  -q --quantize, quantize the attributes of this model.\n' +
+        '  -n --encodeNormals, oct-encode the normals of this model.\n' +
+        '  -c --compressTextureCoordinates, compress the texture coordinates of this model.\n';
     process.stdout.write(help);
     return;
 }
@@ -31,6 +33,8 @@ var binary = defaultValue(defaultValue(argv.b, argv.binary), false);
 var separate = defaultValue(defaultValue(argv.s, argv.separate), false);
 var separateImage = defaultValue(defaultValue(argv.t, argv.separateImage), false);
 var quantize = defaultValue(defaultValue(argv.q, argv.quantize), false);
+var encodeNormals = defaultValue(defaultValue(argv.n, argv.encodeNormals), false);
+var compressTextureCoordinates = defaultValue(defaultValue(argv.c, argv.compressTextureCoordinates), false);
 
 if (!defined(gltfPath)) {
     throw new DeveloperError('Input path is undefined.');
@@ -49,7 +53,9 @@ var options = {
     binary : binary,
     embed : !separate,
     embedImage : !separateImage,
-    quantize : quantize
+    quantize : quantize,
+    encodeNormals : encodeNormals,
+    compressTextureCoordinates : compressTextureCoordinates
 };
 
 processFileToDisk(gltfPath, outputPath, options);

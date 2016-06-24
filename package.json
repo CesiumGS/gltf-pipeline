@@ -42,6 +42,7 @@
     "mime": "^1.3.4",
     "mkdirp": "^0.5.1",
     "object-values": "^1.0.0",
+    "promise": "^7.1.1",
     "yargs": "^4.7.1"
   },
   "devDependencies": {
