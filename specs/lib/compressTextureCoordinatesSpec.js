@@ -6,7 +6,7 @@ var WebGLConstants = Cesium.WebGLConstants;
 var compressTextureCoordinates = require('../../lib/compressTextureCoordinates');
 
 describe('compressTextureCoordinates', function() {
-    it('compresses texture coordinates', function() {
+    it('compresses texture coordinates', function(done) {
         var texCoords = new Float32Array([1.0, 0.0,
                                          0.0, 1.0,
                                          0.5, 0.5]);
@@ -95,25 +95,27 @@ describe('compressTextureCoordinates', function() {
                 }
             }
         };
-        compressTextureCoordinates(gltf);
-        var texCoordAccessor = gltf.accessors.texCoordAccessor;
-        expect(texCoordAccessor.componentType).toEqual(WebGLConstants.FLOAT);
-        expect(texCoordAccessor.type).toEqual('SCALAR');
+        compressTextureCoordinates(gltf).then(function() {
+            var texCoordAccessor = gltf.accessors.texCoordAccessor;
+            expect(texCoordAccessor.componentType).toEqual(WebGLConstants.FLOAT);
+            expect(texCoordAccessor.type).toEqual('SCALAR');
 
-        var technique = gltf.techniques.technique;
-        expect(technique.parameters.texcoord.type).toEqual(WebGLConstants.FLOAT);
+            var technique = gltf.techniques.technique;
+            expect(technique.parameters.texcoord.type).toEqual(WebGLConstants.FLOAT);
 
-        var buffer = gltf.buffers.buffer;
-        var encodedBuffer = buffer.extras._pipeline.source;
-        expect(encodedBuffer.length).toEqual(12);
-        expect(encodedBuffer.length).toEqual(buffer.byteLength);
+            var buffer = gltf.buffers.buffer;
+            var encodedBuffer = buffer.extras._pipeline.source;
+            expect(encodedBuffer.length).toEqual(12);
+            expect(encodedBuffer.length).toEqual(buffer.byteLength);
 
-        var texCoord = new Cartesian2();
-        for (var i = 0; i < texCoordAccessor.count; i++) {
-            var encoded = encodedBuffer.readFloatLE(i*4);
-            AttributeCompression.decompressTextureCoordinates(encoded, texCoord);
-            expect(texCoord.x).toBeCloseTo(texCoords[i*2]);
-            expect(texCoord.y).toBeCloseTo(texCoords[i*2 + 1]);
-        }
+            var texCoord = new Cartesian2();
+            for (var i = 0; i < texCoordAccessor.count; i++) {
+                var encoded = encodedBuffer.readFloatLE(i * 4);
+                AttributeCompression.decompressTextureCoordinates(encoded, texCoord);
+                expect(texCoord.x).toBeCloseTo(texCoords[i * 2]);
+                expect(texCoord.y).toBeCloseTo(texCoords[i * 2 + 1]);
+            }
+            done();
+        });
     });
 });
