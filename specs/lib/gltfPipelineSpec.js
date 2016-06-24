@@ -107,8 +107,33 @@ describe('gltfPipeline', function() {
             createDirectory : false
         };
         readGltf(gltfPath, options, function(gltf) {
+            var options = { basePath : path.dirname(gltfPath) };
             processJSONToDisk(gltf, outputPath, options, function() {
-                expect(path.normalize(spy.calls.first().args[0])).toEqual(path.normalize('./output/'));
+                expect(path.normalize(spy.calls.first().args[0])).toEqual(path.normalize('output/output'));
+                done();
+            });
+        });
+    });
+
+    it('will write sources from JSON', function(done) {
+        var options = {};
+        readGltf(gltfEmbeddedPath, options, function (gltf) {
+            var initialUri = gltf['buffers'].CesiumTexturedBoxTest.uri;
+            processJSON(gltf, options, function () {
+                var finalUri = gltf['buffers'].CesiumTexturedBoxTest.uri;
+                expect(initialUri).not.toEqual(finalUri);
+                done();
+            });
+        });
+    });
+
+    it('will write sources from file', function(done) {
+        var options = {};
+        readGltf(gltfEmbeddedPath, options, function (gltf) {
+            var initialUri = gltf['buffers'].CesiumTexturedBoxTest.uri;
+            processFile(gltfEmbeddedPath, options, function (gltfFinal) {
+                var finalUri = gltfFinal['buffers'].CesiumTexturedBoxTest.uri;
+                expect(initialUri).not.toEqual(finalUri);
                 done();
             });
         });
@@ -116,10 +141,9 @@ describe('gltfPipeline', function() {
 
     it('will add image processing extras if this is a pipeline with image processing', function(done) {
         var options = {
-            imageProcess: true
+            imageProcess : true
         };
         readGltf(gltfEmbeddedPath, options, function(gltf) {
-            var gltfCopy = clone(gltf);
             processJSON(gltf, options, function (gltf) {
                 expect(gltf).toBeDefined();
                 var images = gltf.images;
