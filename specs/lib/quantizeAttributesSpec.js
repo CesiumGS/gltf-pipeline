@@ -124,7 +124,7 @@ describe('quantizeAttributes', function() {
         expect(gltf.buffers.buffer.byteLength).toEqual(buffer.length);
     });
 
-    it('Doesn\t quantize excluded semantics', function() {
+    it('Doesn\'t quantize excluded semantics', function() {
         var gltf = clone(testGltf);
         gltf.buffers.buffer.extras._pipeline.source = buffer;
         quantizeAttributes(gltf, {exclude: ['POSITION', 'NORMAL', 'TEXCOORD', 'SCALAR_TEST']});
