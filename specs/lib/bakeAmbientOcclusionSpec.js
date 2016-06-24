@@ -284,78 +284,57 @@ describe('bakeAmbientOcclusion', function() {
             normals.push(newNormal);
         }
 
-        var aoBuffer = {
-            resolution: 3,
-            samples: new Array(9).fill(0.0),
-            count: new Array(9).fill(0.0)
-        };
+        var samples = new Array(9).fill(0.0);
 
         var texelPoints = [];
 
         for (i = 0; i < 6; i++) {
             texelPoints.push({
                 position: Cartesian3.ZERO,
-                normal: normals[i],
-                index: i,
-                buffer: aoBuffer
+                normal: normals[i]
             });
         }
 
         for (i = 0; i < 6; i++) {
             var texel = texelPoints[i];
-            bakeAmbientOcclusion.computeAmbientOcclusionAt(
+            samples[i] = bakeAmbientOcclusion.computeAmbientOcclusionAt(
                 texel.position, texel.normal, 16, 4,
-                tetrahedron, 0.001, 10.0, aoBuffer, texel.index);
+                tetrahedron, 0.001, 10.0);
         }
 
-        var samples = aoBuffer.samples;
-        var counts = aoBuffer.count;
         for (i = 0; i < 6; i++) {
             expect(samples[i]).toEqual(16.0);
-            expect(counts[i]).toEqual(16);
         }
     });
 
     it('generates various levels of occlusion for samples in the mouth of an open tetrahedron', function() {
         var openTetrahedron = [tetrahedron[1], tetrahedron[2], tetrahedron[3]];
 
-        var aoBuffer = {
-            resolution: 2,
-            samples: new Array(4).fill(0.0),
-            count: new Array(4).fill(0.0)
-        };
+        var samples = new Array(4).fill(0.0);
 
         var bottomCenter = new Cartesian3(0.0, -1.0, 0.0);
 
         var texelPoints = [
             {
                 position: bottomCenter,
-                normal: new Cartesian3(0.0, 1.0, 0.0),
-                index: 0,
-                buffer: aoBuffer
+                normal: new Cartesian3(0.0, 1.0, 0.0)
             },
             {
                 position: bottomCenter,
-                normal: new Cartesian3(0.0, -1.0, 0.0),
-                index: 1,
-                buffer: aoBuffer
+                normal: new Cartesian3(0.0, -1.0, 0.0)
             },
             {
                 position: bottomCenter,
-                normal: new Cartesian3(1.0, 0.0, 0.0),
-                index: 2,
-                buffer: aoBuffer
+                normal: new Cartesian3(1.0, 0.0, 0.0)
             }
         ];
 
         for (var i = 0; i < 3; i++) {
             var texel = texelPoints[i];
-            bakeAmbientOcclusion.computeAmbientOcclusionAt(
+            samples[i] += bakeAmbientOcclusion.computeAmbientOcclusionAt(
                 texel.position, texel.normal, 16, 4,
-                openTetrahedron, 0.001, 10.0, aoBuffer, texel.index);
+                openTetrahedron, 0.001, 10.0);
         }
-
-        var samples = aoBuffer.samples;
 
         expect(samples[0]).toEqual(16);
         expect(samples[1]).toEqual(0); // randomized, but stratification should ensure this.
