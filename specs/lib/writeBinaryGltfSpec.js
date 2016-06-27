@@ -69,7 +69,7 @@ describe('writeBinaryGltf', function() {
     });
 
     it('writes a valid binary gltf header', function() {
-        writeBinaryGltf(clone(testData.gltf), outputPath, true, function(err, header, scene, body) {
+        writeBinaryGltf(clone(testData.gltf), outputPath, true, true, true, function(err, header, scene, body) {
             expect(header.toString('utf8', 0, 4)).toEqual('glTF');
             expect(header.readUInt32LE(4)).toEqual(1);
             expect(header.readUInt32LE(8)).toEqual(17706);
@@ -79,13 +79,13 @@ describe('writeBinaryGltf', function() {
     });
 
     it('writes the correct binary scene', function() {
-        writeBinaryGltf(clone(testData.gltf), outputPath, true, function(err, header, scene, body) {
+        writeBinaryGltf(clone(testData.gltf), outputPath, true, true, true, function(err, header, scene, body) {
             expect(JSON.parse(scene.toString())).toEqual(testData.scene);
         });
     });
 
     it('writes the correct binary body', function() {
-        writeBinaryGltf(clone(testData.gltf), outputPath, true, function(err, header, scene, body) {
+        writeBinaryGltf(clone(testData.gltf), outputPath, true, true, true, function(err, header, scene, body) {
             var binaryBody = Buffer.concat([testData.buffer, testData.fragmentShader, testData.vertexShader, testData.image]);
             expect(bufferEqual(binaryBody, body)).toBe(true);
         })
