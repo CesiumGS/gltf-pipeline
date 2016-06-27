@@ -248,17 +248,18 @@ describe('bakeAmbientOcclusion', function() {
         var scene = testGltf.scenes[testGltf.scene];
         var options = {
             rayDepth : 1.0,
-            resolution : 10,
-            groundPlane : true
+            groundPlane : true,
+            nearCull : CesiumMath.EPSILON4,
+            toVertex : true
         };
         var raytracerScene = bakeAmbientOcclusion.generateRaytracerScene(testGltf, scene, options);
         var triangleSoup = raytracerScene.triangleSoup;
 
         // ground plane size is based on the near culling distance, scene size, and maximum ray depth.
-        var point0 = new Cartesian3(-2.0, -0.075, -2.0);
-        var point1 = new Cartesian3(4.0, -0.075, -2.0);
-        var point2 = new Cartesian3(4.0, -0.075, 2.0);
-        var point3 = new Cartesian3(-2.0, -0.075, 2.0);
+        var point0 = new Cartesian3(-2.0, -0.00015, -2.0);
+        var point1 = new Cartesian3(4.0, -0.00015, -2.0);
+        var point2 = new Cartesian3(4.0, -0.00015, 2.0);
+        var point3 = new Cartesian3(-2.0, -0.00015, 2.0);
 
         ////////// check triangle soup //////////
         expect(triangleSoup.length).toEqual(4);
