@@ -1,7 +1,10 @@
 'use strict';
 var Cesium = require('cesium');
 var CesiumMath = Cesium.Math;
+var Cartesian2 = Cesium.Cartesian2;
 var Cartesian3 = Cesium.Cartesian3;
+var Matrix4 = Cesium.Matrix4;
+var Quaternion = Cesium.Quaternion;
 var bakeAmbientOcclusion = require('../../lib/bakeAmbientOcclusion');
 var clone = require('clone');
 var NodeHelpers = require('../../lib/NodeHelpers');
@@ -207,6 +210,28 @@ describe('bakeAmbientOcclusion', function() {
         [point1, point2, point3],
         [point2, point0, point3]
     ];
+
+    // data for an equilateral triangle whose center is inside the tetrahedron
+    var normal = new Cartesian3(0.0, 1.0, 0.0);
+    var equilateralBufferDataByAccessor = {
+        indices : {
+            data : [0, 1, 2]
+        },
+        positions : {
+            data : [
+                new Cartesian3(0.0, 0.0, 1.0),
+                new Cartesian3(-0.5, 0.0, -Math.sqrt(3.0) / 6.0),
+                new Cartesian3(0.5, 0.0, -Math.sqrt(3.0) / 6.0)
+            ]
+        },
+        normals : {
+            data : [
+                normal,
+                normal,
+                normal
+            ]
+        }
+    };
 
     it('correctly processes a basic 2-triangle square primitive', function() {
         var scene = testGltf.scenes[testGltf.scene];
@@ -515,5 +540,139 @@ describe('bakeAmbientOcclusion', function() {
         expect(unusedPrimitives[1].material).toEqual('Material_001-effect_noAO');
         expect(unusedPrimitives[2].material).toEqual('useless-material');
         expect(unusedPrimitives[3].material).toEqual('useless-material');
+    });
+
+    it('can flatten triangles into their own planes', function() {
+        var positions = [
+            new Cartesian3(0, 0, 0),
+            new Cartesian3(1, 0, 0),
+            new Cartesian3(1, 1, 0)
+        ];
+
+        // Transform the triangle to be unrecognizable but not scaled
+        var rotation = new Quaternion(1.1, 0.2, 0.3, 2.0); // some rotation
+        rotation = Quaternion.normalize(rotation, rotation);
+        var translation = new Cartesian3(1.0, 2.0, 3.0);
+        var scale = new Cartesian3(1.0, 1.0, 1.0);
+        var transform = Matrix4.fromTranslationQuaternionRotationScale(translation, rotation, scale, new Matrix4());
+
+        positions[0] = Matrix4.multiplyByPoint(transform, positions[0], positions[0]);
+        positions[1] = Matrix4.multiplyByPoint(transform, positions[1], positions[1]);
+        positions[2] = Matrix4.multiplyByPoint(transform, positions[2], positions[2]);
+
+        var results = [
+            new Cartesian2(),
+            new Cartesian2(),
+            new Cartesian2()
+        ];
+        var expected = [
+            new Cartesian2(0.0, 0.0),
+            new Cartesian2(1.0, 0.0),
+            new Cartesian2(1.0, 1.0)
+        ];
+
+        bakeAmbientOcclusion.flattenTriangle(positions, results);
+
+        expect(Cartesian2.equalsEpsilon(results[0], expected[0], CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian2.equalsEpsilon(results[1], expected[1], CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian2.equalsEpsilon(results[2], expected[2], CesiumMath.EPSILON7)).toEqual(true);
+    });
+
+    it('it can sample occlusion just at a triangle center', function() {
+        var aoBuffer = {
+            samples: new Array(3).fill(0.0),
+            count: new Array(3).fill(CesiumMath.EPSILON10)
+        };
+
+        var parameters = {
+            raytracerScene : {
+                aoBufferByPrimitive : {
+                    meshPrimitiveID : aoBuffer
+                },
+                bufferDataByAccessor : equilateralBufferDataByAccessor,
+                triangleSoup : tetrahedron,
+                numberSamples : 16,
+                nearCull : CesiumMath.EPSILON4,
+                rayDepth : 1.0
+            }
+        };
+
+        var node = {
+            extras : {
+                _pipeline : {
+                    flatTransform : Matrix4.IDENTITY
+                }
+            }
+        };
+
+        var primitive = {
+            indices : 'indices',
+            attributes : {
+                POSITION : 'positions',
+                NORMAL : 'normals'
+            }
+        };
+
+        bakeAmbientOcclusion.raytraceAtTriangleCenters(primitive, 'meshPrimitiveID', parameters, node);
+
+        var samples = aoBuffer.samples;
+        var counts = aoBuffer.count;
+        // Expect the baked AO to indicate "fully occluded" since the center is inside the tetrahedron
+        expect(CesiumMath.equalsEpsilon(samples[0], counts[0], CesiumMath.EPSILON7)).toEqual(true);
+        expect(CesiumMath.equalsEpsilon(samples[1], counts[1], CesiumMath.EPSILON7)).toEqual(true);
+        expect(CesiumMath.equalsEpsilon(samples[2], counts[2], CesiumMath.EPSILON7)).toEqual(true);
+        expect(CesiumMath.equalsEpsilon(counts[0], 16.0, CesiumMath.EPSILON7)).toEqual(true);
+        expect(CesiumMath.equalsEpsilon(counts[1], 16.0, CesiumMath.EPSILON7)).toEqual(true);
+        expect(CesiumMath.equalsEpsilon(counts[2], 16.0, CesiumMath.EPSILON7)).toEqual(true);
+    });
+
+    it('it can sample occlusion over the area of a triangle and average the results to the vertices', function() {
+        var aoBuffer = {
+            samples: new Array(3).fill(0.0),
+            count: new Array(3).fill(CesiumMath.EPSILON10)
+        };
+
+        var parameters = {
+            raytracerScene : {
+                aoBufferByPrimitive : {
+                    meshPrimitiveID : aoBuffer
+                },
+                bufferDataByAccessor : equilateralBufferDataByAccessor,
+                triangleSoup : tetrahedron,
+                numberSamples : 4,
+                nearCull : CesiumMath.EPSILON4,
+                rayDepth : 1.0
+            },
+            resolution : 4
+        };
+
+        var node = {
+            extras : {
+                _pipeline : {
+                    flatTransform : Matrix4.IDENTITY
+                }
+            }
+        };
+
+        var primitive = {
+            indices : 'indices',
+            attributes : {
+                POSITION : 'positions',
+                NORMAL : 'normals'
+            }
+        };
+
+        bakeAmbientOcclusion.raytraceOverTriangleSamples(primitive, 'meshPrimitiveID', parameters, node);
+
+        var samples = aoBuffer.samples;
+        var counts = aoBuffer.count;
+
+        // Expect the baked AO to only be partially occluded since there will be samples outside the tetrahedron
+        expect(counts[0] > 4).toEqual(true);
+        expect(counts[1] > 4).toEqual(true);
+        expect(counts[2] > 4).toEqual(true);
+        expect(CesiumMath.equalsEpsilon(samples[0], counts[0], CesiumMath.EPSILON7)).toEqual(false);
+        expect(CesiumMath.equalsEpsilon(samples[1], counts[1], CesiumMath.EPSILON7)).toEqual(false);
+        expect(CesiumMath.equalsEpsilon(samples[2], counts[2], CesiumMath.EPSILON7)).toEqual(false);
     });
 });
