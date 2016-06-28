@@ -27,6 +27,7 @@ var fileName = path.basename(gltfPath, fileExtension);
 var filePath = path.dirname(gltfPath);
 
 var outputPath = defaultValue(argv._[1], defaultValue(argv.o, argv.output));
+var outputExtension = path.extname(outputPath);
 var binary = defaultValue(defaultValue(argv.b, argv.binary), false);
 var separate = defaultValue(defaultValue(argv.s, argv.separate), false);
 var separateImage = defaultValue(defaultValue(argv.t, argv.separateImage), false);
@@ -38,6 +39,10 @@ if (!defined(gltfPath)) {
 
 if (fileExtension !== '.glb' && fileExtension !== '.gltf') {
     throw new DeveloperError('Invalid glTF file.');
+}
+
+if (outputExtension !== '.gltf' && outputExtension !== '.glb' || binary && outputExtension !== '.glb') {
+    throw new DeveloperError('Invalid output path extension.');
 }
 
 if (!defined(outputPath)) {
