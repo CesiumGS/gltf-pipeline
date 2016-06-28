@@ -27,8 +27,9 @@ describe('mergeBuffers', function() {
                     "uri": "data:,",
                     "extras": {
                         "_pipeline": {
-                          "source": buffer0,
-                          "deleteExtras": true
+                            "source": buffer0,
+                            "extension": ".bin",
+                            "deleteExtras": true
                         }
                     }
                 },
@@ -38,8 +39,9 @@ describe('mergeBuffers', function() {
                     "uri": "data:,",
                     "extras": {
                         "_pipeline": {
-                          "source": buffer1,
-                          "deleteExtras": true
+                            "source": buffer1,
+                            "extension": ".bin",
+                            "deleteExtras": true
                         }
                     }
                 }
@@ -47,7 +49,7 @@ describe('mergeBuffers', function() {
         };
 
         mergeBuffers(gltf, 'mergedBuffers');
-        
+
         expect(gltf).toEqual({
             "bufferViews": {
                 "bufferView_0": {
@@ -68,8 +70,9 @@ describe('mergeBuffers', function() {
                     "uri": "data:,",
                     "extras": {
                         "_pipeline": {
-                          "source": bufferMerged,
-                          "deleteExtras": true
+                            "source": bufferMerged,
+                            "extension": ".bin",
+                            "deleteExtras": true
                         }
                     }
                 }
