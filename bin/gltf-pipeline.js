@@ -26,9 +26,8 @@ if (process.argv.length < 3 || defined(argv.h) || defined(argv.help)) {
         '  --ao.scene, specify which scene to bake AO for. Defaults to the gltf default scene.\n' +
         '  --ao.nearCull, near-distance at which to cull intersections when raytracing. Defaults to 0.0001 in world space.\n' +
         '  --ao.rayDepth, ray distance for raytraced ambient occlusion. Defaults to 1.0 units in world space.\n' +
-        '  --ao.resolution: When baking to texture, this specifies the resolution of the AO texture that will be overlayed onto the diffuse texture. \n' +
-        '                   When baking to vertices with triangleAverage enabled, this is the count of points per unit length (in model space) for which AO is computed. \n' +
-        '                   Defaults to 128 when baking to texture and 4 when baking to vertices. \n' +
+        '  --ao.resolution: When baking to texture, this specifies the resolution of the AO texture that will be overlayed onto the diffuse texture. Defaults to 128.\n' +
+        '  --ao.density: When baking to vertices with triangleAverage enabled, this is the count of points per unit length (in model space) for which AO is computed. Defaults to 1.\n' +
         '  --ao.samples, sample count for ambient occlusion texel. Clamps to the nearest smaller perfect square. Defaults to 16.\n';
     process.stdout.write(help);
     return;
@@ -47,10 +46,6 @@ var quantize = defaultValue(defaultValue(argv.q, argv.quantize), false);
 
 var aoOptions;
 if (argv.ao) {
-    var defaultResolution = 128;
-    if (argv.ao.triangleAverage && argv.ao.vertex) {
-        defaultResolution = 4;
-    }
     aoOptions = {
         // per-vertex options
         toVertex : defaultValue(argv.ao.vertex, false),
@@ -61,7 +56,8 @@ if (argv.ao) {
         scene : argv.ao.scene,
         nearCull : defaultValue(argv.ao.nearCull, CesiumMath.EPSILON4),
         rayDepth : defaultValue(argv.ao.rayDepth, 1.0),
-        resolution : defaultValue(argv.ao.resolution, defaultResolution),
+        resolution : defaultValue(argv.ao.resolution, 128),
+        density : defaultValue(argv.ao.density, 1.0),
         numberSamples : defaultValue(argv.ao.samples, 16),
         groundPlane : defaultValue(argv.ao.groundPlane, false)
     };

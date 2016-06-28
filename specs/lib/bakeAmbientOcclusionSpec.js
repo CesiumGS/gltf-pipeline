@@ -643,7 +643,7 @@ describe('bakeAmbientOcclusion', function() {
                 nearCull : CesiumMath.EPSILON4,
                 rayDepth : 1.0
             },
-            resolution : 4
+            density : 4
         };
 
         var node = {
