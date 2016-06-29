@@ -2,107 +2,74 @@
 var getUniqueId = require('../../lib/getUniqueId');
 
 describe('getUniqueId', function() {
-    var json = {
+    var gltf = {
         "accessors": {
             "accessor": {
-                "bufferView": "bufferView_137",
-                "byteOffset": 216,
-                "byteStride": 0,
-                "componentType": 5123,
-                "count": 36,
-                "type": "SCALAR"
+                "bufferView": "bufferView_137"
             },
             "accessor_0": {
-                "bufferView": "bufferView_137",
-                "byteOffset": 216,
-                "byteStride": 0,
-                "componentType": 5123,
-                "count": 36,
-                "type": "SCALAR"
+                "bufferView": "bufferView_137"
             },
             "accessor_1": {
-                "bufferView": "bufferView_138",
-                "byteOffset": 3456,
-                "byteStride": 12,
-                "componentType": 5126,
-                "count": 36,
-                "type": "VEC3"
+                "bufferView": "bufferView_138"
             },
             "accessor_2": {
-                "bufferView": "bufferView_138",
-                "byteOffset": 3888,
-                "byteStride": 12,
-                "componentType": 5126,
-                "count": 36,
-                "type": "VEC3"
+                "bufferView": "bufferView_138"
             },
             "accessor_3": {
-                "bufferView": "bufferView_138",
-                "byteOffset": 4320,
-                "byteStride": 8,
-                "componentType": 5126,
-                "count": 36,
-                "type": "VEC2"
+                "bufferView": "bufferView_138"
             },
-            "accessor_4": {
-                "bufferView": "bufferView_137",
-                "byteOffset": 288,
-                "byteStride": 0,
-                "componentType": 5123,
-                "count": 36,
-                "type": "SCALAR"
+            "name": {
+                "bufferView": "bufferView_138"
             }
         },
         "buffers": {
             "bufferId": {
                 "byteLength": 840,
                 "uri": "buffer.bin"
-            }
-        },
-        "buffers_1": {
-            "bufferId": {
+            },
+            "name_0": {
                 "byteLength": 840,
-                "uri_0": "buffer.bin"
-            }
-        },
-        "buffers_0": {
-            "bufferId": {
-                "byteLength": 840,
-                "uri_1": "buffer.bin"
+                "uri": "buffer.bin"
             }
         },
         "materials": {
             "blinn-1": {
                 "technique": "technique1",
                 "values": {
-                    "ambient": [0, 0, 0, 1],
-                    "diffuse": "texture_file2",
-                    "emission": [0, 0, 0, 1],
-                    "shininess": 38.4,
-                    "specular": [0, 0, 0, 1]
+                    "ambient": [0, 0, 0, 1]
                 },
                 "name": "blinn1"
+            },
+            "lambert-1": {
+                "technique": "technique1",
+                "values": {
+                    "ambient": [0, 0, 0, 1],
+                    "diffuse": "texture_file2"
+                },
+                "name": "lambert1"
+            },
+            "name_1": {
+                "technique": "technique1",
+                "values": {
+                    "ambient": [0, 0, 0, 1],
+                    "diffuse": "texture_file2",
+                    "name_2": "wrongName"
+                },
+                "name": "lambert1"
             }
         }
     };
 
-    it('locates IDs at the top level of the json and adjusts accordingly', function() {
-        expect(getUniqueId(json, 'buffers')).toEqual('buffers_2');
+    it('locates IDs in the top level objects of the gltf and adjusts accordingly', function() {
+        expect(getUniqueId(gltf, 'accessor')).toEqual('accessor_4');
     });
 
-    it('locates IDs at the leaves of the json and adjusts accordingly', function() {
-        expect(getUniqueId(json, 'uri')).toEqual('uri_2');
+    it('does not modify the prefix if the prefix does not occur in top level objects of the gltf', function() {
+        expect(getUniqueId(gltf, 'access')).toEqual('access');
     });
 
-    it('locates IDs at intermediate objects in the json and adjusts accordingly', function() {
-        expect(getUniqueId(json, 'accessor')).toEqual('accessor_5');
-    });
-
-    it('does not modify the prefix if the prefix does not occur in the json', function() {
-        expect(getUniqueId(json, 'access')).toEqual('access');
-    });
-
-    it('only looks at keys', function() {
-        expect(getUniqueId(json, 'technique1')).toEqual('technique1');
+    it('can identify instances of the prefix across all top level objects', function() {
+        expect(getUniqueId(gltf, 'name')).toEqual('name_2');
     });
 });
