@@ -251,7 +251,34 @@ describe('triangleAxisAlignedBoundingBoxOverlap', function() {
         }
     });
 
-    it ('consistently detects intersections of triangles in the same plane as AABB faces', function() {
+    it ('detects lack of intersection at various orientations', function() {
+        var triangle = triangleScratch;
+
+        halfSize.x = 0.5;
+        halfSize.y = 0.5;
+        halfSize.z = 0.5;
+        var boundingBox = makeAxisAlignedBoundingBox(Cartesian3.ZERO, halfSize);
+        // Varying orientations
+        for (var x = 0; x < 360; x += 30) {
+            for (var y = 0; y < 360; y += 30) {
+                for (var z = 0; z < 360; z += 30) {
+                    triangle = zPlaneTriangle;
+                    triangle = rotateTriangle(triangle, 1, 0, 0, x, triangleScratch);
+                    triangle = rotateTriangle(triangle, 0, 1, 0, y, triangleScratch);
+                    triangle = rotateTriangle(triangle, 0, 0, 1, z, triangleScratch);
+
+                    var signX = x < 180 ? -1 : 1;
+                    var signY = y < 180 ? -1 : 1;
+                    var signZ = z < 180 ? -1 : 1;
+
+                    triangle = translateTriangle(triangle, 2.0 * signX, 2.0 * signY, 2.0 * signZ, triangleScratch);
+                    expect(triangleAxisAlignedBoundingBoxOverlap(boundingBox, triangle)).toEqual(false);
+                }
+            }
+        }
+    });
+
+    it ('detects intersections of triangles in the same plane as AABB faces', function() {
         var triangle = triangleScratch;
 
         var radius = 0.5;
