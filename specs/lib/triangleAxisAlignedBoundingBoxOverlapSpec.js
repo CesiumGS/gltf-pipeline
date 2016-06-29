@@ -174,8 +174,7 @@ describe('triangleAxisAlignedBoundingBoxOverlap', function() {
             for (var y = -1; y < 2; y++) {
                 for (var z = -1; z < 2; z++) {
                     if (x !== 0 || y !== 0 || z !== 0) {
-                        triangle = rotateTriangle(zPlaneTriangle, x, y, z, x + y + z, triangle);
-                        triangle = translateTriangle(triangle, x * 2, y * 2, z * 2, triangle);
+                        triangle = translateTriangle(zPlaneTriangle, x * 2, y * 2, z * 2, triangleScratch);
                         expect(triangleAxisAlignedBoundingBoxOverlap(boundingBox, triangle)).toEqual(false);
                     }
                 }
@@ -206,9 +205,9 @@ describe('triangleAxisAlignedBoundingBoxOverlap', function() {
         expect(triangleAxisAlignedBoundingBoxOverlap(boundingBox, triangle)).toEqual(true);
 
         // Varying orientations
-        for (var x = 0; x < 360; x += 30) {
-            for (var y = 0; y < 360; y += 30) {
-                for (var z = 0; z < 360; z += 30) {
+        for (var x = 0; x < 360; x += 59) {
+            for (var y = 0; y < 360; y += 59) {
+                for (var z = 0; z < 360; z += 59) {
                     triangle = zPlaneTriangle;
                     triangle = rotateTriangle(triangle, 1, 0, 0, x, triangleScratch);
                     triangle = rotateTriangle(triangle, 0, 1, 0, y, triangleScratch);
@@ -238,9 +237,9 @@ describe('triangleAxisAlignedBoundingBoxOverlap', function() {
         expect(triangleAxisAlignedBoundingBoxOverlap(boundingBox, triangle)).toEqual(true);
 
         // Varying orientations
-        for (x = 0; x < 360; x += 30) {
-            for (y = 0; y < 360; y += 30) {
-                for (z = 0; z < 360; z += 30) {
+        for (x = 0; x < 360; x += 59) {
+            for (y = 0; y < 360; y += 59) {
+                for (z = 0; z < 360; z += 59) {
                     triangle = zPlaneTriangle;
                     triangle = rotateTriangle(triangle, 1, 0, 0, x, triangleScratch);
                     triangle = rotateTriangle(triangle, 0, 1, 0, y, triangleScratch);
@@ -259,9 +258,9 @@ describe('triangleAxisAlignedBoundingBoxOverlap', function() {
         halfSize.z = 0.5;
         var boundingBox = makeAxisAlignedBoundingBox(Cartesian3.ZERO, halfSize);
         // Varying orientations
-        for (var x = 0; x < 360; x += 30) {
-            for (var y = 0; y < 360; y += 30) {
-                for (var z = 0; z < 360; z += 30) {
+        for (var x = 0; x < 360; x += 59) {
+            for (var y = 0; y < 360; y += 59) {
+                for (var z = 0; z < 360; z += 59) {
                     triangle = zPlaneTriangle;
                     triangle = rotateTriangle(triangle, 1, 0, 0, x, triangleScratch);
                     triangle = rotateTriangle(triangle, 0, 1, 0, y, triangleScratch);
@@ -318,6 +317,97 @@ describe('triangleAxisAlignedBoundingBoxOverlap', function() {
         Cartesian3.fromArray([0, 0, -radius], 0, triangle[0]);
         Cartesian3.fromArray([1, 0, -radius], 0, triangle[1]);
         Cartesian3.fromArray([1, 1, -radius], 0, triangle[2]);
+        expect(triangleAxisAlignedBoundingBoxOverlap(boundingBox, triangle)).toEqual(true);
+
+        ////// Faces completely bound triangle //////
+
+        radius = 100.0;
+        halfSize.x = radius;
+        halfSize.y = radius;
+        halfSize.z = radius;
+        boundingBox = makeAxisAlignedBoundingBox(Cartesian3.ZERO, halfSize);
+
+        // in X plane
+        Cartesian3.fromArray([-radius, 0, 0], 0, triangle[0]);
+        Cartesian3.fromArray([-radius, 1, 0], 0, triangle[1]);
+        Cartesian3.fromArray([-radius, 1, 1], 0, triangle[2]);
+        expect(triangleAxisAlignedBoundingBoxOverlap(boundingBox, triangle)).toEqual(true);
+
+        Cartesian3.fromArray([radius, 0, 0], 0, triangle[0]);
+        Cartesian3.fromArray([radius, 1, 0], 0, triangle[1]);
+        Cartesian3.fromArray([radius, 1, 1], 0, triangle[2]);
+        expect(triangleAxisAlignedBoundingBoxOverlap(boundingBox, triangle)).toEqual(true);
+
+        // in Y plane
+        Cartesian3.fromArray([0, radius, 0], 0, triangle[0]);
+        Cartesian3.fromArray([1, radius, 0], 0, triangle[1]);
+        Cartesian3.fromArray([1, radius, 1], 0, triangle[2]);
+        expect(triangleAxisAlignedBoundingBoxOverlap(boundingBox, triangle)).toEqual(true);
+
+        Cartesian3.fromArray([0, -radius, 0], 0, triangle[0]);
+        Cartesian3.fromArray([1, -radius, 0], 0, triangle[1]);
+        Cartesian3.fromArray([1, -radius, 1], 0, triangle[2]);
+        expect(triangleAxisAlignedBoundingBoxOverlap(boundingBox, triangle)).toEqual(true);
+
+        // in Z plane
+        Cartesian3.fromArray([0, 0, radius], 0, triangle[0]);
+        Cartesian3.fromArray([1, 0, radius], 0, triangle[1]);
+        Cartesian3.fromArray([1, 1, radius], 0, triangle[2]);
+        expect(triangleAxisAlignedBoundingBoxOverlap(boundingBox, triangle)).toEqual(true);
+
+        Cartesian3.fromArray([0, 0, -radius], 0, triangle[0]);
+        Cartesian3.fromArray([1, 0, -radius], 0, triangle[1]);
+        Cartesian3.fromArray([1, 1, -radius], 0, triangle[2]);
+        expect(triangleAxisAlignedBoundingBoxOverlap(boundingBox, triangle)).toEqual(true);
+    });
+
+    it ('detects triangle/cube intersection when cube corners cross the triangle bounds', function() {
+        var triangle = triangleScratch;
+
+        var radius = 1.0;
+        halfSize.x = radius;
+        halfSize.y = radius;
+        halfSize.z = radius;
+        var boundingBox = makeAxisAlignedBoundingBox(Cartesian3.ZERO, halfSize);
+
+        Cartesian3.fromArray([0.7, 1.1, 1.1], 0, triangle[0]);
+        Cartesian3.fromArray([1.1, 0.7, 1.1], 0, triangle[1]);
+        Cartesian3.fromArray([1.1, 1.1, 0.7], 0, triangle[2]);
+        expect(triangleAxisAlignedBoundingBoxOverlap(boundingBox, triangle)).toEqual(true);
+
+        Cartesian3.fromArray([-0.7, 1.1, 1.1], 0, triangle[2]);
+        Cartesian3.fromArray([-1.1, 0.7, 1.1], 0, triangle[1]);
+        Cartesian3.fromArray([-1.1, 1.1, 0.7], 0, triangle[0]);
+        expect(triangleAxisAlignedBoundingBoxOverlap(boundingBox, triangle)).toEqual(true);
+
+        Cartesian3.fromArray([0.7, -1.1, 1.1], 0, triangle[2]);
+        Cartesian3.fromArray([1.1, -0.7, 1.1], 0, triangle[1]);
+        Cartesian3.fromArray([1.1, -1.1, 0.7], 0, triangle[0]);
+        expect(triangleAxisAlignedBoundingBoxOverlap(boundingBox, triangle)).toEqual(true);
+
+        Cartesian3.fromArray([0.7, 1.1, -1.1], 0, triangle[2]);
+        Cartesian3.fromArray([1.1, 0.7, -1.1], 0, triangle[1]);
+        Cartesian3.fromArray([1.1, 1.1, -0.7], 0, triangle[0]);
+        expect(triangleAxisAlignedBoundingBoxOverlap(boundingBox, triangle)).toEqual(true);
+
+        Cartesian3.fromArray([-0.7, -1.1, 1.1], 0, triangle[2]);
+        Cartesian3.fromArray([-1.1, -0.7, 1.1], 0, triangle[1]);
+        Cartesian3.fromArray([-1.1, -1.1, 0.7], 0, triangle[0]);
+        expect(triangleAxisAlignedBoundingBoxOverlap(boundingBox, triangle)).toEqual(true);
+
+        Cartesian3.fromArray([0.7, -1.1, -1.1], 0, triangle[2]);
+        Cartesian3.fromArray([1.1, -0.7, -1.1], 0, triangle[1]);
+        Cartesian3.fromArray([1.1, -1.1, -0.7], 0, triangle[0]);
+        expect(triangleAxisAlignedBoundingBoxOverlap(boundingBox, triangle)).toEqual(true);
+
+        Cartesian3.fromArray([-0.7, 1.1, -1.1], 0, triangle[0]);
+        Cartesian3.fromArray([-1.1, 0.7, -1.1], 0, triangle[1]);
+        Cartesian3.fromArray([-1.1, 1.1, -0.7], 0, triangle[2]);
+        expect(triangleAxisAlignedBoundingBoxOverlap(boundingBox, triangle)).toEqual(true);
+
+        Cartesian3.fromArray([-0.7, -1.1, -1.1], 0, triangle[0]);
+        Cartesian3.fromArray([-1.1, -0.7, -1.1], 0, triangle[1]);
+        Cartesian3.fromArray([-1.1, -1.1, -0.7], 0, triangle[2]);
         expect(triangleAxisAlignedBoundingBoxOverlap(boundingBox, triangle)).toEqual(true);
     });
 });
