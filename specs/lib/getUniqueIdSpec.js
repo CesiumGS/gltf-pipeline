@@ -101,4 +101,8 @@ describe('getUniqueId', function() {
     it('does not modify the prefix if the prefix does not occur in the json', function() {
         expect(getUniqueId(json, 'access')).toEqual('access');
     });
+
+    it('only looks at keys', function() {
+        expect(getUniqueId(json, 'technique1')).toEqual('technique1');
+    });
 });
