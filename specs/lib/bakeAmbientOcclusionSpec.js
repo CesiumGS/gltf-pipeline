@@ -1,10 +1,8 @@
 'use strict';
 var Cesium = require('cesium');
 var CesiumMath = Cesium.Math;
-var Cartesian2 = Cesium.Cartesian2;
 var Cartesian3 = Cesium.Cartesian3;
 var Matrix4 = Cesium.Matrix4;
-var Quaternion = Cesium.Quaternion;
 var bakeAmbientOcclusion = require('../../lib/bakeAmbientOcclusion');
 var clone = require('clone');
 var NodeHelpers = require('../../lib/NodeHelpers');
@@ -510,7 +508,7 @@ describe('bakeAmbientOcclusion', function() {
 
         expect(Object.keys(boxOverGroundGltfClone.accessors).length).toEqual(10);
         var cubeMeshPrimitives = boxOverGroundGltfClone.meshes.Cube_mesh.primitives;
-        expect(cubeMeshPrimitives[0].attributes.VERTEX_AO).toEqual('accessor_Cube_mesh_0_AO');
+        expect(cubeMeshPrimitives[0].attributes._OCCLUSION).toEqual('accessor_Cube_mesh_0_AO');
 
         expect(boxOverGroundGltfClone.buffers.aoBuffer).toBeDefined();
         expect(boxOverGroundGltfClone.bufferViews.aoBufferView).toBeDefined();
@@ -540,42 +538,6 @@ describe('bakeAmbientOcclusion', function() {
         expect(unusedPrimitives[1].material).toEqual('Material_001-effect_noAO');
         expect(unusedPrimitives[2].material).toEqual('useless-material');
         expect(unusedPrimitives[3].material).toEqual('useless-material');
-    });
-
-    it('can flatten triangles into their own planes', function() {
-        var positions = [
-            new Cartesian3(0, 0, 0),
-            new Cartesian3(1, 0, 0),
-            new Cartesian3(1, 1, 0)
-        ];
-
-        // Transform the triangle to be unrecognizable but not scaled
-        var rotation = new Quaternion(1.1, 0.2, 0.3, 2.0); // some rotation
-        rotation = Quaternion.normalize(rotation, rotation);
-        var translation = new Cartesian3(1.0, 2.0, 3.0);
-        var scale = new Cartesian3(1.0, 1.0, 1.0);
-        var transform = Matrix4.fromTranslationQuaternionRotationScale(translation, rotation, scale, new Matrix4());
-
-        positions[0] = Matrix4.multiplyByPoint(transform, positions[0], positions[0]);
-        positions[1] = Matrix4.multiplyByPoint(transform, positions[1], positions[1]);
-        positions[2] = Matrix4.multiplyByPoint(transform, positions[2], positions[2]);
-
-        var results = [
-            new Cartesian2(),
-            new Cartesian2(),
-            new Cartesian2()
-        ];
-        var expected = [
-            new Cartesian2(0.0, 0.0),
-            new Cartesian2(1.0, 0.0),
-            new Cartesian2(1.0, 1.0)
-        ];
-
-        bakeAmbientOcclusion.flattenTriangle(positions, results);
-
-        expect(Cartesian2.equalsEpsilon(results[0], expected[0], CesiumMath.EPSILON7)).toEqual(true);
-        expect(Cartesian2.equalsEpsilon(results[1], expected[1], CesiumMath.EPSILON7)).toEqual(true);
-        expect(Cartesian2.equalsEpsilon(results[2], expected[2], CesiumMath.EPSILON7)).toEqual(true);
     });
 
     it('it can sample occlusion just at a triangle center', function() {
