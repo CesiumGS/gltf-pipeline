@@ -16,7 +16,7 @@ describe('getUniqueId', function() {
         },
         "buffers": {
             "bufferId": {
-                "access": ''
+                "accessor": {}
             }
         },
         "materials": {
@@ -27,46 +27,46 @@ describe('getUniqueId', function() {
 
     var allIdentifiersGltf = {
         "nodes": {
-            "name" : ''
+            "id" : {}
         },
         "skins": {
-            "name_0": ''
+            "id_0": {}
         },
         "cameras": {
-            "name_1": ''
+            "id_1": {}
         },
         "meshes": {
-            "name_2": ''
+            "id_2": {}
         },
         "accessors": {
-            "name_3": ''
+            "id_3": {}
         },
         "materials": {
-            "name_4": ''
+            "id_4": {}
         },
         "bufferViews": {
-            "name_5": ''
+            "id_5": {}
         },
         "techniques": {
-            "name_6": ''
+            "id_6": {}
         },
         "textures": {
-            "name_7": ''
+            "id_7": {}
         },
         "buffers": {
-            "name_8": ''
+            "id_8": {}
         },
         "programs": {
-            "name_9": ''
+            "id_9": {}
         },
         "images": {
-            "name_10": ''
+            "id_10": {}
         },
         "samplers": {
-            "name_11": ''
+            "id_11": {}
         },
         "shaders": {
-            "name_12": ''
+            "id_12": {}
         }
     };
 
@@ -75,10 +75,10 @@ describe('getUniqueId', function() {
     });
 
     it('does not modify the prefix if the prefix does not occur in top level objects of the gltf', function() {
-        expect(getUniqueId(gltf, 'access')).toEqual('access');
+        expect(getUniqueId(gltf, 'uniqueId')).toEqual('uniqueId');
     });
 
     it('can identify instances of the prefix across different top level objects', function() {
-        expect(getUniqueId(allIdentifiersGltf, 'name')).toEqual('name_13');
+        expect(getUniqueId(allIdentifiersGltf, 'id')).toEqual('id_13');
     });
 });
