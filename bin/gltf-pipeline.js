@@ -57,7 +57,7 @@ var options = {
     embedImage : !separateImage,
     quantize : quantize,
     aoOptions : aoOptions,
-    imageProcess : defined(aoOptions) && aoOptions.texture
+    imageProcess : defined(aoOptions) && aoOptions.toTexture
 };
 
 processFileToDisk(gltfPath, outputPath, options);
