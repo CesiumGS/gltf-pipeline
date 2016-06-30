@@ -28,16 +28,17 @@ var separateImage = defaultValue(defaultValue(argv.t, argv.separateImage), false
 var quantize = defaultValue(defaultValue(argv.q, argv.quantize), false);
 
 if (!defined(outputPath)) {
-    var fileExtension;
+    var outputFileExtension;
     if (binary) {
-        fileExtension = '.glb';
+        outputFileExtension = '.glb';
     } else {
-        fileExtension = path.extname(gltfPath);
+        outputFileExtension = '.gltf';
     }
+    var fileExtension = path.extname(gltfPath);
     var fileName = path.basename(gltfPath, fileExtension);
     var filePath = path.dirname(gltfPath);
     // Default output.  For example, path/asset.gltf becomes path/asset-optimized.gltf
-    outputPath = path.join(filePath, fileName + '-optimized' + fileExtension);
+    outputPath = path.join(filePath, fileName + '-optimized' + outputFileExtension);
 }
 
 var options = {

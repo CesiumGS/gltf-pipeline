@@ -18,12 +18,12 @@ var invalidPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.glt
 
 describe('writeBinaryGltf', function() {
     var testData = {
-        gltf: gltfPath,
-        scene: scenePath,
-        image: imagePath,
-        buffer: bufferPath,
-        fragmentShader: fragmentShaderPath,
-        vertexShader: vertexShaderPath
+        gltf : gltfPath,
+        scene : scenePath,
+        image : imagePath,
+        buffer : bufferPath,
+        fragmentShader : fragmentShaderPath,
+        vertexShader : vertexShaderPath
     };
 
     beforeAll(function(done) {
@@ -32,7 +32,7 @@ describe('writeBinaryGltf', function() {
                 throw err;
             }
             var options = {
-                basePath: path.dirname(gltfPath)
+                basePath : path.dirname(gltfPath)
             };
 
             loadGltfUris(removeUnused(JSON.parse(data)), options, function(err, gltf) {
@@ -70,37 +70,99 @@ describe('writeBinaryGltf', function() {
     });
 
     it('writes a valid binary gltf header', function() {
-        writeBinaryGltf(clone(testData.gltf), outputPath, true, function(err, header, scene, body) {
+        writeBinaryGltf(clone(testData.gltf), {
+            outputPath : outputPath,
+            embed : true,
+            embedImage : true,
+            createDirectory : true
+        }, function(err, header, scene, body) {
             expect(header.toString('utf8', 0, 4)).toEqual('glTF');
             expect(header.readUInt32LE(4)).toEqual(1);
             expect(header.readUInt32LE(8)).toEqual(17706);
             expect(header.readUInt32LE(12)).toEqual(3896);
             expect(header.readUInt32LE(16)).toEqual(0);
         });
+
+        writeBinaryGltf(clone(testData.gltf), {
+            outputPath : outputPath,
+            embed : false,
+            embedImage : false,
+            createDirectory : true
+        }, function(err, header, scene, body) {
+            expect(header.toString('utf8', 0, 4)).toEqual('glTF');
+            expect(header.readUInt32LE(4)).toEqual(1);
+            expect(header.readUInt32LE(8)).toEqual(4308);
+            expect(header.readUInt32LE(12)).toEqual(3448);
+            expect(header.readUInt32LE(16)).toEqual(0);
+        });
     });
 
     it('writes the correct binary scene', function() {
-        writeBinaryGltf(clone(testData.gltf), outputPath, true, function(err, header, scene, body) {
+        writeBinaryGltf(clone(testData.gltf), {
+            outputPath : outputPath,
+            embed : true,
+            embedImage : true,
+            createDirectory : true
+        }, function(err, header, scene, body) {
             expect(JSON.parse(scene.toString())).toEqual(testData.scene);
         });
     });
 
     it('writes the correct binary body', function() {
-        writeBinaryGltf(clone(testData.gltf), outputPath, true, function(err, header, scene, body) {
+        writeBinaryGltf(clone(testData.gltf), {
+            outputPath : outputPath,
+            embed : true,
+            embedImage : true,
+            createDirectory : true
+        }, function(err, header, scene, body) {
             var binaryBody = Buffer.concat([testData.buffer, testData.fragmentShader, testData.vertexShader, testData.image]);
             expect(bufferEqual(binaryBody, body)).toBe(true);
-        })
+        });
+
+        writeBinaryGltf(clone(testData.gltf), {
+            outputPath : outputPath,
+            embed : true,
+            embedImage : false,
+            createDirectory : true
+        }, function(err, header, scene, body) {
+            var binaryBody = Buffer.concat([testData.buffer, testData.fragmentShader, testData.vertexShader]);
+            expect(bufferEqual(binaryBody, body)).toBe(true);
+        });
+
+        writeBinaryGltf(clone(testData.gltf), {
+            outputPath : outputPath,
+            embed : false,
+            embedImage : true,
+            createDirectory : true
+        }, function(err, header, scene, body) {
+            var binaryBody = Buffer.concat([testData.buffer, testData.image]);
+            expect(bufferEqual(binaryBody, body)).toBe(true);
+        });
+
+        writeBinaryGltf(clone(testData.gltf), {
+            outputPath : outputPath,
+            embed : false,
+            embedImage : false,
+            createDirectory : true
+        }, function(err, header, scene, body) {
+            var binaryBody = testData.buffer;
+            expect(bufferEqual(binaryBody, body)).toBe(true);
+        });
     });
     
     it('throws an invalid output path error', function() {
         expect(function() {
-            writeBinaryGltf(clone(testData.gltf), undefined, true);
+            writeBinaryGltf(clone(testData.gltf), {
+                outputPath : undefined
+            }, true);
         }).toThrowError('Output path is undefined.');
     });
     
     it('throws an invalid output extension error', function() {
         expect(function() {
-            writeBinaryGltf(clone(testData.gltf), invalidPath, true);
+            writeBinaryGltf(clone(testData.gltf), {
+                outputPath : invalidPath
+            }, true);
         }).toThrowError('Invalid output path extension.');
     });
 });
