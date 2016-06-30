@@ -32,16 +32,17 @@ var encodeNormals = defaultValue(defaultValue(argv.n, argv.encodeNormals), false
 var compressTextureCoordinates = defaultValue(defaultValue(argv.c, argv.compressTextureCoordinates), false);
 
 if (!defined(outputPath)) {
-    var fileExtension;
+    var outputFileExtension;
     if (binary) {
-        fileExtension = '.glb';
+        outputFileExtension = '.glb';
     } else {
-        fileExtension = path.extname(gltfPath);
+        outputFileExtension = '.gltf';
     }
+    var fileExtension = path.extname(gltfPath);
     var fileName = path.basename(gltfPath, fileExtension);
     var filePath = path.dirname(gltfPath);
     // Default output.  For example, path/asset.gltf becomes path/asset-optimized.gltf
-    outputPath = path.join(filePath, fileName + '-optimized' + fileExtension);
+    outputPath = path.join(filePath, fileName + '-optimized' + outputFileExtension);
 }
 
 var options = {
