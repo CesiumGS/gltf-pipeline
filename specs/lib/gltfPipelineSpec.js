@@ -10,7 +10,6 @@ var processFileToDisk = gltfPipeline.processFileToDisk;
 var readGltf = require('../../lib/readGltf');
 var removePipelineExtras = require('../../lib/removePipelineExtras');
 var addPipelineExtras = require('../../lib/addPipelineExtras');
-var writeBinaryGltf = require('../../lib/writeBinaryGltf');
 var writeSource = require('../../lib/writeSource');
 var writeGltf = require('../../lib/writeGltf');
 

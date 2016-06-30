@@ -70,8 +70,7 @@ describe('writeBinaryGltf', function() {
     });
 
     it('writes a valid binary gltf header', function() {
-        writeBinaryGltf({
-            gltf : clone(testData.gltf),
+        writeBinaryGltf(clone(testData.gltf), {
             outputPath : outputPath,
             embed : true,
             embedImage : true,
@@ -84,8 +83,7 @@ describe('writeBinaryGltf', function() {
             expect(header.readUInt32LE(16)).toEqual(0);
         });
 
-        writeBinaryGltf({
-            gltf : clone(testData.gltf),
+        writeBinaryGltf(clone(testData.gltf), {
             outputPath : outputPath,
             embed : false,
             embedImage : false,
@@ -100,8 +98,7 @@ describe('writeBinaryGltf', function() {
     });
 
     it('writes the correct binary scene', function() {
-        writeBinaryGltf({
-            gltf : clone(testData.gltf),
+        writeBinaryGltf(clone(testData.gltf), {
             outputPath : outputPath,
             embed : true,
             embedImage : true,
@@ -112,8 +109,7 @@ describe('writeBinaryGltf', function() {
     });
 
     it('writes the correct binary body', function() {
-        writeBinaryGltf({
-            gltf : clone(testData.gltf),
+        writeBinaryGltf(clone(testData.gltf), {
             outputPath : outputPath,
             embed : true,
             embedImage : true,
@@ -123,8 +119,7 @@ describe('writeBinaryGltf', function() {
             expect(bufferEqual(binaryBody, body)).toBe(true);
         });
 
-        writeBinaryGltf({
-            gltf : clone(testData.gltf),
+        writeBinaryGltf(clone(testData.gltf), {
             outputPath : outputPath,
             embed : true,
             embedImage : false,
@@ -134,8 +129,7 @@ describe('writeBinaryGltf', function() {
             expect(bufferEqual(binaryBody, body)).toBe(true);
         });
 
-        writeBinaryGltf({
-            gltf : clone(testData.gltf),
+        writeBinaryGltf(clone(testData.gltf), {
             outputPath : outputPath,
             embed : false,
             embedImage : true,
@@ -145,8 +139,7 @@ describe('writeBinaryGltf', function() {
             expect(bufferEqual(binaryBody, body)).toBe(true);
         });
 
-        writeBinaryGltf({
-            gltf : clone(testData.gltf),
+        writeBinaryGltf(clone(testData.gltf), {
             outputPath : outputPath,
             embed : false,
             embedImage : false,
@@ -159,13 +152,17 @@ describe('writeBinaryGltf', function() {
     
     it('throws an invalid output path error', function() {
         expect(function() {
-            writeBinaryGltf(clone(testData.gltf), undefined, true);
+            writeBinaryGltf(clone(testData.gltf), {
+                outputPath : undefined
+            }, true);
         }).toThrowError('Output path is undefined.');
     });
     
     it('throws an invalid output extension error', function() {
         expect(function() {
-            writeBinaryGltf(clone(testData.gltf), invalidPath, true);
+            writeBinaryGltf(clone(testData.gltf), {
+                outputPath : invalidPath
+            }, true);
         }).toThrowError('Invalid output path extension.');
     });
 });
