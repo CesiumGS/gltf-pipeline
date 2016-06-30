@@ -14,6 +14,7 @@ var bufferPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.bin'
 var imagePath = './specs/data/boxTexturedUnoptimized/Cesium_Logo_Flat_Binary.png';
 var fragmentShaderPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest0FS_Binary.glsl';
 var vertexShaderPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest0VS_Binary.glsl';
+var invalidPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf';
 
 describe('writeBinaryGltf', function() {
     var testData = {
@@ -89,5 +90,17 @@ describe('writeBinaryGltf', function() {
             var binaryBody = Buffer.concat([testData.buffer, testData.fragmentShader, testData.vertexShader, testData.image]);
             expect(bufferEqual(binaryBody, body)).toBe(true);
         })
+    });
+    
+    it('throws an invalid output path error', function() {
+        expect(function() {
+            writeBinaryGltf(clone(testData.gltf), undefined, true);
+        }).toThrowError('Output path is undefined.');
+    });
+    
+    it('throws an invalid output extension error', function() {
+        expect(function() {
+            writeBinaryGltf(clone(testData.gltf), invalidPath, true);
+        }).toThrowError('Invalid output path extension.');
     });
 });
