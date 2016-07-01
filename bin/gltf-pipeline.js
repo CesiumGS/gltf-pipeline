@@ -18,10 +18,11 @@ if (process.argv.length < 3 || defined(argv.h) || defined(argv.help)) {
         '  -q --quantize, quantize the attributes of this model.\n' +
         '  -n --encodeNormals, oct-encode the normals of this model.\n' +
         '  -c --compressTextureCoordinates, compress the texture coordinates of this model.\n' +
-        '  --ao.toTexture: Bake AO to existing diffuse textures instead of to vertices. Does not modify shaders. Deactivated by default.\n' +
-        '  --ao.groundPlane: Add a groundplane at the lowest point of the model for AO computation. Deactivated by default.\n' +
-        '  --ao.ambientShadowContribution: amount of AO to show when blending between shader computed lighting and AO. 1.0 is full AO, 0.5 is a 50/50 blend. Default: 0.5\n' +
-        '  --ao.quality: Valid settings are high, medium, and low. Default: medium\n';
+        '  --ao: Bake ambient occlusion to vertex data using default settings if no others are specified. Default: inactive.\n' +
+        '  --ao.toTexture: Bake AO to existing diffuse textures instead of to vertices. Does not modify shaders. Default: inactive.\n' +
+        '  --ao.groundPlane: Simulate a groundplane at the lowest point of the model when baking AO. Default: inactive.\n' +
+        '  --ao.ambientShadowContribution: Amount of AO to show when blending between shader computed lighting and AO. 1.0 is full AO, 0.5 is a 50/50 blend. Default: 0.5\n' +
+        '  --ao.quality: Valid settings are high, medium, and low. Default: low\n';
 
     process.stdout.write(help);
     return;
