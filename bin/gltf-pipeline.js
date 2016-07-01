@@ -17,8 +17,8 @@ if (process.argv.length < 3 || defined(argv.h) || defined(argv.help)) {
         '  -s --separate, writes out separate geometry/animation data files, shader files and textures instead of embedding them in the glTF file.\n' +
         '  -t --separateImage, write out separate textures, but embed geometry/animation data files, and shader files.\n' +
         '  -q, quantize the attributes of this model.\n' +
-        '  --ao.toTexture: Bake AO to existing diffuse textures instead of to vertices. Does not modify shaders.\n' +
-        '  --ao.groundPlane: Add a groundplane at the lowest point of the model for AO computation.\n' +
+        '  --ao.toTexture: Bake AO to existing diffuse textures instead of to vertices. Does not modify shaders. Deactivated by default.\n' +
+        '  --ao.groundPlane: Add a groundplane at the lowest point of the model for AO computation. Deactivated by default.\n' +
         '  --ao.ambientShadowContribution: amount of AO to show when blending between shader computed lighting and AO. 1.0 is full AO, 0.5 is a 50/50 blend. Default: 0.5\n' +
         '  --ao.quality: Valid settings are high, medium, and low. Default: medium\n';
     process.stdout.write(help);

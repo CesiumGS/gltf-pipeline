@@ -232,12 +232,13 @@ describe('bakeAmbientOcclusion', function() {
     };
 
     it('correctly processes a basic 2-triangle square primitive', function() {
-        var scene = testGltf.scenes[testGltf.scene];
         var options = {
             resolution : 10,
-            toTexture : true
+            toTexture : true,
+            sceneID : testGltf.scene,
+            gltfWithExtras : testGltf
         };
-        var raytracerScene = bakeAmbientOcclusion.generateRaytracerScene(testGltf, scene, options);
+        var raytracerScene = bakeAmbientOcclusion.generateRaytracerScene(options);
         var triangleSoup = raytracerScene.triangleSoup;
 
         // because of the uniform scale, expect triangles to be bigger
@@ -268,13 +269,14 @@ describe('bakeAmbientOcclusion', function() {
     });
 
     it('correctly generates a ground plane just below the minimum of the scene.', function() {
-        var scene = testGltf.scenes[testGltf.scene];
         var options = {
             rayDistance : 1.0,
             groundPlane : true,
-            nearCull : CesiumMath.EPSILON4
+            nearCull : CesiumMath.EPSILON4,
+            sceneID : testGltf.scene,
+            gltfWithExtras : testGltf
         };
-        var raytracerScene = bakeAmbientOcclusion.generateRaytracerScene(testGltf, scene, options);
+        var raytracerScene = bakeAmbientOcclusion.generateRaytracerScene(options);
         var triangleSoup = raytracerScene.triangleSoup;
 
         // ground plane size is based on the near culling distance, scene size, and maximum ray depth.
@@ -370,9 +372,10 @@ describe('bakeAmbientOcclusion', function() {
         var options = {
             numberRays: 0,
             resolution: 4,
-            toTexture: true
+            toTexture: true,
+            gltfWithExtras: boxOverGroundGltfClone
         };
-        bakeAmbientOcclusion.bakeAmbientOcclusion(boxOverGroundGltfClone, options);
+        bakeAmbientOcclusion.bakeAmbientOcclusion(options);
 
         expect(Object.keys(boxOverGroundGltfClone.images).length).toEqual(2);
         expect(Object.keys(boxOverGroundGltfClone.textures).length).toEqual(2);
@@ -398,9 +401,10 @@ describe('bakeAmbientOcclusion', function() {
         var options = {
             numberRays: 0,
             resolution: 4,
-            toTexture: true
+            toTexture: true,
+            gltfWithExtras: boxOverGroundGltfClone
         };
-        bakeAmbientOcclusion.bakeAmbientOcclusion(boxOverGroundGltfClone, options);
+        bakeAmbientOcclusion.bakeAmbientOcclusion(options);
 
         expect(Object.keys(boxOverGroundGltfClone.images).length).toEqual(2);
         expect(Object.keys(boxOverGroundGltfClone.textures).length).toEqual(2);
@@ -426,9 +430,10 @@ describe('bakeAmbientOcclusion', function() {
         var options = {
             numberRays: 0,
             resolution: 4,
-            toTexture: true
+            toTexture: true,
+            gltfWithExtras: boxOverGroundGltfClone
         };
-        bakeAmbientOcclusion.bakeAmbientOcclusion(boxOverGroundGltfClone, options);
+        bakeAmbientOcclusion.bakeAmbientOcclusion(options);
 
         expect(Object.keys(boxOverGroundGltfClone.images).length).toEqual(3); // 1 unused image and 2 images with AO
         expect(Object.keys(boxOverGroundGltfClone.textures).length).toEqual(2);
@@ -456,9 +461,10 @@ describe('bakeAmbientOcclusion', function() {
         var options = {
             numberRays: 0,
             resolution: 4,
-            toTexture: true
+            toTexture: true,
+            gltfWithExtras: boxOverGroundGltfClone
         };
-        bakeAmbientOcclusion.bakeAmbientOcclusion(boxOverGroundGltfClone, options);
+        bakeAmbientOcclusion.bakeAmbientOcclusion(options);
 
         expect(Object.keys(boxOverGroundGltfClone.images).length).toEqual(3); // 1 unused image and 2 with AO
         expect(Object.keys(boxOverGroundGltfClone.textures).length).toEqual(3); // 1 unused texture, 2 with AO
@@ -482,9 +488,10 @@ describe('bakeAmbientOcclusion', function() {
         var options = {
             numberRays: 0,
             resolution: 4,
-            toTexture: true
+            toTexture: true,
+            gltfWithExtras: boxOverGroundGltfClone
         };
-        bakeAmbientOcclusion.bakeAmbientOcclusion(boxOverGroundGltfClone, options);
+        bakeAmbientOcclusion.bakeAmbientOcclusion(options);
 
         expect(Object.keys(boxOverGroundGltfClone.images).length).toEqual(3); // 1 unused image and 2 images with AO
         expect(Object.keys(boxOverGroundGltfClone.textures).length).toEqual(3); // 1 unused texture, 2 with AO
@@ -496,9 +503,10 @@ describe('bakeAmbientOcclusion', function() {
 
         var options = {
             numberRays: 0,
-            toVertex: true
+            toVertex: true,
+            gltfWithExtras: boxOverGroundGltfClone
         };
-        bakeAmbientOcclusion.bakeAmbientOcclusion(boxOverGroundGltfClone, options);
+        bakeAmbientOcclusion.bakeAmbientOcclusion(options);
 
         expect(Object.keys(boxOverGroundGltfClone.accessors).length).toEqual(10);
         var cubeMeshPrimitives = boxOverGroundGltfClone.meshes.Cube_mesh.primitives;
@@ -514,9 +522,10 @@ describe('bakeAmbientOcclusion', function() {
 
         var options = {
             numberRays: 0,
-            toVertex: true
+            toVertex: true,
+            gltfWithExtras: boxOverGroundGltfClone
         };
-        bakeAmbientOcclusion.bakeAmbientOcclusion(boxOverGroundGltfClone, options);
+        bakeAmbientOcclusion.bakeAmbientOcclusion(options);
 
         expect(Object.keys(boxOverGroundGltfClone.materials).length).toEqual(4);
         expect(Object.keys(boxOverGroundGltfClone.techniques).length).toEqual(2);
@@ -631,8 +640,12 @@ describe('bakeAmbientOcclusion', function() {
         expect(CesiumMath.equalsEpsilon(samples[2], counts[2], CesiumMath.EPSILON7)).toEqual(false);
     });
 
-    it ('generates options given nothing or just a quality setting', function() {
-        var options = bakeAmbientOcclusion.generateOptions(boxOverGroundGltf);
+    it ('generates options given nothing but a gltf or just a quality setting', function() {
+        var aoOptions = {
+            gltfWithExtras: boxOverGroundGltf
+        };
+
+        var options = bakeAmbientOcclusion.generateOptions(aoOptions);
         expect(options.toTexture).toEqual(false);
         expect(options.groundPlane).toEqual(false);
         expect(options.ambientShadowContribution).toEqual(0.5);
@@ -645,10 +658,11 @@ describe('bakeAmbientOcclusion', function() {
         expect(options.shaderMode).toEqual('blend');
         expect(options.sceneID).toEqual('defaultScene');
 
-        var aoOptions = {
-            quality: 'medium'
+        aoOptions = {
+            quality: 'medium',
+            gltfWithExtras: boxOverGroundGltf
         };
-        options = bakeAmbientOcclusion.generateOptions(boxOverGroundGltf, aoOptions);
+        options = bakeAmbientOcclusion.generateOptions(aoOptions);
         expect(options.toTexture).toEqual(false);
         expect(options.groundPlane).toEqual(false);
         expect(options.ambientShadowContribution).toEqual(0.5);
@@ -662,9 +676,10 @@ describe('bakeAmbientOcclusion', function() {
         expect(options.sceneID).toEqual('defaultScene');
 
         aoOptions = {
-            quality: 'high'
+            quality: 'high',
+            gltfWithExtras: boxOverGroundGltf
         };
-        options = bakeAmbientOcclusion.generateOptions(boxOverGroundGltf, aoOptions);
+        options = bakeAmbientOcclusion.generateOptions(aoOptions);
         expect(options.toTexture).toEqual(false);
         expect(options.groundPlane).toEqual(false);
         expect(options.ambientShadowContribution).toEqual(0.5);
@@ -683,9 +698,10 @@ describe('bakeAmbientOcclusion', function() {
             quality: 'medium',
             toTexture: true,
             triangleCenterOnly: true,
-            rayDistance: 10.0
+            rayDistance: 10.0,
+            gltfWithExtras: boxOverGroundGltf
         };
-        var options = bakeAmbientOcclusion.generateOptions(boxOverGroundGltf, aoOptions);
+        var options = bakeAmbientOcclusion.generateOptions(aoOptions);
         expect(options.toTexture).toEqual(true);
         expect(options.groundPlane).toEqual(false);
         expect(options.ambientShadowContribution).toEqual(0.5);
