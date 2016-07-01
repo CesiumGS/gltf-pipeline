@@ -231,12 +231,13 @@ describe('bakeAmbientOcclusion', function() {
         }
     };
 
-    it('correctly processes a basic 2-triangle square primitive', function() {
+    fit('correctly processes a basic 2-triangle square primitive', function() {
         var options = {
             resolution : 10,
             toTexture : true,
             sceneID : testGltf.scene,
-            gltfWithExtras : testGltf
+            gltfWithExtras : testGltf,
+            rayDistance : -1 // compute ray distance from AABB
         };
         var raytracerScene = bakeAmbientOcclusion.generateRaytracerScene(options);
         var triangleSoup = raytracerScene.triangleSoup;
@@ -266,6 +267,9 @@ describe('bakeAmbientOcclusion', function() {
         var aoBuffer = aoBuffersByPrimitive.mesh_square_0;
         expect(aoBuffer).toBeDefined();
         expect(aoBuffer.resolution).toEqual(10);
+
+        // check generated ray distance
+        expect(raytracerScene.rayDistance).toEqual(0.0); // 20% of the smallest AABB dimension
     });
 
     it('correctly generates a ground plane just below the minimum of the scene.', function() {
@@ -653,7 +657,7 @@ describe('bakeAmbientOcclusion', function() {
         expect(options.resolution).toEqual(128);
         expect(options.numberRays).toEqual(16);
         expect(options.triangleCenterOnly).toEqual(false);
-        expect(options.rayDistance).toEqual(1.0);
+        expect(options.rayDistance).toEqual(-1);
         expect(options.nearCull).toEqual(0.0001);
         expect(options.shaderMode).toEqual('blend');
         expect(options.sceneID).toEqual('defaultScene');
@@ -670,7 +674,7 @@ describe('bakeAmbientOcclusion', function() {
         expect(options.resolution).toEqual(256);
         expect(options.numberRays).toEqual(36);
         expect(options.triangleCenterOnly).toEqual(false);
-        expect(options.rayDistance).toEqual(1.0);
+        expect(options.rayDistance).toEqual(-1);
         expect(options.nearCull).toEqual(0.0001);
         expect(options.shaderMode).toEqual('blend');
         expect(options.sceneID).toEqual('defaultScene');
@@ -687,7 +691,7 @@ describe('bakeAmbientOcclusion', function() {
         expect(options.resolution).toEqual(512);
         expect(options.numberRays).toEqual(64);
         expect(options.triangleCenterOnly).toEqual(false);
-        expect(options.rayDistance).toEqual(1.0);
+        expect(options.rayDistance).toEqual(-1);
         expect(options.nearCull).toEqual(0.0001);
         expect(options.shaderMode).toEqual('blend');
         expect(options.sceneID).toEqual('defaultScene');
