@@ -3,6 +3,7 @@ var Cesium = require('cesium');
 var CesiumMath = Cesium.Math;
 var Cartesian3 = Cesium.Cartesian3;
 var bakeAmbientOcclusion = require('../../lib/bakeAmbientOcclusion');
+var buildTriangleStaticUniformGrid = require('./../../lib/buildTriangleStaticUniformGrid');
 var clone = require('clone');
 var NodeHelpers = require('../../lib/NodeHelpers');
 var readGltf = require('../../lib/readGltf');
@@ -202,20 +203,22 @@ describe('bakeAmbientOcclusion', function() {
     var point3 = new Cartesian3(0.0, 1.0, 0.0);
 
     var tetrahedron = [
-        {positions: [point0, point1, point2]},
-        {positions: [point0, point1, point3]},
-        {positions: [point1, point2, point3]},
-        {positions: [point2, point0, point3]}
+        [point0, point1, point2],
+        [point0, point1, point3],
+        [point1, point2, point3],
+        [point2, point0, point3]
     ];
+
+    var tetrahedronGrid = buildTriangleStaticUniformGrid(tetrahedron, 10.0);
 
     it('correctly processes a basic 2-triangle square primitive', function() {
         var scene = testGltf.scenes[testGltf.scene];
         var options = {
-            rayDepth : 0.1,
+            rayDepth : 10.0, // force the uniform grid to be a single huge cell
             resolution : 10
         };
         var raytracerScene = bakeAmbientOcclusion.generateRaytracerScene(testGltf, scene, options);
-        var triangleSoup = raytracerScene.triangleSoup;
+        var triangleUniformGrid = raytracerScene.triangleUniformGrid;
 
         // because of the uniform scale, expect triangles to be bigger
         var point0 = new Cartesian3(0.0, 0.0, 0.0);
@@ -225,18 +228,19 @@ describe('bakeAmbientOcclusion', function() {
         var normal = new Cartesian3(0.0, 0.0, 1.0);
 
         ////////// check triangle soup //////////
-        expect(triangleSoup.length).toEqual(2);
+        var triangles = triangleUniformGrid.data;
+        expect(triangles.length).toEqual(2);
 
-        var triangle0 = triangleSoup[0];
-        var triangle1 = triangleSoup[1];
+        var triangle0 = triangles[0];
+        var triangle1 = triangles[1];
 
-        expect(Cartesian3.equalsEpsilon(triangle0.positions[0], point0, CesiumMath.EPSILON7)).toEqual(true);
-        expect(Cartesian3.equalsEpsilon(triangle0.positions[1], point1, CesiumMath.EPSILON7)).toEqual(true);
-        expect(Cartesian3.equalsEpsilon(triangle0.positions[2], point2, CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian3.equalsEpsilon(triangle0[0], point0, CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian3.equalsEpsilon(triangle0[1], point1, CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian3.equalsEpsilon(triangle0[2], point2, CesiumMath.EPSILON7)).toEqual(true);
 
-        expect(Cartesian3.equalsEpsilon(triangle1.positions[0], point0, CesiumMath.EPSILON7)).toEqual(true);
-        expect(Cartesian3.equalsEpsilon(triangle1.positions[1], point2, CesiumMath.EPSILON7)).toEqual(true);
-        expect(Cartesian3.equalsEpsilon(triangle1.positions[2], point3, CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian3.equalsEpsilon(triangle1[0], point0, CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian3.equalsEpsilon(triangle1[1], point2, CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian3.equalsEpsilon(triangle1[2], point3, CesiumMath.EPSILON7)).toEqual(true);
 
         // check ao buffers
         var aoBuffersByPrimitive = raytracerScene.aoBufferByPrimitive;
@@ -275,7 +279,7 @@ describe('bakeAmbientOcclusion', function() {
             var texel = texelPoints[i];
             bakeAmbientOcclusion.computeAmbientOcclusionAt(
                 texel.position, texel.normal, 16, 4,
-                tetrahedron, 0.001, 10.0, aoBuffer, texel.index);
+                tetrahedronGrid, 0.001, 10.0, aoBuffer, texel.index);
         }
 
         var samples = aoBuffer.samples;
@@ -288,6 +292,8 @@ describe('bakeAmbientOcclusion', function() {
 
     it('generates various levels of occlusion for samples in the mouth of an open tetrahedron', function() {
         var openTetrahedron = [tetrahedron[1], tetrahedron[2], tetrahedron[3]];
+
+        var openTetrahedronGrid = buildTriangleStaticUniformGrid(openTetrahedron, 10.0);
 
         var aoBuffer = {
             resolution: 2,
@@ -322,7 +328,7 @@ describe('bakeAmbientOcclusion', function() {
             var texel = texelPoints[i];
             bakeAmbientOcclusion.computeAmbientOcclusionAt(
                 texel.position, texel.normal, 16, 4,
-                openTetrahedron, 0.001, 10.0, aoBuffer, texel.index);
+                openTetrahedronGrid, 0.001, 10.0, aoBuffer, texel.index);
         }
 
         var samples = aoBuffer.samples;
