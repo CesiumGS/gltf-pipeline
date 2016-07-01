@@ -231,7 +231,7 @@ describe('bakeAmbientOcclusion', function() {
         }
     };
 
-    fit('correctly processes a basic 2-triangle square primitive', function() {
+    it('correctly processes a basic 2-triangle square primitive', function() {
         var options = {
             resolution : 10,
             toTexture : true,
