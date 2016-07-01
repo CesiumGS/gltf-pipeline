@@ -10,7 +10,7 @@ var singleDuplicatePath = './specs/data/dagToTree/DagTestSingleDuplicate.gltf';
 var subgraphDuplicatePath = './specs/data/dagToTree/DagTestSubgraphDuplicate.gltf';
 var twoRootsPath = './specs/data/dagToTree/DagTestTwoRoots.gltf';
 
-describe('writeBinaryGltf', function() {
+describe('convertDagToTree', function() {
     var testDags = {
         singleNode: singleNodePath,
         tree: treePath,
