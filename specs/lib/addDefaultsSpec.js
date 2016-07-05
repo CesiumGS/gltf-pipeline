@@ -4,7 +4,6 @@ var addDefaults = require('../../lib/addDefaults');
 var Cesium = require('cesium');
 var clone = require('clone');
 var WebGLConstants = Cesium.WebGLConstants;
-var defined = Cesium.defined;
 
 describe('addDefaults', function() {
     it('Adds accessor properties', function() {
@@ -42,7 +41,7 @@ describe('addDefaults', function() {
                     ],
                     "parameters": {
                         "TIME": "timeAccessorId",
-                        "rotation": "rotationAccessorId",
+                        "rotation": "rotationAccessorId"
                     },
                     "samplers": {
                         "samplerId": {
@@ -178,23 +177,26 @@ describe('addDefaults', function() {
             diffuseTechnique: 'CONSTANT'
         };
 
+        var gltfClone;
+        var materialID;
+
         // default lambert
-        var gltfClone = clone(gltf);
+        gltfClone = clone(gltf);
         addDefaults(gltfClone);
         expect(Object.keys(gltfClone.materials).length > 0).toEqual(true);
         expect(Object.keys(gltfClone.techniques).length > 0).toEqual(true);
-        for (var materialID in gltfClone.materials) {
+        for (materialID in gltfClone.materials) {
             if (gltf.materials.hasOwnProperty(materialID)) {
                 expect(gltfClone.materials[materialID].values).toEqual(expectValues);
             }
         }
 
         // constant
-        var gltfClone = clone(gltf);
+        gltfClone = clone(gltf);
         addDefaults(gltfClone, options);
         expect(Object.keys(gltfClone.materials).length > 0).toEqual(true);
         expect(Object.keys(gltfClone.techniques).length > 0).toEqual(true);
-        for (var materialID in gltfClone.materials) {
+        for (materialID in gltfClone.materials) {
             if (gltf.materials.hasOwnProperty(materialID)) {
                 expect(gltfClone.materials[materialID].values).toEqual(expectValues);
             }
@@ -229,7 +231,7 @@ describe('addDefaults', function() {
         addDefaults(gltfClone);
         expect(Object.keys(gltfClone.materials).length > 0).toEqual(true);
         expect(Object.keys(gltfClone.techniques).length > 0).toEqual(true);
-        for (var materialID in gltfClone.materials) {
+        for (materialID in gltfClone.materials) {
             if (gltfClone.materials.hasOwnProperty(materialID)) {
                 expect(gltfClone.materials[materialID].values).toEqual(expectValues);
             }
@@ -240,7 +242,7 @@ describe('addDefaults', function() {
         addDefaults(gltfClone, options);
         expect(Object.keys(gltfClone.materials).length > 0).toEqual(true);
         expect(Object.keys(gltfClone.techniques).length > 0).toEqual(true);
-        for (var materialID in gltfClone.materials) {
+        for (materialID in gltfClone.materials) {
             if (gltf.materials.hasOwnProperty(materialID)) {
                 expect(gltfClone.materials[materialID].values).toEqual(expectValues);
             }
@@ -273,7 +275,7 @@ describe('addDefaults', function() {
                     "children": [],
                     "extensions": {
                         "KHR_materials_common": {
-                            "light": "ambientLight",
+                            "light": "ambientLight"
                         }
                     }
                 },
@@ -281,7 +283,7 @@ describe('addDefaults', function() {
                     "children": [],
                     "extensions": {
                         "KHR_materials_common": {
-                            "light": "directionalLight",
+                            "light": "directionalLight"
                         }
                     }
                 },
@@ -289,7 +291,7 @@ describe('addDefaults', function() {
                     "children": [],
                     "extensions": {
                         "KHR_materials_common": {
-                            "light": "pointLight",
+                            "light": "pointLight"
                         }
                     }
                 },
@@ -297,10 +299,10 @@ describe('addDefaults', function() {
                     "children": [],
                     "extensions": {
                         "KHR_materials_common": {
-                            "light": "spotLight",
+                            "light": "spotLight"
                         }
                     }
-                },
+                }
 
             },
             "extensionsUsed": [
@@ -383,6 +385,31 @@ describe('addDefaults', function() {
         }
     });
 
+    it('modelMaterialCommon uses the Cesium sun as its default light source when the optimizeForCesium flag is set', function() {
+        var gltf = {
+            "materials": {
+                "material1": {
+                    "values": {
+                        "ambient": [0, 0, 0, 1],
+                        "diffuse": "texture_file2",
+                        "emission": [1, 0, 0, 1]
+                    }
+                }
+            }
+        };
+
+        var gltfClone = clone(gltf);
+        addDefaults(gltfClone, {
+            optimizeForCesium : true
+        });
+        var fragmentShaderSource = gltfClone.shaders.fragmentShader0.extras._pipeline.source;
+        expect(fragmentShaderSource.indexOf('czm_sunDirectionEC') > -1).toBe(true);
+
+        gltfClone = clone(gltf);
+        addDefaults(gltfClone);
+        fragmentShaderSource = gltfClone.shaders.fragmentShader0.extras._pipeline.source;
+        expect(fragmentShaderSource.indexOf('czm_sunDirectionEC') > -1).toBe(false);
+    });
 
     it('Adds mesh properties', function() {
         var gltf = {
