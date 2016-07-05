@@ -5,6 +5,7 @@ var defined = Cesium.defined;
 var Cartesian2 = Cesium.Cartesian2;
 var Cartesian3 = Cesium.Cartesian3;
 var Cartesian4 = Cesium.Cartesian4;
+var WebGLConstants = Cesium.WebGLConstants;
 
 var fs = require('fs');
 var path = require('path');
@@ -28,40 +29,38 @@ describe('readAccessor', function() {
     });
 
 
-    function testContainmentAndFit(min, max, attributes) {
+    function testContainmentAndFit(min, max, data, type) {
         // check if the data in values is bounded by min and max precisely
         var minInValues = new Array(min.length).fill(Number.POSITIVE_INFINITY);
         var maxInValues = new Array(max.length).fill(Number.NEGATIVE_INFINITY);
         var attributeToArray;
         var scratchArray = [];
 
-        switch(attributes.type) {
-            case 'number':
+        switch(type) {
+            case WebGLConstants.FLOAT:
                 attributeToArray = function(value) {
                     return [value];
                 };
                 break;
-            case 'Cartesian2':
+            case WebGLConstants.FLOAT_VEC2:
                 attributeToArray = function(value) {
                     Cartesian2.pack(value, scratchArray);
                     return scratchArray;
                 };
                 break;
-            case 'Cartesian3':
+            case WebGLConstants.FLOAT_VEC3:
                 attributeToArray = function(value) {
                     Cartesian3.pack(value, scratchArray);
                     return scratchArray;
                 };
                 break;
-            case 'Cartesian4':
+            case WebGLConstants.FLOAT_VEC4:
                 attributeToArray = function(value) {
                     Cartesian4.pack(value, scratchArray);
                     return scratchArray;
                 };
                 break;
         }
-
-        var data = attributes.data;
 
         for (var i = 0; i < data.length; i++) {
             var values = attributeToArray(data[i]);
@@ -87,13 +86,17 @@ describe('readAccessor', function() {
     it('reads all the attributes in an accessor correctly', function() {
         var testBoxGltf = clone(boxGltf);
         var accessorIDtoData = {};
+        var accessorIDtoType = {};
         var accessorIDtoMinMax = {};
 
         var allAccessors = testBoxGltf.accessors;
         for (var accessorID in allAccessors) {
             if (allAccessors.hasOwnProperty(accessorID)) {
                 var accessor = allAccessors[accessorID];
-                accessorIDtoData[accessorID] = readAccessor(testBoxGltf, accessor);
+                var accessorData = [];
+                var type = readAccessor(testBoxGltf, accessor, accessorData);
+                accessorIDtoData[accessorID] = accessorData;
+                accessorIDtoType[accessorID] = type;
                 if (defined(accessor.min) && defined(accessor.max)) {
                     accessorIDtoMinMax[accessorID] = {
                         min : accessor.min,
@@ -108,7 +111,7 @@ describe('readAccessor', function() {
             if (accessorIDtoMinMax.hasOwnProperty(accessorID)) {
                 if (accessorIDtoData.hasOwnProperty(accessorID)) {
                     var minMax = accessorIDtoMinMax[accessorID];
-                    expect(testContainmentAndFit(minMax.min, minMax.max, accessorIDtoData[accessorID])).toEqual(true);
+                    expect(testContainmentAndFit(minMax.min, minMax.max, accessorIDtoData[accessorID], accessorIDtoType[accessorID])).toEqual(true);
                 }
             }
         }
