@@ -326,9 +326,14 @@ describe('bakeAmbientOcclusion', function() {
 
         for (i = 0; i < 6; i++) {
             var texel = texelPoints[i];
-            samples[i] = bakeAmbientOcclusion.computeAmbientOcclusionAt(
-                texel.position, texel.normal, 16, 4,
-                tetrahedron, 0.001, 10.0);
+            samples[i] = bakeAmbientOcclusion.computeAmbientOcclusionAt({
+                position : texel.position,
+                normal : texel.normal,
+                numberRays : 16,
+                sqrtNumberRays : 4,
+                triangles : tetrahedron,
+                nearCull : 0.001,
+                rayDistance : 10.0});
         }
 
         for (i = 0; i < 6; i++) {
@@ -360,9 +365,14 @@ describe('bakeAmbientOcclusion', function() {
 
         for (var i = 0; i < 3; i++) {
             var texel = texelPoints[i];
-            samples[i] += bakeAmbientOcclusion.computeAmbientOcclusionAt(
-                texel.position, texel.normal, 16, 4,
-                openTetrahedron, 0.001, 10.0);
+            samples[i] += bakeAmbientOcclusion.computeAmbientOcclusionAt({
+                position : texel.position,
+                normal : texel.normal,
+                numberRays : 16,
+                sqrtNumberRays : 4,
+                triangles : openTetrahedron,
+                nearCull : 0.001,
+                rayDistance : 10.0});
         }
 
         expect(samples[0]).toEqual(16);
