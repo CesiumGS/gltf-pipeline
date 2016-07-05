@@ -5,7 +5,7 @@ var CesiumMath = Cesium.Math;
 var StaticUniformGrid = require('../../lib/StaticUniformGrid');
 
 describe('StaticUniformGrid', function() {
-    function pointDataAABBFunction(point, min, max) {
+    function pointDataAxisAlignedBoundingBox(point, min, max) {
         min.x = Math.min(min.x, point[0]);
         min.y = Math.min(min.y, point[1]);
         min.z = Math.min(min.z, point[2]);
@@ -14,14 +14,14 @@ describe('StaticUniformGrid', function() {
         max.z = Math.max(max.z, point[2]);
     }
 
-    function pointDataCellCheckFunction(point, position, stepWidth) {
+    function pointDataCellCheck(point, cellMin, cellWidth) {
         return (
-            point[0] >= position.x &&
-            point[1] >= position.y &&
-            point[2] >= position.z &&
-            point[0] <= position.x + stepWidth &&
-            point[1] <= position.y + stepWidth &&
-            point[2] <= position.z + stepWidth
+            point[0] >= cellMin.x &&
+            point[1] >= cellMin.y &&
+            point[2] >= cellMin.z &&
+            point[0] <= cellMin.x + cellWidth &&
+            point[1] <= cellMin.y + cellWidth &&
+            point[2] <= cellMin.z + cellWidth
         );
     }
 
@@ -55,6 +55,20 @@ describe('StaticUniformGrid', function() {
         return naiveNeighbors;
     }
 
+    var manyTriangles = [];
+
+    for (var z = 0; z < 5; z++) {
+        for (var y = 0; y < 5; y++) {
+            for (var x = 0; x < 5; x++) {
+                manyTriangles.push([
+                    new Cartesian3(x, y, z),
+                    new Cartesian3(x, y, z + 0.5),
+                    new Cartesian3(x, y + 0.5, z)
+                ]);
+            }
+        }
+    }
+
     var cartesian3Scratch = new Cartesian3();
 
     it('populates a uniform grid with cells based on the center of the data AABB and the resolution', function() {
@@ -66,14 +80,14 @@ describe('StaticUniformGrid', function() {
             [7,17,87] // last cell
         ];
 
-        var grid = new StaticUniformGrid(pointData, 3.0, pointDataAABBFunction, pointDataCellCheckFunction);
+        var grid = new StaticUniformGrid(pointData, 3.0, pointDataAxisAlignedBoundingBox, pointDataCellCheck);
         expect(grid.cellWidth).toEqual(3.0);
 
         var expectedCenter = cartesian3Scratch;
         expectedCenter.x = 4.0;
         expectedCenter.y = 9.0;
         expectedCenter.z = 44.0;
-        expect(Cartesian3.equalsEpsilon(expectedCenter, grid.AABB.center, CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian3.equalsEpsilon(expectedCenter, grid.axisAlignedBoundingBox.center, CesiumMath.EPSILON7)).toEqual(true);
 
         expect(grid.resolution.x).toEqual(3);
         expect(grid.resolution.y).toEqual(6);
@@ -83,13 +97,13 @@ describe('StaticUniformGrid', function() {
         expectedMin.x = -0.5;
         expectedMin.y = 0.0;
         expectedMin.z = 0.5;
-        expect(Cartesian3.equalsEpsilon(expectedMin, grid.AABB.minimum, CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian3.equalsEpsilon(expectedMin, grid.axisAlignedBoundingBox.minimum, CesiumMath.EPSILON7)).toEqual(true);
 
         var expectedMax = cartesian3Scratch;
         expectedMax.x = 8.5;
         expectedMax.y = 18;
         expectedMax.z = 87.5;
-        expect(Cartesian3.equalsEpsilon(expectedMax, grid.AABB.maximum, CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian3.equalsEpsilon(expectedMax, grid.axisAlignedBoundingBox.maximum, CesiumMath.EPSILON7)).toEqual(true);
 
         // check contents
         var cellIndices = grid.cellIndices;
@@ -126,7 +140,7 @@ describe('StaticUniformGrid', function() {
         pointData.push([0.1, 0.1, 0.1]);
         pointData.push([1.5, 1.5, 1.5]);
 
-        var grid = new StaticUniformGrid(pointData, 1.0, pointDataAABBFunction, pointDataCellCheckFunction);
+        var grid = new StaticUniformGrid(pointData, 1.0, pointDataAxisAlignedBoundingBox, pointDataCellCheck);
 
         expect(grid.resolution.x).toEqual(4);
         expect(grid.resolution.y).toEqual(4);
@@ -136,13 +150,13 @@ describe('StaticUniformGrid', function() {
         expectedMin.x = -0.5;
         expectedMin.y = -0.5;
         expectedMin.z = -0.5;
-        expect(Cartesian3.equalsEpsilon(expectedMin, grid.AABB.minimum, CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian3.equalsEpsilon(expectedMin, grid.axisAlignedBoundingBox.minimum, CesiumMath.EPSILON7)).toEqual(true);
 
         var expectedMax = cartesian3Scratch;
         expectedMax.x = 3.5;
         expectedMax.y = 3.5;
         expectedMax.z = 3.5;
-        expect(Cartesian3.equalsEpsilon(expectedMax, grid.AABB.maximum, CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian3.equalsEpsilon(expectedMax, grid.axisAlignedBoundingBox.maximum, CesiumMath.EPSILON7)).toEqual(true);
 
         var samplePosition = cartesian3Scratch;
         samplePosition.x = 1.7;
@@ -185,5 +199,69 @@ describe('StaticUniformGrid', function() {
         fastNeighbors.sort(width5IndexSort);
 
         expect(fastNeighbors).toEqual(naiveNeighbors);
+    });
+
+    it('builds a grid containing triangles, which are lists of Cartesian3s', function() {
+        var grid = StaticUniformGrid.fromTriangleSoup(manyTriangles, 1.0);
+
+        expect(grid.resolution.x).toEqual(5);
+        expect(grid.resolution.y).toEqual(5);
+        expect(grid.resolution.z).toEqual(5);
+
+        var expectedMin = cartesian3Scratch;
+        expectedMin.x = -0.5;
+        expectedMin.y = -0.25;
+        expectedMin.z = -0.25;
+        expect(Cartesian3.equalsEpsilon(expectedMin, grid.axisAlignedBoundingBox.minimum, CesiumMath.EPSILON7)).toEqual(true);
+
+        var expectedMax = cartesian3Scratch;
+        expectedMax.x = 4.5;
+        expectedMax.y = 4.75;
+        expectedMax.z = 4.75;
+        expect(Cartesian3.equalsEpsilon(expectedMax, grid.axisAlignedBoundingBox.maximum, CesiumMath.EPSILON7)).toEqual(true);
+
+        var cellIndices = grid.cellIndices;
+        var cellCounts = grid.cellCounts;
+        var triangleData = grid.data;
+        var cellCount = 125;
+        for (var i = 0; i < cellCount; i++) {
+            expect(cellIndices[i]).toEqual(i);
+            expect(cellCounts[i]).toEqual(1);
+            expect(triangleData[i]).toEqual(manyTriangles[i]);
+        }
+    });
+
+    it('bins trangles that span cells in more than one cell', function() {
+        var corner0 = new Cartesian3(0.0, 0.0, 0.0);
+        var corner1 = new Cartesian3(0.0, 9.0, 0.0);
+        var corner2 = new Cartesian3(9.0, 9.0, 0.0);
+        var corner3 = new Cartesian3(9.0, 0.0, 0.0);
+        var triangleData = [
+            [corner0, corner1, corner2],
+            [corner0, corner2, corner3]
+        ];
+        var grid = StaticUniformGrid.fromTriangleSoup(triangleData, 1.0);
+
+        expect(grid.resolution.x).toEqual(10);
+        expect(grid.resolution.y).toEqual(10);
+        expect(grid.resolution.z).toEqual(1);
+
+        var expectedMin = cartesian3Scratch;
+        expectedMin.x = -0.5;
+        expectedMin.y = -0.5;
+        expectedMin.z = -0.5;
+        expect(Cartesian3.equalsEpsilon(expectedMin, grid.axisAlignedBoundingBox.minimum, CesiumMath.EPSILON7)).toEqual(true);
+
+        var expectedMax = cartesian3Scratch;
+        expectedMax.x = 9.5;
+        expectedMax.y = 9.5;
+        expectedMax.z = 0.5;
+        expect(Cartesian3.equalsEpsilon(expectedMax, grid.axisAlignedBoundingBox.maximum, CesiumMath.EPSILON7)).toEqual(true);
+
+        var cellCounts = grid.cellCounts;
+        var cellCount = 100;
+        for (var i = 0; i < cellCount; i++) {
+            expect(cellCounts[i] === 1 || cellCounts[i] === 2).toEqual(true);
+        }
     });
 });

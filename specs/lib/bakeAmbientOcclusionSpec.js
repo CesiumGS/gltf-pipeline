@@ -3,7 +3,7 @@ var Cesium = require('cesium');
 var CesiumMath = Cesium.Math;
 var Cartesian3 = Cesium.Cartesian3;
 var bakeAmbientOcclusion = require('../../lib/bakeAmbientOcclusion');
-var buildTriangleStaticUniformGrid = require('./../../lib/buildTriangleStaticUniformGrid');
+var StaticUniformGrid = require('./../../lib/StaticUniformGrid');
 var clone = require('clone');
 var NodeHelpers = require('../../lib/NodeHelpers');
 var readGltf = require('../../lib/readGltf');
@@ -209,7 +209,7 @@ describe('bakeAmbientOcclusion', function() {
         [point2, point0, point3]
     ];
 
-    var tetrahedronGrid = buildTriangleStaticUniformGrid(tetrahedron, 10.0);
+    var tetrahedronGrid = StaticUniformGrid.fromTriangleSoup(tetrahedron, 10.0);
 
     it('correctly processes a basic 2-triangle square primitive', function() {
         var scene = testGltf.scenes[testGltf.scene];
@@ -293,7 +293,7 @@ describe('bakeAmbientOcclusion', function() {
     it('generates various levels of occlusion for samples in the mouth of an open tetrahedron', function() {
         var openTetrahedron = [tetrahedron[1], tetrahedron[2], tetrahedron[3]];
 
-        var openTetrahedronGrid = buildTriangleStaticUniformGrid(openTetrahedron, 10.0);
+        var openTetrahedronGrid = StaticUniformGrid.fromTriangleSoup(openTetrahedron, 10.0);
 
         var aoBuffer = {
             resolution: 2,
