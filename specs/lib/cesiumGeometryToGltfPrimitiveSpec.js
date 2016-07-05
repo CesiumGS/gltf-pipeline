@@ -2,12 +2,11 @@
 var readAccessor = require('../../lib/readAccessor');
 var readGltf = require('../../lib/readGltf');
 var addDefaults = require('../../lib/addDefaults');
+var packArray = require('../../lib/packArray');
 var cesiumGeometryToGltfPrimitive = require('../../lib/cesiumGeometryToGltfPrimitive');
 var Cesium = require('cesium');
 var GeometryAttribute = Cesium.GeometryAttribute;
 var Geometry = Cesium.Geometry;
-var Cartesian3 = Cesium.Cartesian3;
-var Cartesian2 = Cesium.Cartesian2;
 
 var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf';
 var positionValues = [ -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 
@@ -56,42 +55,38 @@ describe('cesiumGeometryToGltfPrimitive', function() {
            var primitive = gltf.meshes[Object.keys(gltf.meshes)[0]].primitives[0];
 
            var indicesAccessor = gltf.accessors[primitive.indices];
-           var initialIndices = readAccessor(gltf, indicesAccessor).data;
+           var initialIndices = [];
+           readAccessor(gltf, indicesAccessor, initialIndices);
 
            var positionAccessor = gltf.accessors[primitive.attributes.POSITION];
-           var initialPositions = readAccessor(gltf, positionAccessor).data;
+           var initialPositions = [];
+           readAccessor(gltf, positionAccessor, initialPositions);
 
            var normalAccessor = gltf.accessors[primitive.attributes.NORMAL];
-           var initialNormals = readAccessor(gltf, normalAccessor).data;
+           var initialNormals = [];
+           readAccessor(gltf, normalAccessor, initialNormals);
            
            var textureAccessor = gltf.accessors[primitive.attributes.TEXCOORD_0];
-           var initialCoordinates = readAccessor(gltf, textureAccessor).data;
+           var initialCoordinates = [];
+           readAccessor(gltf, textureAccessor, initialCoordinates);
 
            cesiumGeometryToGltfPrimitive(gltf, primitive, geometry);
 
-           var newIndices = readAccessor(gltf, indicesAccessor).data;
-           var newPositions = readAccessor(gltf, positionAccessor).data;
-           var newNormals = readAccessor(gltf, normalAccessor).data;
-           var newCoordinates = readAccessor(gltf, textureAccessor).data;
+           var newIndices = [];
+           readAccessor(gltf, indicesAccessor, newIndices);
            
-           var positionLength = newPositions.length;
-           var packedPositions = new Array(positionLength * 3);
-           for (i = 0; i < positionLength; ++i) {
-               Cartesian3.pack(newPositions[i], packedPositions, i * 3);
-           }
+           var newPositions = [];
+           var positionType = readAccessor(gltf, positionAccessor, newPositions);
+           var packedPositions = packArray(newPositions, positionType);
 
-           var normalLength = newNormals.length;
-           var packedNormals = new Array(positionLength * 3);
-           for (i = 0; i < normalLength; ++i) {
-               Cartesian3.pack(newNormals[i], packedNormals, i * 3);
-           }
+           var newNormals = [];
+           var normalType = readAccessor(gltf, normalAccessor, newNormals);
+           var packedNormals = packArray(newNormals, normalType);
 
-           var textureLength = newCoordinates.length;
-           var packedCoordinates = new Array(textureLength * 2);
-           for (i = 0; i < positionLength; ++i) {
-               Cartesian2.pack(newCoordinates[i], packedCoordinates, i * 2);
-           }
-           
+           var newCoordinates = [];
+           var coordinateType = readAccessor(gltf, textureAccessor, newCoordinates);
+           var packedCoordinates = packArray(newCoordinates, coordinateType);
+
            expect(initialIndices).not.toEqual(indices);
            expect(initialPositions).not.toEqual(positionValues);
            expect(initialNormals).not.toEqual(normalValues);
