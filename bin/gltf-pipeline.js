@@ -23,7 +23,6 @@ if (process.argv.length < 3 || defined(argv.h) || defined(argv.help)) {
         '  --ao.groundPlane: Simulate a groundplane at the lowest point of the model when baking AO. Default: inactive.\n' +
         '  --ao.ambientShadowContribution: Amount of AO to show when blending between shader computed lighting and AO. 1.0 is full AO, 0.5 is a 50/50 blend. Default: 0.5\n' +
         '  --ao.quality: Valid settings are high, medium, and low. Default: low\n';
-
     process.stdout.write(help);
     return;
 }
