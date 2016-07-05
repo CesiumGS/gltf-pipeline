@@ -4,7 +4,6 @@ var addDefaults = require('../../lib/addDefaults');
 var readGltf = require('../../lib/readGltf');
 var readAccessor = require('../../lib/readAccessor');
 var writeAccessor = require('../../lib/writeAccessor');
-var Cesium = require('cesium');
 
 var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf';
 var unoptimizedIndices = [ 3, 2, 1, 0, 1, 2, 7, 6, 5, 4, 5, 6, 8, 9, 10, 11, 10, 9, 12,

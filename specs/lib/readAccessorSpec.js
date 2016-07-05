@@ -8,10 +8,8 @@ var Cartesian4 = Cesium.Cartesian4;
 var WebGLConstants = Cesium.WebGLConstants;
 
 var fs = require('fs');
-var path = require('path');
 var clone = require('clone');
 var loadGltfUris = require('../../lib/loadGltfUris');
-var addPipelineExtras = require('../../lib/addPipelineExtras');
 var readAccessor = require('../../lib/readAccessor');
 var readGltf = require('../../lib/readGltf');
 

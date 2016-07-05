@@ -19,14 +19,14 @@ var cartesian4 = [new Cartesian4(0, 1, 2, 3), new Cartesian4(4, 5, 6, 7),
 var packedCartesians = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
 var matrix2 = [new Matrix2(0, 2,
-                          1, 3)];
+                           1, 3)];
 var matrix3 = [new Matrix3(0, 3, 6,
-                          1, 4, 7,
-                          2, 5, 8)];
+                           1, 4, 7,
+                           2, 5, 8)];
 var matrix4 = [new Matrix4( 0,  4,  8, 12,
-                           1,  5,  9, 13,
-                           2,  6, 10, 14,
-                           3,  7, 11, 15 )];
+                            1,  5,  9, 13,
+                            2,  6, 10, 14,
+                            3,  7, 11, 15 )];
 
 var packedMatrix2 = [0, 1, 2, 3];
 var packedMatrix3 = [0, 1, 2, 3, 4, 5, 6, 7, 8];
@@ -35,7 +35,6 @@ var packedMatrix4 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
 describe('packArray', function() {
     it('packs an array with numbers', function() {
         var packed = packArray(packedCartesians, WebGLConstants.FLOAT);
-        
         expect(packed).toEqual(packedCartesians);
     });
     
