@@ -141,24 +141,4 @@ describe('gltfPipeline', function() {
             });
         });
     });
-
-    it('will add image processing extras if this is a pipeline with image processing', function(done) {
-        var options = {
-            imageProcess : true
-        };
-        readGltf(gltfEmbeddedPath, options, function(gltf) {
-            processJSON(gltf, options, function (gltf) {
-                expect(gltf).toBeDefined();
-                var images = gltf.images;
-                for (var imageID in images) {
-                    if (images.hasOwnProperty(imageID)) {
-                        var extras = images[imageID].extras._pipeline;
-                        expect(extras.jimpImage).toBeDefined();
-                        expect(extras.imageChanged).toBe(false);
-                    }
-                }
-                done();
-            });
-        });
-    });
 });

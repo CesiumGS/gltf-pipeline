@@ -2,6 +2,7 @@
 var fs = require('fs');
 var bufferEqual = require('buffer-equal');
 var dataUriToBuffer = require('data-uri-to-buffer');
+var addPipelineExtras = require('../../lib/addPipelineExtras');
 var loadGltfUris = require('../../lib/loadGltfUris');
 var fragmentShaderPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest0FS.glsl';
 var basePath = './specs/data/boxTexturedUnoptimized/';
@@ -34,6 +35,7 @@ describe('loadShaderUris', function() {
             }
         };
 
+        addPipelineExtras(gltf);
         loadGltfUris(gltf, options, function(err, gltf) {
             expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras._pipeline.source).toBeDefined();
             expect(bufferEqual(gltf.shaders.CesiumTexturedBoxTest0FS.extras._pipeline.source, fragmentShaderData)).toBe(true);
@@ -51,7 +53,8 @@ describe('loadShaderUris', function() {
                 }
             }
         };
-        
+
+        addPipelineExtras(gltf);
         loadGltfUris(gltf, options, function(err, gltf) {
             expect(gltf.shaders.box0FS.extras._pipeline.source).toBeDefined();
             expect(bufferEqual(gltf.shaders.box0FS.extras._pipeline.source, fragmentShaderData)).toBe(true);
@@ -73,7 +76,8 @@ describe('loadShaderUris', function() {
                 }
             }
         };
-        
+
+        addPipelineExtras(gltf);
         loadGltfUris(gltf, options, function(err, gltf) {
             expect(gltf.shaders.externalBox0FS.extras._pipeline.source).toBeDefined();
             expect(bufferEqual(gltf.shaders.embeddedBox0FS.extras._pipeline.source, fragmentShaderData)).toBe(true);
@@ -88,10 +92,11 @@ describe('loadShaderUris', function() {
                 "CesiumTexturedBoxTest0FS": {
                     "type": 35632,
                     "uri": "CesiumTexturedBoxTestError.glsl"
-                },
+                }
             }
         };
 
+        addPipelineExtras(gltf);
         loadGltfUris(gltf, options, function(err, gltf) {
             expect(err).toBeDefined();
             done();
