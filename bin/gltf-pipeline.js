@@ -17,7 +17,8 @@ if (process.argv.length < 3 || defined(argv.h) || defined(argv.help)) {
         '  -t --separateImage, write out separate textures, but embed geometry/animation data files, and shader files.\n' +
         '  -q --quantize, quantize the attributes of this model.\n' +
         '  -n --encodeNormals, oct-encode the normals of this model.\n' +
-        '  -c --compressTextureCoordinates, compress the texture coordinates of this model.\n';
+        '  -c --compressTextureCoordinates, compress the texture coordinates of this model.\n' +
+        '     --cesium, optimize the glTF for Cesium by using the sun as a default light source. \n';
     process.stdout.write(help);
     return;
 }
@@ -30,6 +31,7 @@ var separateImage = defaultValue(defaultValue(argv.t, argv.separateImage), false
 var quantize = defaultValue(defaultValue(argv.q, argv.quantize), false);
 var encodeNormals = defaultValue(defaultValue(argv.n, argv.encodeNormals), false);
 var compressTextureCoordinates = defaultValue(defaultValue(argv.c, argv.compressTextureCoordinates), false);
+var optimizeForCesium = defaultValue(argv.cesium, false);
 
 if (!defined(outputPath)) {
     var outputFileExtension;
@@ -51,7 +53,8 @@ var options = {
     embedImage : !separateImage,
     quantize : quantize,
     encodeNormals : encodeNormals,
-    compressTextureCoordinates : compressTextureCoordinates
+    compressTextureCoordinates : compressTextureCoordinates,
+    optimizeForCesium : optimizeForCesium
 };
 
 processFileToDisk(gltfPath, outputPath, options);

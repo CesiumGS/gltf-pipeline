@@ -4,8 +4,6 @@ var addDefaults = require('../../lib/addDefaults');
 var readGltf = require('../../lib/readGltf');
 var readAccessor = require('../../lib/readAccessor');
 var writeAccessor = require('../../lib/writeAccessor');
-var Cesium = require('cesium');
-var Cartesian3 = Cesium.Cartesian3;
 
 var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf';
 var unoptimizedIndices = [ 3, 2, 1, 0, 1, 2, 7, 6, 5, 4, 5, 6, 8, 9, 10, 11, 10, 9, 12,
@@ -37,9 +35,10 @@ describe('cacheOptimization', function() {
             writeAccessor(gltf, indexAccessor, unoptimizedIndices);
             
             cacheOptimization(gltf);
-            var indices = readAccessor(gltf, gltf.accessors[indexAccessorId]);
+            var indices = [];
+            readAccessor(gltf, gltf.accessors[indexAccessorId], indices);
             
-            expect(indices.data).toEqual(optimizedIndices);
+            expect(indices).toEqual(optimizedIndices);
             done();
         });
     });
@@ -51,14 +50,16 @@ describe('cacheOptimization', function() {
             var positionAccessor = gltf.accessors['accessor_23'];
             // Use write/read accessor to unpack the optimizedVertices for us
             writeAccessor(gltf, positionAccessor, optimizedVertices);
-            var unpackedOptimizedVertices = readAccessor(gltf, positionAccessor).data;
+            var unpackedOptimizedVertices = [];
+            readAccessor(gltf, positionAccessor, unpackedOptimizedVertices);
             // Write the forcibly unoptimized values
             writeAccessor(gltf, positionAccessor, unoptimizedVertices);
-            var positions = readAccessor(gltf, positionAccessor);
+            var positions = [];
+            readAccessor(gltf, positionAccessor, positions);
             
             cacheOptimization(gltf);
             
-            expect(positions.data).toEqual(unpackedOptimizedVertices);
+            expect(positions).toEqual(unpackedOptimizedVertices);
             done();
         });
     });
