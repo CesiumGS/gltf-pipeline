@@ -402,6 +402,130 @@ describe('addDefaults', function() {
         });
     });
 
+    it('generates techniques and nodes for KHR_materials_common lights', function() {
+        var gltf = {
+            "materials": {
+                "material1": {
+                    "values": {
+                        "ambient": [0, 0, 0, 1],
+                        "diffuse": [0, 0, 0, 1],
+                        "emission": [0, 0, 0, 1]
+                    }
+                }
+            },
+            "nodes": {
+                "node1": {
+                    "children": [],
+                    "extensions": {
+                        "KHR_materials_common": {
+                            "light": "ambientLight"
+                        }
+                    }
+                },
+                "node2": {
+                    "children": [],
+                    "extensions": {
+                        "KHR_materials_common": {
+                            "light": "directionalLight"
+                        }
+                    }
+                },
+                "node3": {
+                    "children": [],
+                    "extensions": {
+                        "KHR_materials_common": {
+                            "light": "pointLight"
+                        }
+                    }
+                },
+                "node4": {
+                    "children": [],
+                    "extensions": {
+                        "KHR_materials_common": {
+                            "light": "spotLight"
+                        }
+                    }
+                }
+
+            },
+            "extensionsUsed": [
+                "KHR_materials_common"
+            ],
+            "extensions": {
+                "KHR_materials_common" : {
+                    "lights": {
+                        "ambientLight": {
+                            "ambient": {
+                                "color": [
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "type": "ambient"
+                        },
+                        "directionalLight": {
+                            "directional": {
+                                "color": [
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "type": "directional"
+                        },
+                        "pointLight": {
+                            "point": {
+                                "color": [
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "constantAttenuation": 0.0,
+                            "distance": 0.0,
+                            "linearAttenuation": 1.0,
+                            "quadraticAttenuation":1.0,
+                            "type": "point"
+                        },
+                        "spotLight": {
+                            "spot": {
+                                "spot": [
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "constantAttenuation": 0.0,
+                            "distance": 0.0,
+                            "linearAttenuation": 1.0,
+                            "quadraticAttenuation":1.0,
+                            "falloffAngle": 1.5,
+                            "falloffExponent": 0.0,
+                            "type": "spot"
+                        }
+                    }
+                }
+            }
+        };
+        var expectValues = {
+            "ambient": [0, 0, 0, 1],
+            "diffuse": [0, 0, 0, 1],
+            "emission": [0, 0, 0, 1],
+            "specular": [0, 0, 0, 1],
+            "shininess": 0.0,
+            "transparency": 1.0
+        };
+        addDefaults(gltf);
+        expect(Object.keys(gltf.materials).length > 0).toEqual(true);
+        expect(Object.keys(gltf.techniques).length > 0).toEqual(true);
+        for (var materialID in gltf.materials) {
+            if (gltf.materials.hasOwnProperty(materialID)) {
+                expect(gltf.materials[materialID].values).toEqual(expectValues);
+            }
+        }
+    });
+
     it('modelMaterialCommon uses the Cesium sun as its default light source when the optimizeForCesium flag is set', function() {
         var gltf = {
             "materials": {
