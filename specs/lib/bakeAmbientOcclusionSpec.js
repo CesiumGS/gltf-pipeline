@@ -454,7 +454,7 @@ describe('bakeAmbientOcclusion', function() {
         expect(Object.keys(boxOverGroundGltfClone.materials).length).toEqual(3);
     });
 
-    it ('adds additional materials as needed', function() {
+    it('adds additional materials as needed', function() {
         var boxOverGroundGltfClone = cloneGltfWithJimps(boxOverGroundGltf);
 
         // remove some materials
@@ -462,8 +462,6 @@ describe('bakeAmbientOcclusion', function() {
         var material = boxOverGroundGltfClone.materials[materialID];
         boxOverGroundGltfClone.materials = {};
         boxOverGroundGltfClone.materials[materialID] = material;
-
-        var meshes = boxOverGroundGltfClone.meshes;
 
         var scene = boxOverGroundGltfClone.scenes[boxOverGroundGltfClone.scene];
         var primitiveFunction = function(primitive) {
@@ -485,7 +483,7 @@ describe('bakeAmbientOcclusion', function() {
         expect(Object.keys(boxOverGroundGltfClone.materials).length).toEqual(2);
     });
 
-    it ('can generate new images for materials that just have a diffuse color', function() {
+    it('can generate new images for materials that just have a diffuse color', function() {
         var boxOverGroundGltfClone = cloneGltfWithJimps(boxOverGroundGltf);
 
         // remove some textures
@@ -512,7 +510,7 @@ describe('bakeAmbientOcclusion', function() {
         expect(Object.keys(boxOverGroundGltfClone.materials).length).toEqual(4); // 1 unused material, 2 with AO
     });
 
-    it ('adds a buffer, bufferView, and an accessor for each primitive when baking AO to vertices', function() {
+    it('adds a buffer, bufferView, and an accessor for each primitive when baking AO to vertices', function() {
         var boxOverGroundGltfClone = clone(boxOverGroundGltf);
 
         var options = {
@@ -531,7 +529,7 @@ describe('bakeAmbientOcclusion', function() {
         expect(boxOverGroundGltfClone.bufferViews.aoBufferView.byteLength).toEqual(72 * 4);
     });
 
-    it ('clones the shading chain as needed for primitives that should not have AO', function() {
+    it('clones the shading chain as needed for primitives that should not have AO', function() {
         var boxOverGroundGltfClone = clone(boxOverGroundGltf);
 
         var options = {
@@ -654,7 +652,7 @@ describe('bakeAmbientOcclusion', function() {
         expect(CesiumMath.equalsEpsilon(samples[2], counts[2], CesiumMath.EPSILON7)).toEqual(false);
     });
 
-    it ('generates options given nothing but a gltf or just a quality setting', function() {
+    it('generates options given nothing but a gltf or just a quality setting', function() {
         var aoOptions = {
             gltfWithExtras: boxOverGroundGltf
         };
@@ -707,7 +705,7 @@ describe('bakeAmbientOcclusion', function() {
         expect(options.sceneID).toEqual('defaultScene');
     });
 
-    it ('overwrites parameters in base options when advanced settings are specified', function() {
+    it('overwrites parameters in base options when advanced settings are specified', function() {
         var aoOptions = {
             quality: 'medium',
             toTexture: true,
