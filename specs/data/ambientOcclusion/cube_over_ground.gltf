@@ -164,46 +164,46 @@
     },
     "materials": {
         "Material-effect": {
-		  "name": "Material-effect",
-		  "technique": "technique0",
-		  "values": {
-			"diffuse": "texture_Untitled",
-			"shininess": 256,
-			"specular": [
-			  0.2,
-			  0.2,
-			  0.2,
-			  1
-			]
-		  }
+            "name": "Material-effect",
+            "technique": "technique0",
+            "values": {
+                "diffuse": "texture_Untitled",
+                "shininess": 256,
+                "specular": [
+                    0.2,
+                    0.2,
+                    0.2,
+                    1
+                ]
+            }
         },
         "Material_001-effect": {
             "name": "Material_001",
             "technique": "technique0",
-			   "values": {
-				"diffuse": "texture_Untitled_001",
-				"shininess": 256,
-				"specular": [
-				  0.2,
-				  0.2,
-				  0.2,
-				  1
-				]
-			  }
+            "values": {
+                "diffuse": "texture_Untitled_001",
+                "shininess": 256,
+                "specular": [
+                    0.2,
+                    0.2,
+                    0.2,
+                    1
+                ]
+            }
         },
         "useless-material": {
             "name": "useless",
             "technique": "technique0",
-			   "values": {
-				"diffuse": "texture_Untitled_001",
-				"shininess": 256,
-				"specular": [
-				  0.2,
-				  0.2,
-				  0.2,
-				  1
-				]
-			  }
+            "values": {
+                "diffuse": "texture_Untitled_001",
+                "shininess": 256,
+                "specular": [
+                    0.2,
+                    0.2,
+                    0.2,
+                    1
+                ]
+            }
         }
     },
     "meshes": {
@@ -250,7 +250,7 @@
                     "material": "Material_001-effect",
                     "mode": 4
                 },
-				{
+                {
                     "attributes": {
                         "NORMAL": "accessor_52",
                         "POSITION": "accessor_50",
@@ -260,7 +260,7 @@
                     "material": "Material_001-effect",
                     "mode": 4
                 },
-				{
+                {
                     "attributes": {
                         "NORMAL": "accessor_52",
                         "POSITION": "accessor_50",
@@ -270,7 +270,7 @@
                     "material": "useless-material",
                     "mode": 4
                 },
-				{
+                {
                     "attributes": {
                         "NORMAL": "accessor_52",
                         "POSITION": "accessor_50",
@@ -359,7 +359,7 @@
             ],
             "name": "Y_UP_Transform"
         },
-		"useless_node": {
+        "useless_node": {
             "children": [],
             "matrix": [
                 1,
@@ -412,7 +412,7 @@
             ],
             "node": []
         },
-		"uselessScene": {
+        "uselessScene": {
             "nodes": [
                 "useless_node"
             ],
@@ -422,8 +422,7 @@
     "shaders": {
         "cube_over_ground0FS": {
             "type": 35632,
-            "type": 35632,
-			"uri": "data:text/plain;base64,cHJlY2lzaW9uIGhpZ2hwIGZsb2F0Ow0KdmFyeWluZyB2ZWMzIHZfbm9ybWFsOw0KdmFyeWluZyB2ZWMyIHZfdGV4Y29vcmQwOw0KdW5pZm9ybSBzYW1wbGVyMkQgdV9kaWZmdXNlOw0KdW5pZm9ybSB2ZWM0IHVfc3BlY3VsYXI7DQp1bmlmb3JtIGZsb2F0IHVfc2hpbmluZXNzOw0Kdm9pZCBtYWluKHZvaWQpIHsNCnZlYzMgbm9ybWFsID0gbm9ybWFsaXplKHZfbm9ybWFsKTsNCnZlYzQgY29sb3IgPSB2ZWM0KDAuLCAwLiwgMC4sIDAuKTsNCnZlYzQgZGlmZnVzZSA9IHZlYzQoMC4sIDAuLCAwLiwgMS4pOw0KdmVjNCBzcGVjdWxhcjsNCmRpZmZ1c2UgPSB0ZXh0dXJlMkQodV9kaWZmdXNlLCB2X3RleGNvb3JkMCk7DQpzcGVjdWxhciA9IHVfc3BlY3VsYXI7DQpkaWZmdXNlLnh5eiAqPSBtYXgoZG90KG5vcm1hbCx2ZWMzKDAuLDAuLDEuKSksIDAuKTsNCmNvbG9yLnh5eiArPSBkaWZmdXNlLnh5ejsNCmNvbG9yID0gdmVjNChjb2xvci5yZ2IgKiBkaWZmdXNlLmEsIGRpZmZ1c2UuYSk7DQpnbF9GcmFnQ29sb3IgPSBjb2xvcjsNCn0NCg=="	
+            "uri": "data:text/plain;base64,cHJlY2lzaW9uIGhpZ2hwIGZsb2F0Ow0KdmFyeWluZyB2ZWMzIHZfbm9ybWFsOw0KdmFyeWluZyB2ZWMyIHZfdGV4Y29vcmQwOw0KdW5pZm9ybSBzYW1wbGVyMkQgdV9kaWZmdXNlOw0KdW5pZm9ybSB2ZWM0IHVfc3BlY3VsYXI7DQp1bmlmb3JtIGZsb2F0IHVfc2hpbmluZXNzOw0Kdm9pZCBtYWluKHZvaWQpIHsNCnZlYzMgbm9ybWFsID0gbm9ybWFsaXplKHZfbm9ybWFsKTsNCnZlYzQgY29sb3IgPSB2ZWM0KDAuLCAwLiwgMC4sIDAuKTsNCnZlYzQgZGlmZnVzZSA9IHZlYzQoMC4sIDAuLCAwLiwgMS4pOw0KdmVjNCBzcGVjdWxhcjsNCmRpZmZ1c2UgPSB0ZXh0dXJlMkQodV9kaWZmdXNlLCB2X3RleGNvb3JkMCk7DQpzcGVjdWxhciA9IHVfc3BlY3VsYXI7DQpkaWZmdXNlLnh5eiAqPSBtYXgoZG90KG5vcm1hbCx2ZWMzKDAuLDAuLDEuKSksIDAuKTsNCmNvbG9yLnh5eiArPSBkaWZmdXNlLnh5ejsNCmNvbG9yID0gdmVjNChjb2xvci5yZ2IgKiBkaWZmdXNlLmEsIGRpZmZ1c2UuYSk7DQpnbF9GcmFnQ29sb3IgPSBjb2xvcjsNCn0NCg=="
         },
         "cube_over_ground0VS": {
             "type": 35633,
@@ -433,63 +432,63 @@
     "skins": {},
     "techniques": {
         "technique0": {
-		  "attributes": {
-			"a_normal": "normal",
-			"a_position": "position",
-			"a_texcoord0": "texcoord0"
-		  },
-		  "parameters": {
-			"diffuse": {
-			  "type": 35678
-			},
-			"modelViewMatrix": {
-			  "semantic": "MODELVIEW",
-			  "type": 35676
-			},
-			"normal": {
-			  "semantic": "NORMAL",
-			  "type": 35665
-			},
-			"normalMatrix": {
-			  "semantic": "MODELVIEWINVERSETRANSPOSE",
-			  "type": 35675
-			},
-			"position": {
-			  "semantic": "POSITION",
-			  "type": 35665
-			},
-			"projectionMatrix": {
-			  "semantic": "PROJECTION",
-			  "type": 35676
-			},
-			"shininess": {
-			  "type": 5126
-			},
-			"specular": {
-			  "type": 35666
-			},
-			"texcoord0": {
-			  "semantic": "TEXCOORD_0",
-			  "type": 35664
-			}
-		  },
-		  "program": "program_0",
-		  "states": {
-			"enable": [
-			  2929,
-			  2884
-			],
-			"disable": []
-		  },
-		  "uniforms": {
-			"u_diffuse": "diffuse",
-			"u_modelViewMatrix": "modelViewMatrix",
-			"u_normalMatrix": "normalMatrix",
-			"u_projectionMatrix": "projectionMatrix",
-			"u_shininess": "shininess",
-			"u_specular": "specular"
-		  }
-		}
+            "attributes": {
+                "a_normal": "normal",
+                "a_position": "position",
+                "a_texcoord0": "texcoord0"
+            },
+            "parameters": {
+                "diffuse": {
+                    "type": 35678
+                },
+                "modelViewMatrix": {
+                    "semantic": "MODELVIEW",
+                    "type": 35676
+                },
+                "normal": {
+                    "semantic": "NORMAL",
+                    "type": 35665
+                },
+                "normalMatrix": {
+                    "semantic": "MODELVIEWINVERSETRANSPOSE",
+                    "type": 35675
+                },
+                "position": {
+                    "semantic": "POSITION",
+                    "type": 35665
+                },
+                "projectionMatrix": {
+                    "semantic": "PROJECTION",
+                    "type": 35676
+                },
+                "shininess": {
+                    "type": 5126
+                },
+                "specular": {
+                    "type": 35666
+                },
+                "texcoord0": {
+                    "semantic": "TEXCOORD_0",
+                    "type": 35664
+                }
+            },
+            "program": "program_0",
+            "states": {
+                "enable": [
+                    2929,
+                    2884
+                ],
+                "disable": []
+            },
+            "uniforms": {
+                "u_diffuse": "diffuse",
+                "u_modelViewMatrix": "modelViewMatrix",
+                "u_normalMatrix": "normalMatrix",
+                "u_projectionMatrix": "projectionMatrix",
+                "u_shininess": "shininess",
+                "u_specular": "specular"
+            }
+        }
     },
     "textures": {
         "texture_Untitled": {
