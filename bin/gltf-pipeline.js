@@ -18,11 +18,11 @@ if (process.argv.length < 3 || defined(argv.h) || defined(argv.help)) {
         '  -q --quantize, quantize the attributes of this model.\n' +
         '  -n --encodeNormals, oct-encode the normals of this model.\n' +
         '  -c --compressTextureCoordinates, compress the texture coordinates of this model.\n' +
-        '  --ao.diffuse, bake ambient occlusion into the diffuse texture. Defaults to false.\n' +
-        '  --ao.scene, specify which scene to bake AO for. Defaults to the gltf default scene.\n' +
-        '  --ao.rayDepth, ray distance for raytraced ambient occlusion. Defaults to 1.0 units in world space.\n' +
-        '  --ao.resolution, number of texel samples along one dimension for each AO texture. Defaults to 128.\n' +
-        '  --ao.samples, sample count for ambient occlusion texel. Clamps to the nearest smaller perfect square. Defaults to 16.\n';
+        '  --ao: Bake ambient occlusion to vertex data using default settings if no others are specified. Default: inactive.\n' +
+        '  --ao.toTexture: Bake AO to existing diffuse textures instead of to vertices. Does not modify shaders. Default: inactive.\n' +
+        '  --ao.groundPlane: Simulate a ground plane at the lowest point of the model when baking AO. Default: inactive.\n' +
+        '  --ao.ambientShadowContribution: Amount of AO to show when blending between shader computed lighting and AO. 1.0 is full AO, 0.5 is a 50/50 blend. Default: 0.5\n' +
+        '  --ao.quality: Valid settings are high, medium, and low. Default: low\n';
     process.stdout.write(help);
     return;
 }
@@ -35,15 +35,9 @@ var separateImage = defaultValue(defaultValue(argv.t, argv.separateImage), false
 var quantize = defaultValue(defaultValue(argv.q, argv.quantize), false);
 var encodeNormals = defaultValue(defaultValue(argv.n, argv.encodeNormals), false);
 var compressTextureCoordinates = defaultValue(defaultValue(argv.c, argv.compressTextureCoordinates), false);
-
-var aoOptions;
-if (argv.ao.diffuse) {
-    aoOptions = {
-        scene : argv.ao.scene,
-        rayDepth : defaultValue(argv.ao.rayDepth, 1.0),
-        resolution : defaultValue(argv.ao.resolution, 128),
-        numberSamples : defaultValue(argv.ao.samples, 16)
-    };
+var aoOptions = argv.ao;
+if (typeof(aoOptions) === 'boolean') {
+    aoOptions = {};
 }
 
 if (!defined(outputPath)) {
@@ -68,7 +62,7 @@ var options = {
     encodeNormals : encodeNormals,
     compressTextureCoordinates : compressTextureCoordinates,
     aoOptions : aoOptions,
-    imageProcess : defined(aoOptions)
+    imageProcess : defined(aoOptions) && aoOptions.toTexture
 };
 
 processFileToDisk(gltfPath, outputPath, options);

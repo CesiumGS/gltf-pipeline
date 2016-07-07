@@ -2,6 +2,7 @@
 var Cesium = require('cesium');
 var CesiumMath = Cesium.Math;
 var Cartesian3 = Cesium.Cartesian3;
+var Matrix4 = Cesium.Matrix4;
 var bakeAmbientOcclusion = require('../../lib/bakeAmbientOcclusion');
 var clone = require('clone');
 var NodeHelpers = require('../../lib/NodeHelpers');
@@ -202,19 +203,43 @@ describe('bakeAmbientOcclusion', function() {
     var point3 = new Cartesian3(0.0, 1.0, 0.0);
 
     var tetrahedron = [
-        {positions: [point0, point1, point2]},
-        {positions: [point0, point1, point3]},
-        {positions: [point1, point2, point3]},
-        {positions: [point2, point0, point3]}
+        [point0, point1, point2],
+        [point0, point1, point3],
+        [point1, point2, point3],
+        [point2, point0, point3]
     ];
 
+    // data for an equilateral triangle whose center is inside the tetrahedron
+    var normal = new Cartesian3(0.0, 1.0, 0.0);
+    var equilateralBufferDataByAccessor = {
+        indices : {
+            data : [0, 1, 2]
+        },
+        positions : {
+            data : [
+                new Cartesian3(0.0, 0.0, 1.0),
+                new Cartesian3(-0.5, 0.0, -Math.sqrt(3.0) / 6.0),
+                new Cartesian3(0.5, 0.0, -Math.sqrt(3.0) / 6.0)
+            ]
+        },
+        normals : {
+            data : [
+                normal,
+                normal,
+                normal
+            ]
+        }
+    };
+
     it('correctly processes a basic 2-triangle square primitive', function() {
-        var scene = testGltf.scenes[testGltf.scene];
         var options = {
-            rayDepth : 0.1,
-            resolution : 10
+            resolution : 10,
+            toTexture : true,
+            sceneID : testGltf.scene,
+            gltfWithExtras : testGltf,
+            rayDistance : -1 // compute ray distance from AABB
         };
-        var raytracerScene = bakeAmbientOcclusion.generateRaytracerScene(testGltf, scene, options);
+        var raytracerScene = bakeAmbientOcclusion.generateRaytracerScene(options);
         var triangleSoup = raytracerScene.triangleSoup;
 
         // because of the uniform scale, expect triangles to be bigger
@@ -222,7 +247,6 @@ describe('bakeAmbientOcclusion', function() {
         var point1 = new Cartesian3(0.0, 2.0, 0.0);
         var point2 = new Cartesian3(2.0, 2.0, 0.0);
         var point3 = new Cartesian3(2.0, 0.0, 0.0);
-        var normal = new Cartesian3(0.0, 0.0, 1.0);
 
         ////////// check triangle soup //////////
         expect(triangleSoup.length).toEqual(2);
@@ -230,19 +254,54 @@ describe('bakeAmbientOcclusion', function() {
         var triangle0 = triangleSoup[0];
         var triangle1 = triangleSoup[1];
 
-        expect(Cartesian3.equalsEpsilon(triangle0.positions[0], point0, CesiumMath.EPSILON7)).toEqual(true);
-        expect(Cartesian3.equalsEpsilon(triangle0.positions[1], point1, CesiumMath.EPSILON7)).toEqual(true);
-        expect(Cartesian3.equalsEpsilon(triangle0.positions[2], point2, CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian3.equalsEpsilon(triangle0[0], point0, CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian3.equalsEpsilon(triangle0[1], point1, CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian3.equalsEpsilon(triangle0[2], point2, CesiumMath.EPSILON7)).toEqual(true);
 
-        expect(Cartesian3.equalsEpsilon(triangle1.positions[0], point0, CesiumMath.EPSILON7)).toEqual(true);
-        expect(Cartesian3.equalsEpsilon(triangle1.positions[1], point2, CesiumMath.EPSILON7)).toEqual(true);
-        expect(Cartesian3.equalsEpsilon(triangle1.positions[2], point3, CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian3.equalsEpsilon(triangle1[0], point0, CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian3.equalsEpsilon(triangle1[1], point2, CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian3.equalsEpsilon(triangle1[2], point3, CesiumMath.EPSILON7)).toEqual(true);
 
         // check ao buffers
         var aoBuffersByPrimitive = raytracerScene.aoBufferByPrimitive;
         var aoBuffer = aoBuffersByPrimitive.mesh_square_0;
         expect(aoBuffer).toBeDefined();
         expect(aoBuffer.resolution).toEqual(10);
+
+        // check generated ray distance
+        expect(raytracerScene.rayDistance).toEqual(0.0); // 20% of the smallest AABB dimension
+    });
+
+    it('correctly generates a ground plane just below the minimum of the scene.', function() {
+        var options = {
+            rayDistance : 1.0,
+            groundPlane : true,
+            nearCull : CesiumMath.EPSILON4,
+            sceneID : testGltf.scene,
+            gltfWithExtras : testGltf
+        };
+        var raytracerScene = bakeAmbientOcclusion.generateRaytracerScene(options);
+        var triangleSoup = raytracerScene.triangleSoup;
+
+        // ground plane size is based on the near culling distance, scene size, and maximum ray depth.
+        var point0 = new Cartesian3(-2.0, -0.00015, -2.0);
+        var point1 = new Cartesian3(4.0, -0.00015, -2.0);
+        var point2 = new Cartesian3(4.0, -0.00015, 2.0);
+        var point3 = new Cartesian3(-2.0, -0.00015, 2.0);
+
+        ////////// check triangle soup //////////
+        expect(triangleSoup.length).toEqual(4);
+
+        var groundPlane1 = triangleSoup[2];
+        var groundPlane2 = triangleSoup[3];
+
+        expect(Cartesian3.equalsEpsilon(groundPlane1[0], point0, CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian3.equalsEpsilon(groundPlane1[1], point1, CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian3.equalsEpsilon(groundPlane1[2], point2, CesiumMath.EPSILON7)).toEqual(true);
+
+        expect(Cartesian3.equalsEpsilon(groundPlane2[0], point0, CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian3.equalsEpsilon(groundPlane2[1], point2, CesiumMath.EPSILON7)).toEqual(true);
+        expect(Cartesian3.equalsEpsilon(groundPlane2[2], point3, CesiumMath.EPSILON7)).toEqual(true);
     });
 
     it('generates all occluded (1.0) for samples inside a closed tetrahedron', function() {
@@ -254,78 +313,67 @@ describe('bakeAmbientOcclusion', function() {
             normals.push(newNormal);
         }
 
-        var aoBuffer = {
-            resolution: 3,
-            samples: new Array(9).fill(0.0),
-            count: new Array(9).fill(0.0)
-        };
+        var samples = new Array(9).fill(0.0);
 
         var texelPoints = [];
 
         for (i = 0; i < 6; i++) {
             texelPoints.push({
                 position: Cartesian3.ZERO,
-                normal: normals[i],
-                index: i,
-                buffer: aoBuffer
+                normal: normals[i]
             });
         }
 
         for (i = 0; i < 6; i++) {
             var texel = texelPoints[i];
-            bakeAmbientOcclusion.computeAmbientOcclusionAt(
-                texel.position, texel.normal, 16, 4,
-                tetrahedron, 0.001, 10.0, aoBuffer, texel.index);
+            samples[i] = bakeAmbientOcclusion.computeAmbientOcclusionAt({
+                position : texel.position,
+                normal : texel.normal,
+                numberRays : 16,
+                sqrtNumberRays : 4,
+                triangles : tetrahedron,
+                nearCull : 0.001,
+                rayDistance : 10.0});
         }
 
-        var samples = aoBuffer.samples;
-        var counts = aoBuffer.count;
         for (i = 0; i < 6; i++) {
             expect(samples[i]).toEqual(16.0);
-            expect(counts[i]).toEqual(16);
         }
     });
 
     it('generates various levels of occlusion for samples in the mouth of an open tetrahedron', function() {
         var openTetrahedron = [tetrahedron[1], tetrahedron[2], tetrahedron[3]];
 
-        var aoBuffer = {
-            resolution: 2,
-            samples: new Array(4).fill(0.0),
-            count: new Array(4).fill(0.0)
-        };
+        var samples = new Array(4).fill(0.0);
 
         var bottomCenter = new Cartesian3(0.0, -1.0, 0.0);
 
         var texelPoints = [
             {
                 position: bottomCenter,
-                normal: new Cartesian3(0.0, 1.0, 0.0),
-                index: 0,
-                buffer: aoBuffer
+                normal: new Cartesian3(0.0, 1.0, 0.0)
             },
             {
                 position: bottomCenter,
-                normal: new Cartesian3(0.0, -1.0, 0.0),
-                index: 1,
-                buffer: aoBuffer
+                normal: new Cartesian3(0.0, -1.0, 0.0)
             },
             {
                 position: bottomCenter,
-                normal: new Cartesian3(1.0, 0.0, 0.0),
-                index: 2,
-                buffer: aoBuffer
+                normal: new Cartesian3(1.0, 0.0, 0.0)
             }
         ];
 
         for (var i = 0; i < 3; i++) {
             var texel = texelPoints[i];
-            bakeAmbientOcclusion.computeAmbientOcclusionAt(
-                texel.position, texel.normal, 16, 4,
-                openTetrahedron, 0.001, 10.0, aoBuffer, texel.index);
+            samples[i] += bakeAmbientOcclusion.computeAmbientOcclusionAt({
+                position : texel.position,
+                normal : texel.normal,
+                numberRays : 16,
+                sqrtNumberRays : 4,
+                triangles : openTetrahedron,
+                nearCull : 0.001,
+                rayDistance : 10.0});
         }
-
-        var samples = aoBuffer.samples;
 
         expect(samples[0]).toEqual(16);
         expect(samples[1]).toEqual(0); // randomized, but stratification should ensure this.
@@ -336,15 +384,16 @@ describe('bakeAmbientOcclusion', function() {
         var boxOverGroundGltfClone = cloneGltfWithJimps(boxOverGroundGltf);
 
         var options = {
-            numberSamples: 1,
-            rayDepth: 1.0,
-            resolution: 4
+            numberRays: 0,
+            resolution: 4,
+            toTexture: true,
+            gltfWithExtras: boxOverGroundGltfClone
         };
-        bakeAmbientOcclusion.bakeAmbientOcclusion(boxOverGroundGltfClone, options);
+        bakeAmbientOcclusion.bakeAmbientOcclusion(options);
 
         expect(Object.keys(boxOverGroundGltfClone.images).length).toEqual(2);
         expect(Object.keys(boxOverGroundGltfClone.textures).length).toEqual(2);
-        expect(Object.keys(boxOverGroundGltfClone.materials).length).toEqual(2);
+        expect(Object.keys(boxOverGroundGltfClone.materials).length).toEqual(3);
     });
 
     it('adds additional images as needed', function() {
@@ -364,16 +413,16 @@ describe('bakeAmbientOcclusion', function() {
         }
 
         var options = {
-            runAO: true,
-            numberSamples: 1,
-            rayDepth: 1.0,
-            resolution: 4
+            numberRays: 0,
+            resolution: 4,
+            toTexture: true,
+            gltfWithExtras: boxOverGroundGltfClone
         };
-        bakeAmbientOcclusion.bakeAmbientOcclusion(boxOverGroundGltfClone, options);
+        bakeAmbientOcclusion.bakeAmbientOcclusion(options);
 
         expect(Object.keys(boxOverGroundGltfClone.images).length).toEqual(2);
         expect(Object.keys(boxOverGroundGltfClone.textures).length).toEqual(2);
-        expect(Object.keys(boxOverGroundGltfClone.materials).length).toEqual(2);
+        expect(Object.keys(boxOverGroundGltfClone.materials).length).toEqual(3);
     });
 
     it('adds additional textures as needed', function() {
@@ -393,19 +442,19 @@ describe('bakeAmbientOcclusion', function() {
         }
 
         var options = {
-            runAO: true,
-            numberSamples: 1,
-            rayDepth: 1.0,
-            resolution: 4
+            numberRays: 0,
+            resolution: 4,
+            toTexture: true,
+            gltfWithExtras: boxOverGroundGltfClone
         };
-        bakeAmbientOcclusion.bakeAmbientOcclusion(boxOverGroundGltfClone, options);
+        bakeAmbientOcclusion.bakeAmbientOcclusion(options);
 
         expect(Object.keys(boxOverGroundGltfClone.images).length).toEqual(3); // 1 unused image and 2 images with AO
         expect(Object.keys(boxOverGroundGltfClone.textures).length).toEqual(2);
-        expect(Object.keys(boxOverGroundGltfClone.materials).length).toEqual(2);
+        expect(Object.keys(boxOverGroundGltfClone.materials).length).toEqual(3);
     });
 
-    it ('adds additional materials as needed', function() {
+    it('adds additional materials as needed', function() {
         var boxOverGroundGltfClone = cloneGltfWithJimps(boxOverGroundGltf);
 
         // remove some materials
@@ -413,8 +462,6 @@ describe('bakeAmbientOcclusion', function() {
         var material = boxOverGroundGltfClone.materials[materialID];
         boxOverGroundGltfClone.materials = {};
         boxOverGroundGltfClone.materials[materialID] = material;
-
-        var meshes = boxOverGroundGltfClone.meshes;
 
         var scene = boxOverGroundGltfClone.scenes[boxOverGroundGltfClone.scene];
         var primitiveFunction = function(primitive) {
@@ -424,19 +471,19 @@ describe('bakeAmbientOcclusion', function() {
         NodeHelpers.forEachPrimitiveInScene(boxOverGroundGltfClone, scene, primitiveFunction);
 
         var options = {
-            runAO: true,
-            numberSamples: 1,
-            rayDepth: 1.0,
-            resolution: 4
+            numberRays: 0,
+            resolution: 4,
+            toTexture: true,
+            gltfWithExtras: boxOverGroundGltfClone
         };
-        bakeAmbientOcclusion.bakeAmbientOcclusion(boxOverGroundGltfClone, options);
+        bakeAmbientOcclusion.bakeAmbientOcclusion(options);
 
         expect(Object.keys(boxOverGroundGltfClone.images).length).toEqual(3); // 1 unused image and 2 with AO
         expect(Object.keys(boxOverGroundGltfClone.textures).length).toEqual(3); // 1 unused texture, 2 with AO
         expect(Object.keys(boxOverGroundGltfClone.materials).length).toEqual(2);
     });
 
-    it ('can generate new images for materials that just have a diffuse color', function() {
+    it('can generate new images for materials that just have a diffuse color', function() {
         var boxOverGroundGltfClone = cloneGltfWithJimps(boxOverGroundGltf);
 
         // remove some textures
@@ -451,15 +498,232 @@ describe('bakeAmbientOcclusion', function() {
         }
 
         var options = {
-            runAO: true,
-            numberSamples: 1,
-            rayDepth: 1.0,
-            resolution: 4
+            numberRays: 0,
+            resolution: 4,
+            toTexture: true,
+            gltfWithExtras: boxOverGroundGltfClone
         };
-        bakeAmbientOcclusion.bakeAmbientOcclusion(boxOverGroundGltfClone, options);
+        bakeAmbientOcclusion.bakeAmbientOcclusion(options);
 
         expect(Object.keys(boxOverGroundGltfClone.images).length).toEqual(3); // 1 unused image and 2 images with AO
         expect(Object.keys(boxOverGroundGltfClone.textures).length).toEqual(3); // 1 unused texture, 2 with AO
-        expect(Object.keys(boxOverGroundGltfClone.materials).length).toEqual(3); // 1 unused material, 2 with AO
+        expect(Object.keys(boxOverGroundGltfClone.materials).length).toEqual(4); // 1 unused material, 2 with AO
+    });
+
+    it('adds a buffer, bufferView, and an accessor for each primitive when baking AO to vertices', function() {
+        var boxOverGroundGltfClone = clone(boxOverGroundGltf);
+
+        var options = {
+            numberRays: 0,
+            toVertex: true,
+            gltfWithExtras: boxOverGroundGltfClone
+        };
+        bakeAmbientOcclusion.bakeAmbientOcclusion(options);
+
+        expect(Object.keys(boxOverGroundGltfClone.accessors).length).toEqual(10);
+        var cubeMeshPrimitives = boxOverGroundGltfClone.meshes.Cube_mesh.primitives;
+        expect(cubeMeshPrimitives[0].attributes._OCCLUSION).toEqual('accessor_Cube_mesh_0_AO');
+
+        expect(boxOverGroundGltfClone.buffers.aoBuffer).toBeDefined();
+        expect(boxOverGroundGltfClone.bufferViews.aoBufferView).toBeDefined();
+        expect(boxOverGroundGltfClone.bufferViews.aoBufferView.byteLength).toEqual(72 * 4);
+    });
+
+    it('clones the shading chain as needed for primitives that should not have AO', function() {
+        var boxOverGroundGltfClone = clone(boxOverGroundGltf);
+
+        var options = {
+            numberRays: 0,
+            toVertex: true,
+            gltfWithExtras: boxOverGroundGltfClone
+        };
+        bakeAmbientOcclusion.bakeAmbientOcclusion(options);
+
+        expect(Object.keys(boxOverGroundGltfClone.materials).length).toEqual(4);
+        expect(Object.keys(boxOverGroundGltfClone.techniques).length).toEqual(2);
+        expect(Object.keys(boxOverGroundGltfClone.programs).length).toEqual(2);
+        expect(Object.keys(boxOverGroundGltfClone.shaders).length).toEqual(4);
+
+        var usedPrimitives = boxOverGroundGltfClone.meshes.Cube_mesh.primitives;
+        expect(usedPrimitives[0].material).toEqual('Material-effect');
+
+        var unusedPrimitives = boxOverGroundGltfClone.meshes.useless_mesh.primitives;
+        expect(unusedPrimitives[0].material).toEqual('Material_001-effect_noAO');
+        expect(unusedPrimitives[1].material).toEqual('Material_001-effect_noAO');
+        expect(unusedPrimitives[2].material).toEqual('useless-material');
+        expect(unusedPrimitives[3].material).toEqual('useless-material');
+    });
+
+    it('it can sample occlusion just at a triangle center', function() {
+        var aoBuffer = {
+            samples: new Array(3).fill(0.0),
+            count: new Array(3).fill(CesiumMath.EPSILON10)
+        };
+
+        var parameters = {
+            raytracerScene : {
+                aoBufferByPrimitive : {
+                    meshPrimitiveID : aoBuffer
+                },
+                bufferDataByAccessor : equilateralBufferDataByAccessor,
+                triangleSoup : tetrahedron,
+                numberRays : 16,
+                nearCull : CesiumMath.EPSILON4,
+                rayDistance : 1.0
+            }
+        };
+
+        var node = {
+            extras : {
+                _pipeline : {
+                    flatTransform : Matrix4.IDENTITY
+                }
+            }
+        };
+
+        var primitive = {
+            indices : 'indices',
+            attributes : {
+                POSITION : 'positions',
+                NORMAL : 'normals'
+            }
+        };
+
+        bakeAmbientOcclusion.raytraceAtTriangleCenters(primitive, 'meshPrimitiveID', parameters, node);
+
+        var samples = aoBuffer.samples;
+        var counts = aoBuffer.count;
+        // Expect the baked AO to indicate "fully occluded" since the center is inside the tetrahedron
+        expect(CesiumMath.equalsEpsilon(samples[0], counts[0], CesiumMath.EPSILON7)).toEqual(true);
+        expect(CesiumMath.equalsEpsilon(samples[1], counts[1], CesiumMath.EPSILON7)).toEqual(true);
+        expect(CesiumMath.equalsEpsilon(samples[2], counts[2], CesiumMath.EPSILON7)).toEqual(true);
+        expect(CesiumMath.equalsEpsilon(counts[0], 16.0, CesiumMath.EPSILON7)).toEqual(true);
+        expect(CesiumMath.equalsEpsilon(counts[1], 16.0, CesiumMath.EPSILON7)).toEqual(true);
+        expect(CesiumMath.equalsEpsilon(counts[2], 16.0, CesiumMath.EPSILON7)).toEqual(true);
+    });
+
+    it('it can sample occlusion over the area of a triangle and average the results to the vertices', function() {
+        var aoBuffer = {
+            samples: new Array(3).fill(0.0),
+            count: new Array(3).fill(CesiumMath.EPSILON10)
+        };
+
+        var parameters = {
+            raytracerScene : {
+                aoBufferByPrimitive : {
+                    meshPrimitiveID : aoBuffer
+                },
+                bufferDataByAccessor : equilateralBufferDataByAccessor,
+                triangleSoup : tetrahedron,
+                numberRays : 4,
+                nearCull : CesiumMath.EPSILON4,
+                rayDistance : 1.0
+            },
+            density : 4
+        };
+
+        var node = {
+            extras : {
+                _pipeline : {
+                    flatTransform : Matrix4.IDENTITY
+                }
+            }
+        };
+
+        var primitive = {
+            indices : 'indices',
+            attributes : {
+                POSITION : 'positions',
+                NORMAL : 'normals'
+            }
+        };
+
+        bakeAmbientOcclusion.raytraceOverTriangleSamples(primitive, 'meshPrimitiveID', parameters, node);
+
+        var samples = aoBuffer.samples;
+        var counts = aoBuffer.count;
+
+        // Expect the baked AO to only be partially occluded since there will be samples outside the tetrahedron
+        expect(counts[0] > 4).toEqual(true);
+        expect(counts[1] > 4).toEqual(true);
+        expect(counts[2] > 4).toEqual(true);
+        expect(CesiumMath.equalsEpsilon(samples[0], counts[0], CesiumMath.EPSILON7)).toEqual(false);
+        expect(CesiumMath.equalsEpsilon(samples[1], counts[1], CesiumMath.EPSILON7)).toEqual(false);
+        expect(CesiumMath.equalsEpsilon(samples[2], counts[2], CesiumMath.EPSILON7)).toEqual(false);
+    });
+
+    it('generates options given nothing but a gltf or just a quality setting', function() {
+        var aoOptions = {
+            gltfWithExtras: boxOverGroundGltf
+        };
+
+        var options = bakeAmbientOcclusion.generateOptions(aoOptions);
+        expect(options.toTexture).toEqual(false);
+        expect(options.groundPlane).toEqual(false);
+        expect(options.ambientShadowContribution).toEqual(0.5);
+        expect(options.density).toEqual(1.0);
+        expect(options.resolution).toEqual(128);
+        expect(options.numberRays).toEqual(16);
+        expect(options.triangleCenterOnly).toEqual(false);
+        expect(options.rayDistance).toEqual(-1);
+        expect(options.nearCull).toEqual(0.0001);
+        expect(options.shaderMode).toEqual('blend');
+        expect(options.sceneID).toEqual('defaultScene');
+
+        aoOptions = {
+            quality: 'medium',
+            gltfWithExtras: boxOverGroundGltf
+        };
+        options = bakeAmbientOcclusion.generateOptions(aoOptions);
+        expect(options.toTexture).toEqual(false);
+        expect(options.groundPlane).toEqual(false);
+        expect(options.ambientShadowContribution).toEqual(0.5);
+        expect(options.density).toEqual(2.0);
+        expect(options.resolution).toEqual(256);
+        expect(options.numberRays).toEqual(36);
+        expect(options.triangleCenterOnly).toEqual(false);
+        expect(options.rayDistance).toEqual(-1);
+        expect(options.nearCull).toEqual(0.0001);
+        expect(options.shaderMode).toEqual('blend');
+        expect(options.sceneID).toEqual('defaultScene');
+
+        aoOptions = {
+            quality: 'high',
+            gltfWithExtras: boxOverGroundGltf
+        };
+        options = bakeAmbientOcclusion.generateOptions(aoOptions);
+        expect(options.toTexture).toEqual(false);
+        expect(options.groundPlane).toEqual(false);
+        expect(options.ambientShadowContribution).toEqual(0.5);
+        expect(options.density).toEqual(4.0);
+        expect(options.resolution).toEqual(512);
+        expect(options.numberRays).toEqual(64);
+        expect(options.triangleCenterOnly).toEqual(false);
+        expect(options.rayDistance).toEqual(-1);
+        expect(options.nearCull).toEqual(0.0001);
+        expect(options.shaderMode).toEqual('blend');
+        expect(options.sceneID).toEqual('defaultScene');
+    });
+
+    it('overwrites parameters in base options when advanced settings are specified', function() {
+        var aoOptions = {
+            quality: 'medium',
+            toTexture: true,
+            triangleCenterOnly: true,
+            rayDistance: 10.0,
+            gltfWithExtras: boxOverGroundGltf
+        };
+        var options = bakeAmbientOcclusion.generateOptions(aoOptions);
+        expect(options.toTexture).toEqual(true);
+        expect(options.groundPlane).toEqual(false);
+        expect(options.ambientShadowContribution).toEqual(0.5);
+        expect(options.density).toEqual(2.0);
+        expect(options.resolution).toEqual(256);
+        expect(options.numberRays).toEqual(36);
+        expect(options.triangleCenterOnly).toEqual(true);
+        expect(options.rayDistance).toEqual(10.0);
+        expect(options.nearCull).toEqual(0.0001);
+        expect(options.shaderMode).toEqual('blend');
+        expect(options.sceneID).toEqual('defaultScene');
     });
 });

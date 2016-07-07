@@ -37,7 +37,7 @@
   "dependencies": {
     "async": "^1.5.2",
     "buffer-equal": "^1.0.0",
-    "cesium": "^1.22.0",
+    "cesium": "^1.23.0",
     "data-uri-to-buffer": "0.0.4",
     "datauri": "^1.0.0-alpha.5",
     "image-size": "^0.5.0",
