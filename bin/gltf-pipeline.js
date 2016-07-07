@@ -36,6 +36,9 @@ var quantize = defaultValue(defaultValue(argv.q, argv.quantize), false);
 var encodeNormals = defaultValue(defaultValue(argv.n, argv.encodeNormals), false);
 var compressTextureCoordinates = defaultValue(defaultValue(argv.c, argv.compressTextureCoordinates), false);
 var aoOptions = argv.ao;
+if (typeof(aoOptions) === 'boolean') {
+    aoOptions = {};
+}
 
 if (!defined(outputPath)) {
     var outputFileExtension;
