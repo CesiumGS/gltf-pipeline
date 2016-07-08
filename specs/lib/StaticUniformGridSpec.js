@@ -201,6 +201,94 @@ describe('StaticUniformGrid', function() {
         expect(fastNeighbors).toEqual(naiveNeighbors);
     });
 
+    it('runs functions on objects in the quadrant of a direction', function() {
+        var pointData = [];
+        for (var x = 0; x < 5; x++) {
+            for (var y = 0; y < 5; y++) {
+                for (var z = 0; z < 5; z++) {
+                    pointData.push([x, y, z]);
+                }
+            }
+        }
+
+        var grid = new StaticUniformGrid(pointData, 1.0, pointDataAxisAlignedBoundingBox, pointDataCellCheck);
+
+        var samplePosition = new Cartesian3(2.0, 2.0, 2.0);
+        var sampleDirection = new Cartesian3(1.0, 1.0, 1.0);
+        // Check a couple octants
+        var parameters = {
+            position: [2.0, 2.0, 2.0],
+            distance: 10.0,
+            neighbors: []
+        };
+
+        StaticUniformGrid.forNeighborsOctant(grid, samplePosition, sampleDirection, listPointNeighbors, parameters);
+        var fastNeighbors = parameters.neighbors;
+        var expectedNeighbors = [
+            [2, 2, 2],
+            [2, 3, 2],
+            [2, 2, 3],
+            [2, 3, 3],
+            [3, 2, 2],
+            [3, 3, 2],
+            [3, 2, 3],
+            [3, 3, 3]
+        ];
+        fastNeighbors.sort(width5IndexSort);
+        expectedNeighbors.sort(width5IndexSort);
+        expect(fastNeighbors).toEqual(expectedNeighbors);
+
+        sampleDirection.x = -1.0;
+        sampleDirection.y = -1.0;
+        sampleDirection.z = -1.0;
+        parameters = {
+            position: [2.0, 2.0, 2.0],
+            distance: 10.0,
+            neighbors: []
+        };
+
+        StaticUniformGrid.forNeighborsOctant(grid, samplePosition, sampleDirection, listPointNeighbors, parameters);
+        fastNeighbors = parameters.neighbors;
+        expectedNeighbors = [
+            [2, 2, 2],
+            [2, 1, 2],
+            [2, 2, 1],
+            [2, 1, 1],
+            [1, 2, 2],
+            [1, 1, 2],
+            [1, 2, 1],
+            [1, 1, 1]
+        ];
+        fastNeighbors.sort(width5IndexSort);
+        expectedNeighbors.sort(width5IndexSort);
+        expect(fastNeighbors).toEqual(expectedNeighbors);
+
+        sampleDirection.x = -1.0;
+        sampleDirection.y = 1.0;
+        sampleDirection.z = 1.0;
+        parameters = {
+            position: [2.0, 2.0, 2.0],
+            distance: 10.0,
+            neighbors: []
+        };
+
+        StaticUniformGrid.forNeighborsOctant(grid, samplePosition, sampleDirection, listPointNeighbors, parameters);
+        fastNeighbors = parameters.neighbors;
+        expectedNeighbors = [
+            [2, 2, 2],
+            [2, 3, 2],
+            [2, 2, 3],
+            [2, 3, 3],
+            [1, 2, 2],
+            [1, 3, 2],
+            [1, 2, 3],
+            [1, 3, 3]
+        ];
+        fastNeighbors.sort(width5IndexSort);
+        expectedNeighbors.sort(width5IndexSort);
+        expect(fastNeighbors).toEqual(expectedNeighbors);
+    });
+
     it('builds a grid containing triangles, which are lists of Cartesian3s', function() {
         var grid = StaticUniformGrid.fromTriangleSoup(manyTriangles, 1.0);
 
