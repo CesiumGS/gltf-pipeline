@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var Cesium = require('cesium');
 
