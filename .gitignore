@@ -9,5 +9,6 @@ npm-debug.log
 # Generate data
 coverage
 output
+test
 specs/data/boxTexturedUnoptimized/output
 
