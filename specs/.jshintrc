@@ -1,4 +1,5 @@
 {
   "extends": "../.jshintrc",
-  "jasmine": true
+  "jasmine": true,
+  "unused": false
 }
