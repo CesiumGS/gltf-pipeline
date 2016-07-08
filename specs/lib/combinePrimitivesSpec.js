@@ -108,7 +108,7 @@ describe('combinePrimitives', function() {
             typeError.accessors.accessor_29.type = 'VEC3';
             expect(function () {
                 combinePrimitives(typeError);
-            }).toThrow();
+            }).toThrowDeveloperError();
             done();
         });
     });
@@ -119,7 +119,7 @@ describe('combinePrimitives', function() {
             componentTypeError.accessors.accessor_29.componentType = 5126;
             expect(function () {
                 combinePrimitives(componentTypeError);
-            }).toThrow();
+            }).toThrowDeveloperError();
             done();
         });
     });

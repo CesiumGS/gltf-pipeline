@@ -161,7 +161,7 @@ describe('writeBinaryGltf', function() {
             writeBinaryGltf(clone(testData.gltf), {
                 outputPath : undefined
             }, true);
-        }).toThrowError('Output path is undefined.');
+        }).toThrowDeveloperError();
     });
     
     it('throws an invalid output extension error', function() {
@@ -169,6 +169,6 @@ describe('writeBinaryGltf', function() {
             writeBinaryGltf(clone(testData.gltf), {
                 outputPath : invalidPath
             }, true);
-        }).toThrowError('Invalid output path extension.');
+        }).toThrowDeveloperError();
     });
 });

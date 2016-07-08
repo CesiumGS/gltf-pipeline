@@ -122,8 +122,8 @@ describe('parseBinaryGltf', function() {
                 expect(err.message).toEqual('File is not valid binary glTF');
                 throw err;
             }
-        }).toThrow();
-    })
+        }).toThrowDeveloperError();
+    });
 
     it('throws a version error', function() {
         var versionError = new Buffer(testData.binary);
@@ -137,8 +137,8 @@ describe('parseBinaryGltf', function() {
                 expect(err.message).toEqual('Binary glTF version is not 1');
                 throw err;
             }
-        }).toThrow();
-    })
+        }).toThrowDeveloperError();
+    });
 
     it('throws a format error', function() {
         var formatError = new Buffer(testData.binary);
@@ -152,6 +152,6 @@ describe('parseBinaryGltf', function() {
                 expect(err.message).toEqual('Binary glTF scene format is not JSON');
                 throw err;
             }
-        }).toThrow();
-    })
+        }).toThrowDeveloperError();
+    });
 });
