@@ -9,7 +9,6 @@ var WebGLConstants = Cesium.WebGLConstants;
 
 var fs = require('fs');
 var clone = require('clone');
-var loadGltfUris = require('../../lib/loadGltfUris');
 var readAccessor = require('../../lib/readAccessor');
 var readGltf = require('../../lib/readGltf');
 

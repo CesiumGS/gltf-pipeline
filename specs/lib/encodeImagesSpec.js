@@ -1,6 +1,7 @@
 'use strict';
 var fs = require('fs');
 var bufferEqual = require('buffer-equal');
+var addPipelineExtras = require('../../lib/addPipelineExtras');
 var encodeImages = require('../../lib/encodeImages');
 var loadGltfUris = require('../../lib/loadGltfUris');
 var dataUriToBuffer = require('data-uri-to-buffer');
@@ -12,8 +13,7 @@ var Jimp = require('jimp');
 describe('encodeImages', function() {
     var imageBuffer = dataUriToBuffer(imageUri);
     var options = {
-        basePath: basePath,
-        imageProcess: true
+        basePath: basePath
     };
 
     var gltf = {
@@ -33,6 +33,7 @@ describe('encodeImages', function() {
     it('does not re-encode if the images have not been changed', function(done) {
         var gltfClone = clone(gltf);
 
+        addPipelineExtras(gltf);
         loadGltfUris(gltfClone, options, function() {
             var pipelineExtras0001 = gltfClone.images.Image0001.extras._pipeline;
             var pipelineExtras0002 = gltfClone.images.Image0002.extras._pipeline;
@@ -48,6 +49,7 @@ describe('encodeImages', function() {
     it('re-encodes any jimp images and replaces the existing source', function(done) {
         var gltfClone = clone(gltf);
 
+        addPipelineExtras(gltf);
         loadGltfUris(gltfClone, options, function() {
             var pipelineExtras0001 = gltfClone.images.Image0001.extras._pipeline;
             var jimpImage001 = pipelineExtras0001.jimpImage;
