@@ -1,0 +1,156 @@
+{
+  "accessors": {
+    "accessor_index_0": {
+      "bufferView": "bufferView_index",
+      "byteOffset": 0,
+      "byteStride": 0,
+      "componentType": 5123,
+      "count": 36,
+      "type": "SCALAR"
+    },
+    "accessor_position": {
+      "bufferView": "bufferView_vertex",
+      "byteOffset": 0,
+      "byteStride": 24,
+      "componentType": 5126,
+      "count": 24,
+      "min": [
+        -1,
+        -1,
+        -1
+      ],
+      "max": [
+        1,
+        1,
+        1
+      ],
+      "type": "VEC3"
+    },
+    "accessor_normal": {
+      "bufferView": "bufferView_vertex",
+      "byteOffset": 12,
+      "byteStride": 24,
+      "componentType": 5126,
+      "count": 24,
+      "type": "VEC3"
+    }
+  },
+  "asset": {
+    "generator": "OBJ2GLTF",
+    "premultipliedAlpha": true,
+    "profile": {
+      "api": "WebGL",
+      "version": "1.0"
+    },
+    "version": 1
+  },
+  "buffers": {
+    "buffer_box_normals": {
+      "byteLength": 648,
+      "type": "arraybuffer",
+      "uri": "data:application/octet-stream;base64,AACAvwAAgD8AAIA/AACAvwAAAAAAAAAAAACAvwAAgD8AAIC/AACAvwAAAAAAAAAAAACAvwAAgL8AAIC/AACAvwAAAAAAAAAAAACAvwAAgL8AAIA/AACAvwAAAAAAAAAAAACAvwAAgD8AAIC/AAAAAAAAAAAAAIC/AACAPwAAgD8AAIC/AAAAAAAAAAAAAIC/AACAPwAAgL8AAIC/AAAAAAAAAAAAAIC/AACAvwAAgL8AAIC/AAAAAAAAAAAAAIC/AACAPwAAgD8AAIC/AACAPwAAAAAAAAAAAACAPwAAgD8AAIA/AACAPwAAAAAAAAAAAACAPwAAgL8AAIA/AACAPwAAAAAAAAAAAACAPwAAgL8AAIC/AACAPwAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAIA/AACAvwAAgD8AAIA/AAAAAAAAAAAAAIA/AACAvwAAgL8AAIA/AAAAAAAAAAAAAIA/AACAPwAAgL8AAIA/AAAAAAAAAAAAAIA/AACAvwAAgL8AAIA/AAAAAAAAgL8AAAAAAACAvwAAgL8AAIC/AAAAAAAAgL8AAAAAAACAPwAAgL8AAIC/AAAAAAAAgL8AAAAAAACAPwAAgL8AAIA/AAAAAAAAgL8AAAAAAACAPwAAgD8AAIA/AAAAAAAAgD8AAAAAAACAPwAAgD8AAIC/AAAAAAAAgD8AAAAAAACAvwAAgD8AAIC/AAAAAAAAgD8AAAAAAACAvwAAgD8AAIA/AAAAAAAAgD8AAAAAAAABAAIAAAACAAMABAAFAAYABAAGAAcACAAJAAoACAAKAAsADAANAA4ADAAOAA8AEAARABIAEAASABMAFAAVABYAFAAWABcA"
+    }
+  },
+  "bufferViews": {
+    "bufferView_vertex": {
+      "buffer": "buffer_box_normals",
+      "byteLength": 576,
+      "byteOffset": 0,
+      "target": 34962
+    },
+    "bufferView_index": {
+      "buffer": "buffer_box_normals",
+      "byteLength": 72,
+      "byteOffset": 576,
+      "target": 34963
+    }
+  },
+  "images": {},
+  "materials": {
+    "material_czmDefaultMat": {
+      "name": "czmDefaultMat",
+      "values": {
+        "ambient": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "diffuse": [
+          0.5,
+          0.5,
+          0.5,
+          1
+        ],
+        "emission": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "specular": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "shininess": 0
+      }
+    }
+  },
+  "meshes": {
+    "mesh_box_normals": {
+      "name": "box_normals",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": "accessor_position",
+            "NORMAL": "accessor_normal"
+          },
+          "indices": "accessor_index_0",
+          "material": "material_czmDefaultMat",
+          "mode": 4
+        }
+      ]
+    }
+  },
+  "nodes": {
+    "node_box_normals": {
+      "children": [],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "meshes": [
+        "mesh_box_normals"
+      ],
+      "name": "box_normals"
+    }
+  },
+  "samplers": {
+    "sampler_0": {}
+  },
+  "scene": "scene_box_normals",
+  "scenes": {
+    "scene_box_normals": {
+      "nodes": [
+        "node_box_normals"
+      ]
+    }
+  },
+  "textures": {}
+}
