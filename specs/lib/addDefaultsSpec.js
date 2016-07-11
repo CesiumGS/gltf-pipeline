@@ -1,9 +1,17 @@
 'use strict';
 
+var fs = require('fs');
 var addDefaults = require('../../lib/addDefaults');
+var addPipelineExtras = require('../../lib/addPipelineExtras');
+var loadGltfUris = require('../../lib/loadGltfUris');
+var readGltf = require('../../lib/readGltf');
+var removePipelineExtras = require('../../lib/removePipelineExtras');
 var Cesium = require('cesium');
 var clone = require('clone');
 var WebGLConstants = Cesium.WebGLConstants;
+
+var transparentImageUri = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAB3RJTUUH4AcGERIfpcOGjwAAAQZJREFUGNMFwcErQ3EAwPHv7+3JEw2FFe+lZ9vpTTnYiR2MsyKuE8VB/ojdlZuDg4sVyUU7TVK7KG05jFgWPdt6oqWI5/E87/l8RNO8zyoylF4EtTeB6wWMhH2mNMG3B3KHDMemxOFdQEj4qN3tPDoS9Q+HxaiPdNkS5G5+SUV1xoYG6VNcRvvh9ClMS+hIZ6aLocZY0M+Zj1X59CMcXXmsJUO4dh7Z0HTiEZvN3DQDvcNk5mrYyU5q5SUK1QuktGpxkE/x8OpSaVqUSxt81bfYKewxkVhF9h1BjxJHyBW84I/dk23ebVieWWF2fB1hNZ6zSlsXxdt9rhtFgsDH0CZJJzK43g//gYBjzrZ4jf0AAAAASUVORK5CYII=';
+var gltfTransparentPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestTransparent.gltf';
 
 describe('addDefaults', function() {
     it('Adds accessor properties', function() {
@@ -107,13 +115,23 @@ describe('addDefaults', function() {
 
     it('does not change the material if the material has a technique', function() {
         var gltf = {
+            "techniques": {
+                "technique1": {
+                    "states": {
+                        "enable": [
+                            2929,
+                            2884
+                        ]
+                    }
+                }
+            },
             "materials": {
                 "blinn-1": {
                     "technique": "technique1",
                     "values": {
                         "ambient": [0, 0, 0, 1],
-                        "diffuse": "texture_file2",
-                        "emission": [0, 0, 0, 1],
+                        "diffuse": [1, 0, 0, 1],
+                        "emission": "texture_file2",
                         "shininess": 38.4,
                         "specular": [0, 0, 0, 1]
                     },
@@ -155,21 +173,26 @@ describe('addDefaults', function() {
                 "material1": {
                     "values": {
                         "ambient": [0, 0, 0, 1],
-                        "diffuse": "texture_file2",
-                        "emission": [1, 0, 0, 1]
+                        "diffuse": [1, 0, 0, 1],
+                        "emission": "texture_file2"
                     }
                 }
             }
         };
         var expectValues = {
             "ambient": [0, 0, 0, 1],
-            "diffuse": "texture_file2",
-            "doubleSided": false,
-            "emission": [1, 0, 0, 1],
+            "diffuse": [1, 0, 0, 1],
+            "emission": "texture_file2",
             "specular": [0, 0, 0, 1],
             "shininess": 0.0,
-            "transparency": 1.0,
-            "transparent": false
+            "transparency": 1.0
+        };
+
+        var expectedStates = {
+            enable: [
+                WebGLConstants.CULL_FACE,
+                WebGLConstants.DEPTH_TEST
+            ]
         };
 
         var options = {
@@ -185,8 +208,10 @@ describe('addDefaults', function() {
         addDefaults(gltfClone);
         expect(Object.keys(gltfClone.materials).length > 0).toEqual(true);
         expect(Object.keys(gltfClone.techniques).length > 0).toEqual(true);
+        expect(gltfClone.techniques[Object.keys(gltfClone.techniques)[0]].states).toEqual(expectedStates);
+
         for (materialID in gltfClone.materials) {
-            if (gltf.materials.hasOwnProperty(materialID)) {
+            if (gltfClone.materials.hasOwnProperty(materialID)) {
                 expect(gltfClone.materials[materialID].values).toEqual(expectValues);
             }
         }
@@ -196,8 +221,9 @@ describe('addDefaults', function() {
         addDefaults(gltfClone, options);
         expect(Object.keys(gltfClone.materials).length > 0).toEqual(true);
         expect(Object.keys(gltfClone.techniques).length > 0).toEqual(true);
+        expect(gltfClone.techniques[Object.keys(gltfClone.techniques)[0]].states).toEqual(expectedStates);
         for (materialID in gltfClone.materials) {
-            if (gltf.materials.hasOwnProperty(materialID)) {
+            if (gltfClone.materials.hasOwnProperty(materialID)) {
                 expect(gltfClone.materials[materialID].values).toEqual(expectValues);
             }
         }
@@ -207,8 +233,8 @@ describe('addDefaults', function() {
                 "lambert-1": {
                     "values": {
                         "ambient": [0, 0, 0, 1],
-                        "diffuse": "texture_file2",
-                        "emission": [1, 0, 0, 1],
+                        "diffuse": [1, 0, 0, 1],
+                        "emission": "texture_file2",
                         "shininess": 10.0
                     }
                 }
@@ -217,13 +243,11 @@ describe('addDefaults', function() {
 
         expectValues = {
             "ambient": [0, 0, 0, 1],
-            "diffuse": "texture_file2",
-            "doubleSided": false,
-            "emission": [1, 0, 0, 1],
+            "diffuse": [1, 0, 0, 1],
+            "emission": "texture_file2",
             "specular": [0, 0, 0, 1],
             "shininess": 10.0,
-            "transparency": 1.0,
-            "transparent": false
+            "transparency": 1.0
         };
 
         // default blinn
@@ -231,6 +255,7 @@ describe('addDefaults', function() {
         addDefaults(gltfClone);
         expect(Object.keys(gltfClone.materials).length > 0).toEqual(true);
         expect(Object.keys(gltfClone.techniques).length > 0).toEqual(true);
+        expect(gltfClone.techniques[Object.keys(gltfClone.techniques)[0]].states).toEqual(expectedStates);
         for (materialID in gltfClone.materials) {
             if (gltfClone.materials.hasOwnProperty(materialID)) {
                 expect(gltfClone.materials[materialID].values).toEqual(expectValues);
@@ -242,8 +267,9 @@ describe('addDefaults', function() {
         addDefaults(gltfClone, options);
         expect(Object.keys(gltfClone.materials).length > 0).toEqual(true);
         expect(Object.keys(gltfClone.techniques).length > 0).toEqual(true);
+        expect(gltfClone.techniques[Object.keys(gltfClone.techniques)[0]].states).toEqual(expectedStates);
         for (materialID in gltfClone.materials) {
-            if (gltf.materials.hasOwnProperty(materialID)) {
+            if (gltfClone.materials.hasOwnProperty(materialID)) {
                 expect(gltfClone.materials[materialID].values).toEqual(expectValues);
             }
         }
@@ -257,6 +283,123 @@ describe('addDefaults', function() {
                 expect(shader.extras._pipeline.source).toBeDefined();
             }
         }
+    });
+
+    var alphaBlendState = {
+        enable : [
+            WebGLConstants.DEPTH_TEST,
+            WebGLConstants.BLEND
+        ],
+        depthMask : false,
+        functions : {
+            blendEquationSeparate : [
+                WebGLConstants.FUNC_ADD,
+                WebGLConstants.FUNC_ADD
+            ],
+            blendFuncSeparate : [
+                WebGLConstants.ONE,
+                WebGLConstants.ONE_MINUS_SRC_ALPHA,
+                WebGLConstants.ONE,
+                WebGLConstants.ONE_MINUS_SRC_ALPHA
+            ]
+        }
+    };
+
+    it('generates a material with alpha blending if the diffuse texture is transparent and no technique or extension values are given', function(done) {
+        var gltf = {
+            "textures": {
+                "texture0001": {
+                    "format": 6408,
+                    "internalFormat": 6408,
+                    "sampler": "sampler_0",
+                    "source": "Image0001",
+                    "target": 3553,
+                    "type": 5121
+                }
+            },
+            "images": {
+                "Image0001": {
+                    "name": "Image0001",
+                    "uri": transparentImageUri
+                }
+            },
+            "materials": {
+                "material1": {
+                    "values": {
+                        "ambient": [0, 0, 0, 1],
+                        "diffuse": "texture0001",
+                        "emission": [1, 0, 0, 1]
+                    }
+                }
+            }
+        };
+
+        addPipelineExtras(gltf);
+        loadGltfUris(gltf, {}, function(err, gltf) {
+            if (err) {
+                throw err;
+            }
+            addDefaults(gltf);
+            var technique = gltf.techniques[Object.keys(gltf.techniques)[0]];
+            expect(technique.states).toEqual(alphaBlendState);
+            done();
+        });
+    });
+
+    it('generates a material with alpha blending if the diffuse color is transparent and no technique or extension values are given', function() {
+        var gltf = {
+            "materials": {
+                "material1": {
+                    "values": {
+                        "ambient": [0, 0, 0, 1],
+                        "diffuse": [1, 0, 0, 0.5],
+                        "emission": [1, 0, 0, 1]
+                    }
+                }
+            }
+        };
+
+        addDefaults(gltf);
+        var technique = gltf.techniques[Object.keys(gltf.techniques)[0]];
+        expect(technique.states).toEqual(alphaBlendState);
+    });
+
+    it('modifies the material\'s technique to support alpha blending if the diffuse texture is transparent', function(done) {
+        fs.readFile(gltfTransparentPath, function(err, data) {
+            if (err) {
+                throw err;
+            }
+            var gltf = JSON.parse(data);
+            var originalState = gltf.techniques[Object.keys(gltf.techniques)[0]].states;
+            expect(originalState).not.toEqual(alphaBlendState);
+            readGltf(gltfTransparentPath, {}, function (gltf) {
+                addDefaults(gltf);
+                var technique = gltf.techniques[Object.keys(gltf.techniques)[0]];
+                expect(technique.states).toEqual(alphaBlendState);
+                done();
+            });
+        });
+    });
+
+    it('modifies the material\'s technique to support alpha blending if the diffuse color is transparent', function(done) {
+        fs.readFile(gltfTransparentPath, function(err, data) {
+            if (err) {
+                throw err;
+            }
+            var gltf = JSON.parse(data);
+            var originalState = gltf.techniques[Object.keys(gltf.techniques)[0]].states;
+            expect(originalState).not.toEqual(alphaBlendState);
+
+            var options = {};
+            readGltf(gltfTransparentPath, options, function (gltf) {
+                var material = gltf.materials[Object.keys(gltf.materials)[0]];
+                material.values.diffuse = [1, 0, 0, 0.5];
+                addDefaults(gltf);
+                var technique = gltf.techniques[Object.keys(gltf.techniques)[0]];
+                expect(technique.states).toEqual(alphaBlendState);
+                done();
+            });
+        });
     });
 
     it('generates techniques and nodes for KHR_materials_common lights', function() {
@@ -368,12 +511,10 @@ describe('addDefaults', function() {
         var expectValues = {
             "ambient": [0, 0, 0, 1],
             "diffuse": [0, 0, 0, 1],
-            "doubleSided": false,
             "emission": [0, 0, 0, 1],
             "specular": [0, 0, 0, 1],
             "shininess": 0.0,
-            "transparency": 1.0,
-            "transparent": false
+            "transparency": 1.0
         };
         addDefaults(gltf);
         expect(Object.keys(gltf.materials).length > 0).toEqual(true);
@@ -391,8 +532,8 @@ describe('addDefaults', function() {
                 "material1": {
                     "values": {
                         "ambient": [0, 0, 0, 1],
-                        "diffuse": "texture_file2",
-                        "emission": [1, 0, 0, 1]
+                        "diffuse": [1, 0, 0, 1],
+                        "emission": "texture_file2"
                     }
                 }
             }
