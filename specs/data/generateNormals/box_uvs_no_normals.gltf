@@ -1,0 +1,156 @@
+{
+  "accessors": {
+    "accessor_index_0": {
+      "bufferView": "bufferView_index",
+      "byteOffset": 0,
+      "byteStride": 0,
+      "componentType": 5123,
+      "count": 36,
+      "type": "SCALAR"
+    },
+    "accessor_position": {
+      "bufferView": "bufferView_vertex",
+      "byteOffset": 0,
+      "byteStride": 20,
+      "componentType": 5126,
+      "count": 14,
+      "min": [
+        -1,
+        -1,
+        -1
+      ],
+      "max": [
+        1,
+        1,
+        1
+      ],
+      "type": "VEC3"
+    },
+    "accessor_uv": {
+      "bufferView": "bufferView_vertex",
+      "byteOffset": 12,
+      "byteStride": 20,
+      "componentType": 5126,
+      "count": 14,
+      "type": "VEC2"
+    }
+  },
+  "asset": {
+    "generator": "OBJ2GLTF",
+    "premultipliedAlpha": true,
+    "profile": {
+      "api": "WebGL",
+      "version": "1.0"
+    },
+    "version": 1
+  },
+  "buffers": {
+    "box_uvs_no_normals_buffer": {
+      "byteLength": 352,
+      "type": "arraybuffer",
+      "uri": "data:application/octet-stream;base64,AACAvwAAgD8AAIA/AACAPhe30TgAAIC/AACAPwAAgL8Xt9E4F7fROAAAgL8AAIC/AACAvxe30TgAAIA+AACAvwAAgL8AAIA/AACAPgAAgD4AAIC/AACAPwAAgL8AAIA+AABAPwAAgD8AAIA/AACAvwAAAD8AAEA/AACAPwAAgL8AAIC/AAAAPwAAAD8AAIC/AACAvwAAgL8AAIA+AAAAPwAAgD8AAIA/AACAvwAAQD8Xt9E4AACAPwAAgD8AAIA/AAAAPxe30TgAAIA/AACAvwAAgD8AAAA/AACAPgAAgD8AAIC/AACAvwAAQD8AAIA+AACAPwAAgD8AAIA/AAAAP3L5fz8AAIC/AACAPwAAgD8AAIA+cvl/PwAAAQACAAAAAgADAAQABQAGAAQABgAHAAgACQAKAAgACgALAAkAAAADAAkAAwAKAAMABwAGAAMABgAKAAwABQAEAAwABAANAA=="
+    }
+  },
+  "bufferViews": {
+    "bufferView_vertex": {
+      "buffer": "box_uvs_no_normals_buffer",
+      "byteLength": 280,
+      "byteOffset": 0,
+      "target": 34962
+    },
+    "bufferView_index": {
+      "buffer": "box_uvs_no_normals_buffer",
+      "byteLength": 72,
+      "byteOffset": 280,
+      "target": 34963
+    }
+  },
+  "images": {},
+  "materials": {
+    "material_None": {
+      "name": "None",
+      "values": {
+        "ambient": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "diffuse": [
+          0.8,
+          0.8,
+          0.8,
+          1
+        ],
+        "emission": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "specular": [
+          0.8,
+          0.8,
+          0.8,
+          1
+        ],
+        "shininess": 0
+      }
+    }
+  },
+  "meshes": {
+    "mesh_box_uvs_no_normals": {
+      "name": "box_uvs_no_normals",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": "accessor_position",
+            "TEXCOORD_0": "accessor_uv"
+          },
+          "indices": "accessor_index_0",
+          "material": "material_None",
+          "mode": 4
+        }
+      ]
+    }
+  },
+  "nodes": {
+    "node_box_uvs_no_normals": {
+      "children": [],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "meshes": [
+        "mesh_box_uvs_no_normals"
+      ],
+      "name": "box_uvs_no_normals"
+    }
+  },
+  "samplers": {
+    "sampler_0": {}
+  },
+  "scene": "scene_box_uvs_no_normals",
+  "scenes": {
+    "scene_box_uvs_no_normals": {
+      "nodes": [
+        "node_box_uvs_no_normals"
+      ]
+    }
+  },
+  "textures": {}
+}

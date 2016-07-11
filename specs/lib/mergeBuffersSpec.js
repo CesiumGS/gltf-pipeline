@@ -49,7 +49,7 @@ describe('mergeBuffers', function() {
         };
 
         mergeBuffers(gltf, 'mergedBuffers');
-        
+
         expect(gltf).toEqual({
             "bufferViews": {
                 "bufferView_0": {
