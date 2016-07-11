@@ -117,9 +117,7 @@ describe('gltfPipeline', function() {
             });
         });
     });
-
-
-    /*
+    
     it('will write sources from JSON', function(done) {
         var options = {};
         readGltf(gltfEmbeddedPath, options, function (gltf) {
@@ -143,7 +141,6 @@ describe('gltfPipeline', function() {
             });
         });
     });
-    */
 
     it('will add image processing extras if this is a pipeline with image processing', function(done) {
         var options = {
