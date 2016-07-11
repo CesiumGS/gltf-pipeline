@@ -117,7 +117,7 @@ describe('gltfPipeline', function() {
             });
         });
     });
-    
+
     it('will write sources from JSON', function(done) {
         var options = {};
         readGltf(gltfEmbeddedPath, options, function (gltf) {
