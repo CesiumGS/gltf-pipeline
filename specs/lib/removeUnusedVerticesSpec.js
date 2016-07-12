@@ -1,6 +1,4 @@
 'use strict';
-var fs = require('fs');
-var path = require('path');
 var clone = require('clone');
 var removeUnusedVertices = require('../../lib/removeUnusedVertices');
 var byteLengthForComponentType = require('../../lib/byteLengthForComponentType');
@@ -134,7 +132,6 @@ describe('removeUnusedVertices', function() {
         var attributesSource = Uint8Array.from(attributesBuffer.extras._pipeline.source);
         var check1 = new Float32Array(attributesSource.buffer, attributeAccessor1.byteOffset, expectAttribute1.length);
         var check2 = new Uint16Array(attributesSource.buffer, attributeAccessor2.byteOffset, expectAttribute2.length);
-        var i;
         expect(check1).toEqual(expectAttribute1);
         expect(check2).toEqual(expectAttribute2);
 
@@ -400,9 +397,10 @@ describe('removeUnusedVertices', function() {
     });
 
     it('removes parts of the buffer based on the attribute type if the stride is 0', function() {
+        var i;
         var indices = [0,1,2,0,2,3];
         var indicesBuffer = new Buffer(indices.length * 2);
-        for (var i = 0; i < indices.length; i++) {
+        for (i = 0; i < indices.length; i++) {
             indicesBuffer.writeUInt16LE(indices[i], i * 2);
         }
 
@@ -416,7 +414,7 @@ describe('removeUnusedVertices', function() {
             2,2,2
         ];
         var positionsBuffer = new Buffer(positions.length * 4);
-        for (var i = 0; i < positions.length; i++) {
+        for (i = 0; i < positions.length; i++) {
             positionsBuffer.writeFloatLE(positions[i], i * 4);
         }
 
@@ -492,13 +490,14 @@ describe('removeUnusedVertices', function() {
         };
 
         removeUnusedVertices(testGltf);
-        expect(testGltf.buffers["buffer_0"].byteLength).toEqual(6 * 2 + 4 * 3 * 4);
+        expect(testGltf.buffers.buffer_0.byteLength).toEqual(6 * 2 + 4 * 3 * 4);
     });
 
     it('handles 8 bit indices', function(){
+        var i;
         var indices = [0,1,2,0,2,3];
         var indicesBuffer = new Buffer(indices.length);
-        for (var i = 0; i < indices.length; i++) {
+        for (i = 0; i < indices.length; i++) {
             indicesBuffer.writeUInt8(indices[i], i);
         }
 
@@ -512,7 +511,7 @@ describe('removeUnusedVertices', function() {
             2,2,2
         ];
         var positionsBuffer = new Buffer(positions.length * 4);
-        for (var i = 0; i < positions.length; i++) {
+        for (i = 0; i < positions.length; i++) {
             positionsBuffer.writeFloatLE(positions[i], i * 4);
         }
 
@@ -588,6 +587,6 @@ describe('removeUnusedVertices', function() {
         };
 
         removeUnusedVertices(testGltf);
-        expect(testGltf.buffers["buffer_0"].byteLength).toEqual(6 + 4 * 3 * 4);
+        expect(testGltf.buffers.buffer_0.byteLength).toEqual(6 + 4 * 3 * 4);
     });
 });

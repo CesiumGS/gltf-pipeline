@@ -3,7 +3,6 @@
 var fs = require('fs');
 var clone = require('clone');
 var bufferEqual = require('buffer-equal');
-var dataUriToBuffer = require('data-uri-to-buffer');
 var writeGltf = require('../../lib/writeGltf');
 var fragmentShaderPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest0FS.glsl';
 var outputPath = './specs/data/boxTexturedUnoptimized/output.gltf';

@@ -1,7 +1,6 @@
 'use strict';
 var fs = require('fs');
 var bufferEqual = require('buffer-equal');
-var dataUriToBuffer = require('data-uri-to-buffer');
 var addPipelineExtras = require('../../lib/addPipelineExtras');
 var loadGltfUris = require('../../lib/loadGltfUris');
 var fragmentShaderPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest0FS.glsl';

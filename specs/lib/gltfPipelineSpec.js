@@ -8,10 +8,7 @@ var processJSONToDisk = gltfPipeline.processJSONToDisk;
 var processFile = gltfPipeline.processFile;
 var processFileToDisk = gltfPipeline.processFileToDisk;
 var readGltf = require('../../lib/readGltf');
-var removePipelineExtras = require('../../lib/removePipelineExtras');
 var addPipelineExtras = require('../../lib/addPipelineExtras');
-var writeSource = require('../../lib/writeSource');
-var writeGltf = require('../../lib/writeGltf');
 
 var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf';
 var gltfEmbeddedPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestEmbedded.gltf';
@@ -121,9 +118,9 @@ describe('gltfPipeline', function() {
     it('will write sources from JSON', function(done) {
         var options = {};
         readGltf(gltfEmbeddedPath, options, function (gltf) {
-            var initialUri = gltf['buffers'].CesiumTexturedBoxTest.uri;
+            var initialUri = gltf.buffers.CesiumTexturedBoxTest.uri;
             processJSON(gltf, options, function () {
-                var finalUri = gltf['buffers'].CesiumTexturedBoxTest.uri;
+                var finalUri = gltf.buffers.CesiumTexturedBoxTest.uri;
                 expect(initialUri).not.toEqual(finalUri);
                 done();
             });
@@ -133,9 +130,9 @@ describe('gltfPipeline', function() {
     it('will write sources from file', function(done) {
         var options = {};
         readGltf(gltfEmbeddedPath, options, function (gltf) {
-            var initialUri = gltf['buffers'].CesiumTexturedBoxTest.uri;
+            var initialUri = gltf.buffers.CesiumTexturedBoxTest.uri;
             processFile(gltfEmbeddedPath, options, function (gltfFinal) {
-                var finalUri = gltfFinal['buffers'].CesiumTexturedBoxTest.uri;
+                var finalUri = gltfFinal.buffers.CesiumTexturedBoxTest.uri;
                 expect(initialUri).not.toEqual(finalUri);
                 done();
             });
