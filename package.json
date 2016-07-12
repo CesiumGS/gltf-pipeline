@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "async": "2.0.0-rc.6",
+    "bluebird": "^3.4.1",
     "buffer-equal": "1.0.0",
     "cesium": "1.23.0",
     "clone": "1.0.2",
