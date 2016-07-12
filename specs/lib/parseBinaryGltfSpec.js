@@ -3,8 +3,6 @@ var fs = require('fs');
 var async = require('async');
 var bufferEqual = require('buffer-equal');
 var parseBinaryGltf = require('../../lib/parseBinaryGltf');
-var Cesium = require('cesium');
-var DeveloperError = Cesium.DeveloperError;
 var removePipelineExtras = require('../../lib/removePipelineExtras');
 var binaryGltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.glb';
 var overlapGltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestOverlap.glb';
@@ -122,8 +120,8 @@ describe('parseBinaryGltf', function() {
                 expect(err.message).toEqual('File is not valid binary glTF');
                 throw err;
             }
-        }).toThrow();
-    })
+        }).toThrowDeveloperError();
+    });
 
     it('throws a version error', function() {
         var versionError = new Buffer(testData.binary);
@@ -137,8 +135,8 @@ describe('parseBinaryGltf', function() {
                 expect(err.message).toEqual('Binary glTF version is not 1');
                 throw err;
             }
-        }).toThrow();
-    })
+        }).toThrowDeveloperError();
+    });
 
     it('throws a format error', function() {
         var formatError = new Buffer(testData.binary);
@@ -152,6 +150,6 @@ describe('parseBinaryGltf', function() {
                 expect(err.message).toEqual('Binary glTF scene format is not JSON');
                 throw err;
             }
-        }).toThrow();
-    })
+        }).toThrowDeveloperError();
+    });
 });

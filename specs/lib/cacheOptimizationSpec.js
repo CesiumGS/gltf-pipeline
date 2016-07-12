@@ -21,7 +21,7 @@ var unoptimizedVertices = [ 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5,
 var optimizedVertices = [ 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 
     -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5,
     0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 
-    -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5 ]
+    -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5 ];
 
 
 describe('cacheOptimization', function() {
@@ -47,7 +47,7 @@ describe('cacheOptimization', function() {
         var options = {};
         readGltf(gltfPath, options, function(gltf) {
             addDefaults(gltf);
-            var positionAccessor = gltf.accessors['accessor_23'];
+            var positionAccessor = gltf.accessors.accessor_23;
             // Use write/read accessor to unpack the optimizedVertices for us
             writeAccessor(gltf, positionAccessor, optimizedVertices);
             var unpackedOptimizedVertices = [];

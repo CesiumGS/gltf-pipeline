@@ -1,5 +1,4 @@
 'use strict';
-var fs = require('fs');
 var bufferEqual = require('buffer-equal');
 var addPipelineExtras = require('../../lib/addPipelineExtras');
 var encodeImages = require('../../lib/encodeImages');

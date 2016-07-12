@@ -1,5 +1,4 @@
 'use strict';
-var Cesium = require('cesium');
 var addCesiumRTC = require('../../lib/addCesiumRTC');
 
 describe('addCesiumRTC', function() {

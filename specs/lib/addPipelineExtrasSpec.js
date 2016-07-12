@@ -8,6 +8,9 @@ describe('addPipelineExtras', function() {
 
     beforeAll(function(done) {
         fs.readFile(gltfExtrasPath, function(err, data) {
+            if (err) {
+                throw err;
+            }
             gltf = JSON.parse(data);
             addPipelineExtras(gltf);
             done();
