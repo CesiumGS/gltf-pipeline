@@ -1,5 +1,5 @@
 'use strict';
-var fs = require('fs');
+var fsExtra = require('fs-extra');
 var path = require('path');
 var writeGltf = require('../../lib/writeGltf');
 var readGltf = require('../../lib/readGltf');
@@ -10,7 +10,7 @@ var invalidPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.exe
 
 describe('writeGltf', function() {
     it('will write a file to the correct directory', function(done) {
-        var spy = spyOn(fs, 'writeFile').and.callFake(function(file, data, callback) {
+        var spy = spyOn(fsExtra, 'outputJson').and.callFake(function(file, data, callback) {
             callback();
         });
         

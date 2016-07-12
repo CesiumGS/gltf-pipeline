@@ -1,5 +1,5 @@
 'use strict';
-var fs = require('fs');
+var fsExtra = require('fs-extra');
 var path = require('path');
 var clone = require('clone');
 var gltfPipeline = require('../../lib/gltfPipeline');
@@ -31,7 +31,7 @@ describe('gltfPipeline', function() {
     
     it('optimizes a gltf JSON with external resources', function(done) {
         var options = { basePath : path.dirname(gltfPath) };
-        fs.readFile(gltfPath, options, function(err, data) {
+        fsExtra.readFile(gltfPath, options, function(err, data) {
             if (err) {
                 throw err;
             }
@@ -73,7 +73,7 @@ describe('gltfPipeline', function() {
     });
 
     it('will write a file to the correct directory', function(done) {
-        var spy = spyOn(fs, 'writeFile').and.callFake(function(file, data, callback) {
+        var spy = spyOn(fsExtra, 'outputJson').and.callFake(function(file, data, callback) {
             callback();
         });
         var options = {
@@ -86,7 +86,7 @@ describe('gltfPipeline', function() {
     });
 
     it('will write a binary file', function(done) {
-        var spy = spyOn(fs, 'writeFile').and.callFake(function(file, data, callback) {
+        var spy = spyOn(fsExtra, 'outputFile').and.callFake(function(file, data, callback) {
             callback();
         });
         var options = {
@@ -100,7 +100,7 @@ describe('gltfPipeline', function() {
     });
 
     it('will write a file from JSON', function(done) {
-        var spy = spyOn(fs, 'writeFile').and.callFake(function(file, data, callback) {
+        var spy = spyOn(fsExtra, 'outputJson').and.callFake(function(file, data, callback) {
             callback();
         });
         var options = {
