@@ -34,7 +34,7 @@ describe('loadImageUris', function() {
         };
 
         addPipelineExtras(gltf);
-        loadGltfUris(gltf, options, function(err, gltf) {
+        loadGltfUris(gltf, options).then(function(f) {
             expect(gltf.images.Image0001.extras._pipeline.source).toBeDefined();
             expect(bufferEqual(gltf.images.Image0001.extras._pipeline.source, imageData)).toBe(true);
             expect(gltf.images.Image0001.extras._pipeline.extension).toEqual('.png');
@@ -52,7 +52,7 @@ describe('loadImageUris', function() {
         };
 
         addPipelineExtras(gltf);
-        loadGltfUris(gltf, options, function(err, gltf) {
+        loadGltfUris(gltf, options).then(function() {
             expect(gltf.images.Image0001.extras._pipeline.source).toBeDefined();
             expect(bufferEqual(gltf.images.Image0001.extras._pipeline.source, imageData)).toBe(true);
             expect(gltf.images.Image0001.extras._pipeline.extension).toEqual('.png');
@@ -73,7 +73,7 @@ describe('loadImageUris', function() {
         };
 
         addPipelineExtras(gltf);
-        loadGltfUris(gltf, options, function(err, gltf) {
+        loadGltfUris(gltf, options).then(function() {
             expect(gltf.images.embeddedImage0001.extras._pipeline.source).toBeDefined();
             expect(bufferEqual(gltf.images.embeddedImage0001.extras._pipeline.source, imageData)).toBe(true);
             expect(gltf.images.embeddedImage0001.extras._pipeline.extension).toEqual('.png');
@@ -94,7 +94,7 @@ describe('loadImageUris', function() {
         };
 
         addPipelineExtras(gltf);
-        loadGltfUris(gltf, options, function(err, gltf) {
+        loadGltfUris(gltf, options).catch(function(err) {
             expect(err).toBeDefined();
             done();
         });
@@ -110,7 +110,7 @@ describe('loadImageUris', function() {
         };
 
         addPipelineExtras(gltf);
-        loadGltfUris(gltf, options, function(err, gltf) {
+        loadGltfUris(gltf, options).then(function() {
             var pipelineExtras = gltf.images.Image0001.extras._pipeline;
             expect(pipelineExtras.imageChanged).toEqual(false);
             expect(pipelineExtras.transparent).toEqual(false);
@@ -137,7 +137,7 @@ describe('loadImageUris', function() {
         };
 
         addPipelineExtras(gltf);
-        loadGltfUris(gltf, options, function(err, gltf) {
+        loadGltfUris(gltf, options).then(function() {
             var pipelineExtras = gltf.images.Image0001.extras._pipeline;
             expect(pipelineExtras.transparent).toEqual(true);
             done();

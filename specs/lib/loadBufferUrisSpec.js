@@ -33,7 +33,7 @@ describe('loadBufferUris', function() {
         };
 
         addPipelineExtras(gltf);
-        loadGltfUris(gltf, options, function(err, gltf) {
+        loadGltfUris(gltf, options).then(function() {
             expect(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline.source).toBeDefined();
             expect(bufferEqual(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline.source, bufferData)).toBe(true);
             expect(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline.extension).toEqual('.bin');
@@ -51,7 +51,7 @@ describe('loadBufferUris', function() {
         };
 
         addPipelineExtras(gltf);
-        loadGltfUris(gltf, options, function(err, gltf) {
+        loadGltfUris(gltf, options).then(function() {
             expect(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline.source).toBeDefined();
             expect(bufferEqual(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline.source, bufferData)).toBe(true);
             expect(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline.extension).toEqual('.bin');
@@ -72,7 +72,7 @@ describe('loadBufferUris', function() {
         };
 
         addPipelineExtras(gltf);
-        loadGltfUris(gltf, options, function(err, gltf) {
+        loadGltfUris(gltf, options).then(function() {
             expect(gltf.buffers.embeddedBox.extras._pipeline.source).toBeDefined();
             expect(bufferEqual(gltf.buffers.embeddedBox.extras._pipeline.source, bufferData)).toBe(true);
             expect(gltf.buffers.externalBox.extras._pipeline.source).toBeDefined();
@@ -91,7 +91,7 @@ describe('loadBufferUris', function() {
         };
 
         addPipelineExtras(gltf);
-        loadGltfUris(gltf, options, function(err, gltf) {
+        loadGltfUris(gltf, options).then(function() {}).catch(function(err) {
             expect(err).toBeDefined();
             done();
         });

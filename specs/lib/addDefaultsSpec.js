@@ -335,14 +335,13 @@ describe('addDefaults', function() {
         };
 
         addPipelineExtras(gltf);
-        loadGltfUris(gltf, {}, function(err, gltf) {
-            if (err) {
-                throw err;
-            }
+        loadGltfUris(gltf, {}).then(function() {
             addDefaults(gltf);
             var technique = gltf.techniques[Object.keys(gltf.techniques)[0]];
             expect(technique.states).toEqual(alphaBlendState);
             done();
+        }).catch(function(err) {
+            throw err;
         });
     });
 

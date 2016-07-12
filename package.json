@@ -3,10 +3,12 @@
   "version": "0.0.0",
   "description": "Content pipeline tools for optimizing glTF assets.",
   "license": "Apache-2.0",
-  "contributors": [{
-    "name": "Richard Lee, Analytical Graphics, Inc., and Contributors",
-    "url": "https://github.com/AnalyticalGraphicsInc/gltf-pipeline/graphs/contributors"
-  }],
+  "contributors": [
+    {
+      "name": "Richard Lee, Analytical Graphics, Inc., and Contributors",
+      "url": "https://github.com/AnalyticalGraphicsInc/gltf-pipeline/graphs/contributors"
+    }
+  ],
   "keywords": [
     "glTF",
     "WebGL"
@@ -36,6 +38,7 @@
   },
   "dependencies": {
     "async": "^1.5.2",
+    "bluebird": "^3.4.1",
     "buffer-equal": "^1.0.0",
     "cesium": "^1.22.0",
     "data-uri-to-buffer": "0.0.4",

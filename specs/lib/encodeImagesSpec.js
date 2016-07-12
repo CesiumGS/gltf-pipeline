@@ -34,7 +34,7 @@ describe('encodeImages', function() {
         var gltfClone = clone(gltf);
 
         addPipelineExtras(gltf);
-        loadGltfUris(gltfClone, options, function() {
+        loadGltfUris(gltfClone, options).then(function() {
             var pipelineExtras0001 = gltfClone.images.Image0001.extras._pipeline;
             var pipelineExtras0002 = gltfClone.images.Image0002.extras._pipeline;
 
@@ -50,7 +50,7 @@ describe('encodeImages', function() {
         var gltfClone = clone(gltf);
 
         addPipelineExtras(gltf);
-        loadGltfUris(gltfClone, options, function() {
+        loadGltfUris(gltfClone, options).then(function() {
             var pipelineExtras0001 = gltfClone.images.Image0001.extras._pipeline;
             var jimpImage001 = pipelineExtras0001.jimpImage;
             jimpImage001.resize(10, 10, Jimp.RESIZE_BEZIER);

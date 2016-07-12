@@ -36,7 +36,7 @@ describe('loadShaderUris', function() {
         };
 
         addPipelineExtras(gltf);
-        loadGltfUris(gltf, options, function(err, gltf) {
+        loadGltfUris(gltf, options).then(function() {
             expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras._pipeline.source).toBeDefined();
             expect(bufferEqual(gltf.shaders.CesiumTexturedBoxTest0FS.extras._pipeline.source, fragmentShaderData)).toBe(true);
             expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras._pipeline.extension).toEqual('.glsl');
@@ -55,7 +55,7 @@ describe('loadShaderUris', function() {
         };
 
         addPipelineExtras(gltf);
-        loadGltfUris(gltf, options, function(err, gltf) {
+        loadGltfUris(gltf, options).then(function() {
             expect(gltf.shaders.box0FS.extras._pipeline.source).toBeDefined();
             expect(bufferEqual(gltf.shaders.box0FS.extras._pipeline.source, fragmentShaderData)).toBe(true);
             expect(gltf.shaders.box0FS.extras._pipeline.extension).toEqual('.glsl');
@@ -78,7 +78,7 @@ describe('loadShaderUris', function() {
         };
 
         addPipelineExtras(gltf);
-        loadGltfUris(gltf, options, function(err, gltf) {
+        loadGltfUris(gltf, options).then(function() {
             expect(gltf.shaders.externalBox0FS.extras._pipeline.source).toBeDefined();
             expect(bufferEqual(gltf.shaders.embeddedBox0FS.extras._pipeline.source, fragmentShaderData)).toBe(true);
             expect(gltf.shaders.externalBox0FS.extras._pipeline.extension).toEqual('.glsl');
@@ -97,7 +97,7 @@ describe('loadShaderUris', function() {
         };
 
         addPipelineExtras(gltf);
-        loadGltfUris(gltf, options, function(err, gltf) {
+        loadGltfUris(gltf, options).catch(function(err) {
             expect(err).toBeDefined();
             done();
         });
