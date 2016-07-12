@@ -1,10 +1,10 @@
-.idea
+/.idea
 .jshintrc
 .npmignore
 .travis.yml
-coverage
+/coverage
 gulpfile.js
-output
-test
-specs
-TypeScriptDefinitions
+/output
+/test
+/specs
+/TypeScriptDefinitions
