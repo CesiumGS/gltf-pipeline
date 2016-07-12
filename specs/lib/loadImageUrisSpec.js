@@ -34,7 +34,7 @@ describe('loadImageUris', function() {
         };
 
         addPipelineExtras(gltf);
-        loadGltfUris(gltf, options).then(function(f) {
+        loadGltfUris(gltf, options).then(function() {
             expect(gltf.images.Image0001.extras._pipeline.source).toBeDefined();
             expect(bufferEqual(gltf.images.Image0001.extras._pipeline.source, imageData)).toBe(true);
             expect(gltf.images.Image0001.extras._pipeline.extension).toEqual('.png');
