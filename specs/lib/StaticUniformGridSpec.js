@@ -71,7 +71,7 @@ describe('StaticUniformGrid', function() {
 
     var cartesian3Scratch = new Cartesian3();
 
-    it('populates a uniform grid with cells based on the center of the data AABB and the resolution', function() {
+    it('populates a uniform grid with cells based on the center of the object soup AABB and the resolution', function() {
         var pointData = [
             [1,1,1], // cell 0
             [2,2,2], // cell 0
@@ -108,7 +108,7 @@ describe('StaticUniformGrid', function() {
         // check contents
         var cellIndices = grid.cellIndices;
         var cellCounts = grid.cellCounts;
-        expect(grid.data).toEqual(pointData);
+        expect(grid.items).toEqual(pointData);
 
         expect(cellIndices[0]).toEqual(0);
         expect(cellCounts[0]).toEqual(2);
@@ -201,7 +201,7 @@ describe('StaticUniformGrid', function() {
         expect(fastNeighbors).toEqual(naiveNeighbors);
     });
 
-    it('runs functions on objects in the quadrant of a direction', function() {
+    it('runs functions on items in the quadrant of a direction', function() {
         var pointData = [];
         for (var x = 0; x < 5; x++) {
             for (var y = 0; y < 5; y++) {
@@ -310,7 +310,7 @@ describe('StaticUniformGrid', function() {
 
         var cellIndices = grid.cellIndices;
         var cellCounts = grid.cellCounts;
-        var triangleData = grid.data;
+        var triangleData = grid.items;
         var cellCount = 125;
         for (var i = 0; i < cellCount; i++) {
             expect(cellIndices[i]).toEqual(i);

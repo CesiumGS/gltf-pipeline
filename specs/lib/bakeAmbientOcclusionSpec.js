@@ -243,7 +243,7 @@ describe('bakeAmbientOcclusion', function() {
             rayDistance : 10.0
         };
         var raytracerScene = bakeAmbientOcclusion.generateRaytracerScene(options);
-        var triangleSoup = raytracerScene.triangleGrid.data;
+        var triangleSoup = raytracerScene.triangleGrid.items;
 
         // because of the uniform scale, expect triangles to be bigger
         var point0 = new Cartesian3(0.0, 0.0, 0.0);
@@ -284,7 +284,7 @@ describe('bakeAmbientOcclusion', function() {
             gltfWithExtras : testGltf
         };
         var raytracerScene = bakeAmbientOcclusion.generateRaytracerScene(options);
-        var triangleSoup = raytracerScene.triangleGrid.data;
+        var triangleSoup = raytracerScene.triangleGrid.items;
 
         // ground plane size is based on the near culling distance, scene size, and maximum ray depth.
         var point0 = new Cartesian3(-2.0, -0.00015, -2.0);
@@ -293,11 +293,11 @@ describe('bakeAmbientOcclusion', function() {
         var point3 = new Cartesian3(-2.0, -0.00015, 2.0);
 
         ////////// check triangle soup //////////
-        var dataCount = triangleSoup.length;
+        var itemsCount = triangleSoup.length;
         // Because of how the grid cell indices are laid out,
-        // we should expect the lowest objects in the scene to be at the end of the data list.
-        var groundPlane1 = triangleSoup[dataCount - 2];
-        var groundPlane2 = triangleSoup[dataCount - 1];
+        // we should expect the lowest items in the scene to be at the end of the item list.
+        var groundPlane1 = triangleSoup[itemsCount - 2];
+        var groundPlane2 = triangleSoup[itemsCount - 1];
 
         expect(Cartesian3.equalsEpsilon(groundPlane1[0], point0, CesiumMath.EPSILON7)).toEqual(true);
         expect(Cartesian3.equalsEpsilon(groundPlane1[1], point1, CesiumMath.EPSILON7)).toEqual(true);
