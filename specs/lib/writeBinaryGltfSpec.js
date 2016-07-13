@@ -1,5 +1,9 @@
 'use strict';
 var fs = require('fs');
+
+var Promise = require('bluebird');
+var readFile = Promise.promisify(fs.readFile);
+
 var path = require('path');
 var clone = require('clone');
 var async = require('async');
@@ -39,23 +43,41 @@ describe('writeBinaryGltf', function() {
                 }
                 testData.scene = JSON.parse(data);
 
-                var names = ['image', 'buffer', 'fragmentShader', 'vertexShader'];
-                async.each(names, function(name, callback) {
-                    fs.readFile(testData[name], function(err, data) {
-                        if (err) {
-                            callback(err);
-                        }
-                        else {
-                            testData[name] = data;
-                            callback();
-                        }
+
+                var readFiles = [
+                    readFile(testData['image']),
+                    readFile(testData['buffer']),
+                    readFile(testData['fragmentShader']),
+                    readFile(testData['vertexShader'])
+                ];
+                Promise.all(readFiles)
+                    .then(function(results) {
+                        testData['image'] = results[0];
+                        testData['buffer'] = results[1];
+                        testData['fragmentShader'] = results[2];
+                        testData['vertexShader'] = results[3];
+                        done();
                     });
-                }, function(err) {
-                    if (err) {
-                        throw err;
-                    }
-                    done();
-                });
+
+
+                
+                // async.each(names, function(name, callback) {
+                //     fs.readFile(testData[name], function(err, data) {
+                //         if (err) {
+                //             callback(err);
+                //         }
+                //         else {
+                //             testData[name] = data;
+                //             callback();
+                //         }
+                //     });
+                // }, function(err) {
+                //     if (err) {
+                //         throw err;
+                //     }
+                //     done();
+                // });
+                
             });
         });
     });

@@ -75,20 +75,20 @@ describe('gltfPipeline', function() {
         });
     });
 
-    it('will write a file to the correct directory', function(done) {
+    it('will write a file to the correct directory', function() {
         var spy = spyOn(fsExtra, 'outputJson').and.callFake(function(file, data, callback) {
             callback();
         });
         var options = {
             createDirectory : false
         };
-        processFileToDisk(gltfPath, outputGltfPath, options, function() {
-            expect(path.normalize(spy.calls.first().args[0])).toEqual(path.normalize(outputGltfPath));
-            done();
-        });
+        processFileToDisk(gltfPath, outputGltfPath, options)
+            .then(function() {
+                expect(path.normalize(spy.calls.first().args[0])).toEqual(path.normalize(outputGltfPath));
+            });
     });
 
-    it('will write a binary file', function(done) {
+    it('will write a binary file', function() {
         var spy = spyOn(fsExtra, 'outputFile').and.callFake(function(file, data, callback) {
             callback();
         });
@@ -98,11 +98,10 @@ describe('gltfPipeline', function() {
         };
         processFileToDisk(gltfPath, outputGlbPath, options, function() {
             expect(path.normalize(spy.calls.first().args[0])).toEqual(path.normalize(outputGlbPath));
-            done();
         });
     });
 
-    it('will write a file from JSON', function(done) {
+    it('will write a file from JSON', function() {
         var spy = spyOn(fsExtra, 'outputJson').and.callFake(function(file, data, callback) {
             callback();
         });
@@ -111,10 +110,10 @@ describe('gltfPipeline', function() {
             basePath : path.dirname(gltfPath)
         };
         readGltf(gltfPath, options, function(gltf) {
-            processJSONToDisk(gltf, outputGltfPath, options, function() {
-                expect(path.normalize(spy.calls.first().args[0])).toEqual(path.normalize(outputGltfPath));
-                done();
-            });
+            processJSONToDisk(gltf, outputGltfPath, options)
+                .then(function() {
+                    expect(path.normalize(spy.calls.first().args[0])).toEqual(path.normalize(outputGltfPath));
+                });
         });
     });
 

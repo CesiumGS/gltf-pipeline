@@ -1,6 +1,8 @@
 'use strict';
 
 var fs = require('fs');
+var Promise = require('bluebird');
+var readFile = Promise.promisify(fs.readFile);
 var clone = require('clone');
 var bufferEqual = require('buffer-equal');
 var writeGltf = require('../../lib/writeGltf');
@@ -39,37 +41,55 @@ describe('writeImages', function() {
 
     it('writes an external buffer', function(done) {
         var gltf = clone(testGltf);
+        var options = {
+            outputPath : outputPath,
+            embed : false,
+            embedImage : false,
+            createDirectory : true
+        };
 
-        writeGltf(gltf, outputPath, false, false, true, function() {
-            expect(gltf.images.Cesium_Logo_Flat_Low.extras).not.toBeDefined();
-            expect(gltf.images.Cesium_Logo_Flat_Low.uri).toEqual('Cesium_Logo_Flat_Low.png');
-            fs.readFile(outputImagePath, function(err, outputData) {
-                if (err) {
-                    throw err;
-                }
-                expect(bufferEqual(outputData, imageData)).toBe(true);
-                done();
+        writeGltf(gltf, options)
+            .then(function() {
+                expect(gltf.images.Cesium_Logo_Flat_Low.extras).not.toBeDefined();
+                expect(gltf.images.Cesium_Logo_Flat_Low.uri).toEqual('Cesium_Logo_Flat_Low.png');
+                readFile(outputImagePath).then(function (outputData) {
+                    expect(bufferEqual(outputData, imageData)).toBe(true);
+                    done();
+                });
             });
-        });
     });
 
     it('writes an embedded buffer', function(done) {
         var gltf = clone(testGltf);
+        var options = {
+            outputPath : outputPath,
+            embed : true,
+            embedImage : true,
+            createDirectory : true
+        };
         
-        writeGltf(gltf, outputPath, true, true, true, function() {
-            expect(gltf.images.Cesium_Logo_Flat_Low.extras).not.toBeDefined();
-            expect(gltf.images.Cesium_Logo_Flat_Low.uri).toEqual(imageUri);
-            done();
-        });
+        writeGltf(gltf, options)
+            .then(function() {
+                expect(gltf.images.Cesium_Logo_Flat_Low.extras).not.toBeDefined();
+                expect(gltf.images.Cesium_Logo_Flat_Low.uri).toEqual(imageUri);
+                done();
+            });
     });
 
     it('writes an embedded buffer with external images', function(done) {
         var gltf = clone(testGltf);
-
-        writeGltf(gltf, outputPath, true, false, true, function() {
-            expect(gltf.images.Cesium_Logo_Flat_Low.extras).not.toBeDefined();
-            expect(gltf.images.Cesium_Logo_Flat_Low.uri).toEqual('Cesium_Logo_Flat_Low.png');
-            done();
-        });
+        var options = {
+            outputPath : outputPath,
+            embed : true,
+            embedImage : false,
+            createDirectory : true
+        };
+        
+        writeGltf(gltf, options)
+            .then(function() {
+                expect(gltf.images.Cesium_Logo_Flat_Low.extras).not.toBeDefined();
+                expect(gltf.images.Cesium_Logo_Flat_Low.uri).toEqual('Cesium_Logo_Flat_Low.png');
+                done();
+            });
     });
 });

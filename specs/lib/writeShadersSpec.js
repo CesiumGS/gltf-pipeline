@@ -1,6 +1,8 @@
 'use strict';
 
 var fs = require('fs');
+var Promise = require('bluebird');
+var readFile = Promise.promisify(fs.readFile);
 var clone = require('clone');
 var bufferEqual = require('buffer-equal');
 var dataUriToBuffer = require('data-uri-to-buffer');
@@ -42,27 +44,38 @@ describe('writeShaders', function() {
 
     it('writes an external shader', function(done) {
         var gltf = clone(testGltf);
+        var options = {
+            outputPath : outputPath,
+            embed : false,
+            embedImage : false,
+            createDirectory : true
+        };
 
-        writeGltf(gltf, outputPath, false, false, true, function() {
-            expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras).not.toBeDefined();
-            expect(gltf.shaders.CesiumTexturedBoxTest0FS.uri).toEqual('CesiumTexturedBoxTest0FS.glsl');
-            fs.readFile(outputFragmentShaderPath, function(err, outputData) {
-                if (err) {
-                    throw err;
-                }
-                expect(bufferEqual(outputData, fragmentShaderData)).toBe(true);
-                done();
+        writeGltf(gltf, options)
+            .then(function() {
+                expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras).not.toBeDefined();
+                expect(gltf.shaders.CesiumTexturedBoxTest0FS.uri).toEqual('CesiumTexturedBoxTest0FS.glsl');
+                readFile(outputFragmentShaderPath).then(function(outputData) {
+                    expect(bufferEqual(outputData, fragmentShaderData)).toBe(true);
+                    done();
+                });
             });
-        });
     });
 
     it('writes an embedded shader', function(done) {
         var gltf = clone(testGltf);
+        var options = {
+            outputPath : outputPath,
+            embed : true,
+            embedImage : true,
+            createDirectory : true
+        };
         
-        writeGltf(gltf, outputPath, true, true, true, function() {
-            expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras).not.toBeDefined();
-            expect(gltf.shaders.CesiumTexturedBoxTest0FS.uri).toEqual(fragmentShaderUri);
-            done();
-        });
+        writeGltf(gltf, options)
+            .then(function() {
+                expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras).not.toBeDefined();
+                expect(gltf.shaders.CesiumTexturedBoxTest0FS.uri).toEqual(fragmentShaderUri);
+                done();
+            });
     });
 });

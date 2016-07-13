@@ -1,6 +1,8 @@
 'use strict';
 
 var fs = require('fs');
+var Promise = require('bluebird');
+var readFile = Promise.promisify(fs.readFile);
 var clone = require('clone');
 var bufferEqual = require('buffer-equal');
 var writeGltf = require('../../lib/writeGltf');
@@ -39,27 +41,39 @@ describe('writeBuffers', function() {
 
     it('writes an external buffer', function(done) {
         var gltf = clone(testGltf);
+        var options = {
+            outputPath : outputPath,
+            embed : false,
+            embedImage : false,
+            createDirectory : true
+        };
 
-        writeGltf(gltf, outputPath, false, false, true, function() {
-            expect(gltf.buffers.CesiumTexturedBoxTest.extras).not.toBeDefined();
-            expect(gltf.buffers.CesiumTexturedBoxTest.uri).toEqual('CesiumTexturedBoxTest.bin');
-            fs.readFile(outputBufferPath, function(err, outputData) {
-                if (err) {
-                    throw err;
-                }
-                expect(bufferEqual(outputData, bufferData)).toBe(true);
-                done();
-            });
+        writeGltf(gltf, options)
+            .then(function() {
+                expect(gltf.buffers.CesiumTexturedBoxTest.extras).not.toBeDefined();
+                expect(gltf.buffers.CesiumTexturedBoxTest.uri).toEqual('CesiumTexturedBoxTest.bin');
+                readFile(outputBufferPath)
+                    .then(function(outputData) {
+                        expect(bufferEqual(outputData, bufferData)).toBe(true);
+                        done();
+                });
         });
     });
 
     it('writes an embedded buffer', function(done) {
         var gltf = clone(testGltf);
+        var options = {
+            outputPath : outputPath,
+            embed : true,
+            embedImage : true,
+            createDirectory : true
+        };
         
-        writeGltf(gltf, outputPath, true, true, true, function() {
-            expect(gltf.buffers.CesiumTexturedBoxTest.extras).not.toBeDefined();
-            expect(gltf.buffers.CesiumTexturedBoxTest.uri).toEqual(bufferUri);
-            done();
-        });
+        writeGltf(gltf, options)
+            .then(function() {
+                expect(gltf.buffers.CesiumTexturedBoxTest.extras).not.toBeDefined();
+                expect(gltf.buffers.CesiumTexturedBoxTest.uri).toEqual(bufferUri);
+                done();
+            });
     });
 });
