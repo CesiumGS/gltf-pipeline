@@ -37,12 +37,14 @@ node ./bin/gltf-pipeline.js ./specs/data/boxTexturedUnoptimized/CesiumTexturedBo
 |`-h`, `--help`|Display help|No|
 |`-t`, `--separateTexture`|Write out separate textures, but embed geometry/animation data files, and shader files.|No, default `false`|
 |`-q`, `--quantize`|Quantize attributes using WEB3D_quantized_attributes extension.|No, default `false`|
+|`-n`, `--encodeNormals`|Oct-encode the normals of this model.|No, default `false`|
+|`-c`, `--compressTextureCoordinates`|Compress the texture coordinates of this model.|No, default `false`
 
 ## Build Instructions
 
 Run the tests:
 ```
-npm run jasmine
+npm run test
 ```
 To run JSHint on the entire codebase, run:
 ```

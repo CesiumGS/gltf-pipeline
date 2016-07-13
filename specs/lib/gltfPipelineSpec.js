@@ -1,5 +1,5 @@
 'use strict';
-var fs = require('fs');
+var fsExtra = require('fs-extra');
 var path = require('path');
 var clone = require('clone');
 var gltfPipeline = require('../../lib/gltfPipeline');
@@ -8,11 +8,7 @@ var processJSONToDisk = gltfPipeline.processJSONToDisk;
 var processFile = gltfPipeline.processFile;
 var processFileToDisk = gltfPipeline.processFileToDisk;
 var readGltf = require('../../lib/readGltf');
-var removePipelineExtras = require('../../lib/removePipelineExtras');
 var addPipelineExtras = require('../../lib/addPipelineExtras');
-var writeBinaryGltf = require('../../lib/writeBinaryGltf');
-var writeSource = require('../../lib/writeSource');
-var writeGltf = require('../../lib/writeGltf');
 
 var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf';
 var gltfEmbeddedPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestEmbedded.gltf';
@@ -35,7 +31,7 @@ describe('gltfPipeline', function() {
     
     it('optimizes a gltf JSON with external resources', function(done) {
         var options = { basePath : path.dirname(gltfPath) };
-        fs.readFile(gltfPath, options, function(err, data) {
+        fsExtra.readFile(gltfPath, options, function(err, data) {
             if (err) {
                 throw err;
             }
@@ -77,7 +73,7 @@ describe('gltfPipeline', function() {
     });
 
     it('will write a file to the correct directory', function(done) {
-        var spy = spyOn(fs, 'writeFile').and.callFake(function(file, data, callback) {
+        var spy = spyOn(fsExtra, 'outputJson').and.callFake(function(file, data, callback) {
             callback();
         });
         var options = {
@@ -90,7 +86,7 @@ describe('gltfPipeline', function() {
     });
 
     it('will write a binary file', function(done) {
-        var spy = spyOn(fs, 'writeFile').and.callFake(function(file, data, callback) {
+        var spy = spyOn(fsExtra, 'outputFile').and.callFake(function(file, data, callback) {
             callback();
         });
         var options = {
@@ -104,7 +100,7 @@ describe('gltfPipeline', function() {
     });
 
     it('will write a file from JSON', function(done) {
-        var spy = spyOn(fs, 'writeFile').and.callFake(function(file, data, callback) {
+        var spy = spyOn(fsExtra, 'outputJson').and.callFake(function(file, data, callback) {
             callback();
         });
         var options = {
@@ -122,9 +118,9 @@ describe('gltfPipeline', function() {
     it('will write sources from JSON', function(done) {
         var options = {};
         readGltf(gltfEmbeddedPath, options, function (gltf) {
-            var initialUri = gltf['buffers'].CesiumTexturedBoxTest.uri;
+            var initialUri = gltf.buffers.CesiumTexturedBoxTest.uri;
             processJSON(gltf, options, function () {
-                var finalUri = gltf['buffers'].CesiumTexturedBoxTest.uri;
+                var finalUri = gltf.buffers.CesiumTexturedBoxTest.uri;
                 expect(initialUri).not.toEqual(finalUri);
                 done();
             });
@@ -134,30 +130,10 @@ describe('gltfPipeline', function() {
     it('will write sources from file', function(done) {
         var options = {};
         readGltf(gltfEmbeddedPath, options, function (gltf) {
-            var initialUri = gltf['buffers'].CesiumTexturedBoxTest.uri;
+            var initialUri = gltf.buffers.CesiumTexturedBoxTest.uri;
             processFile(gltfEmbeddedPath, options, function (gltfFinal) {
-                var finalUri = gltfFinal['buffers'].CesiumTexturedBoxTest.uri;
+                var finalUri = gltfFinal.buffers.CesiumTexturedBoxTest.uri;
                 expect(initialUri).not.toEqual(finalUri);
-                done();
-            });
-        });
-    });
-
-    it('will add image processing extras if this is a pipeline with image processing', function(done) {
-        var options = {
-            imageProcess : true
-        };
-        readGltf(gltfEmbeddedPath, options, function(gltf) {
-            processJSON(gltf, options, function (gltf) {
-                expect(gltf).toBeDefined();
-                var images = gltf.images;
-                for (var imageID in images) {
-                    if (images.hasOwnProperty(imageID)) {
-                        var extras = images[imageID].extras._pipeline;
-                        expect(extras.jimpImage).toBeDefined();
-                        expect(extras.imageChanged).toBe(false);
-                    }
-                }
                 done();
             });
         });

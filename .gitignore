@@ -1,12 +1,13 @@
-/node_modules
+# NPM
+node_modules
 npm-debug.log
-.DS_Store
-Thumbs.db
-/coverage
-/output
-/specs/data/boxTexturedUnoptimized/output
-.git-credentials
-.gitconfig
+
+# WebStorm user-specific
 .idea/workspace.xml
 .idea/tasks.xml
-.bash_history
+
+# Generate data
+coverage
+output
+test
+specs/data/boxTexturedUnoptimized/output
