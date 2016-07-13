@@ -11,7 +11,7 @@ describe('generateNormals', function(){
     it('generates normals if they do not exist', function(done) {
         var options = {};
         readGltf(gltfNoNormalsPath, options, function(gltf){
-            var attributes = gltf.meshes['mesh_box'].primitives[0].attributes;
+            var attributes = gltf.meshes.mesh_box.primitives[0].attributes;
             var byteLengthBefore = gltf.buffers[Object.keys(gltf.buffers)[0]].byteLength;
             expect(attributes.NORMAL).toBeUndefined();
             generateNormals(gltf);
@@ -31,5 +31,5 @@ describe('generateNormals', function(){
             expect(clone(gltf)).toEqual(gltfCopy);
             done();
         });
-    })
+    });
 });
