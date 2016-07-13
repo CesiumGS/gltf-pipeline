@@ -45,39 +45,19 @@ describe('writeBinaryGltf', function() {
 
 
                 var readFiles = [
-                    readFile(testData['image']),
-                    readFile(testData['buffer']),
-                    readFile(testData['fragmentShader']),
-                    readFile(testData['vertexShader'])
+                    readFile(testData.image),
+                    readFile(testData.buffer),
+                    readFile(testData.fragmentShader),
+                    readFile(testData.vertexShader)
                 ];
                 Promise.all(readFiles)
                     .then(function(results) {
-                        testData['image'] = results[0];
-                        testData['buffer'] = results[1];
-                        testData['fragmentShader'] = results[2];
-                        testData['vertexShader'] = results[3];
+                        testData.image = results[0];
+                        testData.buffer = results[1];
+                        testData.fragmentShader = results[2];
+                        testData.vertexShader = results[3];
                         done();
                     });
-
-
-                
-                // async.each(names, function(name, callback) {
-                //     fs.readFile(testData[name], function(err, data) {
-                //         if (err) {
-                //             callback(err);
-                //         }
-                //         else {
-                //             testData[name] = data;
-                //             callback();
-                //         }
-                //     });
-                // }, function(err) {
-                //     if (err) {
-                //         throw err;
-                //     }
-                //     done();
-                // });
-                
             });
         });
     });
@@ -183,7 +163,7 @@ describe('writeBinaryGltf', function() {
             writeBinaryGltf(clone(testData.gltf), {
                 outputPath : undefined
             }, true);
-        }).toThrowError('Output path is undefined.');
+        }).toThrowDeveloperError();
     });
     
     it('throws an invalid output extension error', function() {
@@ -191,6 +171,6 @@ describe('writeBinaryGltf', function() {
             writeBinaryGltf(clone(testData.gltf), {
                 outputPath : invalidPath
             }, true);
-        }).toThrowError('Invalid output path extension.');
+        }).toThrowDeveloperError();
     });
 });

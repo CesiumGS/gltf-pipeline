@@ -59,5 +59,4 @@ describe('writeGltf', function() {
             }).toThrowError('Invalid output path extension.');
         });
     });
-
 });

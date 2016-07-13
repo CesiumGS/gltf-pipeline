@@ -1,6 +1,5 @@
 'use strict';
-var Cesium = require('cesium');
-var clone = Cesium.clone
+var clone = require('clone');
 var combineMeshes = require('../../lib/combineMeshes');
 
 describe('combineMeshes', function() {
@@ -36,7 +35,7 @@ describe('combineMeshes', function() {
             }
         };
 
-        expect(gltf).toEqual(combineMeshes(clone(gltf, true)));
+        expect(gltf).toEqual(combineMeshes(clone(gltf)));
     });
 
     it('combines both meshes', function() {
@@ -114,7 +113,7 @@ describe('combineMeshes', function() {
             }
         };
 
-        var combinedGltf = combineMeshes(clone(gltf, true));
+        var combinedGltf = combineMeshes(clone(gltf));
 
         expect(combinedGltf.nodes.node_0.meshes).toEqual(['node_0_mesh_0']);
         expect(combinedGltf.meshes.node_0_mesh_0).toBeDefined();

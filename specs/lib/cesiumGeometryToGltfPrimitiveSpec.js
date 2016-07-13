@@ -49,7 +49,6 @@ var geometry = new Geometry({
 describe('cesiumGeometryToGltfPrimitive', function() {
    it('writes geometry data to a glTF', function(done) {
        var options = {};
-       var i;
        readGltf(gltfPath, options, function(gltf) {
            addDefaults(gltf);
            var primitive = gltf.meshes[Object.keys(gltf.meshes)[0]].primitives[0];

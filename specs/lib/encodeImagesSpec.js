@@ -1,5 +1,4 @@
 'use strict';
-var fs = require('fs');
 var bufferEqual = require('buffer-equal');
 var addPipelineExtras = require('../../lib/addPipelineExtras');
 var encodeImages = require('../../lib/encodeImages');
@@ -34,53 +33,55 @@ describe('encodeImages', function() {
         var gltfClone = clone(gltf);
 
         addPipelineExtras(gltf);
-        loadGltfUris(gltfClone, options, function() {
-            var pipelineExtras0001 = gltfClone.images.Image0001.extras._pipeline;
-            var pipelineExtras0002 = gltfClone.images.Image0002.extras._pipeline;
+        loadGltfUris(gltfClone, options)
+            .then(function() {
+                var pipelineExtras0001 = gltfClone.images.Image0001.extras._pipeline;
+                var pipelineExtras0002 = gltfClone.images.Image0002.extras._pipeline;
 
-            encodeImages(gltfClone, function() {
-                expect(bufferEqual(pipelineExtras0001.source, imageBuffer)).toBe(true);
-                expect(bufferEqual(pipelineExtras0002.source, imageBuffer)).toBe(true);
-                done();
+                encodeImages(gltfClone, function() {
+                    expect(bufferEqual(pipelineExtras0001.source, imageBuffer)).toBe(true);
+                    expect(bufferEqual(pipelineExtras0002.source, imageBuffer)).toBe(true);
+                    done();
+                });
             });
-        });
     });
 
     it('re-encodes any jimp images and replaces the existing source', function(done) {
         var gltfClone = clone(gltf);
 
         addPipelineExtras(gltf);
-        loadGltfUris(gltfClone, options, function() {
-            var pipelineExtras0001 = gltfClone.images.Image0001.extras._pipeline;
-            var jimpImage001 = pipelineExtras0001.jimpImage;
-            jimpImage001.resize(10, 10, Jimp.RESIZE_BEZIER);
-            pipelineExtras0001.imageChanged = true;
+        loadGltfUris(gltfClone, options)
+            .then(function() {
+                var pipelineExtras0001 = gltfClone.images.Image0001.extras._pipeline;
+                var jimpImage001 = pipelineExtras0001.jimpImage;
+                jimpImage001.resize(10, 10, Jimp.RESIZE_BEZIER);
+                pipelineExtras0001.imageChanged = true;
 
-            var pipelineExtras0002 = gltfClone.images.Image0002.extras._pipeline;
-            var jimpImage002 = pipelineExtras0002.jimpImage;
-            pipelineExtras0002.imageChanged = true;
+                var pipelineExtras0002 = gltfClone.images.Image0002.extras._pipeline;
+                var jimpImage002 = pipelineExtras0002.jimpImage;
+                pipelineExtras0002.imageChanged = true;
 
-            encodeImages(gltfClone, function() {
-                expect(jimpImage001.bitmap.width).toEqual(10);
-                expect(jimpImage001.bitmap.height).toEqual(10);
-
-                expect(jimpImage002.bitmap.width).toEqual(8);
-                expect(jimpImage002.bitmap.height).toEqual(8);
-
-                expect(bufferEqual(pipelineExtras0001.source, imageBuffer)).not.toBe(true);
-                expect(bufferEqual(pipelineExtras0002.source, imageBuffer)).not.toBe(true);
-
-                // expect the buffers to still be readable by jimp (valid image buffer)
-                Jimp.read(pipelineExtras0001.source, function(jimpErr, image) {
-                    expect(image.bitmap.height).toEqual(10);
+                encodeImages(gltfClone, function() {
+                    expect(jimpImage001.bitmap.width).toEqual(10);
                     expect(jimpImage001.bitmap.height).toEqual(10);
-                    Jimp.read(pipelineExtras0002.source, function(jimpErr, image) {
-                        expect(image.bitmap.height).toEqual(8);
-                        expect(jimpImage002.bitmap.height).toEqual(8);
-                        done();
+
+                    expect(jimpImage002.bitmap.width).toEqual(8);
+                    expect(jimpImage002.bitmap.height).toEqual(8);
+
+                    expect(bufferEqual(pipelineExtras0001.source, imageBuffer)).not.toBe(true);
+                    expect(bufferEqual(pipelineExtras0002.source, imageBuffer)).not.toBe(true);
+
+                    // expect the buffers to still be readable by jimp (valid image buffer)
+                    Jimp.read(pipelineExtras0001.source, function(jimpErr, image) {
+                        expect(image.bitmap.height).toEqual(10);
+                        expect(jimpImage001.bitmap.height).toEqual(10);
+                        Jimp.read(pipelineExtras0002.source, function(jimpErr, image) {
+                            expect(image.bitmap.height).toEqual(8);
+                            expect(jimpImage002.bitmap.height).toEqual(8);
+                            done();
+                        });
                     });
                 });
-            });
         });
     });
 });

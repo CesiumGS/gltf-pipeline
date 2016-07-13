@@ -335,15 +335,16 @@ describe('addDefaults', function() {
         };
 
         addPipelineExtras(gltf);
-        loadGltfUris(gltf, {}, function(err, gltf) {
-            if (err) {
+        loadGltfUris(gltf, {})
+            .then(function() {
+                addDefaults(gltf);
+                var technique = gltf.techniques[Object.keys(gltf.techniques)[0]];
+                expect(technique.states).toEqual(alphaBlendState);
+                done();
+            })
+            .catch(function(err) {
                 throw err;
-            }
-            addDefaults(gltf);
-            var technique = gltf.techniques[Object.keys(gltf.techniques)[0]];
-            expect(technique.states).toEqual(alphaBlendState);
-            done();
-        });
+            });
     });
 
     it('generates a material with alpha blending if the diffuse color is transparent and no technique or extension values are given', function() {
