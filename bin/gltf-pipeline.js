@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 'use strict';
 var argv = require('yargs').argv;
 var path = require('path');

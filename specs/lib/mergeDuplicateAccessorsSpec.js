@@ -69,7 +69,7 @@ describe('mergeDuplicateAccessors', function() {
         gltf.bufferViews.bufferView.byteLength = buffer.length;
         mergeDuplicateAccessors(gltf);
         expect(Object.keys(gltf.accessors).length).toEqual(1);
-        expect(gltf.meshes.meshA.primitives[0].attributes.TEST).toEqual(gltf.meshes.meshB.primitives[0].attributes.TEST)
+        expect(gltf.meshes.meshA.primitives[0].attributes.TEST).toEqual(gltf.meshes.meshB.primitives[0].attributes.TEST);
     });
 
     it ('merges multiple duplicate accessors', function () {

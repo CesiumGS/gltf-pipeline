@@ -63,7 +63,7 @@ describe('removeUnused', function() {
 
             var gltf = JSON.parse(data);
             gltf.scenes.defaultScene.nodes[0] = 'node_3';
-            gltf.animations.animation_0.parameters['TIME'] = 'animAccessor_0';
+            gltf.animations.animation_0.parameters.TIME = 'animAccessor_0';
             var stats = new OptimizationStatistics();
             removeUnused(gltf, stats);
 

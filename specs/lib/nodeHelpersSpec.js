@@ -164,8 +164,8 @@ describe('NodeHelpers', function() {
             0, 0, 1, 0,
             -1, 0, 0, 1
         ]);
-        var actualLeftPinkie = testNodesClone['leftPinkie'].extras._pipeline.flatTransform;
-        var actualRightWrist = testNodesClone['rightWrist'].extras._pipeline.flatTransform;
+        var actualLeftPinkie = testNodesClone.leftPinkie.extras._pipeline.flatTransform;
+        var actualRightWrist = testNodesClone.rightWrist.extras._pipeline.flatTransform;
         expect(Matrix4.equalsEpsilon(actualLeftPinkie, expectLeftPinkie, CesiumMath.EPSILON7)).toEqual(true);
         expect(Matrix4.equalsEpsilon(actualRightWrist, expectRightWrist, CesiumMath.EPSILON7)).toEqual(true);
     });

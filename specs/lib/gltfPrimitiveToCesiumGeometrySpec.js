@@ -4,9 +4,6 @@ var readGltf = require('../../lib/readGltf');
 var addDefaults = require('../../lib/addDefaults');
 var readAccessor = require('../../lib/readAccessor');
 var packArray = require('../../lib/packArray');
-var Cesium = require('cesium');
-var Cartesian2 = Cesium.Cartesian2;
-var Cartesian3 = Cesium.Cartesian3;
 
 var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf';
 var primitiveType = 4;
@@ -14,7 +11,6 @@ var primitiveType = 4;
 describe('gltfPrimitiveToCesiumGeometry', function() {
     it('returns a geometry', function(done) {
         var options = {};
-        var i;
         readGltf(gltfPath, options, function(gltf) {
             addDefaults(gltf);
             var primitive = gltf.meshes[Object.keys(gltf.meshes)[0]].primitives[0];

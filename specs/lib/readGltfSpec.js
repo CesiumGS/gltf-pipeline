@@ -24,13 +24,13 @@ describe('readGltf', function() {
 
     it('throws error when an input path is undefined', function() {
         expect(function() {
-            readGltf(undefined);
-        }).toThrow();
+            readGltf(undefined, options);
+        }).toThrowDeveloperError();
     });
 
     it('throws error when file extension of input file is invalid', function() {
         expect(function() {
-            readGltf(invalidPath);
-        }).toThrow();
+            readGltf(invalidPath, options);
+        }).toThrowDeveloperError();
     });
 });

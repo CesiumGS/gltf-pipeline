@@ -7,7 +7,6 @@ var Cartesian3 = Cesium.Cartesian3;
 var Cartesian4 = Cesium.Cartesian4;
 var WebGLConstants = Cesium.WebGLConstants;
 
-var fs = require('fs');
 var clone = require('clone');
 var readAccessor = require('../../lib/readAccessor');
 var readGltf = require('../../lib/readGltf');
