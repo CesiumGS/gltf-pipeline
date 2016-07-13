@@ -93,9 +93,10 @@ describe('gltfPipeline', function() {
             binary : true,
             createDirectory : false
         };
-        processFileToDisk(gltfPath, outputGlbPath, options, function() {
-            expect(path.normalize(spy.calls.first().args[0])).toEqual(path.normalize(outputGlbPath));
-        });
+        processFileToDisk(gltfPath, outputGlbPath, options)
+            .then(function() {
+                expect(path.normalize(spy.calls.first().args[0])).toEqual(path.normalize(outputGlbPath));
+            });
     });
 
     it('will write a file from JSON', function() {
