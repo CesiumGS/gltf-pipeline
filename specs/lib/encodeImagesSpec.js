@@ -32,17 +32,17 @@ describe('encodeImages', function() {
         }
     };
 
-    it('does not re-encode if the images have not been changed', function (done) {
+    it('does not re-encode if the images have not been changed', function(done) {
         var gltfClone = clone(gltf);
 
         addPipelineExtras(gltf);
         loadGltfUris(gltfClone, options)
-            .then(function () {
+            .then(function() {
                 var pipelineExtras0001 = gltfClone.images.Image0001.extras._pipeline;
                 var pipelineExtras0002 = gltfClone.images.Image0002.extras._pipeline;
 
                 encodeImages(gltfClone)
-                    .then(function () {
+                    .then(function() {
                         expect(bufferEqual(pipelineExtras0001.source, imageBuffer)).toBe(true);
                         expect(bufferEqual(pipelineExtras0002.source, imageBuffer)).toBe(true);
                         done();
@@ -50,12 +50,12 @@ describe('encodeImages', function() {
             });
     });
 
-    it('re-encodes any jimp images and replaces the existing source', function (done) {
+    it('re-encodes any jimp images and replaces the existing source', function(done) {
         var gltfClone = clone(gltf);
 
         addPipelineExtras(gltf);
         loadGltfUris(gltfClone, options)
-            .then(function () {
+            .then(function() {
                 var pipelineExtras0001 = gltfClone.images.Image0001.extras._pipeline;
                 var jimpImage001 = pipelineExtras0001.jimpImage;
                 jimpImage001.resize(10, 10, Jimp.RESIZE_BEZIER);
@@ -66,7 +66,7 @@ describe('encodeImages', function() {
                 pipelineExtras0002.imageChanged = true;
 
                 encodeImages(gltfClone)
-                    .then(function () {
+                    .then(function() {
                         expect(jimpImage001.bitmap.width).toEqual(10);
                         expect(jimpImage001.bitmap.height).toEqual(10);
 
@@ -79,17 +79,17 @@ describe('encodeImages', function() {
                         // expect the buffers to still be readable by jimp (valid image buffer)
                         var promises = [];
                         promises.push(Jimp.read(pipelineExtras0001.source)
-                            .then(function (image) {
+                            .then(function(image) {
                                 expect(image.bitmap.height).toEqual(10);
                                 expect(jimpImage001.bitmap.height).toEqual(10);
                             }));
                         promises.push(Jimp.read(pipelineExtras0002.source)
-                            .then(function (image) {
+                            .then(function(image) {
                                 expect(image.bitmap.height).toEqual(8);
                                 expect(jimpImage002.bitmap.height).toEqual(8);
                             }));
                         Promise.all(promises)
-                            .then(function () {
+                            .then(function() {
                                 done();
                             });
                     });
