@@ -731,4 +731,59 @@ describe('bakeAmbientOcclusion', function() {
         expect(options.shaderMode).toEqual('blend');
         expect(options.sceneID).toEqual('defaultScene');
     });
+
+    it('has a helper that can extract a function call from a shader', function() {
+        var shaderSource = 'function(arg0, arg1, arg2, arg3, innerArg0) {' +
+            'command(arg3);' +
+            'otherCommand(arg0);' +
+            'val = command(arg0, arg1 * (arg2 + innerCommand(innerArg0))) + 0.0;' +
+            '}';
+
+        var shader = {
+            extras : {
+                _pipeline : {
+                    source : shaderSource
+                }
+            }
+        };
+        var options = {
+            shader : shader,
+            functionName : 'command',
+            functionArguments : ['arg0', 'arg1', 'arg2']
+        };
+
+        var extractedCommand = bakeAmbientOcclusion.extractInstructionWithFunctionCall(options);
+        expect(extractedCommand).toEqual('val = command(arg0, arg1 * (arg2 + innerCommand(innerArg0))) + 0.0');
+    });
+
+    it('has a helper that can, given a snippet, inject code into shader after an instruction', function() {
+        var shaderSource = 'function(arg0, arg1, arg2, arg3, innerArg0) {' +
+            'command(arg3);' +
+            'otherCommand(arg0);' +
+            'val = command(arg0, arg1 * (arg2 + innerCommand(innerArg0))) + 0.0;' +
+            '}';
+
+        var shader = {
+            extras : {
+                _pipeline : {
+                    source : shaderSource
+                }
+            }
+        };
+        var options = {
+            shader : shader,
+            lines : ['newCommand1();', 'newCommand2();'],
+            snippet : 'innerCommand'
+        };
+
+        bakeAmbientOcclusion.injectGlslAfterInstructionContaining(options);
+        var newSource = shader.extras._pipeline.source.toString();
+        expect(newSource).toEqual('function(arg0, arg1, arg2, arg3, innerArg0) {' +
+            'command(arg3);' +
+            'otherCommand(arg0);' +
+            'val = command(arg0, arg1 * (arg2 + innerCommand(innerArg0))) + 0.0;' +
+            'newCommand1();' +
+            'newCommand2();' +
+            '}');
+    });
 });
