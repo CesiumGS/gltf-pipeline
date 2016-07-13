@@ -7,6 +7,7 @@ var bakeAmbientOcclusion = require('../../lib/bakeAmbientOcclusion');
 var clone = require('clone');
 var NodeHelpers = require('../../lib/NodeHelpers');
 var readGltf = require('../../lib/readGltf');
+var StaticUniformGrid = require('../../lib/StaticUniformGrid');
 
 var boxOverGroundGltfPath = './specs/data/ambientOcclusion/cube_over_ground.gltf';
 
@@ -209,6 +210,8 @@ describe('bakeAmbientOcclusion', function() {
         [point2, point0, point3]
     ];
 
+    var tetrahedronGrid = StaticUniformGrid.fromTriangleSoup(tetrahedron, 10.0);
+
     // data for an equilateral triangle whose center is inside the tetrahedron
     var normal = new Cartesian3(0.0, 1.0, 0.0);
     var equilateralBufferDataByAccessor = {
@@ -237,10 +240,10 @@ describe('bakeAmbientOcclusion', function() {
             toTexture : true,
             sceneID : testGltf.scene,
             gltfWithExtras : testGltf,
-            rayDistance : -1 // compute ray distance from AABB
+            rayDistance : 10.0
         };
         var raytracerScene = bakeAmbientOcclusion.generateRaytracerScene(options);
-        var triangleSoup = raytracerScene.triangleSoup;
+        var triangleSoup = raytracerScene.triangleGrid.items;
 
         // because of the uniform scale, expect triangles to be bigger
         var point0 = new Cartesian3(0.0, 0.0, 0.0);
@@ -269,7 +272,7 @@ describe('bakeAmbientOcclusion', function() {
         expect(aoBuffer.resolution).toEqual(10);
 
         // check generated ray distance
-        expect(raytracerScene.rayDistance).toEqual(0.0); // 20% of the smallest AABB dimension
+        expect(raytracerScene.rayDistance).toEqual(10.0);
     });
 
     it('correctly generates a ground plane just below the minimum of the scene.', function() {
@@ -281,7 +284,7 @@ describe('bakeAmbientOcclusion', function() {
             gltfWithExtras : testGltf
         };
         var raytracerScene = bakeAmbientOcclusion.generateRaytracerScene(options);
-        var triangleSoup = raytracerScene.triangleSoup;
+        var triangleSoup = raytracerScene.triangleGrid.items;
 
         // ground plane size is based on the near culling distance, scene size, and maximum ray depth.
         var point0 = new Cartesian3(-2.0, -0.00015, -2.0);
@@ -290,10 +293,11 @@ describe('bakeAmbientOcclusion', function() {
         var point3 = new Cartesian3(-2.0, -0.00015, 2.0);
 
         ////////// check triangle soup //////////
-        expect(triangleSoup.length).toEqual(4);
-
-        var groundPlane1 = triangleSoup[2];
-        var groundPlane2 = triangleSoup[3];
+        var itemsCount = triangleSoup.length;
+        // Because of how the grid cell indices are laid out,
+        // we should expect the lowest items in the scene to be at the end of the item list.
+        var groundPlane1 = triangleSoup[itemsCount - 2];
+        var groundPlane2 = triangleSoup[itemsCount - 1];
 
         expect(Cartesian3.equalsEpsilon(groundPlane1[0], point0, CesiumMath.EPSILON7)).toEqual(true);
         expect(Cartesian3.equalsEpsilon(groundPlane1[1], point1, CesiumMath.EPSILON7)).toEqual(true);
@@ -331,7 +335,7 @@ describe('bakeAmbientOcclusion', function() {
                 normal : texel.normal,
                 numberRays : 16,
                 sqrtNumberRays : 4,
-                triangles : tetrahedron,
+                triangleGrid : tetrahedronGrid,
                 nearCull : 0.001,
                 rayDistance : 10.0});
         }
@@ -370,7 +374,7 @@ describe('bakeAmbientOcclusion', function() {
                 normal : texel.normal,
                 numberRays : 16,
                 sqrtNumberRays : 4,
-                triangles : openTetrahedron,
+                triangleGrid : StaticUniformGrid.fromTriangleSoup(openTetrahedron, 10.0),
                 nearCull : 0.001,
                 rayDistance : 10.0});
         }
@@ -566,7 +570,7 @@ describe('bakeAmbientOcclusion', function() {
                     meshPrimitiveID : aoBuffer
                 },
                 bufferDataByAccessor : equilateralBufferDataByAccessor,
-                triangleSoup : tetrahedron,
+                triangleGrid : tetrahedronGrid,
                 numberRays : 16,
                 nearCull : CesiumMath.EPSILON4,
                 rayDistance : 1.0
@@ -593,6 +597,7 @@ describe('bakeAmbientOcclusion', function() {
 
         var samples = aoBuffer.samples;
         var counts = aoBuffer.count;
+
         // Expect the baked AO to indicate "fully occluded" since the center is inside the tetrahedron
         expect(CesiumMath.equalsEpsilon(samples[0], counts[0], CesiumMath.EPSILON7)).toEqual(true);
         expect(CesiumMath.equalsEpsilon(samples[1], counts[1], CesiumMath.EPSILON7)).toEqual(true);
@@ -614,7 +619,7 @@ describe('bakeAmbientOcclusion', function() {
                     meshPrimitiveID : aoBuffer
                 },
                 bufferDataByAccessor : equilateralBufferDataByAccessor,
-                triangleSoup : tetrahedron,
+                triangleGrid : tetrahedronGrid,
                 numberRays : 4,
                 nearCull : CesiumMath.EPSILON4,
                 rayDistance : 1.0
@@ -725,5 +730,60 @@ describe('bakeAmbientOcclusion', function() {
         expect(options.nearCull).toEqual(0.0001);
         expect(options.shaderMode).toEqual('blend');
         expect(options.sceneID).toEqual('defaultScene');
+    });
+
+    it('has a helper that can extract a function call from a shader', function() {
+        var shaderSource = 'function(arg0, arg1, arg2, arg3, innerArg0) {' +
+            'command(arg3);' +
+            'otherCommand(arg0);' +
+            'val = command(arg0, arg1 * (arg2 + innerCommand(innerArg0))) + 0.0;' +
+            '}';
+
+        var shader = {
+            extras : {
+                _pipeline : {
+                    source : shaderSource
+                }
+            }
+        };
+        var options = {
+            shader : shader,
+            functionName : 'command',
+            functionArguments : ['arg0', 'arg1', 'arg2']
+        };
+
+        var extractedCommand = bakeAmbientOcclusion.extractInstructionWithFunctionCall(options);
+        expect(extractedCommand).toEqual('val = command(arg0, arg1 * (arg2 + innerCommand(innerArg0))) + 0.0');
+    });
+
+    it('has a helper that can, given a snippet, inject code into shader after an instruction', function() {
+        var shaderSource = 'function(arg0, arg1, arg2, arg3, innerArg0) {' +
+            'command(arg3);' +
+            'otherCommand(arg0);' +
+            'val = command(arg0, arg1 * (arg2 + innerCommand(innerArg0))) + 0.0;' +
+            '}';
+
+        var shader = {
+            extras : {
+                _pipeline : {
+                    source : shaderSource
+                }
+            }
+        };
+        var options = {
+            shader : shader,
+            lines : ['newCommand1();', 'newCommand2();'],
+            snippet : 'innerCommand'
+        };
+
+        bakeAmbientOcclusion.injectGlslAfterInstructionContaining(options);
+        var newSource = shader.extras._pipeline.source.toString();
+        expect(newSource).toEqual('function(arg0, arg1, arg2, arg3, innerArg0) {' +
+            'command(arg3);' +
+            'otherCommand(arg0);' +
+            'val = command(arg0, arg1 * (arg2 + innerCommand(innerArg0))) + 0.0;' +
+            'newCommand1();' +
+            'newCommand2();' +
+            '}');
     });
 });

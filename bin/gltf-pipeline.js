@@ -18,7 +18,7 @@ if (process.argv.length < 3 || defined(argv.h) || defined(argv.help)) {
         '  -q --quantize, quantize the attributes of this model.\n' +
         '  -n --encodeNormals, oct-encode the normals of this model.\n' +
         '  -c --compressTextureCoordinates, compress the texture coordinates of this model.\n' +
-        '  --ao: Bake ambient occlusion to vertex data using default settings if no others are specified. Default: inactive.\n' +
+        '  --ao: Bake ambient occlusion to vertex data using default settings ONLY. When specifying other settings, do not use `--ao` on its own. Default: inactive.\n' +
         '  --ao.toTexture: Bake AO to existing diffuse textures instead of to vertices. Does not modify shaders. Default: inactive.\n' +
         '  --ao.groundPlane: Simulate a ground plane at the lowest point of the model when baking AO. Default: inactive.\n' +
         '  --ao.ambientShadowContribution: Amount of AO to show when blending between shader computed lighting and AO. 1.0 is full AO, 0.5 is a 50/50 blend. Default: 0.5\n' +

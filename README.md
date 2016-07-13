@@ -39,7 +39,7 @@ node ./bin/gltf-pipeline.js ./specs/data/boxTexturedUnoptimized/CesiumTexturedBo
 |`-q`, `--quantize`|Quantize attributes using WEB3D_quantized_attributes extension.|No, default `false`|
 |`-n`, `--encodeNormals`|Oct-encode the normals of this model.|No, default `false`|
 |`-c`, `--compressTextureCoordinates`|Compress the texture coordinates of this model.|No, default `false`|
-|`--ao`|Bake ambient occlusion to vertex data using default settings if no others are specified. Advanced settings in `lib/bakeAmbientOcclusion.js`|No, default `false`|
+|`--ao`|Bake ambient occlusion to vertex data using default settings __only__. When specifying other settings, do not use `--ao` on its own. Advanced settings in `lib/bakeAmbientOcclusion.js`|No, default `false`|
 |`--ao.toTexture`|Bake AO to existing diffuse textures instead of to vertices. Does not modify shaders.|No, default `false`|
 |`--ao.groundPlane`|Simulate a groundplane at the lowest point of the model when baking AO.|No, default `false`|
 |`--ao.ambientShadowContribution`|Amount of AO to show when blending between shader computed lighting and AO. 1.0 is full AO, 0.5 is a 50/50 blend.|No, default `0.5`|
