@@ -25,7 +25,7 @@ describe('writeGltf', function() {
         readGltf(gltfPath, options, function(gltf) {
             expect(function() {
                 writeGltf(gltf, undefined, true, true, true);
-            }).toThrowDeveloperError();
+            }).toThrowError('Output path is undefined.');
         });
     });
 
@@ -34,7 +34,7 @@ describe('writeGltf', function() {
         readGltf(gltfPath, options, function(gltf) {
             expect(function() {
                 writeGltf(gltf, invalidPath, true, true, true);
-            }).toThrowDeveloperError();
+            }).toThrowError('Invalid output path extension.');
         });
     });
 });
