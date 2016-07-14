@@ -1,6 +1,6 @@
 'use strict';
-var readGltf = require('../../lib/readGltf');
 var combinePrimitives = require('../../lib/combinePrimitives');
+var readGltf = require('../../lib/readGltf');
 var removePipelineExtras = require('../../lib/removePipelineExtras');
 
 var boxPath = './specs/data/combineObjects/box.gltf';

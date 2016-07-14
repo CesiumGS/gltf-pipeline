@@ -1,28 +1,21 @@
 'use strict';
-var fs = require('fs');
-
-var Promise = require('bluebird');
-var readFile = Promise.promisify(fs.readFile);
-
-var path = require('path');
-var clone = require('clone');
-var async = require('async');
 var bufferEqual = require('buffer-equal');
-var addPipelineExtras = require('../../lib/addPipelineExtras');
+var clone = require('clone');
+var fs = require('fs');
+var Promise = require('bluebird');
+
 var getBinaryGltf = require('../../lib/getBinaryGltf');
-var loadGltfUris = require('../../lib/loadGltfUris');
 var readGltf = require('../../lib/readGltf');
 var removeUnused = require('../../lib/removeUnused');
-var writeBinaryGltf = require('../../lib/writeBinaryGltf');
+
+var fsReadFile = Promise.promisify(fs.readFile);
 
 var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest_BinaryInput.gltf';
 var scenePath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest_BinaryCheck.gltf';
-var outputPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.glb';
 var bufferPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.bin';
 var imagePath = './specs/data/boxTexturedUnoptimized/Cesium_Logo_Flat_Binary.png';
 var fragmentShaderPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest0FS_Binary.glsl';
 var vertexShaderPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest0VS_Binary.glsl';
-var invalidPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf';
 
 
 describe('getBinaryGltf', function() {
@@ -49,10 +42,10 @@ describe('getBinaryGltf', function() {
                     testData.scene = JSON.parse(data);
 
                     var readFiles = [
-                        readFile(testData.image),
-                        readFile(testData.buffer),
-                        readFile(testData.fragmentShader),
-                        readFile(testData.vertexShader)
+                        fsReadFile(testData.image),
+                        fsReadFile(testData.buffer),
+                        fsReadFile(testData.fragmentShader),
+                        fsReadFile(testData.vertexShader)
                     ];
                     Promise.all(readFiles)
                         .then(function (results) {

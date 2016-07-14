@@ -1,8 +1,8 @@
 'use strict';
-var cacheOptimization = require('../../lib/cacheOptimization');
 var addDefaults = require('../../lib/addDefaults');
-var readGltf = require('../../lib/readGltf');
+var cacheOptimization = require('../../lib/cacheOptimization');
 var readAccessor = require('../../lib/readAccessor');
+var readGltf = require('../../lib/readGltf');
 var writeAccessor = require('../../lib/writeAccessor');
 
 var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf';

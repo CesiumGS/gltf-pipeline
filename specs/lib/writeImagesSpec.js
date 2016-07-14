@@ -1,11 +1,13 @@
 'use strict';
-
+var bufferEqual = require('buffer-equal');
+var clone = require('clone');
 var fs = require('fs');
 var Promise = require('bluebird');
-var readFile = Promise.promisify(fs.readFile);
-var clone = require('clone');
-var bufferEqual = require('buffer-equal');
+
 var writeGltf = require('../../lib/writeGltf');
+
+var fsReadFile = Promise.promisify(fs.readFile);
+
 var imagePath = './specs/data/boxTexturedUnoptimized/Cesium_Logo_Flat_Low.png';
 var imageUri = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADTSURBVBhXAcgAN/8B49/cCAQAyukB2vAB+vz/Ig7+QR0B+PwAAezj3LDfAqnZ/wMB/xwPBwUEAiMK91Uj/gLN6wGj1fs9IyEwGxoUCPotFQC75g7rASECvd/6KxwkVCHFUiTX9P4Xq9L8ZjUD+vWyAaHK+CUX+pujFBYRH1NR2vUAANrLX8zXyAJCHOWnsj3d7frR4+XLymz24Y6ZuKI7LGUE/vcBEAglAQTR/P/9nbmV8fUAYURiTjRqAeXi6AgFDMDWptPiwP///isdPEIsXvr8+Tj0Y5s8qCp8AAAAAElFTkSuQmCC';
 var outputPath = './specs/data/boxTexturedUnoptimized/output.gltf';
@@ -52,7 +54,7 @@ describe('writeImages', function() {
             .then(function() {
                 expect(gltf.images.Cesium_Logo_Flat_Low.extras).not.toBeDefined();
                 expect(gltf.images.Cesium_Logo_Flat_Low.uri).toEqual('Cesium_Logo_Flat_Low.png');
-                return readFile(outputImagePath);
+                return fsReadFile(outputImagePath);
             })
             .then(function (outputData) {
                 expect(bufferEqual(outputData, imageData)).toBe(true);

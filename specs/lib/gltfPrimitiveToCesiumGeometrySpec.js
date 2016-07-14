@@ -1,9 +1,9 @@
 'use strict';
-var gltfPrimitiveToCesiumGeometry = require('../../lib/gltfPrimitiveToCesiumGeometry');
-var readGltf = require('../../lib/readGltf');
 var addDefaults = require('../../lib/addDefaults');
-var readAccessor = require('../../lib/readAccessor');
+var gltfPrimitiveToCesiumGeometry = require('../../lib/gltfPrimitiveToCesiumGeometry');
 var packArray = require('../../lib/packArray');
+var readAccessor = require('../../lib/readAccessor');
+var readGltf = require('../../lib/readGltf');
 
 var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf';
 var primitiveType = 4;
@@ -25,7 +25,7 @@ describe('gltfPrimitiveToCesiumGeometry', function() {
                 var positions = [];
                 var positionType = readAccessor(gltf, positionAccessor, positions);
                 var packedPositions = packArray(positions, positionType);
-                
+
                 var normalAccessor = gltf.accessors[primitive.attributes.NORMAL];
                 var normals = [];
                 var normalType = readAccessor(gltf, normalAccessor, normals);

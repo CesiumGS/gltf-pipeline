@@ -1,8 +1,9 @@
 'use strict';
 var fsExtra = require('fs-extra');
 var path = require('path');
-var writeGltf = require('../../lib/writeGltf');
+
 var readGltf = require('../../lib/readGltf');
+var writeGltf = require('../../lib/writeGltf');
 
 var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest_BinaryInput.gltf';
 var outputGltfPath = './output/CesiumTexturedBoxTest.gltf';

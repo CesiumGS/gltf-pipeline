@@ -1,13 +1,8 @@
 'use strict';
-var fsExtra = require('fs-extra');
-
-var Promise = require('bluebird');
-var readFile = Promise.promisify(fsExtra.readFile);
-
-var path = require('path');
 var clone = require('clone');
-var async = require('async');
-var bufferEqual = require('buffer-equal');
+var fsExtra = require('fs-extra');
+var path = require('path');
+
 var addPipelineExtras = require('../../lib/addPipelineExtras');
 var loadGltfUris = require('../../lib/loadGltfUris');
 var readGltf = require('../../lib/readGltf');

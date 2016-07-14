@@ -1,17 +1,17 @@
 'use strict';
-var Promise = require('bluebird');
+var clone = require('clone');
 var fsExtra = require('fs-extra');
 var path = require('path');
-var clone = require('clone');
+var Promise = require('bluebird');
 
+var addPipelineExtras = require('../../lib/addPipelineExtras');
 var gltfPipeline = require('../../lib/gltfPipeline');
 var readGltf = require('../../lib/readGltf');
-var addPipelineExtras = require('../../lib/addPipelineExtras');
 
-var processJSON = gltfPipeline.processJSON;
-var processJSONToDisk = gltfPipeline.processJSONToDisk;
 var processFile = gltfPipeline.processFile;
 var processFileToDisk = gltfPipeline.processFileToDisk;
+var processJSON = gltfPipeline.processJSON;
+var processJSONToDisk = gltfPipeline.processJSONToDisk;
 
 var fsExtraReadFile = Promise.promisify(fsExtra.readFile);
 

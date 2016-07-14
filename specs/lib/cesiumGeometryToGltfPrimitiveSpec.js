@@ -1,12 +1,15 @@
 'use strict';
-var readAccessor = require('../../lib/readAccessor');
-var readGltf = require('../../lib/readGltf');
-var addDefaults = require('../../lib/addDefaults');
-var packArray = require('../../lib/packArray');
-var cesiumGeometryToGltfPrimitive = require('../../lib/cesiumGeometryToGltfPrimitive');
 var Cesium = require('cesium');
+
 var GeometryAttribute = Cesium.GeometryAttribute;
 var Geometry = Cesium.Geometry;
+
+var addDefaults = require('../../lib/addDefaults');
+var cesiumGeometryToGltfPrimitive = require('../../lib/cesiumGeometryToGltfPrimitive');
+var packArray = require('../../lib/packArray');
+var readAccessor = require('../../lib/readAccessor');
+var readGltf = require('../../lib/readGltf');
+
 
 var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf';
 var positionValues = [ -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 
