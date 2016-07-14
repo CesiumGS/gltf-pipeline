@@ -53,7 +53,8 @@ describe('writeImages', function() {
                 expect(gltf.images.Cesium_Logo_Flat_Low.extras).not.toBeDefined();
                 expect(gltf.images.Cesium_Logo_Flat_Low.uri).toEqual('Cesium_Logo_Flat_Low.png');
                 return readFile(outputImagePath);
-            }).then(function (outputData) {
+            })
+            .then(function (outputData) {
                 expect(bufferEqual(outputData, imageData)).toBe(true);
                 done();
             });

@@ -1,5 +1,6 @@
 'use strict';
-var fsExtra = require('fs-extra');
+var Promise = require('bluebird');
+var fsPromise = Promise.promisifyAll(require('fs-extra'));
 var path = require('path');
 var writeGltf = require('../../lib/writeGltf');
 var readGltf = require('../../lib/readGltf');
@@ -10,7 +11,7 @@ var invalidPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.exe
 
 describe('writeGltf', function() {
     it('will write a file to the correct directory', function(done) {
-        var spy = spyOn(fsExtra, 'outputJson').and.callFake(function() {});
+        var spy = spyOn(fsPromise, 'outputJson').and.callFake(function() {});
         var readOptions = {};
         var writeOptions = {
             outputPath : outputGltfPath,

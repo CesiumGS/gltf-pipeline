@@ -55,7 +55,8 @@ describe('writeShaders', function() {
                 expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras).not.toBeDefined();
                 expect(gltf.shaders.CesiumTexturedBoxTest0FS.uri).toEqual('CesiumTexturedBoxTest0FS.glsl');
                 return readFile(outputFragmentShaderPath);
-            }).then(function(outputData) {
+            })
+            .then(function(outputData) {
                 expect(bufferEqual(outputData, fragmentShaderData)).toBe(true);
                 done();
             });
