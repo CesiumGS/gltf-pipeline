@@ -34,7 +34,7 @@ describe('gltfPipeline', function() {
                 expect(gltf).toBeDefined();
                 expect(clone(gltf)).not.toEqual(gltfCopy);
                 done();
-            });;
+            });
     });
     
     it('optimizes a gltf JSON with external resources', function(done) {

@@ -52,7 +52,7 @@ describe('writeBuffers', function() {
             .then(function() {
                 expect(gltf.buffers.CesiumTexturedBoxTest.extras).not.toBeDefined();
                 expect(gltf.buffers.CesiumTexturedBoxTest.uri).toEqual('CesiumTexturedBoxTest.bin');
-                return readFile(outputBufferPath)
+                return readFile(outputBufferPath);
             }).then(function(outputData) {
                 expect(bufferEqual(outputData, bufferData)).toBe(true);
                 done();
