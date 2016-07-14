@@ -54,10 +54,10 @@ describe('writeShaders', function() {
             .then(function() {
                 expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras).not.toBeDefined();
                 expect(gltf.shaders.CesiumTexturedBoxTest0FS.uri).toEqual('CesiumTexturedBoxTest0FS.glsl');
-                readFile(outputFragmentShaderPath).then(function(outputData) {
-                    expect(bufferEqual(outputData, fragmentShaderData)).toBe(true);
-                    done();
-                });
+                return readFile(outputFragmentShaderPath)
+            }).then(function(outputData) {
+                expect(bufferEqual(outputData, fragmentShaderData)).toBe(true);
+                done();
             });
     });
 
