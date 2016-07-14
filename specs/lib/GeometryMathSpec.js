@@ -17,7 +17,7 @@ describe('GeometryMath', function() {
 
         var barycentric = new Cartesian3(1/3, 1/3, 1/3);
         var result = new Cartesian3();
-        result = GeometryMath.sumBarycentric(barycentric, values[0], values[1], values[2], result);
+        result = GeometryMath.sumCartesian3sBarycentric(barycentric, values[0], values[1], values[2], result);
         var expectedResult = new Cartesian3(1/3, 1/3, 1/3);
         expect(Cartesian3.equalsEpsilon(result, expectedResult, CesiumMath.EPSILON7)).toEqual(true);
     });

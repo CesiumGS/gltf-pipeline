@@ -1,8 +1,9 @@
 'use strict';
 var Cesium = require('cesium');
+var StaticUniformGrid = require('../../lib/StaticUniformGrid');
+
 var Cartesian3 = Cesium.Cartesian3;
 var CesiumMath = Cesium.Math;
-var StaticUniformGrid = require('../../lib/StaticUniformGrid');
 
 describe('StaticUniformGrid', function() {
     function pointDataAxisAlignedBoundingBox(point, min, max) {
