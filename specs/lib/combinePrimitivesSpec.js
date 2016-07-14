@@ -1,10 +1,6 @@
 'use strict';
-var fs = require('fs');
 var readGltf = require('../../lib/readGltf');
-var addPipelineExtras = require('../../lib/addPipelineExtras');
 var combinePrimitives = require('../../lib/combinePrimitives');
-var writeGltf = require('../../lib/writeGltf');
-var loadGltfUris = require('../../lib/loadGltfUris');
 var removePipelineExtras = require('../../lib/removePipelineExtras');
 
 var boxPath = './specs/data/combineObjects/box.gltf';
@@ -53,7 +49,7 @@ describe('combinePrimitives', function() {
                 "TEXCOORD_0": 'meshTest_TEXCOORD_0_accessor_0'
             });
 
-            expect(doubleBoxToCombine.accessors['meshTest_INDEX_accessor_0']).toEqual({
+            expect(doubleBoxToCombine.accessors.meshTest_INDEX_accessor_0).toEqual({
                 "bufferView": "meshTest_INDEX_bufferView_0",
                 "byteOffset": 0,
                 "byteStride": 0,
@@ -64,7 +60,7 @@ describe('combinePrimitives', function() {
                 "min": [0]
             });
 
-            expect(doubleBoxToCombine.accessors['meshTest_POSITION_accessor_0']).toEqual({
+            expect(doubleBoxToCombine.accessors.meshTest_POSITION_accessor_0).toEqual({
                 "bufferView": "meshTest_POSITION_bufferView_0",
                 "byteOffset": 0,
                 "byteStride": 12,
@@ -74,7 +70,7 @@ describe('combinePrimitives', function() {
                 "max": [0.5, 0.5, 0.5],
                 "min": [-0.5, -0.5, -0.5]
             });
-            expect(doubleBoxToCombine.bufferViews['meshTest_INDEX_bufferView_0'].buffer).toEqual('meshTest_INDEX_buffer_0');
+            expect(doubleBoxToCombine.bufferViews.meshTest_INDEX_bufferView_0.buffer).toEqual('meshTest_INDEX_buffer_0');
             done();
         });
     });
@@ -98,8 +94,8 @@ describe('combinePrimitives', function() {
             expect(Object.keys(fiveBox.buffers).indexOf('meshTest_INDEX_buffer_1')).not.toEqual(-1);
             expect(Object.keys(fiveBox.buffers).indexOf('meshTest_POSITION_buffer_1')).not.toEqual(-1);
 
-            expect(fiveBox.accessors['meshTest_INDEX_accessor_1'].bufferView).toEqual('meshTest_INDEX_bufferView_1');
-            expect(fiveBox.bufferViews['meshTest_INDEX_bufferView_1'].buffer).toEqual('meshTest_INDEX_buffer_1');
+            expect(fiveBox.accessors.meshTest_INDEX_accessor_1.bufferView).toEqual('meshTest_INDEX_bufferView_1');
+            expect(fiveBox.bufferViews.meshTest_INDEX_bufferView_1.buffer).toEqual('meshTest_INDEX_buffer_1');
             done();
         });
     });
@@ -110,7 +106,7 @@ describe('combinePrimitives', function() {
             typeError.accessors.accessor_29.type = 'VEC3';
             expect(function () {
                 combinePrimitives(typeError);
-            }).toThrow();
+            }).toThrowDeveloperError();
             done();
         });
     });
@@ -121,7 +117,7 @@ describe('combinePrimitives', function() {
             componentTypeError.accessors.accessor_29.componentType = 5126;
             expect(function () {
                 combinePrimitives(componentTypeError);
-            }).toThrow();
+            }).toThrowDeveloperError();
             done();
         });
     });

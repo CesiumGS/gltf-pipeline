@@ -215,23 +215,17 @@ describe('bakeAmbientOcclusion', function() {
     // data for an equilateral triangle whose center is inside the tetrahedron
     var normal = new Cartesian3(0.0, 1.0, 0.0);
     var equilateralBufferDataByAccessor = {
-        indices : {
-            data : [0, 1, 2]
-        },
-        positions : {
-            data : [
-                new Cartesian3(0.0, 0.0, 1.0),
-                new Cartesian3(-0.5, 0.0, -Math.sqrt(3.0) / 6.0),
-                new Cartesian3(0.5, 0.0, -Math.sqrt(3.0) / 6.0)
-            ]
-        },
-        normals : {
-            data : [
-                normal,
-                normal,
-                normal
-            ]
-        }
+        indices : [0, 1, 2],
+        positions : [
+            new Cartesian3(0.0, 0.0, 1.0),
+            new Cartesian3(-0.5, 0.0, -Math.sqrt(3.0) / 6.0),
+            new Cartesian3(0.5, 0.0, -Math.sqrt(3.0) / 6.0)
+        ],
+        normals : [
+            normal,
+            normal,
+            normal
+        ]
     };
 
     it('correctly processes a basic 2-triangle square primitive', function() {

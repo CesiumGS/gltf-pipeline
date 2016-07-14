@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = {
     gltfPipeline : require('./lib/gltfPipeline'),
     readGltf : require('./lib/readGltf'),

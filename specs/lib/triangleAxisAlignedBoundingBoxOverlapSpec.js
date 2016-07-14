@@ -204,10 +204,14 @@ describe('triangleAxisAlignedBoundingBoxOverlap', function() {
         Cartesian3.fromArray([1, 0, 1], 0, triangle[2]);
         expect(triangleAxisAlignedBoundingBoxOverlap(boundingBox, triangle)).toEqual(true);
 
+        var x = 0;
+        var y = 0;
+        var z = 0;
+
         // Varying orientations
-        for (var x = 0; x < 360; x += 59) {
-            for (var y = 0; y < 360; y += 59) {
-                for (var z = 0; z < 360; z += 59) {
+        for (x = 0; x < 360; x += 59) {
+            for (y = 0; y < 360; y += 59) {
+                for (z = 0; z < 360; z += 59) {
                     triangle = zPlaneTriangle;
                     triangle = rotateTriangle(triangle, 1, 0, 0, x, triangleScratch);
                     triangle = rotateTriangle(triangle, 0, 1, 0, y, triangleScratch);

@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 'use strict';
 var argv = require('yargs').argv;
 var path = require('path');
@@ -18,11 +19,12 @@ if (process.argv.length < 3 || defined(argv.h) || defined(argv.help)) {
         '  -q --quantize, quantize the attributes of this model.\n' +
         '  -n --encodeNormals, oct-encode the normals of this model.\n' +
         '  -c --compressTextureCoordinates, compress the texture coordinates of this model.\n' +
-        '  --ao: Bake ambient occlusion to vertex data using default settings ONLY. When specifying other settings, do not use `--ao` on its own. Default: inactive.\n' +
-        '  --ao.toTexture: Bake AO to existing diffuse textures instead of to vertices. Does not modify shaders. Default: inactive.\n' +
-        '  --ao.groundPlane: Simulate a ground plane at the lowest point of the model when baking AO. Default: inactive.\n' +
-        '  --ao.ambientShadowContribution: Amount of AO to show when blending between shader computed lighting and AO. 1.0 is full AO, 0.5 is a 50/50 blend. Default: 0.5\n' +
-        '  --ao.quality: Valid settings are high, medium, and low. Default: low\n';
+        '     --ao: Bake ambient occlusion to vertex data using default settings ONLY. When specifying other settings, do not use `--ao` on its own. Default: inactive.\n' +
+        '     --ao.toTexture: Bake AO to existing diffuse textures instead of to vertices. Does not modify shaders. Default: inactive.\n' +
+        '     --ao.groundPlane: Simulate a ground plane at the lowest point of the model when baking AO. Default: inactive.\n' +
+        '     --ao.ambientShadowContribution: Amount of AO to show when blending between shader computed lighting and AO. 1.0 is full AO, 0.5 is a 50/50 blend. Default: 0.5\n' +
+        '     --ao.quality: Valid settings are high, medium, and low. Default: low\n' +
+        '     --cesium, optimize the glTF for Cesium by using the sun as a default light source. \n';
     process.stdout.write(help);
     return;
 }
@@ -39,6 +41,7 @@ var aoOptions = argv.ao;
 if (typeof(aoOptions) === 'boolean') {
     aoOptions = {};
 }
+var optimizeForCesium = defaultValue(argv.cesium, false);
 
 if (!defined(outputPath)) {
     var outputFileExtension;
@@ -62,7 +65,8 @@ var options = {
     encodeNormals : encodeNormals,
     compressTextureCoordinates : compressTextureCoordinates,
     aoOptions : aoOptions,
-    imageProcess : defined(aoOptions) && aoOptions.toTexture
+    imageProcess : defined(aoOptions) && aoOptions.toTexture,
+    optimizeForCesium : optimizeForCesium
 };
 
 processFileToDisk(gltfPath, outputPath, options);

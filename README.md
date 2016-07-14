@@ -49,7 +49,7 @@ node ./bin/gltf-pipeline.js ./specs/data/boxTexturedUnoptimized/CesiumTexturedBo
 
 Run the tests:
 ```
-npm run jasmine
+npm run test
 ```
 To run JSHint on the entire codebase, run:
 ```
