@@ -49,53 +49,54 @@ var geometry = new Geometry({
 describe('cesiumGeometryToGltfPrimitive', function() {
    it('writes geometry data to a glTF', function(done) {
        var options = {};
-       readGltf(gltfPath, options, function(gltf) {
-           addDefaults(gltf);
-           var primitive = gltf.meshes[Object.keys(gltf.meshes)[0]].primitives[0];
-
-           var indicesAccessor = gltf.accessors[primitive.indices];
-           var initialIndices = [];
-           readAccessor(gltf, indicesAccessor, initialIndices);
-
-           var positionAccessor = gltf.accessors[primitive.attributes.POSITION];
-           var initialPositions = [];
-           readAccessor(gltf, positionAccessor, initialPositions);
-
-           var normalAccessor = gltf.accessors[primitive.attributes.NORMAL];
-           var initialNormals = [];
-           readAccessor(gltf, normalAccessor, initialNormals);
-           
-           var textureAccessor = gltf.accessors[primitive.attributes.TEXCOORD_0];
-           var initialCoordinates = [];
-           readAccessor(gltf, textureAccessor, initialCoordinates);
-
-           cesiumGeometryToGltfPrimitive(gltf, primitive, geometry);
-
-           var newIndices = [];
-           readAccessor(gltf, indicesAccessor, newIndices);
-           
-           var newPositions = [];
-           var positionType = readAccessor(gltf, positionAccessor, newPositions);
-           var packedPositions = packArray(newPositions, positionType);
-
-           var newNormals = [];
-           var normalType = readAccessor(gltf, normalAccessor, newNormals);
-           var packedNormals = packArray(newNormals, normalType);
-
-           var newCoordinates = [];
-           var coordinateType = readAccessor(gltf, textureAccessor, newCoordinates);
-           var packedCoordinates = packArray(newCoordinates, coordinateType);
-
-           expect(initialIndices).not.toEqual(indices);
-           expect(initialPositions).not.toEqual(positionValues);
-           expect(initialNormals).not.toEqual(normalValues);
-           expect(initialCoordinates).not.toEqual(stValues);
-           
-           expect(newIndices).toEqual(indices);
-           expect(packedPositions).toEqual(positionValues);
-           expect(packedNormals).toEqual(normalValues);
-           expect(packedCoordinates).toEqual(stValues);
-           done();
-       });
+       readGltf(gltfPath, options)
+           .then(function(gltf) {
+               addDefaults(gltf);
+               var primitive = gltf.meshes[Object.keys(gltf.meshes)[0]].primitives[0];
+    
+               var indicesAccessor = gltf.accessors[primitive.indices];
+               var initialIndices = [];
+               readAccessor(gltf, indicesAccessor, initialIndices);
+    
+               var positionAccessor = gltf.accessors[primitive.attributes.POSITION];
+               var initialPositions = [];
+               readAccessor(gltf, positionAccessor, initialPositions);
+    
+               var normalAccessor = gltf.accessors[primitive.attributes.NORMAL];
+               var initialNormals = [];
+               readAccessor(gltf, normalAccessor, initialNormals);
+               
+               var textureAccessor = gltf.accessors[primitive.attributes.TEXCOORD_0];
+               var initialCoordinates = [];
+               readAccessor(gltf, textureAccessor, initialCoordinates);
+    
+               cesiumGeometryToGltfPrimitive(gltf, primitive, geometry);
+    
+               var newIndices = [];
+               readAccessor(gltf, indicesAccessor, newIndices);
+               
+               var newPositions = [];
+               var positionType = readAccessor(gltf, positionAccessor, newPositions);
+               var packedPositions = packArray(newPositions, positionType);
+    
+               var newNormals = [];
+               var normalType = readAccessor(gltf, normalAccessor, newNormals);
+               var packedNormals = packArray(newNormals, normalType);
+    
+               var newCoordinates = [];
+               var coordinateType = readAccessor(gltf, textureAccessor, newCoordinates);
+               var packedCoordinates = packArray(newCoordinates, coordinateType);
+    
+               expect(initialIndices).not.toEqual(indices);
+               expect(initialPositions).not.toEqual(positionValues);
+               expect(initialNormals).not.toEqual(normalValues);
+               expect(initialCoordinates).not.toEqual(stValues);
+               
+               expect(newIndices).toEqual(indices);
+               expect(packedPositions).toEqual(positionValues);
+               expect(packedNormals).toEqual(normalValues);
+               expect(packedCoordinates).toEqual(stValues);
+               done();
+           });
     });
 });

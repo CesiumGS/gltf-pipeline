@@ -1,8 +1,8 @@
 'use strict';
-var fs = require('fs');
+var fsExtra = require('fs-extra');
 
 var Promise = require('bluebird');
-var readFile = Promise.promisify(fs.readFile);
+var readFile = Promise.promisify(fsExtra.readFile);
 
 var path = require('path');
 var clone = require('clone');
@@ -13,164 +13,69 @@ var loadGltfUris = require('../../lib/loadGltfUris');
 var readGltf = require('../../lib/readGltf');
 var removeUnused = require('../../lib/removeUnused');
 var writeBinaryGltf = require('../../lib/writeBinaryGltf');
-var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest_BinaryInput.gltf';
-var scenePath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest_BinaryCheck.gltf';
-var outputPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.glb';
-var bufferPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.bin';
-var imagePath = './specs/data/boxTexturedUnoptimized/Cesium_Logo_Flat_Binary.png';
-var fragmentShaderPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest0FS_Binary.glsl';
-var vertexShaderPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest0VS_Binary.glsl';
-var invalidPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf';
+
+var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf';
+var outputGltfPath = './output/CesiumTexturedBoxTest.glb';
+var invalidPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.exe';
 
 describe('writeBinaryGltf', function() {
-    var testData = {
-        gltf : gltfPath,
-        scene : scenePath,
-        image : imagePath,
-        buffer : bufferPath,
-        fragmentShader : fragmentShaderPath,
-        vertexShader : vertexShaderPath
-    };
+    it('will write a file to the correct directory', function(done) {
+        var spy = spyOn(fsExtra, 'outputFile').and.callFake(function() {});
+        var readOptions = {};
+        var writeOptions = {
+            outputPath : outputGltfPath,
+            embed : true,
+            embedImage : true,
+            createDirectory : false
+        };
 
-    beforeAll(function(done) {
-        var options = {};
-        readGltf(gltfPath, options, function(gltf) {
-            testData.gltf = gltf;
-
-            fs.readFile(scenePath, function(err, data) {
-                if (err) {
-                    throw err;
-                }
-                testData.scene = JSON.parse(data);
-
-
-                var readFiles = [
-                    readFile(testData.image),
-                    readFile(testData.buffer),
-                    readFile(testData.fragmentShader),
-                    readFile(testData.vertexShader)
-                ];
-                Promise.all(readFiles)
-                    .then(function(results) {
-                        testData.image = results[0];
-                        testData.buffer = results[1];
-                        testData.fragmentShader = results[2];
-                        testData.vertexShader = results[3];
-                        done();
-                    });
+        readGltf(gltfPath, readOptions)
+            .then(function(gltf) {
+                return writeBinaryGltf(gltf, writeOptions);
+            })
+            .then(function() {
+                expect(path.normalize(spy.calls.first().args[0])).toEqual(path.normalize(outputGltfPath));
+                done();
+            })
+            .catch(function (err) {
+                done();
+                throw err;
             });
-        });
     });
 
-    it('writes a valid binary gltf header with embedded resources', function(done) {
-        writeBinaryGltf(clone(testData.gltf), {
-            outputPath : outputPath,
+    it('throws an invalid output path error', function(done) {
+        var readOptions = {};
+        var writeOptions = {
+            outputPath : undefined,
             embed : true,
             embedImage : true,
             createDirectory : true
-        }, function(err, header, scene, body) {
-            expect(header.toString('utf8', 0, 4)).toEqual('glTF');
-            expect(header.readUInt32LE(4)).toEqual(1);
-            expect(header.readUInt32LE(8)).toEqual(17706);
-            expect(header.readUInt32LE(12)).toEqual(3896);
-            expect(header.readUInt32LE(16)).toEqual(0);
-            done();
-        });
+        };
+
+        readGltf(gltfPath, readOptions)
+            .then(function(gltf) {
+                expect(function() {
+                    writeBinaryGltf(gltf, writeOptions);
+                }).toThrowError('Output path is undefined.');
+                done();
+            });
     });
 
-    it('writes a valid binary gltf header with separate resources', function(done) {
-        writeBinaryGltf(clone(testData.gltf), {
-            outputPath : outputPath,
-            embed : false,
-            embedImage : false,
-            createDirectory : true
-        }, function(err, header, scene, body) {
-            expect(header.toString('utf8', 0, 4)).toEqual('glTF');
-            expect(header.readUInt32LE(4)).toEqual(1);
-            expect(header.readUInt32LE(8)).toEqual(4308);
-            expect(header.readUInt32LE(12)).toEqual(3448);
-            expect(header.readUInt32LE(16)).toEqual(0);
-            done();
-        });
-    });
-
-    it('writes the correct binary scene', function(done) {
-        writeBinaryGltf(clone(testData.gltf), {
-            outputPath : outputPath,
+    it('throws an invalid output extension error', function(done) {
+        var readOptions = {};
+        var writeOptions = {
+            outputPath : invalidPath,
             embed : true,
             embedImage : true,
             createDirectory : true
-        }, function(err, header, scene, body) {
-            expect(JSON.parse(scene.toString())).toEqual(testData.scene);
-            done();
-        });
-    });
+        };
 
-    it('writes the correct binary body with embedded resources', function(done) {
-        writeBinaryGltf(clone(testData.gltf), {
-            outputPath : outputPath,
-            embed : true,
-            embedImage : true,
-            createDirectory : true
-        }, function(err, header, scene, body) {
-            var binaryBody = Buffer.concat([testData.buffer, testData.fragmentShader, testData.vertexShader, testData.image]);
-            expect(bufferEqual(binaryBody, body)).toBe(true);
-            done();
-        });
-    });
-
-    it('writes the correct binary body with separate images', function(done) {
-        writeBinaryGltf(clone(testData.gltf), {
-            outputPath : outputPath,
-            embed : true,
-            embedImage : false,
-            createDirectory : true
-        }, function(err, header, scene, body) {
-            var binaryBody = Buffer.concat([testData.buffer, testData.fragmentShader, testData.vertexShader]);
-            expect(bufferEqual(binaryBody, body)).toBe(true);
-            done();
-        });
-    });
-
-    it('writes the correct binary body with separate resources except images', function(done) {
-        writeBinaryGltf(clone(testData.gltf), {
-            outputPath : outputPath,
-            embed : false,
-            embedImage : true,
-            createDirectory : true
-        }, function(err, header, scene, body) {
-            var binaryBody = Buffer.concat([testData.buffer, testData.image]);
-            expect(bufferEqual(binaryBody, body)).toBe(true);
-            done();
-        });
-    });
-
-    it('writes the correct binary body with separate resources', function(done) {
-        writeBinaryGltf(clone(testData.gltf), {
-            outputPath : outputPath,
-            embed : false,
-            embedImage : false,
-            createDirectory : true
-        }, function(err, header, scene, body) {
-            var binaryBody = testData.buffer;
-            expect(bufferEqual(binaryBody, body)).toBe(true);
-            done();
-        });
-    });
-    
-    it('throws an invalid output path error', function() {
-        expect(function() {
-            writeBinaryGltf(clone(testData.gltf), {
-                outputPath : undefined
-            }, true);
-        }).toThrowDeveloperError();
-    });
-    
-    it('throws an invalid output extension error', function() {
-        expect(function() {
-            writeBinaryGltf(clone(testData.gltf), {
-                outputPath : invalidPath
-            }, true);
-        }).toThrowDeveloperError();
+        readGltf(gltfPath, readOptions)
+            .then(function(gltf) {
+                expect(function() {
+                    writeBinaryGltf(gltf, writeOptions);
+                }).toThrowError('Invalid output path extension.');
+                done();
+            });
     });
 });

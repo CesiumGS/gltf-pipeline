@@ -18,10 +18,11 @@ describe('readAccessor', function() {
     var options = {};
 
     beforeAll(function(done) {
-        readGltf(gltfPath, options, function(gltf) {
-            boxGltf = gltf;
-            done();
-        });
+        readGltf(gltfPath, options)
+            .then(function(gltf) {
+                boxGltf = gltf;
+                done();
+            });
     });
 
 

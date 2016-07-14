@@ -373,12 +373,13 @@ describe('addDefaults', function() {
             var gltf = JSON.parse(data);
             var originalState = gltf.techniques[Object.keys(gltf.techniques)[0]].states;
             expect(originalState).not.toEqual(alphaBlendState);
-            readGltf(gltfTransparentPath, {}, function (gltf) {
-                addDefaults(gltf);
-                var technique = gltf.techniques[Object.keys(gltf.techniques)[0]];
-                expect(technique.states).toEqual(alphaBlendState);
-                done();
-            });
+            readGltf(gltfTransparentPath, {})
+                .then(function(gltf) {
+                    addDefaults(gltf);
+                    var technique = gltf.techniques[Object.keys(gltf.techniques)[0]];
+                    expect(technique.states).toEqual(alphaBlendState);
+                    done();
+                });
         });
     });
 
@@ -392,14 +393,15 @@ describe('addDefaults', function() {
             expect(originalState).not.toEqual(alphaBlendState);
 
             var options = {};
-            readGltf(gltfTransparentPath, options, function (gltf) {
-                var material = gltf.materials[Object.keys(gltf.materials)[0]];
-                material.values.diffuse = [1, 0, 0, 0.5];
-                addDefaults(gltf);
-                var technique = gltf.techniques[Object.keys(gltf.techniques)[0]];
-                expect(technique.states).toEqual(alphaBlendState);
-                done();
-            });
+            readGltf(gltfTransparentPath, options)
+                .then(function(gltf) {
+                    var material = gltf.materials[Object.keys(gltf.materials)[0]];
+                    material.values.diffuse = [1, 0, 0, 0.5];
+                    addDefaults(gltf);
+                    var technique = gltf.techniques[Object.keys(gltf.techniques)[0]];
+                    expect(technique.states).toEqual(alphaBlendState);
+                    done();
+                });
         });
     });
 
