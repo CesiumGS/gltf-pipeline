@@ -2,6 +2,7 @@
 var Cesium = require('cesium');
 var clone = require('clone');
 var fs = require('fs');
+
 var WebGLConstants = Cesium.WebGLConstants;
 
 var addDefaults = require('../../lib/addDefaults');

@@ -17,7 +17,6 @@ var imagePath = './specs/data/boxTexturedUnoptimized/Cesium_Logo_Flat_Binary.png
 var fragmentShaderPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest0FS_Binary.glsl';
 var vertexShaderPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest0VS_Binary.glsl';
 
-
 describe('getBinaryGltf', function() {
 
     var testData = {
@@ -58,7 +57,6 @@ describe('getBinaryGltf', function() {
                 });
             });
     });
-
 
     it('writes a valid binary gltf header with embedded resources', function () {
         var gltf = clone(testData.gltf);
