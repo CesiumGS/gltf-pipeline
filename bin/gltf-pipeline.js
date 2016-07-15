@@ -1,11 +1,14 @@
 #!/usr/bin/env node
 'use strict';
+var Cesium = require('cesium');
 var argv = require('yargs').argv;
 var path = require('path');
-var Cesium = require('cesium');
+
 var defaultValue = Cesium.defaultValue;
 var defined = Cesium.defined;
+
 var gltfPipeline = require('../lib/gltfPipeline');
+
 var processFileToDisk = gltfPipeline.processFileToDisk;
 
 if (process.argv.length < 3 || defined(argv.h) || defined(argv.help)) {
@@ -68,4 +71,5 @@ var options = {
     optimizeForCesium : optimizeForCesium
 };
 
+// Node automatically waits for all promises to terminate
 processFileToDisk(gltfPath, outputPath, options);

@@ -1,5 +1,4 @@
 'use strict';
-var bakeAmbientOcclusion = require('../../lib/bakeAmbientOcclusion');
 var Cesium = require('cesium');
 var clone = require('clone');
 
@@ -7,6 +6,7 @@ var CesiumMath = Cesium.Math;
 var Cartesian3 = Cesium.Cartesian3;
 var Matrix4 = Cesium.Matrix4;
 
+var bakeAmbientOcclusion = require('../../lib/bakeAmbientOcclusion');
 var NodeHelpers = require('../../lib/NodeHelpers');
 var readGltf = require('../../lib/readGltf');
 var StaticUniformGrid = require('../../lib/StaticUniformGrid');

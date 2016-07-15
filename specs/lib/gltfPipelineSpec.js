@@ -81,7 +81,7 @@ describe('gltfPipeline', function() {
     });
 
     it('will write a file to the correct directory', function(done) {
-        var spy = spyOn(fsExtra, 'outputJson').and.callFake(function() {});
+        var spy = spyOn(fsExtra, 'outputJsonAsync').and.callFake(function() {});
         var options = {
             createDirectory : false
         };
@@ -95,7 +95,7 @@ describe('gltfPipeline', function() {
     });
 
     it('will write a binary file', function(done) {
-        var spy = spyOn(fsExtra, 'outputFile').and.callFake(function() {});
+        var spy = spyOn(fsExtra, 'outputFileAsync').and.callFake(function() {});
         var options = {
             binary : true,
             createDirectory : false
@@ -111,7 +111,7 @@ describe('gltfPipeline', function() {
     });
 
     it('will write a file from JSON', function(done) {
-        var spy = spyOn(fsExtra, 'outputJson').and.callFake(function() {});
+        var spy = spyOn(fsExtra, 'outputJsonAsync').and.callFake(function() {});
         var readOptions = {};
         var processOptions = {
             createDirectory : false, 
