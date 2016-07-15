@@ -11,7 +11,7 @@ var primitiveType = 4;
 describe('gltfPrimitiveToCesiumGeometry', function() {
     it('returns a geometry', function(done) {
         var options = {};
-        readGltf(gltfPath, options)
+        expect(readGltf(gltfPath, options)
             .then(function(gltf) {
                 addDefaults(gltf);
                 var primitive = gltf.meshes[Object.keys(gltf.meshes)[0]].primitives[0];
@@ -41,7 +41,6 @@ describe('gltfPrimitiveToCesiumGeometry', function() {
                 expect(geometry.attributes.st.values).toEqual(new Float32Array(packedCoordinates));
                 expect(geometry.indices).toEqual(new Uint32Array(indices));
                 expect(geometry.primitiveType).toEqual(primitiveType);
-                done();
-            });
+            }), done).toResolve();
     });
 });

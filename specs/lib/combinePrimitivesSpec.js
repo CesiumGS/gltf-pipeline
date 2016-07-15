@@ -12,30 +12,28 @@ describe('combinePrimitives', function() {
     var options = {};
 
     it('does not affect single primitives', function(done){
-        readGltf(boxPath, options)
+        expect(readGltf(boxPath, options)
             .then(function(gltf) {
                 var box = gltf;
                 var stringBox = JSON.stringify(box);
                 combinePrimitives(box);
                 expect(stringBox).toEqual(JSON.stringify(box));
-                done();
-        });
+        }), done).toResolve();
     });
 
     it('does not combine two primitives', function(done) {
-        readGltf(doubleBoxNotCombinedPath, options)
-            .then(function(gltf){
+        expect(readGltf(doubleBoxNotCombinedPath, options)
+            .then(function(gltf) {
                 var doubleBoxNotCombined = gltf;
                 var stringDoubleBoxNotCombined = JSON.stringify(doubleBoxNotCombined);
                 combinePrimitives(doubleBoxNotCombined);
                 expect(stringDoubleBoxNotCombined).toEqual(JSON.stringify(doubleBoxNotCombined));
-                done();
-            });
+            }), done).toResolve();
     });
 
     it('combines two primitives', function(done) {
-        readGltf(doubleBoxToCombinePath, options)
-            .then(function(gltf){
+        expect(readGltf(doubleBoxToCombinePath, options)
+            .then(function(gltf) {
                 var doubleBoxToCombine = gltf;
     
                 combinePrimitives(doubleBoxToCombine);
@@ -74,12 +72,11 @@ describe('combinePrimitives', function() {
                     "min": [-0.5, -0.5, -0.5]
                 });
                 expect(doubleBoxToCombine.bufferViews.meshTest_INDEX_bufferView_0.buffer).toEqual('meshTest_INDEX_buffer_0');
-                done();
-            });
+            }), done).toResolve();
     });
 
     it('combines some primitives', function(done){
-        readGltf(fiveBoxPath, options)
+        expect(readGltf(fiveBoxPath, options)
             .then(function(gltf){
                 var fiveBox = gltf;
                 combinePrimitives(fiveBox);
@@ -100,31 +97,28 @@ describe('combinePrimitives', function() {
     
                 expect(fiveBox.accessors.meshTest_INDEX_accessor_1.bufferView).toEqual('meshTest_INDEX_bufferView_1');
                 expect(fiveBox.bufferViews.meshTest_INDEX_bufferView_1.buffer).toEqual('meshTest_INDEX_buffer_1');
-                done();
-            });
+            }), done).toResolve();
     });
 
     it('throws a type error', function(done) {
-        readGltf(doubleBoxToCombinePath, options)
+        expect(readGltf(doubleBoxToCombinePath, options)
             .then(function (gltf) {
                 var typeError = gltf;
                 typeError.accessors.accessor_29.type = 'VEC3';
                 expect(function () {
                     combinePrimitives(typeError);
                 }).toThrowDeveloperError();
-                done();
-            });
+            }), done).toResolve();
     });
 
     it ('throws a componentType error', function(done) {
-        readGltf(doubleBoxToCombinePath, options)
+        expect(readGltf(doubleBoxToCombinePath, options)
             .then(function(gltf){
                 var componentTypeError = gltf;
                 componentTypeError.accessors.accessor_29.componentType = 5126;
                 expect(function () {
                     combinePrimitives(componentTypeError);
                 }).toThrowDeveloperError();
-                done();
-            });
+            }), done).toResolve();
     });
 });

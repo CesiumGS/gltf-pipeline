@@ -18,29 +18,26 @@ describe('writeShaders', function() {
     var testGltf;
 
     beforeAll(function(done) {
-        fs.readFile(fragmentShaderPath, function (err, data) {
-            if (err) {
-                throw err;
-            }
-            fragmentShaderData = data;
-            testGltf = {
-                "shaders": {
-                    "CesiumTexturedBoxTest0FS": {
-                        "type": 35632,
-                        "uri": fragmentShaderUri,
-                        "extras": {
-                            "_pipeline": {
-                                "source": fragmentShaderData,
-                                "extension": '.glsl',
-                                "deleteExtras": true
+        expect(fsReadFile(fragmentShaderPath)
+            .then(function(data) {
+                fragmentShaderData = data;
+                testGltf = {
+                    "shaders": {
+                        "CesiumTexturedBoxTest0FS": {
+                            "type": 35632,
+                            "uri": fragmentShaderUri,
+                            "extras": {
+                                "_pipeline": {
+                                    "source": fragmentShaderData,
+                                    "extension": '.glsl',
+                                    "deleteExtras": true
+                                }
                             }
                         }
                     }
-                }
-            };
-            fragmentShaderUri = 'data:text/plain;base64,' + new Buffer(fragmentShaderData).toString('base64');
-            done();
-        });
+                };
+                fragmentShaderUri = 'data:text/plain;base64,' + new Buffer(fragmentShaderData).toString('base64');
+            }), done).toResolve();
     });
 
     it('writes an external shader', function(done) {
@@ -52,7 +49,7 @@ describe('writeShaders', function() {
             createDirectory : true
         };
 
-        writeGltf(gltf, options)
+        expect(writeGltf(gltf, options)
             .then(function() {
                 expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras).not.toBeDefined();
                 expect(gltf.shaders.CesiumTexturedBoxTest0FS.uri).toEqual('CesiumTexturedBoxTest0FS.glsl');
@@ -60,8 +57,7 @@ describe('writeShaders', function() {
             })
             .then(function(outputData) {
                 expect(bufferEqual(outputData, fragmentShaderData)).toBe(true);
-                done();
-            });
+            }), done).toResolve();
     });
 
     it('writes an embedded shader', function(done) {
@@ -73,11 +69,10 @@ describe('writeShaders', function() {
             createDirectory : true
         };
         
-        writeGltf(gltf, options)
+        expect(writeGltf(gltf, options)
             .then(function() {
                 expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras).not.toBeDefined();
                 expect(gltf.shaders.CesiumTexturedBoxTest0FS.uri).toEqual(fragmentShaderUri);
-                done();
-            });
+            }), done).toResolve();
     });
 });

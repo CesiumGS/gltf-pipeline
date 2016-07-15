@@ -25,7 +25,7 @@ describe('gltfPipeline', function() {
     it('optimizes a gltf JSON with embedded resources', function(done) {
         var options = {};
         var gltfCopy;
-        readGltf(gltfEmbeddedPath, options)
+        expect(readGltf(gltfEmbeddedPath, options)
             .then(function(gltf) {
                 gltfCopy = clone(gltf);
                 return processJSON(gltf, options);
@@ -33,14 +33,13 @@ describe('gltfPipeline', function() {
             .then(function(gltf) {
                 expect(gltf).toBeDefined();
                 expect(clone(gltf)).not.toEqual(gltfCopy);
-                done();
-            });
+            }), done).toResolve();
     });
     
     it('optimizes a gltf JSON with external resources', function(done) {
         var options = { basePath : path.dirname(gltfPath) };
         var gltfCopy;
-        fsExtraReadFile(gltfPath, options)
+        expect(fsExtraReadFile(gltfPath, options)
             .then(function(data) {
                 var gltf = JSON.parse(data);
                 gltfCopy = clone(gltfCopy);
@@ -50,14 +49,13 @@ describe('gltfPipeline', function() {
             .then(function(gltf) {
                 expect(gltf).toBeDefined();
                 expect(clone(gltf)).not.toEqual(gltfCopy);
-                done();
-            });
+            }), done).toResolve();
     });
 
     it('optimizes a glTF file', function(done) {
         var gltfCopy;
         var options = {};
-        readGltf(gltfPath, options)
+        expect(readGltf(gltfPath, options)
             .then(function(gltf) {
                 gltfCopy = clone(gltf);
                 return processFile(gltfPath, options);
@@ -65,14 +63,13 @@ describe('gltfPipeline', function() {
             .then(function(gltf) {
                 expect(gltf).toBeDefined();
                 expect(clone(gltf)).not.toEqual(gltfCopy);
-                done();
-            });
+            }), done).toResolve();
     });
 
     it('optimizes a glb file', function(done) {
         var gltfCopy;
         var options = {};
-        readGltf(glbPath, options)
+        expect(readGltf(glbPath, options)
             .then(function(gltf) {
                 gltfCopy = clone(gltf);
                 return processFile(glbPath, options);
@@ -80,8 +77,7 @@ describe('gltfPipeline', function() {
             .then(function(gltf) {
                 expect(gltf).toBeDefined();
                 expect(clone(gltf)).not.toEqual(gltfCopy);
-                done();
-            });
+            }), done).toResolve();
     });
 
     it('will write a file to the correct directory', function(done) {
@@ -89,15 +85,13 @@ describe('gltfPipeline', function() {
         var options = {
             createDirectory : false
         };
-        processFileToDisk(gltfPath, outputGltfPath, options)
+        expect(processFileToDisk(gltfPath, outputGltfPath, options)
             .then(function() {
                 expect(path.normalize(spy.calls.first().args[0])).toEqual(path.normalize(outputGltfPath));
-                done();
             })
             .catch(function(err) {
-                done();
                 throw err;
-            });
+            }), done).toResolve();
     });
 
     it('will write a binary file', function(done) {
@@ -106,45 +100,39 @@ describe('gltfPipeline', function() {
             binary : true,
             createDirectory : false
         };
-        processFileToDisk(gltfPath, outputGlbPath, options)
+        expect(processFileToDisk(gltfPath, outputGlbPath, options)
             .then(function() {
                 expect(path.normalize(spy.calls.first().args[0])).toEqual(path.normalize(outputGlbPath));
-                done();
             })
             .catch(function(err) {
-                done();
                 throw err;
-            });
+            }), done).toResolve();
 
     });
 
     it('will write a file from JSON', function(done) {
-        var spy = spyOn(fsExtra, 'outputJson').and.callFake(function() {
-            return;
-        });
+        var spy = spyOn(fsExtra, 'outputJson').and.callFake(function() {});
         var readOptions = {};
         var processOptions = {
             createDirectory : false, 
             basePath : path.dirname(gltfPath)
         };
-        readGltf(gltfPath, readOptions)
+        expect(readGltf(gltfPath, readOptions)
             .then(function(gltf) {
                 return processJSONToDisk(gltf, outputGltfPath, processOptions);
             })
             .then(function() {
                 expect(path.normalize(spy.calls.first().args[0])).toEqual(path.normalize(outputGltfPath));
-                done();
             })
             .catch(function(err) {
-                done();
                 throw err;
-            });
+            }), done).toResolve();
     });
 
     it('will write sources from JSON', function(done) {
         var initialUri;
         var options = {};
-        readGltf(gltfEmbeddedPath, options)
+        expect(readGltf(gltfEmbeddedPath, options)
             .then(function(gltf) {
                 initialUri = gltf.buffers.CesiumTexturedBoxTest.uri;
                 return processJSON(gltf, options);
@@ -152,14 +140,13 @@ describe('gltfPipeline', function() {
             .then(function(gltf) {
                 var finalUri = gltf.buffers.CesiumTexturedBoxTest.uri;
                 expect(initialUri).not.toEqual(finalUri);
-                done();
-            });
+            }), done).toResolve();
     });
 
     it('will write sources from file', function(done) {
         var initialUri;
         var options = {};
-        readGltf(gltfEmbeddedPath, options)
+        expect(readGltf(gltfEmbeddedPath, options)
             .then(function(gltf) {
                 initialUri = gltf.buffers.CesiumTexturedBoxTest.uri;
                 return processFile(gltfEmbeddedPath, options);
@@ -167,7 +154,6 @@ describe('gltfPipeline', function() {
             .then(function(gltfFinal) {
                 var finalUri = gltfFinal.buffers.CesiumTexturedBoxTest.uri;
                 expect(initialUri).not.toEqual(finalUri);
-                done();
-            });
+            }), done).toResolve();
     });
 });

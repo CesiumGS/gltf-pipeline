@@ -29,7 +29,7 @@ describe('getBinaryGltf', function() {
 
     beforeAll(function(done) {
         var options = {};
-        readGltf(gltfPath, options)
+        expect(readGltf(gltfPath, options)
             .then(function(gltf) {
                 testData.gltf = gltf;
                 return fsReadFile(scenePath);
@@ -50,8 +50,7 @@ describe('getBinaryGltf', function() {
                 testData.buffer = results[1];
                 testData.fragmentShader = results[2];
                 testData.vertexShader = results[3];
-                done();
-            });
+            }), done).toResolve();
     });
 
     it('writes a valid binary gltf header with embedded resources', function () {

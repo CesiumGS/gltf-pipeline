@@ -24,18 +24,16 @@ describe('writeBinaryGltf', function() {
             createDirectory : false
         };
 
-        readGltf(gltfPath, readOptions)
+        expect(readGltf(gltfPath, readOptions)
             .then(function(gltf) {
                 return writeBinaryGltf(gltf, writeOptions);
             })
             .then(function() {
                 expect(path.normalize(spy.calls.first().args[0])).toEqual(path.normalize(outputGltfPath));
-                done();
             })
             .catch(function (err) {
-                done();
                 throw err;
-            });
+            }), done).toResolve();
     });
 
     it('throws an invalid output path error', function(done) {
@@ -47,13 +45,12 @@ describe('writeBinaryGltf', function() {
             createDirectory : true
         };
 
-        readGltf(gltfPath, readOptions)
+        expect(readGltf(gltfPath, readOptions)
             .then(function(gltf) {
                 expect(function() {
                     writeBinaryGltf(gltf, writeOptions);
                 }).toThrowError('Output path is undefined.');
-                done();
-            });
+            }), done).toResolve();
     });
 
     it('throws an invalid output extension error', function(done) {
@@ -65,12 +62,11 @@ describe('writeBinaryGltf', function() {
             createDirectory : true
         };
 
-        readGltf(gltfPath, readOptions)
+        expect(readGltf(gltfPath, readOptions)
             .then(function(gltf) {
                 expect(function() {
                     writeBinaryGltf(gltf, writeOptions);
                 }).toThrowError('Invalid output path extension.');
-                done();
-            });
+            }), done).toResolve();
     });
 });

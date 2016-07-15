@@ -37,7 +37,6 @@ var st = new GeometryAttribute({
     componentsPerAttribute : 2,
     values : stValues
 });
-
 var geometry = new Geometry({
     attributes : {
         position : position,
@@ -51,7 +50,7 @@ var geometry = new Geometry({
 describe('cesiumGeometryToGltfPrimitive', function() {
    it('writes geometry data to a glTF', function(done) {
        var options = {};
-       readGltf(gltfPath, options)
+       expect(readGltf(gltfPath, options)
            .then(function(gltf) {
                addDefaults(gltf);
                var primitive = gltf.meshes[Object.keys(gltf.meshes)[0]].primitives[0];
@@ -98,7 +97,6 @@ describe('cesiumGeometryToGltfPrimitive', function() {
                expect(packedPositions).toEqual(positionValues);
                expect(packedNormals).toEqual(normalValues);
                expect(packedCoordinates).toEqual(stValues);
-               done();
-           });
+           }), done).toResolve();
     });
 });
