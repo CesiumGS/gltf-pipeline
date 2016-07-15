@@ -2,13 +2,14 @@
 var bakeAmbientOcclusion = require('../../lib/bakeAmbientOcclusion');
 var Cesium = require('cesium');
 var clone = require('clone');
-var NodeHelpers = require('../../lib/NodeHelpers');
-var readGltf = require('../../lib/readGltf');
-var StaticUniformGrid = require('../../lib/StaticUniformGrid');
 
 var CesiumMath = Cesium.Math;
 var Cartesian3 = Cesium.Cartesian3;
 var Matrix4 = Cesium.Matrix4;
+
+var NodeHelpers = require('../../lib/NodeHelpers');
+var readGltf = require('../../lib/readGltf');
+var StaticUniformGrid = require('../../lib/StaticUniformGrid');
 
 var boxOverGroundGltfPath = './specs/data/ambientOcclusion/cube_over_ground.gltf';
 
@@ -189,10 +190,10 @@ describe('bakeAmbientOcclusion', function() {
     };
 
     beforeAll(function(done) {
-        readGltf(boxOverGroundGltfPath, {}, function(gltf) {
-            boxOverGroundGltf = gltf;
-            done();
-        });
+        expect(readGltf(boxOverGroundGltfPath, {})
+            .then(function(gltf) {
+                boxOverGroundGltf = gltf;
+            }), done).toResolve();
     });
 
     // tetrahedron
