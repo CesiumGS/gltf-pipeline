@@ -65,7 +65,6 @@ var options = {
     encodeNormals : encodeNormals,
     compressTextureCoordinates : compressTextureCoordinates,
     aoOptions : aoOptions,
-    imageProcess : defined(aoOptions) && aoOptions.toTexture,
     optimizeForCesium : optimizeForCesium
 };
 

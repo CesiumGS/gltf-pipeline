@@ -189,10 +189,7 @@ describe('bakeAmbientOcclusion', function() {
     };
 
     beforeAll(function(done) {
-        var options = {
-            imageProcess: true
-        };
-        readGltf(boxOverGroundGltfPath, options, function(gltf) {
+        readGltf(boxOverGroundGltfPath, {}, function(gltf) {
             boxOverGroundGltf = gltf;
             done();
         });

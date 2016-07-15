@@ -1,9 +1,13 @@
 'use strict';
 var Cesium = require('cesium');
-var Matrix4 = Cesium.Matrix4;
-var CesiumMath = Cesium.Math;
+var Promise = require('bluebird');
 var clone = require('clone');
 var fs = require('fs');
+
+var Matrix4 = Cesium.Matrix4;
+var CesiumMath = Cesium.Math;
+
+var fsReadFile = Promise.promisify(fs.readFile);
 
 var NodeHelpers = require('../../lib/NodeHelpers');
 var fiveBoxPath = './specs/data/combineObjects/fiveBox.gltf';
@@ -173,34 +177,35 @@ describe('NodeHelpers', function() {
     });
 
     it('performs operations per primitive in a scene', function(done) {
-        fs.readFile(fiveBoxPath, function(err, data) {
-            if (err) {
+        fsReadFile(fiveBoxPath)
+            .then(function(data) {
+                var gltf = JSON.parse(data);
+                var scene = gltf.scenes[gltf.scene];
+
+                var functionParameters = {
+                    numberPrimitives: 0,
+                    primitiveMeshIDs: [],
+                    materialIDs: []
+                };
+
+                var primitiveFunction = function (primitive, meshPrimitiveID, parameters) {
+                    parameters.numberPrimitives++;
+                    parameters.primitiveMeshIDs.push(meshPrimitiveID);
+                    parameters.materialIDs.push(primitive.material);
+                };
+
+                NodeHelpers.forEachPrimitiveInScene(gltf, scene, primitiveFunction, functionParameters);
+
+                expect(functionParameters.numberPrimitives).toEqual(5);
+                expect(functionParameters.primitiveMeshIDs[0]).toEqual('meshTest_0');
+                expect(functionParameters.primitiveMeshIDs[4]).toEqual('meshTest_4');
+                expect(functionParameters.materialIDs[0]).toEqual('Effect_outer');
+                expect(functionParameters.materialIDs[2]).toEqual('Effect_inner');
+
+                done();
+            })
+            .catch(function(err) {
                 throw err;
-            }
-            var gltf = JSON.parse(data);
-            var scene = gltf.scenes[gltf.scene];
-
-            var functionParameters = {
-                numberPrimitives: 0,
-                primitiveMeshIDs: [],
-                materialIDs: []
-            };
-
-            var primitiveFunction = function(primitive, meshPrimitiveID, parameters) {
-                parameters.numberPrimitives++;
-                parameters.primitiveMeshIDs.push(meshPrimitiveID);
-                parameters.materialIDs.push(primitive.material);
-            };
-
-            NodeHelpers.forEachPrimitiveInScene(gltf, scene, primitiveFunction, functionParameters);
-
-            expect(functionParameters.numberPrimitives).toEqual(5);
-            expect(functionParameters.primitiveMeshIDs[0]).toEqual('meshTest_0');
-            expect(functionParameters.primitiveMeshIDs[4]).toEqual('meshTest_4');
-            expect(functionParameters.materialIDs[0]).toEqual('Effect_outer');
-            expect(functionParameters.materialIDs[2]).toEqual('Effect_inner');
-
-            done();
-        });
+            });
     });
 });
