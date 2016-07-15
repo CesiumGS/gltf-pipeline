@@ -18,7 +18,6 @@ var fragmentShaderPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxT
 var vertexShaderPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest0VS_Binary.glsl';
 
 describe('getBinaryGltf', function() {
-
     var testData = {
         gltf: gltfPath,
         scene: scenePath,
@@ -28,33 +27,30 @@ describe('getBinaryGltf', function() {
         vertexShader: vertexShaderPath
     };
 
-    beforeAll(function (done) {
+    beforeAll(function(done) {
         var options = {};
         readGltf(gltfPath, options)
-            .then(function (gltf) {
+            .then(function(gltf) {
                 testData.gltf = gltf;
+                return fsReadFile(scenePath);
+            })
+            .then(function(data) {
+                testData.scene = JSON.parse(data);
 
-                fs.readFile(scenePath, function (err, data) {
-                    if (err) {
-                        throw err;
-                    }
-                    testData.scene = JSON.parse(data);
-
-                    var readFiles = [
-                        fsReadFile(testData.image),
-                        fsReadFile(testData.buffer),
-                        fsReadFile(testData.fragmentShader),
-                        fsReadFile(testData.vertexShader)
-                    ];
-                    Promise.all(readFiles)
-                        .then(function (results) {
-                            testData.image = results[0];
-                            testData.buffer = results[1];
-                            testData.fragmentShader = results[2];
-                            testData.vertexShader = results[3];
-                            done();
-                        });
-                });
+                var readFiles = [
+                    fsReadFile(testData.image),
+                    fsReadFile(testData.buffer),
+                    fsReadFile(testData.fragmentShader),
+                    fsReadFile(testData.vertexShader)
+                ];
+                return Promise.all(readFiles);
+            })
+            .then(function(results) {
+                testData.image = results[0];
+                testData.buffer = results[1];
+                testData.fragmentShader = results[2];
+                testData.vertexShader = results[3];
+                done();
             });
     });
 
