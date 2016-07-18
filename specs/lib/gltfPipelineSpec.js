@@ -118,10 +118,13 @@ describe('gltfPipeline', function() {
     it('will write sources from JSON', function(done) {
         var options = {};
         readGltf(gltfEmbeddedPath, options, function (gltf) {
-            var initialUri = gltf.buffers.CesiumTexturedBoxTest.uri;
+            var firstBufferId = Object.keys(gltf.buffers)[0];
+            var testBuffer = gltf.buffers[firstBufferId];
+            var initialUri = testBuffer.uri;
             processJSON(gltf, options, function () {
-                var finalUri = gltf.buffers.buffer_0.uri;
-                expect(gltf.buffers.CesiumTexturedBoxTest).toBeUndefined();
+                firstBufferId = Object.keys(gltf.buffers)[0];
+                testBuffer = gltf.buffers[firstBufferId];
+                var finalUri = testBuffer.uri;
                 expect(initialUri).not.toEqual(finalUri);
                 done();
             });
@@ -131,10 +134,13 @@ describe('gltfPipeline', function() {
     it('will write sources from file', function(done) {
         var options = {};
         readGltf(gltfEmbeddedPath, options, function (gltf) {
-            var initialUri = gltf.buffers.CesiumTexturedBoxTest.uri;
+            var firstBufferId = Object.keys(gltf.buffers)[0];
+            var testBuffer = gltf.buffers[firstBufferId];
+            var initialUri = testBuffer.uri;
             processFile(gltfEmbeddedPath, options, function (gltfFinal) {
-                var finalUri = gltfFinal.buffers.buffer_0.uri;
-                expect(gltfFinal.buffers.CesiumTexturedBoxTest).toBeUndefined();
+                firstBufferId = Object.keys(gltfFinal.buffers)[0];
+                testBuffer = gltfFinal.buffers[firstBufferId];
+                var finalUri = testBuffer.uri;
                 expect(initialUri).not.toEqual(finalUri);
                 done();
             });
