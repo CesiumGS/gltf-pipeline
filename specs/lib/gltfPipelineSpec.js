@@ -120,7 +120,8 @@ describe('gltfPipeline', function() {
         readGltf(gltfEmbeddedPath, options, function (gltf) {
             var initialUri = gltf.buffers.CesiumTexturedBoxTest.uri;
             processJSON(gltf, options, function () {
-                var finalUri = gltf.buffers.uri;
+                var finalUri = gltf.buffers.buffer_0.uri;
+                expect(gltf.buffers.CesiumTexturedBoxTest).toBeUndefined();
                 expect(initialUri).not.toEqual(finalUri);
                 done();
             });
@@ -132,7 +133,8 @@ describe('gltfPipeline', function() {
         readGltf(gltfEmbeddedPath, options, function (gltf) {
             var initialUri = gltf.buffers.CesiumTexturedBoxTest.uri;
             processFile(gltfEmbeddedPath, options, function (gltfFinal) {
-                var finalUri = gltfFinal.buffers.uri;
+                var finalUri = gltfFinal.buffers.buffer_0.uri;
+                expect(gltfFinal.buffers.CesiumTexturedBoxTest).toBeUndefined();
                 expect(initialUri).not.toEqual(finalUri);
                 done();
             });
