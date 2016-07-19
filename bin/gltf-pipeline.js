@@ -19,6 +19,7 @@ if (process.argv.length < 3 || defined(argv.h) || defined(argv.help)) {
         '  -q --quantize, quantize the attributes of this model.\n' +
         '  -n --encodeNormals, oct-encode the normals of this model.\n' +
         '  -c --compressTextureCoordinates, compress the texture coordinates of this model.\n' +
+        '  -m --minifyImages, compresses texture images to reduce overall model size.\n' +
         '     --ao: Bake ambient occlusion to vertex data using default settings ONLY. When specifying other settings, do not use `--ao` on its own. Default: inactive.\n' +
         '     --ao.toTexture: Bake AO to existing diffuse textures instead of to vertices. Does not modify shaders. Default: inactive.\n' +
         '     --ao.groundPlane: Simulate a ground plane at the lowest point of the model when baking AO. Default: inactive.\n' +
@@ -37,6 +38,7 @@ var separateImage = defaultValue(defaultValue(argv.t, argv.separateImage), false
 var quantize = defaultValue(defaultValue(argv.q, argv.quantize), false);
 var encodeNormals = defaultValue(defaultValue(argv.n, argv.encodeNormals), false);
 var compressTextureCoordinates = defaultValue(defaultValue(argv.c, argv.compressTextureCoordinates), false);
+var minifyImages = defaultValue(defaultValue(argv.m, argv.minifyImages), false);
 var aoOptions = argv.ao;
 var typeofAoOptions = typeof(aoOptions);
 if (typeofAoOptions === 'boolean' || typeofAoOptions === 'string') {
@@ -59,14 +61,15 @@ if (!defined(outputPath)) {
 }
 
 var options = {
+    aoOptions : aoOptions,
     binary : binary,
+    compressTextureCoordinates : compressTextureCoordinates,
     embed : !separate,
     embedImage : !separateImage,
-    quantize : quantize,
     encodeNormals : encodeNormals,
-    compressTextureCoordinates : compressTextureCoordinates,
-    aoOptions : aoOptions,
-    optimizeForCesium : optimizeForCesium
+    minifyImages : minifyImages,
+    optimizeForCesium : optimizeForCesium,
+    quantize : quantize
 };
 
 processFileToDisk(gltfPath, outputPath, options);
