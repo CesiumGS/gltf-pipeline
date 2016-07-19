@@ -11,10 +11,10 @@ describe('generateNormals', function(){
     it('generates normals if they do not exist', function(done) {
         var options = {};
         readGltf(gltfNoNormalsPath, options, function(gltf){
-            var attributes = gltf.meshes.mesh_box.primitives[0].attributes;
-            var byteLengthBefore = gltf.buffers[Object.keys(gltf.buffers)[0]].byteLength;
-            expect(attributes.NORMAL).toBeUndefined();
+            var byteLengthBefore = 168;
             generateNormals(gltf);
+            
+            var attributes = gltf.meshes.mesh_box.primitives[0].attributes;
             var byteLengthAfter = gltf.buffers[Object.keys(gltf.buffers)[0]].byteLength;
             expect(attributes.NORMAL).toBeDefined();
             expect(gltf.accessors[attributes.NORMAL]).toBeDefined();
