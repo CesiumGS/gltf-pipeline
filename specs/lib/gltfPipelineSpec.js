@@ -138,7 +138,9 @@ describe('gltfPipeline', function() {
                 return processJSON(gltf, options);
             })
             .then(function(gltf) {
-                var finalUri = gltf.buffers.CesiumTexturedBoxTest.uri;
+                var firstBufferId = Object.keys(gltf.buffers)[0];
+                var testBuffer = gltf.buffers[firstBufferId];
+                var finalUri = testBuffer.uri;
                 expect(initialUri).not.toEqual(finalUri);
             }), done).toResolve();
     });
@@ -152,7 +154,9 @@ describe('gltfPipeline', function() {
                 return processFile(gltfEmbeddedPath, options);
             })
             .then(function(gltfFinal) {
-                var finalUri = gltfFinal.buffers.CesiumTexturedBoxTest.uri;
+                var firstBufferId = Object.keys(gltfFinal.buffers)[0];
+                var testBuffer = gltfFinal.buffers[firstBufferId];
+                var finalUri = testBuffer.uri;
                 expect(initialUri).not.toEqual(finalUri);
             }), done).toResolve();
     });
