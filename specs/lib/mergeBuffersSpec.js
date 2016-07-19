@@ -28,6 +28,7 @@ describe('mergeBuffers', function() {
                     "extras": {
                         "_pipeline": {
                           "source": buffer0,
+                          "extension": ".bin",
                           "deleteExtras": true
                         }
                     }
@@ -39,6 +40,7 @@ describe('mergeBuffers', function() {
                     "extras": {
                         "_pipeline": {
                           "source": buffer1,
+                          "extension": ".bin",
                           "deleteExtras": true
                         }
                     }
@@ -47,7 +49,7 @@ describe('mergeBuffers', function() {
         };
 
         mergeBuffers(gltf, 'mergedBuffers');
-        
+
         expect(gltf).toEqual({
             "bufferViews": {
                 "bufferView_0": {
@@ -69,6 +71,7 @@ describe('mergeBuffers', function() {
                     "extras": {
                         "_pipeline": {
                           "source": bufferMerged,
+                          "extension": ".bin",
                           "deleteExtras": true
                         }
                     }
