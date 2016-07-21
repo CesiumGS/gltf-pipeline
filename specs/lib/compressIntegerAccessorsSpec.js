@@ -180,13 +180,32 @@ var testGltf = {
             },
             type : "arraybuffer"
         }
+    },
+    meshes : {
+        mesh : {
+            primitives : [
+                {
+                    attributes : {
+                        A : 'cantCompressByte',
+                        B : 'cantCompressUByte',
+                        C : 'cantCompressIndices',
+                        D : 'cantCompressBigShort',
+                        E : 'floatToShort',
+                        F : 'floatToByte',
+                        G : 'shortToByte'
+                    }
+                }
+            ]
+        }
     }
 };
 
 describe('compressIntegerAccessors', function() {
     it('compresses integer accessors and leaves uncompressible accessors alone', function() {
         var gltf = testGltf;
-        compressIntegerAccessors(gltf);
+        compressIntegerAccessors(gltf, {
+            semantics : ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+        });
         expect(gltf.accessors.cantCompressByte.componentType === WebGLConstants.BYTE);
         expect(gltf.accessors.cantCompressUByte.componentType === WebGLConstants.UNSIGNED_BYTE);
         expect(gltf.accessors.cantCompressIndices.componentType === WebGLConstants.UNSIGNED_SHORT);
