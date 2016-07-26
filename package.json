@@ -36,6 +36,7 @@
     "fs-extra": "0.30.0",
     "image-size": "0.5.0",
     "jimp": "0.2.24",
+    "jsonpath": "^0.2.6",
     "mime": "1.3.4",
     "mkdirp": "0.5.1",
     "object-values": "1.0.0",
