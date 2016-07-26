@@ -1,13 +1,14 @@
 'use strict';
 var Cesium = require('cesium');
-var CesiumMath = Cesium.Math;
-var defined = Cesium.defined;
+var clone = require('clone');
+
 var Cartesian2 = Cesium.Cartesian2;
 var Cartesian3 = Cesium.Cartesian3;
 var Cartesian4 = Cesium.Cartesian4;
+var CesiumMath = Cesium.Math;
+var defined = Cesium.defined;
 var WebGLConstants = Cesium.WebGLConstants;
 
-var clone = require('clone');
 var readAccessor = require('../../lib/readAccessor');
 var readGltf = require('../../lib/readGltf');
 
@@ -18,13 +19,12 @@ describe('readAccessor', function() {
     var options = {};
 
     beforeAll(function(done) {
-        readGltf(gltfPath, options, function(gltf) {
-            boxGltf = gltf;
-            done();
-        });
+        expect(readGltf(gltfPath, options)
+            .then(function(gltf) {
+                boxGltf = gltf;
+            }), done).toResolve();
     });
-
-
+    
     function testContainmentAndFit(min, max, data, type) {
         // check if the data in values is bounded by min and max precisely
         var minInValues = new Array(min.length).fill(Number.POSITIVE_INFINITY);

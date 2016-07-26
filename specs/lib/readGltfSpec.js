@@ -9,17 +9,17 @@ describe('readGltf', function() {
     var options = {};
 
     it('parses a .gltf input path, checks that a gltf JSON is defined', function(done) {
-        readGltf(gltfPath, options, function(gltf) {
-            expect(gltf).toBeDefined();
-            done();
-        });
+        expect(readGltf(gltfPath, options)
+            .then(function(gltf) {
+                expect(gltf).toBeDefined();
+            }), done).toResolve();
     });
 
     it('parses a .glb input path, checks that a gltf JSON is defined', function(done) {
-        readGltf(glbPath, options, function(gltf) {
-            expect(gltf).toBeDefined();
-            done();
-        });
+        expect(readGltf(glbPath, options)
+            .then(function(gltf) {
+                expect(gltf).toBeDefined();
+            }), done).toResolve();
     });
 
     it('throws error when an input path is undefined', function() {
