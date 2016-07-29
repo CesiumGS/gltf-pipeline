@@ -41,4 +41,41 @@ describe('removeDuplicatePrimitives', function() {
         expect(primitives.length).toEqual(2);
         expect(primitives[1].indices).toEqual(8);
     });
+
+    it('combines duplicate primitives across meshes', function() {
+        var gltf = {
+            meshes : {
+                meshA : {
+                    primitives : [
+                        {
+                            attributes : {
+                                a : 1,
+                                b : 2,
+                                c : 3
+                            },
+                            indices : 4
+                        }
+                    ]
+                },
+                meshB : {
+                    primitives : [
+                        {
+                            attributes : {
+                                a : 1,
+                                b : 2,
+                                c : 3
+                            },
+                            indices : 4
+                        }
+                    ]
+                }
+            }
+        };
+        removeDuplicatePrimitives(gltf);
+        var meshes = gltf.meshes;
+        expect(meshes['mesh-split']).toBeDefined();
+        expect(meshes['mesh-split'].primitives.length).toEqual(1);
+        expect(meshes.meshA.primitives.length).toEqual(0);
+        expect(meshes.meshB.primitives.length).toEqual(0);
+    });
 });

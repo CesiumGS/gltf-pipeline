@@ -208,4 +208,22 @@ describe('NodeHelpers', function() {
                 throw err;
             });
     });
+
+    it('maps meshes to nodes', function() {
+        var gltf = {
+            meshes : {
+                mesh : {}
+            },
+            nodes : {
+                nodeA : {
+                    meshes : ['mesh']
+                },
+                nodeB : {
+                    meshes : ['mesh']
+                }
+            }
+        };
+        var meshesToNodes = NodeHelpers.mapMeshesToNodes(gltf);
+        expect(meshesToNodes.mesh).toEqual(['nodeA', 'nodeB']);
+    });
 });
