@@ -11,7 +11,7 @@ var fiveBoxPath = './specs/data/combineObjects/fiveBox.gltf';
 describe('combinePrimitives', function() {
     var options = {};
 
-    /*it('does not affect single primitives', function(done){
+    it('does not affect single primitives', function(done){
         expect(readGltf(boxPath, options)
             .then(function(gltf) {
                 var box = gltf;
@@ -120,5 +120,5 @@ describe('combinePrimitives', function() {
                     combinePrimitives(componentTypeError);
                 }).toThrowDeveloperError();
             }), done).toResolve();
-    });*/
+    });
 });
