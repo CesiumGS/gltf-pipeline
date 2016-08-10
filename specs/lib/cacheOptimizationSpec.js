@@ -59,4 +59,24 @@ describe('cacheOptimization', function() {
                 expect(positions).toEqual(unpackedOptimizedVertices);
             }), done).toResolve();
     });
+
+    it('doesn\'t run if a primitive has no indices', function() {
+        var gltf = {
+            meshes : {
+                mesh : {
+                    primitives : [
+                        {
+                            attributes : {
+                                POSITION : 'notImportant',
+                                NORMAL : 'notImportantEither'
+                            }
+                        }
+                    ]
+                }
+            }
+        };
+        expect(function() {
+            cacheOptimization(gltf);
+        }).not.toThrowRuntimeError();
+    });
 });
