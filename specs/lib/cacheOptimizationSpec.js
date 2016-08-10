@@ -75,8 +75,6 @@ describe('cacheOptimization', function() {
                 }
             }
         };
-        expect(function() {
-            cacheOptimization(gltf);
-        }).not.toThrowRuntimeError();
+        cacheOptimization(gltf);
     });
 });
