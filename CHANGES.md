@@ -3,7 +3,7 @@ Change Log
 
 ### Next Release
 
-* gltfPrimitiveToCesiumGeometry no longer crashes on primitives without indices. [#154](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/issues/154)
+* cacheOptimization no longer crashes on primitives without indices. [#154](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/issues/154)
 
 ### 0.1.0-alpha3 - 2016-07-25
 
