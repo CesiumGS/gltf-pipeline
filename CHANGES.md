@@ -4,6 +4,7 @@ Change Log
 ### Next Release
 
 * cacheOptimization no longer crashes on primitives without indices. [#154](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/issues/154)
+* lib/**/*.js is exposed as the Public API via index.js [#153](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/issues/153)
 
 ### 0.1.0-alpha3 - 2016-07-25
 
