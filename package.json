@@ -46,6 +46,7 @@
   },
   "devDependencies": {
     "coveralls": "2.11.9",
+    "glob": "7.0.5",
     "gulp": "3.9.1",
     "gulp-jshint": "2.0.1",
     "istanbul": "0.4.4",

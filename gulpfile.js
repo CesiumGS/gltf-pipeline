@@ -1,8 +1,10 @@
 'use strict';
 
 var Cesium = require('cesium');
+var Promise = require('bluebird');
 var child_process = require('child_process');
 var fsExtra = require('fs-extra');
+var glob = require('glob');
 var gulp = require('gulp');
 var gulpJshint = require('gulp-jshint');
 var Jasmine = require('jasmine');
@@ -14,6 +16,9 @@ var yargs = require('yargs');
 
 var defined = Cesium.defined;
 var argv = yargs.argv;
+
+var fsWriteFile = Promise.promisify(fsExtra.writeFile);
+var globPromise = Promise.promisify(glob);
 
 // Add third-party node module binaries to the system path
 // since some tasks need to call them directly.
@@ -78,6 +83,31 @@ gulp.task('coverage', function () {
         stdio: [process.stdin, process.stdout, process.stderr]
     });
     open('coverage/lcov-report/index.html');
+});
+
+/**
+ * Regenerates index.js to export the contents of the 'lib/' directory
+ */
+gulp.task('regenerate-index', function() {
+    var indexJS = 'module.exports = {\n';
+    var first = false;
+    globPromise('lib/**/*.js', undefined)
+        .then(function(files) {
+            return Promise.map(files, function (fileName) {
+                var exportName = path.basename(fileName, '.js');
+                if (!first) {
+                    first = true;
+                } else {
+                    indexJS += ',\n';
+                }
+                indexJS += '    ' + exportName + ' : require(\'./' + fileName + '\')';
+            });
+        })
+        .then(function() {
+            indexJS += '\n};';
+            return fsWriteFile('index.js', indexJS);
+        });
+
 });
 
 function copyModule(module) {
