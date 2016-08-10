@@ -1,4 +1,7 @@
 'use strict';
+var Cesium = require('cesium');
+var GeometryPipeline = Cesium.GeometryPipeline;
+
 var addDefaults = require('../../lib/addDefaults');
 var cacheOptimization = require('../../lib/cacheOptimization');
 var readAccessor = require('../../lib/readAccessor');
@@ -75,6 +78,8 @@ describe('cacheOptimization', function() {
                 }
             }
         };
+        spyOn(GeometryPipeline, 'reorderForPostVertexCache');
         cacheOptimization(gltf);
+        expect(GeometryPipeline.reorderForPostVertexCache).not.toHaveBeenCalled();
     });
 });
