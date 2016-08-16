@@ -4,14 +4,14 @@ var fsExtra = require('fs-extra');
 var path = require('path');
 var Promise = require('bluebird');
 
+var Pipeline = require('../../lib/Pipeline');
 var addPipelineExtras = require('../../lib/addPipelineExtras');
-var gltfPipeline = require('../../lib/gltfPipeline');
 var readGltf = require('../../lib/readGltf');
 
-var processFile = gltfPipeline.processFile;
-var processFileToDisk = gltfPipeline.processFileToDisk;
-var processJSON = gltfPipeline.processJSON;
-var processJSONToDisk = gltfPipeline.processJSONToDisk;
+var processFile = Pipeline.processFile;
+var processFileToDisk = Pipeline.processFileToDisk;
+var processJSON = Pipeline.processJSON;
+var processJSONToDisk = Pipeline.processJSONToDisk;
 
 var fsExtraReadFile = Promise.promisify(fsExtra.readFile);
 
@@ -21,7 +21,7 @@ var glbPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.glb';
 var outputGltfPath = './output/CesiumTexturedBoxTest.gltf';
 var outputGlbPath = './output/CesiumTexturedBoxTest.glb';
 
-describe('gltfPipeline', function() {
+describe('Pipeline', function() {
     it('optimizes a gltf JSON with embedded resources', function(done) {
         var options = {};
         var gltfCopy;

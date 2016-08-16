@@ -6,7 +6,6 @@ var path = require('path');
 var addPipelineExtras = require('../../lib/addPipelineExtras');
 var loadGltfUris = require('../../lib/loadGltfUris');
 var readGltf = require('../../lib/readGltf');
-var removeUnused = require('../../lib/removeUnused');
 var writeBinaryGltf = require('../../lib/writeBinaryGltf');
 
 var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf';

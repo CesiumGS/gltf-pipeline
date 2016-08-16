@@ -6,7 +6,6 @@ var Promise = require('bluebird');
 
 var getBinaryGltf = require('../../lib/getBinaryGltf');
 var readGltf = require('../../lib/readGltf');
-var removeUnused = require('../../lib/removeUnused');
 
 var fsReadFile = Promise.promisify(fs.readFile);
 
