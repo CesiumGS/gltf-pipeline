@@ -5,6 +5,11 @@ Change Log
 
 * cacheOptimization no longer crashes on primitives without indices. [#154](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/issues/154)
 * Public API is exposed via index.js [#153](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/issues/153)
+  * Documentation has been added for all exposed functions.
+  * OptimizationStats is removed from removeUnusedStages.
+  * gltfPipeline.js is now named Pipeline.js.
+  * bakeAmbientOcclusion.js is now named AmbientOcclusion.js, bakeAmbientOcclusion is accessible via this object.
+  * All removeUnusedElement type stages have been consolidated to RemoveUnusedElements to clean up the global scope.
 
 ### 0.1.0-alpha3 - 2016-07-25
 
