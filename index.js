@@ -23,7 +23,7 @@ module.exports = {
     mergeDuplicateVertices : require('./lib/mergeDuplicateVertices'),
     numberOfComponentsForType : require('./lib/numberOfComponentsForType'),
     octEncodeNormals : require('./lib/octEncodeNormals'),
-    optimizeCache : require('./lib/optimizeCache'),
+    optimizeForVertexCache : require('./lib/optimizeForVertexCache'),
     packArray : require('./lib/packArray'),
     parseBinaryGltf : require('./lib/parseBinaryGltf'),
     Pipeline : require('./lib/Pipeline'),

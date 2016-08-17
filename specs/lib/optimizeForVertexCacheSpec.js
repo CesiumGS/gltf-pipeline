@@ -3,7 +3,7 @@ var Cesium = require('cesium');
 var GeometryPipeline = Cesium.GeometryPipeline;
 
 var addDefaults = require('../../lib/addDefaults');
-var optimizeCache = require('../../lib/optimizeCache');
+var optimizeForVertexCache = require('../../lib/optimizeForVertexCache');
 var readAccessor = require('../../lib/readAccessor');
 var readGltf = require('../../lib/readGltf');
 var writeAccessor = require('../../lib/writeAccessor');
@@ -23,7 +23,7 @@ var optimizedVertices = [ 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0
     0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 
     -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5 ];
 
-describe('optimizeCache', function() {
+describe('optimizeForVertexCache', function() {
     it('reorders indices', function(done) {
         expect(readGltf(gltfPath)
             .then(function(gltf) {
@@ -33,7 +33,7 @@ describe('optimizeCache', function() {
                 // Rewrite indices to be forcibly unoptimized
                 writeAccessor(gltf, indexAccessor, unoptimizedIndices);
             
-                optimizeCache(gltf);
+                optimizeForVertexCache(gltf);
                 var indices = [];
                 readAccessor(gltf, gltf.accessors[indexAccessorId], indices);
             
@@ -55,7 +55,7 @@ describe('optimizeCache', function() {
                 var positions = [];
                 readAccessor(gltf, positionAccessor, positions);
             
-                optimizeCache(gltf);
+                optimizeForVertexCache(gltf);
             
                 expect(positions).toEqual(unpackedOptimizedVertices);
             }), done).toResolve();
@@ -77,7 +77,7 @@ describe('optimizeCache', function() {
             }
         };
         spyOn(GeometryPipeline, 'reorderForPostVertexCache');
-        optimizeCache(gltf);
+        optimizeForVertexCache(gltf);
         expect(GeometryPipeline.reorderForPostVertexCache).not.toHaveBeenCalled();
     });
 });
