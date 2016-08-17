@@ -1,7 +1,5 @@
 module.exports = {
     AccessorReader : require('./lib/AccessorReader'),
-    Pipeline : require('./lib/Pipeline'),
-    RemoveUnusedElements : require('./RemoveUnusedElements'),
     addCesiumRTC : require('./lib/addCesiumRTC'),
     addDefaults : require('./lib/addDefaults'),
     addExtensionsUsed : require('./lib/addExtensionsUsed'),
@@ -28,16 +26,18 @@ module.exports = {
     optimizeCache : require('./lib/optimizeCache'),
     packArray : require('./lib/packArray'),
     parseBinaryGltf : require('./lib/parseBinaryGltf'),
+    Pipeline : require('./lib/Pipeline'),
     quantizeAttributes : require('./lib/quantizeAttributes'),
     readAccessor : require('./lib/readAccessor'),
-    readBufferComponentType : require('./lib/readBufferComponent'),
+    readBufferComponent : require('./lib/readBufferComponent'),
     readGltf : require('./lib/readGltf'),
     removeDuplicatePrimitives : require('./lib/removeDuplicatePrimitives'),
     removePipelineExtras : require('./lib/removePipelineExtras'),
+    RemoveUnusedProperties : require('./lib/RemoveUnusedProperties'),
     removeUnusedVertices : require('./lib/removeUnusedVertices'),
     uninterleaveAndPackBuffers : require('./lib/uninterleaveAndPackBuffers'),
     writeAccessor : require('./lib/writeAccessor'),
     writeBinaryGltf : require('./lib/writeBinaryGltf'),
-    writeBufferComponentType : require('./lib/writeBufferComponent'),
+    writeBufferComponent : require('./lib/writeBufferComponent'),
     writeGltf : require('./lib/writeGltf')
 };

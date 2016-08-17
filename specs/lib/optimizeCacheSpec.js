@@ -25,8 +25,7 @@ var optimizedVertices = [ 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0
 
 describe('optimizeCache', function() {
     it('reorders indices', function(done) {
-        var options = {};
-        expect(readGltf(gltfPath, options)
+        expect(readGltf(gltfPath)
             .then(function(gltf) {
                 addDefaults(gltf);
                 var indexAccessorId = gltf.meshes[Object.keys(gltf.meshes)[0]].primitives[0].indices;
@@ -43,8 +42,7 @@ describe('optimizeCache', function() {
     });
 
     it('reorders independent attribute accessors', function(done) {
-        var options = {};
-        expect(readGltf(gltfPath, options)
+        expect(readGltf(gltfPath)
             .then(function(gltf) {
                 addDefaults(gltf);
                 var positionAccessor = gltf.accessors.accessor_23;

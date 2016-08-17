@@ -27,8 +27,7 @@ describe('getBinaryGltf', function() {
     };
 
     beforeAll(function(done) {
-        var options = {};
-        expect(readGltf(gltfPath, options)
+        expect(readGltf(gltfPath)
             .then(function(gltf) {
                 testData.gltf = gltf;
                 return fsReadFile(scenePath);

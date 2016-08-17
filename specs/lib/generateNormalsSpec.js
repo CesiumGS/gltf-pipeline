@@ -9,8 +9,7 @@ var gltfNormalsPath = './specs/data/generateNormals/box_normals.gltf';
 
 describe('generateNormals', function(){
     it('generates normals if they do not exist', function(done) {
-        var options = {};
-        expect(readGltf(gltfNoNormalsPath, options)
+        expect(readGltf(gltfNoNormalsPath)
             .then(function(gltf){
                 var byteLengthBefore = 168;
                 generateNormals(gltf);
@@ -24,8 +23,7 @@ describe('generateNormals', function(){
     });
 
     it('does not generate normals if they already exist', function(done) {
-        var options = {};
-        expect(readGltf(gltfNormalsPath, options)
+        expect(readGltf(gltfNormalsPath)
             .then(function(gltf) {
                 var gltfCopy = clone(gltf);
                 generateNormals(gltf);

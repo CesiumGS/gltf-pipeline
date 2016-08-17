@@ -12,7 +12,6 @@ var invalidPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.exe
 describe('writeGltf', function() {
     it('will write a file to the correct directory', function(done) {
         var spy = spyOn(fsExtra, 'outputJsonAsync').and.callFake(function() {});
-        var readOptions = {};
         var writeOptions = {
             outputPath : outputGltfPath,
             embed : true,
@@ -20,7 +19,7 @@ describe('writeGltf', function() {
             createDirectory : false
         };
 
-        expect(readGltf(gltfPath, readOptions)
+        expect(readGltf(gltfPath)
             .then(function(gltf) {
                 return writeGltf(gltf, writeOptions);
             })
@@ -33,7 +32,6 @@ describe('writeGltf', function() {
     });
 
     it('throws an invalid output path error', function(done) {
-        var readOptions = {};
         var writeOptions = {
             outputPath : undefined,
             embed : true,
@@ -41,7 +39,7 @@ describe('writeGltf', function() {
             createDirectory : true
         };
 
-        expect(readGltf(gltfPath, readOptions)
+        expect(readGltf(gltfPath)
             .then(function(gltf) {
                 expect(function() {
                     writeGltf(gltf, writeOptions);
@@ -50,7 +48,6 @@ describe('writeGltf', function() {
     });
 
     it('throws an invalid output extension error', function(done) {
-        var readOptions = {};
         var writeOptions = {
             outputPath : invalidPath,
             embed : true,
@@ -58,7 +55,7 @@ describe('writeGltf', function() {
             createDirectory : true
         };
 
-        expect(readGltf(gltfPath, readOptions)
+        expect(readGltf(gltfPath)
             .then(function(gltf) {
                 expect(function() {
                     writeGltf(gltf, writeOptions);
