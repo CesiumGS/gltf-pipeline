@@ -3,14 +3,14 @@
 var Promise = require('bluebird');
 var fs = require('fs-extra');
 
-var RemoveUnusedElements = require('../../lib/RemoveUnusedElements');
+var RemoveUnusedProperties = require('../../lib/RemoveUnusedProperties');
 
 var fsReadFile = Promise.promisify(fs.readFile);
 
 var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestUnusedTree.gltf';
 
-describe('RemoveUnusedElements', function() {
-    var removeUnusedNodes = RemoveUnusedElements.removeUnusedNodes;
+describe('RemoveUnusedProperties', function() {
+    var removeUnusedNodes = RemoveUnusedProperties.removeUnusedNodes;
     describe('removeUnusedNodes', function () {
         it('removes an isolated node', function () {
             var gltf = {
@@ -153,7 +153,7 @@ describe('RemoveUnusedElements', function() {
         });
     });
 
-    var removeUnusedSkins = RemoveUnusedElements.removeUnusedSkins;
+    var removeUnusedSkins = RemoveUnusedProperties.removeUnusedSkins;
     describe('removeUnusedSkins', function () {
         it('removes a skin', function () {
             var gltf = {
@@ -204,7 +204,7 @@ describe('RemoveUnusedElements', function() {
         });
     });
 
-    var removeUnusedCameras = RemoveUnusedElements.removeUnusedCameras;
+    var removeUnusedCameras = RemoveUnusedProperties.removeUnusedCameras;
     describe('removeUnusedCameras', function () {
         it('removes a camera', function () {
             var gltf = {
@@ -264,7 +264,7 @@ describe('RemoveUnusedElements', function() {
         });
     });
 
-    var removeUnusedMeshes = RemoveUnusedElements.removeUnusedMeshes;
+    var removeUnusedMeshes = RemoveUnusedProperties.removeUnusedMeshes;
     describe('removeUnusedMeshes', function () {
         it('removes a mesh', function () {
             var gltf = {
@@ -304,7 +304,7 @@ describe('RemoveUnusedElements', function() {
         });
     });
 
-    var removeUnusedAccessors = RemoveUnusedElements.removeUnusedAccessors;
+    var removeUnusedAccessors = RemoveUnusedProperties.removeUnusedAccessors;
     describe('removeUnusedAccessors', function () {
         it('removes an accessor', function () {
             var gltf = {
@@ -446,7 +446,7 @@ describe('RemoveUnusedElements', function() {
         });
     });
 
-    var removeUnusedMaterials = RemoveUnusedElements.removeUnusedMaterials;
+    var removeUnusedMaterials = RemoveUnusedProperties.removeUnusedMaterials;
     describe('removeUnusedMaterials', function () {
         it('removes a material', function () {
             var gltf = {
@@ -511,7 +511,7 @@ describe('RemoveUnusedElements', function() {
         });
     });
 
-    var removeUnusedBufferViews = RemoveUnusedElements.removeUnusedBufferViews;
+    var removeUnusedBufferViews = RemoveUnusedProperties.removeUnusedBufferViews;
     describe('removeUnusedBufferViews', function () {
         it('removes a bufferView', function () {
             var gltf = {
@@ -572,7 +572,7 @@ describe('RemoveUnusedElements', function() {
         });
     });
 
-    var removeUnusedTechniques = RemoveUnusedElements.removeUnusedTechniques;
+    var removeUnusedTechniques = RemoveUnusedProperties.removeUnusedTechniques;
     describe('removeUnusedTechniques', function () {
         it('removes a technique', function () {
             var gltf = {
@@ -691,7 +691,7 @@ describe('RemoveUnusedElements', function() {
         });
     });
 
-    var removeUnusedTextures = RemoveUnusedElements.removeUnusedTextures;
+    var removeUnusedTextures = RemoveUnusedProperties.removeUnusedTextures;
     describe('removeUnusedTextures', function () {
         it('removes a texture', function () {
             var gltf = {
@@ -828,7 +828,7 @@ describe('RemoveUnusedElements', function() {
         });
     });
 
-    var removeUnusedBuffers = RemoveUnusedElements.removeUnusedBuffers;
+    var removeUnusedBuffers = RemoveUnusedProperties.removeUnusedBuffers;
     describe('removeUnusedBuffers', function () {
         it('removes a buffer', function () {
             var gltf = {
@@ -882,7 +882,7 @@ describe('RemoveUnusedElements', function() {
         });
     });
 
-    var removeUnusedPrograms = RemoveUnusedElements.removeUnusedPrograms;
+    var removeUnusedPrograms = RemoveUnusedProperties.removeUnusedPrograms;
     describe('removeUnusedPrograms', function () {
         it('removes a program', function () {
             var gltf = {
@@ -982,7 +982,7 @@ describe('RemoveUnusedElements', function() {
         });
     });
 
-    var removeUnusedImages = RemoveUnusedElements.removeUnusedImages;
+    var removeUnusedImages = RemoveUnusedProperties.removeUnusedImages;
     describe('removeUnusedImages', function() {
         it('removes an image', function() {
             var gltf = {
@@ -1037,7 +1037,7 @@ describe('RemoveUnusedElements', function() {
         });
     });
 
-    var removeUnusedSamplers = RemoveUnusedElements.removeUnusedSamplers;
+    var removeUnusedSamplers = RemoveUnusedProperties.removeUnusedSamplers;
     describe('removeUnusedSamplers', function() {
         it('removes a sampler', function() {
             var gltf = {
@@ -1098,7 +1098,7 @@ describe('RemoveUnusedElements', function() {
         });
     });
 
-    var removeUnusedShaders = RemoveUnusedElements.removeUnusedShaders;
+    var removeUnusedShaders = RemoveUnusedProperties.removeUnusedShaders;
     describe('removeUnusedShaders', function() {
         it('removes a shader', function() {
             var gltf = {
@@ -1164,7 +1164,7 @@ describe('RemoveUnusedElements', function() {
         });
     });
 
-    var removeUnusedPrimitiveAttributes = RemoveUnusedElements.removeUnusedPrimitiveAttributes;
+    var removeUnusedPrimitiveAttributes = RemoveUnusedProperties.removeUnusedPrimitiveAttributes;
     describe('removeUnusedPrimitiveAttributes', function() {
         it('removes unused primitive attributes', function() {
             var gltf = {
@@ -1216,7 +1216,7 @@ describe('RemoveUnusedElements', function() {
         });
     });
 
-    var removeAllUnused = RemoveUnusedElements.removeAllUnused;
+    var removeAllUnused = RemoveUnusedProperties.removeAllUnused;
     describe('removeAllUnused', function() {
         it('removes a tree of objects', function (done) {
             expect(fsReadFile(gltfPath)

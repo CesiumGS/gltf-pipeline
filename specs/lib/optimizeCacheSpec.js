@@ -3,7 +3,7 @@ var Cesium = require('cesium');
 var GeometryPipeline = Cesium.GeometryPipeline;
 
 var addDefaults = require('../../lib/addDefaults');
-var cacheOptimization = require('../../lib/cacheOptimization');
+var optimizeCache = require('../../lib/optimizeCache');
 var readAccessor = require('../../lib/readAccessor');
 var readGltf = require('../../lib/readGltf');
 var writeAccessor = require('../../lib/writeAccessor');
@@ -23,7 +23,7 @@ var optimizedVertices = [ 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0
     0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 
     -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5 ];
 
-describe('cacheOptimization', function() {
+describe('optimizeCache', function() {
     it('reorders indices', function(done) {
         var options = {};
         expect(readGltf(gltfPath, options)
@@ -34,7 +34,7 @@ describe('cacheOptimization', function() {
                 // Rewrite indices to be forcibly unoptimized
                 writeAccessor(gltf, indexAccessor, unoptimizedIndices);
             
-                cacheOptimization(gltf);
+                optimizeCache(gltf);
                 var indices = [];
                 readAccessor(gltf, gltf.accessors[indexAccessorId], indices);
             
@@ -57,7 +57,7 @@ describe('cacheOptimization', function() {
                 var positions = [];
                 readAccessor(gltf, positionAccessor, positions);
             
-                cacheOptimization(gltf);
+                optimizeCache(gltf);
             
                 expect(positions).toEqual(unpackedOptimizedVertices);
             }), done).toResolve();
@@ -79,7 +79,7 @@ describe('cacheOptimization', function() {
             }
         };
         spyOn(GeometryPipeline, 'reorderForPostVertexCache');
-        cacheOptimization(gltf);
+        optimizeCache(gltf);
         expect(GeometryPipeline.reorderForPostVertexCache).not.toHaveBeenCalled();
     });
 });
