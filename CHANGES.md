@@ -8,7 +8,7 @@ Change Log
   * Documentation has been added for all exposed functions.
   * `OptimizationStats` is removed from `removeUnused` stages.
   * `gltfPipeline.js` is now named `Pipeline.js`.
-  * `bakeAmbientOcclusion.js` is now named `AmbientOcclusion.js`, `bakeAmbientOcclusion` is accessible via this object.
+  * `bakeAmbientOcclusion.js` now directly exports the `bakeAmbientOcclusion` function.
   * `bakeAmbientOcclusion` now takes a glTF asset as its first parameter to match the function signature of other stages.
   * All `removeUnused` stages have been consolidated to `RemoveUnusedProperties` to clean up the global scope.
   * `readBufferComponentType` and `writeBufferComponentType` have been renamed to `readBufferComponent` and `writeBufferComponent` respectively.
