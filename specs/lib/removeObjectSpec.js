@@ -1,7 +1,6 @@
 'use strict';
 
 var removeObject = require('../../lib/removeObject');
-var OptimizationStatistics = require('../../lib/OptimizationStatistics');
 
 describe('removeObject', function() {
     it('removes an object', function() {
@@ -31,11 +30,9 @@ describe('removeObject', function() {
                 }
             }
         };
-
-        var stats = new OptimizationStatistics();
-        gltf = removeObject(gltf, 'samplers', { sampler_0 : true }, stats);
+        gltf = removeObject(gltf, 'samplers', { sampler_0 : true });
         expect(gltf.samplers.unusedSamplerId).not.toBeDefined();
-        expect(stats.numberRemoved.samplers).toEqual(1);
+        expect(Object.keys(gltf.samplers).length).toEqual(1);
     });
 
     it('does not remove any objects', function() {
@@ -59,10 +56,8 @@ describe('removeObject', function() {
                 }
             }
         };
-
-        var stats = new OptimizationStatistics();
-        gltf = removeObject(gltf, 'samplers', { sampler_0 : true }, stats);
+        gltf = removeObject(gltf, 'samplers', { sampler_0 : true });
         expect(gltf.samplers.sampler_0).toBeDefined();
-        expect(stats.numberRemoved.samplers).toEqual(0);
+        expect(Object.keys(gltf.samplers).length).toEqual(1);
     });
 });

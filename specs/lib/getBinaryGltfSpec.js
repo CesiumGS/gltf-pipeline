@@ -6,7 +6,6 @@ var Promise = require('bluebird');
 
 var getBinaryGltf = require('../../lib/getBinaryGltf');
 var readGltf = require('../../lib/readGltf');
-var removeUnused = require('../../lib/removeUnused');
 
 var fsReadFile = Promise.promisify(fs.readFile);
 
@@ -28,8 +27,7 @@ describe('getBinaryGltf', function() {
     };
 
     beforeAll(function(done) {
-        var options = {};
-        expect(readGltf(gltfPath, options)
+        expect(readGltf(gltfPath)
             .then(function(gltf) {
                 testData.gltf = gltf;
                 return fsReadFile(scenePath);

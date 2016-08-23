@@ -16,10 +16,9 @@ var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf';
 
 describe('readAccessor', function() {
     var boxGltf;
-    var options = {};
 
     beforeAll(function(done) {
-        expect(readGltf(gltfPath, options)
+        expect(readGltf(gltfPath)
             .then(function(gltf) {
                 boxGltf = gltf;
             }), done).toResolve();
