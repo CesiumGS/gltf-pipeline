@@ -1,4 +1,7 @@
 'use strict';
+var Cesium = require('cesium');
+var GeometryPipeline = Cesium.GeometryPipeline;
+
 var addDefaults = require('../../lib/addDefaults');
 var cacheOptimization = require('../../lib/cacheOptimization');
 var readAccessor = require('../../lib/readAccessor');
@@ -58,5 +61,25 @@ describe('cacheOptimization', function() {
             
                 expect(positions).toEqual(unpackedOptimizedVertices);
             }), done).toResolve();
+    });
+
+    it('doesn\'t run if a primitive has no indices', function() {
+        var gltf = {
+            meshes : {
+                mesh : {
+                    primitives : [
+                        {
+                            attributes : {
+                                POSITION : 'notImportant',
+                                NORMAL : 'notImportantEither'
+                            }
+                        }
+                    ]
+                }
+            }
+        };
+        spyOn(GeometryPipeline, 'reorderForPostVertexCache');
+        cacheOptimization(gltf);
+        expect(GeometryPipeline.reorderForPostVertexCache).not.toHaveBeenCalled();
     });
 });
