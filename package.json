@@ -34,6 +34,7 @@
     "data-uri-to-buffer": "0.0.4",
     "datauri": "1.0.4",
     "fs-extra": "0.30.0",
+    "glob": "^7.0.5",
     "image-size": "0.5.0",
     "jimp": "0.2.24",
     "jsonpath": "0.2.6",
