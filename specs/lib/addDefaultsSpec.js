@@ -31,7 +31,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         var accessor = gltf.accessors.accessorId;
         expect(accessor.byteStride).toEqual(0);
         expect(accessor.min).toBeDefined();
@@ -65,7 +65,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.animations.animationId.samplers.samplerId.interpolation).toEqual('LINEAR');
     });
 
@@ -77,7 +77,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.animations.animationId.channels).toEqual([]);
         expect(gltf.animations.animationId.parameters).toEqual({});
         expect(gltf.animations.animationId.samplers).toEqual({});
@@ -86,7 +86,7 @@ describe('addDefaults', function() {
     it('Adds asset properties', function() {
         var gltf = {};
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.asset).toBeDefined();
         expect(gltf.asset.premultipliedAlpha).toEqual(false);
         expect(gltf.asset.profile).toBeDefined();
@@ -99,7 +99,7 @@ describe('addDefaults', function() {
             "version" : 0.8
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.asset.version).toEqual('0.8');
     });
 
@@ -113,7 +113,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.buffers.bufferId.type).toEqual('arraybuffer');
     });
 
@@ -200,8 +200,7 @@ describe('addDefaults', function() {
         };
 
         var options = {
-            specularTechnique: 'PHONG',
-            diffuseTechnique: 'CONSTANT'
+            technique: 'PHONG'
         };
 
         var gltfClone;
@@ -339,7 +338,7 @@ describe('addDefaults', function() {
         };
 
         addPipelineExtras(gltf);
-        loadGltfUris(gltf, {})
+        loadGltfUris(gltf)
             .then(function() {
                 addDefaults(gltf);
                 var technique = gltf.techniques[Object.keys(gltf.techniques)[0]];
@@ -375,7 +374,7 @@ describe('addDefaults', function() {
                 var gltf = JSON.parse(data);
                 var originalState = gltf.techniques[Object.keys(gltf.techniques)[0]].states;
                 expect(originalState).not.toEqual(alphaBlendState);
-                return readGltf(gltfTransparentPath, {});
+                return readGltf(gltfTransparentPath);
             })
             .then(function (gltf) {
                 addDefaults(gltf);
@@ -391,8 +390,7 @@ describe('addDefaults', function() {
                 var originalState = gltf.techniques[Object.keys(gltf.techniques)[0]].states;
                 expect(originalState).not.toEqual(alphaBlendState);
 
-                var options = {};
-                return readGltf(gltfTransparentPath, options);
+                return readGltf(gltfTransparentPath);
             })
             .then(function (gltf) {
                 var material = gltf.materials[Object.keys(gltf.materials)[0]];
@@ -561,7 +559,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.meshes.meshId.primitives).toEqual([]);
 
         gltf = {
@@ -577,7 +575,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.meshes.meshId.primitives[0].attributes).toBeDefined();
         expect(gltf.meshes.meshId.primitives[0].mode).toEqual(WebGLConstants.TRIANGLES);
     });
@@ -597,7 +595,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.meshes.meshId.primitives[0].mode).toEqual(WebGLConstants.TRIANGLE_STRIP);
     });
 
@@ -609,7 +607,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.nodes.nodeId.children).toEqual([]);
         expect(gltf.nodes.nodeId.matrix).toEqual([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
 
@@ -621,7 +619,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.nodes.nodeId.rotation).toEqual([0.0, 0.0, 0.0, 1.0]);
         expect(gltf.nodes.nodeId.scale).toEqual([1.0, 1.0, 1.0]);
 
@@ -633,7 +631,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.nodes.nodeId.translation).toEqual([0.0, 0.0, 0.0]);
         expect(gltf.nodes.nodeId.rotation).toEqual([0.0, 0.0, 0.0, 1.0]);
     });
@@ -651,7 +649,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.nodes.nodeId.skeletons).toBeDefined();
         expect(gltf.nodes.nodeId.skin).toBeDefined();
         expect(gltf.nodes.nodeId.meshes).toBeDefined();
@@ -668,7 +666,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.nodes.nodeId.rotation).toEqual([0.0, 0.0, 0.0, 1.0]);
     });
 
@@ -682,7 +680,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.programs.programId.attributes).toEqual([]);
     });
 
@@ -694,7 +692,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.samplers.samplerId.magFilter).toEqual(WebGLConstants.LINEAR);
         expect(gltf.samplers.samplerId.minFilter).toEqual(WebGLConstants.NEAREST_MIPMAP_LINEAR);
         expect(gltf.samplers.samplerId.wrapS).toEqual(WebGLConstants.REPEAT);
@@ -709,7 +707,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.scenes.defaultScene.nodes).toEqual([]);
     });
 
@@ -726,7 +724,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.skins.skinId.bindShapeMatrix).toEqual([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
     });
 
@@ -743,7 +741,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.textures.textureId.format).toEqual(WebGLConstants.RGBA);
         expect(gltf.textures.textureId.internalFormat).toEqual(6408);
         expect(gltf.textures.textureId.target).toEqual(WebGLConstants.TEXTURE_2D);
@@ -758,7 +756,7 @@ describe('addDefaults', function() {
             ]
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.allExtensions).not.toBeDefined();
         expect(gltf.extensionsUsed).toBeDefined();
     });
@@ -766,7 +764,7 @@ describe('addDefaults', function() {
     it('Adds empty top-level properties', function() {
         var gltf = {};
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.extensionsUsed).toBeDefined();
         expect(gltf.accessors).toBeDefined();
         expect(gltf.animations).toBeDefined();
