@@ -6,7 +6,6 @@ var path = require('path');
 var addPipelineExtras = require('../../lib/addPipelineExtras');
 var loadGltfUris = require('../../lib/loadGltfUris');
 var readGltf = require('../../lib/readGltf');
-var removeUnused = require('../../lib/removeUnused');
 var writeBinaryGltf = require('../../lib/writeBinaryGltf');
 
 var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf';
@@ -16,7 +15,6 @@ var invalidPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.exe
 describe('writeBinaryGltf', function() {
     it('will write a file to the correct directory', function(done) {
         var spy = spyOn(fsExtra, 'outputFileAsync').and.callFake(function() {});
-        var readOptions = {};
         var writeOptions = {
             outputPath : outputGltfPath,
             embed : true,
@@ -24,7 +22,7 @@ describe('writeBinaryGltf', function() {
             createDirectory : false
         };
 
-        expect(readGltf(gltfPath, readOptions)
+        expect(readGltf(gltfPath)
             .then(function(gltf) {
                 return writeBinaryGltf(gltf, writeOptions);
             })
@@ -37,7 +35,6 @@ describe('writeBinaryGltf', function() {
     });
 
     it('throws an invalid output path error', function(done) {
-        var readOptions = {};
         var writeOptions = {
             outputPath : undefined,
             embed : true,
@@ -45,7 +42,7 @@ describe('writeBinaryGltf', function() {
             createDirectory : true
         };
 
-        expect(readGltf(gltfPath, readOptions)
+        expect(readGltf(gltfPath)
             .then(function(gltf) {
                 expect(function() {
                     writeBinaryGltf(gltf, writeOptions);
@@ -54,7 +51,6 @@ describe('writeBinaryGltf', function() {
     });
 
     it('throws an invalid output extension error', function(done) {
-        var readOptions = {};
         var writeOptions = {
             outputPath : invalidPath,
             embed : true,
@@ -62,7 +58,7 @@ describe('writeBinaryGltf', function() {
             createDirectory : true
         };
 
-        expect(readGltf(gltfPath, readOptions)
+        expect(readGltf(gltfPath)
             .then(function(gltf) {
                 expect(function() {
                     writeBinaryGltf(gltf, writeOptions);

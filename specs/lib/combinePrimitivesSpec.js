@@ -9,10 +9,8 @@ var doubleBoxNotCombinedPath = './specs/data/combineObjects/doubleBoxNotCombined
 var fiveBoxPath = './specs/data/combineObjects/fiveBox.gltf';
 
 describe('combinePrimitives', function() {
-    var options = {};
-
     it('does not affect single primitives', function(done){
-        expect(readGltf(boxPath, options)
+        expect(readGltf(boxPath)
             .then(function(gltf) {
                 var box = gltf;
                 var stringBox = JSON.stringify(box);
@@ -22,7 +20,7 @@ describe('combinePrimitives', function() {
     });
 
     it('does not combine two primitives', function(done) {
-        expect(readGltf(doubleBoxNotCombinedPath, options)
+        expect(readGltf(doubleBoxNotCombinedPath)
             .then(function(gltf) {
                 var doubleBoxNotCombined = gltf;
                 var stringDoubleBoxNotCombined = JSON.stringify(doubleBoxNotCombined);
@@ -32,7 +30,7 @@ describe('combinePrimitives', function() {
     });
 
     it('combines two primitives', function(done) {
-        expect(readGltf(doubleBoxToCombinePath, options)
+        expect(readGltf(doubleBoxToCombinePath)
             .then(function(gltf) {
                 var doubleBoxToCombine = gltf;
     
@@ -76,7 +74,7 @@ describe('combinePrimitives', function() {
     });
 
     it('combines some primitives', function(done){
-        expect(readGltf(fiveBoxPath, options)
+        expect(readGltf(fiveBoxPath)
             .then(function(gltf){
                 var fiveBox = gltf;
                 combinePrimitives(fiveBox);
@@ -101,7 +99,7 @@ describe('combinePrimitives', function() {
     });
 
     it('throws a type error', function(done) {
-        expect(readGltf(doubleBoxToCombinePath, options)
+        expect(readGltf(doubleBoxToCombinePath)
             .then(function (gltf) {
                 var typeError = gltf;
                 typeError.accessors.accessor_29.type = 'VEC3';
@@ -112,7 +110,7 @@ describe('combinePrimitives', function() {
     });
 
     it ('throws a componentType error', function(done) {
-        expect(readGltf(doubleBoxToCombinePath, options)
+        expect(readGltf(doubleBoxToCombinePath)
             .then(function(gltf){
                 var componentTypeError = gltf;
                 componentTypeError.accessors.accessor_29.componentType = 5126;
