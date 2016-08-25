@@ -8,7 +8,7 @@ describe('mergeDuplicateMaterials', function() {
                 meshOne : {
                     primitives : [
                         {
-                            material : 'materialOne',
+                            material : 'materialOne'
                         },
                         {
                             material : 'materialThree'
