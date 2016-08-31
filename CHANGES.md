@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+### Next Release
+
+* Added `MergeDuplicateProperties` for stages merging duplicate glTF properties, like materials and shaders. [#152](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/152)
+  * `mergeDuplicateAccessors` is now a part of this stage
+
 ### 0.1.0-alpha4 - 2016-08-25
 
 * `cacheOptimization` no longer crashes on primitives without indices. [#154](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/issues/154)
