@@ -19,7 +19,7 @@ module.exports = {
     getUniqueId : require('./lib/getUniqueId'),
     loadGltfUris : require('./lib/loadGltfUris'),
     mergeBuffers : require('./lib/mergeBuffers'),
-    MergeDuplicateProperties = require('./lib/MergeDuplicateProperties'),
+    MergeDuplicateProperties : require('./lib/MergeDuplicateProperties'),
     mergeDuplicateVertices : require('./lib/mergeDuplicateVertices'),
     numberOfComponentsForType : require('./lib/numberOfComponentsForType'),
     octEncodeNormals : require('./lib/octEncodeNormals'),
