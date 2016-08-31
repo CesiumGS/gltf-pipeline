@@ -190,11 +190,6 @@ describe('MergeDuplicateProperties', function() {
             };
             mergeDuplicateShaders(gltf);
             var programs = gltf.programs;
-            var shaders = gltf.shaders;
-            expect(shaders.VSOne).toBeDefined();
-            expect(shaders.FSOne).toBeDefined();
-            expect(shaders.VSTwo).toBeDefined();
-            expect(shaders.FSTwo).not.toBeDefined();
             expect(programs.programOne.fragmentShader).toBe('FSOne');
             expect(programs.programOne.vertexShader).toBe('VSOne');
             expect(programs.programTwo.fragmentShader).toBe('FSOne');
@@ -233,10 +228,6 @@ describe('MergeDuplicateProperties', function() {
                 }
             };
             mergeDuplicatePrograms(gltf);
-            var programs = gltf.programs;
-            expect(programs.programOne).toBeDefined();
-            expect(programs.programTwo).not.toBeDefined();
-            expect(programs.programThree).toBeDefined();
             var techniques = gltf.techniques;
             expect(techniques.techniqueOne.program).toBe('programOne');
             expect(techniques.techniqueTwo.program).toBe('programOne');
@@ -284,10 +275,6 @@ describe('MergeDuplicateProperties', function() {
                 }
             };
             mergeDuplicateTechniques(gltf);
-            var techniques = gltf.techniques;
-            expect(techniques.techniqueOne).toBeDefined();
-            expect(techniques.techniqueTwo).toBeDefined();
-            expect(techniques.techniqueThree).not.toBeDefined();
             var materials = gltf.materials;
             expect(materials.materialOne.technique).toBe('techniqueOne');
             expect(materials.materialTwo.technique).toBe('techniqueTwo');
@@ -346,10 +333,6 @@ describe('MergeDuplicateProperties', function() {
                 }
             };
             mergeDuplicateMaterials(gltf);
-            var materials = gltf.materials;
-            expect(materials.materialOne).toBeDefined();
-            expect(materials.materialTwo).toBeDefined();
-            expect(materials.materialThree).not.toBeDefined();
             var meshes = gltf.meshes;
             var meshOne = meshes.meshOne;
             var meshOnePrimitives = meshOne.primitives;
