@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+### Next Release
+
+* `quantizedAttributes` has an optional `normalized` flag to use the glTF 1.0.1 `accessor.normalized` for a higher precision decode matrix.
+
 ### 0.1.0-alpha4 - 2016-08-25
 
 * `cacheOptimization` no longer crashes on primitives without indices. [#154](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/issues/154)
