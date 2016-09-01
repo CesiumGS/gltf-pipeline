@@ -1,14 +1,18 @@
 'use strict';
-
+var Cesium = require('cesium');
+var clone = require('clone');
 var fs = require('fs');
+var Promise = require('bluebird');
+
+var WebGLConstants = Cesium.WebGLConstants;
+
 var addDefaults = require('../../lib/addDefaults');
 var addPipelineExtras = require('../../lib/addPipelineExtras');
 var loadGltfUris = require('../../lib/loadGltfUris');
 var readGltf = require('../../lib/readGltf');
 var removePipelineExtras = require('../../lib/removePipelineExtras');
-var Cesium = require('cesium');
-var clone = require('clone');
-var WebGLConstants = Cesium.WebGLConstants;
+
+var fsReadFile = Promise.promisify(fs.readFile);
 
 var transparentImageUri = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAB3RJTUUH4AcGERIfpcOGjwAAAQZJREFUGNMFwcErQ3EAwPHv7+3JEw2FFe+lZ9vpTTnYiR2MsyKuE8VB/ojdlZuDg4sVyUU7TVK7KG05jFgWPdt6oqWI5/E87/l8RNO8zyoylF4EtTeB6wWMhH2mNMG3B3KHDMemxOFdQEj4qN3tPDoS9Q+HxaiPdNkS5G5+SUV1xoYG6VNcRvvh9ClMS+hIZ6aLocZY0M+Zj1X59CMcXXmsJUO4dh7Z0HTiEZvN3DQDvcNk5mrYyU5q5SUK1QuktGpxkE/x8OpSaVqUSxt81bfYKewxkVhF9h1BjxJHyBW84I/dk23ebVieWWF2fB1hNZ6zSlsXxdt9rhtFgsDH0CZJJzK43g//gYBjzrZ4jf0AAAAASUVORK5CYII=';
 var gltfTransparentPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestTransparent.gltf';
@@ -27,7 +31,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         var accessor = gltf.accessors.accessorId;
         expect(accessor.byteStride).toEqual(0);
         expect(accessor.min).toBeDefined();
@@ -61,7 +65,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.animations.animationId.samplers.samplerId.interpolation).toEqual('LINEAR');
     });
 
@@ -73,7 +77,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.animations.animationId.channels).toEqual([]);
         expect(gltf.animations.animationId.parameters).toEqual({});
         expect(gltf.animations.animationId.samplers).toEqual({});
@@ -82,7 +86,7 @@ describe('addDefaults', function() {
     it('Adds asset properties', function() {
         var gltf = {};
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.asset).toBeDefined();
         expect(gltf.asset.premultipliedAlpha).toEqual(false);
         expect(gltf.asset.profile).toBeDefined();
@@ -95,7 +99,7 @@ describe('addDefaults', function() {
             "version" : 0.8
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.asset.version).toEqual('0.8');
     });
 
@@ -109,7 +113,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.buffers.bufferId.type).toEqual('arraybuffer');
     });
 
@@ -196,8 +200,7 @@ describe('addDefaults', function() {
         };
 
         var options = {
-            specularTechnique: 'PHONG',
-            diffuseTechnique: 'CONSTANT'
+            technique: 'PHONG'
         };
 
         var gltfClone;
@@ -335,7 +338,7 @@ describe('addDefaults', function() {
         };
 
         addPipelineExtras(gltf);
-        loadGltfUris(gltf, {})
+        loadGltfUris(gltf)
             .then(function() {
                 addDefaults(gltf);
                 var technique = gltf.techniques[Object.keys(gltf.techniques)[0]];
@@ -366,41 +369,36 @@ describe('addDefaults', function() {
     });
 
     it('modifies the material\'s technique to support alpha blending if the diffuse texture is transparent', function(done) {
-        fs.readFile(gltfTransparentPath, function(err, data) {
-            if (err) {
-                throw err;
-            }
-            var gltf = JSON.parse(data);
-            var originalState = gltf.techniques[Object.keys(gltf.techniques)[0]].states;
-            expect(originalState).not.toEqual(alphaBlendState);
-            readGltf(gltfTransparentPath, {}, function (gltf) {
+        expect(fsReadFile(gltfTransparentPath)
+            .then(function(data) {
+                var gltf = JSON.parse(data);
+                var originalState = gltf.techniques[Object.keys(gltf.techniques)[0]].states;
+                expect(originalState).not.toEqual(alphaBlendState);
+                return readGltf(gltfTransparentPath);
+            })
+            .then(function (gltf) {
                 addDefaults(gltf);
                 var technique = gltf.techniques[Object.keys(gltf.techniques)[0]];
                 expect(technique.states).toEqual(alphaBlendState);
-                done();
-            });
-        });
+            }), done).toResolve();
     });
 
     it('modifies the material\'s technique to support alpha blending if the diffuse color is transparent', function(done) {
-        fs.readFile(gltfTransparentPath, function(err, data) {
-            if (err) {
-                throw err;
-            }
-            var gltf = JSON.parse(data);
-            var originalState = gltf.techniques[Object.keys(gltf.techniques)[0]].states;
-            expect(originalState).not.toEqual(alphaBlendState);
+        expect(fsReadFile(gltfTransparentPath)
+            .then(function(data) {
+                var gltf = JSON.parse(data);
+                var originalState = gltf.techniques[Object.keys(gltf.techniques)[0]].states;
+                expect(originalState).not.toEqual(alphaBlendState);
 
-            var options = {};
-            readGltf(gltfTransparentPath, options, function (gltf) {
+                return readGltf(gltfTransparentPath);
+            })
+            .then(function (gltf) {
                 var material = gltf.materials[Object.keys(gltf.materials)[0]];
                 material.values.diffuse = [1, 0, 0, 0.5];
                 addDefaults(gltf);
                 var technique = gltf.techniques[Object.keys(gltf.techniques)[0]];
                 expect(technique.states).toEqual(alphaBlendState);
-                done();
-            });
-        });
+            }), done).toResolve();
     });
 
     it('generates techniques and nodes for KHR_materials_common lights', function() {
@@ -561,7 +559,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.meshes.meshId.primitives).toEqual([]);
 
         gltf = {
@@ -577,7 +575,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.meshes.meshId.primitives[0].attributes).toBeDefined();
         expect(gltf.meshes.meshId.primitives[0].mode).toEqual(WebGLConstants.TRIANGLES);
     });
@@ -597,7 +595,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.meshes.meshId.primitives[0].mode).toEqual(WebGLConstants.TRIANGLE_STRIP);
     });
 
@@ -609,7 +607,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.nodes.nodeId.children).toEqual([]);
         expect(gltf.nodes.nodeId.matrix).toEqual([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
 
@@ -621,7 +619,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.nodes.nodeId.rotation).toEqual([0.0, 0.0, 0.0, 1.0]);
         expect(gltf.nodes.nodeId.scale).toEqual([1.0, 1.0, 1.0]);
 
@@ -633,7 +631,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.nodes.nodeId.translation).toEqual([0.0, 0.0, 0.0]);
         expect(gltf.nodes.nodeId.rotation).toEqual([0.0, 0.0, 0.0, 1.0]);
     });
@@ -651,7 +649,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.nodes.nodeId.skeletons).toBeDefined();
         expect(gltf.nodes.nodeId.skin).toBeDefined();
         expect(gltf.nodes.nodeId.meshes).toBeDefined();
@@ -668,7 +666,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.nodes.nodeId.rotation).toEqual([0.0, 0.0, 0.0, 1.0]);
     });
 
@@ -682,7 +680,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.programs.programId.attributes).toEqual([]);
     });
 
@@ -694,7 +692,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.samplers.samplerId.magFilter).toEqual(WebGLConstants.LINEAR);
         expect(gltf.samplers.samplerId.minFilter).toEqual(WebGLConstants.NEAREST_MIPMAP_LINEAR);
         expect(gltf.samplers.samplerId.wrapS).toEqual(WebGLConstants.REPEAT);
@@ -709,7 +707,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.scenes.defaultScene.nodes).toEqual([]);
     });
 
@@ -726,7 +724,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.skins.skinId.bindShapeMatrix).toEqual([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
     });
 
@@ -743,7 +741,7 @@ describe('addDefaults', function() {
             }
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.textures.textureId.format).toEqual(WebGLConstants.RGBA);
         expect(gltf.textures.textureId.internalFormat).toEqual(6408);
         expect(gltf.textures.textureId.target).toEqual(WebGLConstants.TEXTURE_2D);
@@ -758,7 +756,7 @@ describe('addDefaults', function() {
             ]
         };
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.allExtensions).not.toBeDefined();
         expect(gltf.extensionsUsed).toBeDefined();
     });
@@ -766,7 +764,7 @@ describe('addDefaults', function() {
     it('Adds empty top-level properties', function() {
         var gltf = {};
 
-        addDefaults(gltf, undefined);
+        addDefaults(gltf);
         expect(gltf.extensionsUsed).toBeDefined();
         expect(gltf.accessors).toBeDefined();
         expect(gltf.animations).toBeDefined();

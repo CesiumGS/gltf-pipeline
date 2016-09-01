@@ -14,6 +14,6 @@ describe('isDataUri', function() {
     });
 
     it('is undefined', function() {
-        expect(isDataUri(undefined)).toBe(false);
+        expect(isDataUri()).toBe(false);
     });
 });

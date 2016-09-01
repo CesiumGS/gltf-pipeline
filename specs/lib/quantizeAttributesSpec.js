@@ -18,7 +18,7 @@ describe('quantizeAttributes', function() {
                 count : 3,
                 min : [-1.0, -1.0, -1.0],
                 max : [1.0, 1.0, 1.0],
-                type : 'VEC3',
+                type : 'VEC3'
             },
             accessor_1 : {
                 bufferView : 'bufferView_0',
@@ -71,6 +71,16 @@ describe('quantizeAttributes', function() {
                 min : [0],
                 max : [1],
                 type : 'SCALAR'
+            },
+            // floating-point rounding test
+            accessor_5 : {
+                bufferView : 'bufferView_2',
+                byteOffset : 0,
+                componentType : 5126,
+                count : 1,
+                min : [-82.39035034179688],
+                max : [0.0026710000820457935],
+                type : 'SCALAR'
             }
         },
         bufferViews : {
@@ -85,6 +95,12 @@ describe('quantizeAttributes', function() {
                 byteLength : 72,
                 byteOffset : 48,
                 target : 34962
+            },
+            bufferView_2 : {
+                buffer : 'buffer_float',
+                byteLength : 4,
+                byteOffset : 0,
+                target: 34962
             }
         },
         buffers : {
@@ -93,6 +109,15 @@ describe('quantizeAttributes', function() {
                 type : 'arraybuffer',
                 extras : {
                     _pipeline : {}
+                }
+            },
+            buffer_float : {
+                byteLength : 4,
+                type : 'array_buffer',
+                extras : {
+                    _pipeline : {
+                        source : new Buffer(new Float32Array([0.0026710000820457935]).buffer)
+                    }
                 }
             }
         },
@@ -111,6 +136,11 @@ describe('quantizeAttributes', function() {
                             TEXCOORD : 'accessor_3',
                             SCALAR_TEST : 'accessor_4'
                         }
+                    },
+                    {
+                        attributes : {
+                            FLOAT_TEST : 'accessor_5'
+                        }
                     }
                 ]
             }
@@ -127,7 +157,7 @@ describe('quantizeAttributes', function() {
     it('Doesn\'t quantize excluded semantics', function() {
         var gltf = clone(testGltf);
         gltf.buffers.buffer.extras._pipeline.source = buffer;
-        quantizeAttributes(gltf, {exclude: ['POSITION', 'NORMAL', 'TEXCOORD', 'SCALAR_TEST']});
+        quantizeAttributes(gltf, {exclude: ['POSITION', 'NORMAL', 'TEXCOORD', 'SCALAR_TEST', 'FLOAT_TEST']});
         expect(gltf.buffers.buffer.byteLength).toEqual(buffer.length);
     });
 
@@ -141,6 +171,27 @@ describe('quantizeAttributes', function() {
         gltf.buffers.buffer.extras._pipeline.source = buffer;
         quantizeAttributes(gltf, {semantics: ['POSITION']});
         expect(gltf.buffers.buffer.byteLength + size).toEqual(buffer.length);
+        var decodeMatrix = accessor_0.extensions.WEB3D_quantized_attributes.decodeMatrix;
+        expect(decodeMatrix[0]).toBe(2.0 / 65535.0);
+    });
+
+    it('Quantizes attributes using options.normalized for higher precision decode', function() {
+        var gltf = clone(testGltf);
+        var accessor_0 = gltf.accessors.accessor_0;
+        var accessor_2 = gltf.accessors.accessor_2;
+        var size = byteLengthForComponentType(accessor_0.componentType) * numberOfComponentsForType(accessor_0.type) * accessor_0.count;
+        size += byteLengthForComponentType(accessor_2.componentType) * numberOfComponentsForType(accessor_2.type) * accessor_2.count;
+        size = size/2.0;
+        gltf.buffers.buffer.extras._pipeline.source = buffer;
+        quantizeAttributes(gltf, {
+            semantics : ['POSITION'],
+            normalized : true
+        });
+        expect(gltf.buffers.buffer.byteLength + size).toEqual(buffer.length);
+        expect(accessor_0.normalized).toBeTruthy();
+        expect(accessor_2.normalized).toBeTruthy();
+        var decodeMatrix = accessor_0.extensions.WEB3D_quantized_attributes.decodeMatrix;
+        expect(decodeMatrix[0]).toBe(2.0);
     });
 
     it('Reduces the decimal places in decode matrix using options.precision', function() {
