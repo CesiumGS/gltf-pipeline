@@ -107,6 +107,7 @@
       "uri": "data:,"
     }
   },
+  "extensionsUsed": ["KHR_binary_glTF"],
   "images": {
     "Image0001": {
       "name": "Image0001",
