@@ -1,10 +1,9 @@
 'use strict';
 var Cesium = require('cesium');
-
-var WebGLConstants = Cesium.WebGLConstants;
-
 var AccessorReader = require('../../lib/AccessorReader');
 var changeAccessorComponentType = require('../../lib/changeAccessorComponentType');
+
+var WebGLConstants = Cesium.WebGLConstants;
 
 describe('changeAccessorComponentType', function() {
     it('does nothing if the accessor is already the target componentType', function() {
@@ -58,7 +57,7 @@ describe('changeAccessorComponentType', function() {
         expect(Object.keys(gltf.buffers).length).toBe(1);
         var accessorReader = new AccessorReader(gltf, accessor);
         var components = [];
-        while(accessorReader.hasNext()) {
+        while (accessorReader.hasNext()) {
             accessorReader.read(components);
             expect(components[0]).toBe(accessorReader.index);
             accessorReader.next();
@@ -103,7 +102,7 @@ describe('changeAccessorComponentType', function() {
         expect(Object.keys(gltf.buffers).length).toBe(1);
         var accessorReader = new AccessorReader(gltf, accessor);
         var components = [];
-        while(accessorReader.hasNext()) {
+        while (accessorReader.hasNext()) {
             accessorReader.read(components);
             expect(components[0]).toBe(accessorReader.index);
             accessorReader.next();
@@ -148,7 +147,7 @@ describe('changeAccessorComponentType', function() {
         expect(Object.keys(gltf.buffers).length).toBe(2);
         var accessorReader = new AccessorReader(gltf, accessor);
         var components = [];
-        while(accessorReader.hasNext()) {
+        while (accessorReader.hasNext()) {
             accessorReader.read(components);
             expect(components[0]).toBe(accessorReader.index);
             accessorReader.next();
