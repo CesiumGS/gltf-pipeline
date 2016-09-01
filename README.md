@@ -5,7 +5,7 @@
 [![Coverage Status](https://coveralls.io/repos/AnalyticalGraphicsInc/gltf-pipeline/badge.svg?branch=master)](https://coveralls.io/r/AnalyticalGraphicsInc/gltf-pipeline?branch=master)
 
 <p align="center">
-<a href="https://www.khronos.org/gltf"><img src="doc/gltf.png" /></a>
+<a href="https://www.khronos.org/gltf"><img src="doc/gltf.png" onerror="this.src='gltf.png'"/></a>
 </p>
 
 Content pipeline tools for optimizing [glTF](https://www.khronos.org/gltf) assets by [Richard Lee](http://leerichard.net/) and the [Cesium team](http://cesiumjs.org/).
@@ -60,7 +60,7 @@ To run JSHint automatically when a file is saved, run the following and leave it
 npm run jsHint-watch
 ```
 
-### Running test coverage
+### Running Test Coverage
 
 Coverage uses [istanbul](https://github.com/gotwarlost/istanbul).  Run:
 ```
@@ -69,6 +69,15 @@ npm run coverage
 For complete coverage details, open `coverage/lcov-report/index.html`.
 
 The tests and coverage covers the Node.js module; it does not cover the command-line interface, which is tiny.
+
+## Generating Documentation
+
+To generate the documentation:
+```
+npm run jsdoc
+```
+
+The documentation will be placed in the `doc` folder.
 
 ### Debugging
 
@@ -82,5 +91,5 @@ Pull requests are appreciated!  Please use the same [Contributor License Agreeme
 ---
 
 <p align="center">
-<a href="http://cesiumjs.org/"><img src="doc/cesium.png" /></a>
+<a href="http://cesiumjs.org/"><img src="doc/cesium.png" onerror="this.src='cesium.png'"/></a>
 </p>

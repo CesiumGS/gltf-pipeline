@@ -4,14 +4,14 @@ var fsExtra = require('fs-extra');
 var path = require('path');
 var Promise = require('bluebird');
 
+var Pipeline = require('../../lib/Pipeline');
 var addPipelineExtras = require('../../lib/addPipelineExtras');
-var gltfPipeline = require('../../lib/gltfPipeline');
 var readGltf = require('../../lib/readGltf');
 
-var processFile = gltfPipeline.processFile;
-var processFileToDisk = gltfPipeline.processFileToDisk;
-var processJSON = gltfPipeline.processJSON;
-var processJSONToDisk = gltfPipeline.processJSONToDisk;
+var processFile = Pipeline.processFile;
+var processFileToDisk = Pipeline.processFileToDisk;
+var processJSON = Pipeline.processJSON;
+var processJSONToDisk = Pipeline.processJSONToDisk;
 
 var fsExtraReadFile = Promise.promisify(fsExtra.readFile);
 
@@ -21,14 +21,13 @@ var glbPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.glb';
 var outputGltfPath = './output/CesiumTexturedBoxTest.gltf';
 var outputGlbPath = './output/CesiumTexturedBoxTest.glb';
 
-describe('gltfPipeline', function() {
+describe('Pipeline', function() {
     it('optimizes a gltf JSON with embedded resources', function(done) {
-        var options = {};
         var gltfCopy;
-        expect(readGltf(gltfEmbeddedPath, options)
+        expect(readGltf(gltfEmbeddedPath)
             .then(function(gltf) {
                 gltfCopy = clone(gltf);
-                return processJSON(gltf, options);
+                return processJSON(gltf);
             })
             .then(function(gltf) {
                 expect(gltf).toBeDefined();
@@ -37,7 +36,9 @@ describe('gltfPipeline', function() {
     });
     
     it('optimizes a gltf JSON with external resources', function(done) {
-        var options = { basePath : path.dirname(gltfPath) };
+        var options = {
+            basePath : path.dirname(gltfPath)
+        };
         var gltfCopy;
         expect(fsExtraReadFile(gltfPath, options)
             .then(function(data) {
@@ -54,11 +55,10 @@ describe('gltfPipeline', function() {
 
     it('optimizes a glTF file', function(done) {
         var gltfCopy;
-        var options = {};
-        expect(readGltf(gltfPath, options)
+        expect(readGltf(gltfPath)
             .then(function(gltf) {
                 gltfCopy = clone(gltf);
-                return processFile(gltfPath, options);
+                return processFile(gltfPath);
             })
             .then(function(gltf) {
                 expect(gltf).toBeDefined();
@@ -68,11 +68,10 @@ describe('gltfPipeline', function() {
 
     it('optimizes a glb file', function(done) {
         var gltfCopy;
-        var options = {};
-        expect(readGltf(glbPath, options)
+        expect(readGltf(glbPath)
             .then(function(gltf) {
                 gltfCopy = clone(gltf);
-                return processFile(glbPath, options);
+                return processFile(glbPath);
             })
             .then(function(gltf) {
                 expect(gltf).toBeDefined();
@@ -112,12 +111,11 @@ describe('gltfPipeline', function() {
 
     it('will write a file from JSON', function(done) {
         var spy = spyOn(fsExtra, 'outputJsonAsync').and.callFake(function() {});
-        var readOptions = {};
         var processOptions = {
             createDirectory : false, 
             basePath : path.dirname(gltfPath)
         };
-        expect(readGltf(gltfPath, readOptions)
+        expect(readGltf(gltfPath)
             .then(function(gltf) {
                 return processJSONToDisk(gltf, outputGltfPath, processOptions);
             })
@@ -131,11 +129,10 @@ describe('gltfPipeline', function() {
 
     it('will write sources from JSON', function(done) {
         var initialUri;
-        var options = {};
-        expect(readGltf(gltfEmbeddedPath, options)
+        expect(readGltf(gltfEmbeddedPath)
             .then(function(gltf) {
                 initialUri = gltf.buffers.CesiumTexturedBoxTest.uri;
-                return processJSON(gltf, options);
+                return processJSON(gltf);
             })
             .then(function(gltf) {
                 var firstBufferId = Object.keys(gltf.buffers)[0];
@@ -147,11 +144,10 @@ describe('gltfPipeline', function() {
 
     it('will write sources from file', function(done) {
         var initialUri;
-        var options = {};
-        expect(readGltf(gltfEmbeddedPath, options)
+        expect(readGltf(gltfEmbeddedPath)
             .then(function(gltf) {
                 initialUri = gltf.buffers.CesiumTexturedBoxTest.uri;
-                return processFile(gltfEmbeddedPath, options);
+                return processFile(gltfEmbeddedPath);
             })
             .then(function(gltfFinal) {
                 var firstBufferId = Object.keys(gltfFinal.buffers)[0];

@@ -18,7 +18,7 @@ describe('quantizeAttributes', function() {
                 count : 3,
                 min : [-1.0, -1.0, -1.0],
                 max : [1.0, 1.0, 1.0],
-                type : 'VEC3',
+                type : 'VEC3'
             },
             accessor_1 : {
                 bufferView : 'bufferView_0',
@@ -171,6 +171,27 @@ describe('quantizeAttributes', function() {
         gltf.buffers.buffer.extras._pipeline.source = buffer;
         quantizeAttributes(gltf, {semantics: ['POSITION']});
         expect(gltf.buffers.buffer.byteLength + size).toEqual(buffer.length);
+        var decodeMatrix = accessor_0.extensions.WEB3D_quantized_attributes.decodeMatrix;
+        expect(decodeMatrix[0]).toBe(2.0 / 65535.0);
+    });
+
+    it('Quantizes attributes using options.normalized for higher precision decode', function() {
+        var gltf = clone(testGltf);
+        var accessor_0 = gltf.accessors.accessor_0;
+        var accessor_2 = gltf.accessors.accessor_2;
+        var size = byteLengthForComponentType(accessor_0.componentType) * numberOfComponentsForType(accessor_0.type) * accessor_0.count;
+        size += byteLengthForComponentType(accessor_2.componentType) * numberOfComponentsForType(accessor_2.type) * accessor_2.count;
+        size = size/2.0;
+        gltf.buffers.buffer.extras._pipeline.source = buffer;
+        quantizeAttributes(gltf, {
+            semantics : ['POSITION'],
+            normalized : true
+        });
+        expect(gltf.buffers.buffer.byteLength + size).toEqual(buffer.length);
+        expect(accessor_0.normalized).toBeTruthy();
+        expect(accessor_2.normalized).toBeTruthy();
+        var decodeMatrix = accessor_0.extensions.WEB3D_quantized_attributes.decodeMatrix;
+        expect(decodeMatrix[0]).toBe(2.0);
     });
 
     it('Reduces the decimal places in decode matrix using options.precision', function() {

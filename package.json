@@ -1,6 +1,6 @@
 {
   "name": "gltf-pipeline",
-  "version": "0.1.0-alpha3",
+  "version": "0.1.0-alpha4",
   "description": "Content pipeline tools for optimizing glTF assets.",
   "license": "Apache-2.0",
   "contributors": [
@@ -51,6 +51,7 @@
     "istanbul": "0.4.4",
     "jasmine": "2.4.1",
     "jasmine-spec-reporter": "2.5.0",
+    "jsdoc": "3.4.0",
     "jshint": "2.9.2",
     "jshint-stylish": "2.2.0",
     "open": "0.0.5",
@@ -58,6 +59,7 @@
     "requirejs": "2.2.0"
   },
   "scripts": {
+    "jsdoc": "jsdoc ./lib -R ./README.md -d doc",
     "jsHint": "gulp jsHint",
     "jsHint-watch": "gulp jsHint-watch",
     "test": "gulp test",

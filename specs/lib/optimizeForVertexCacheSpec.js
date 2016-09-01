@@ -3,7 +3,7 @@ var Cesium = require('cesium');
 var GeometryPipeline = Cesium.GeometryPipeline;
 
 var addDefaults = require('../../lib/addDefaults');
-var cacheOptimization = require('../../lib/cacheOptimization');
+var optimizeForVertexCache = require('../../lib/optimizeForVertexCache');
 var readAccessor = require('../../lib/readAccessor');
 var readGltf = require('../../lib/readGltf');
 var writeAccessor = require('../../lib/writeAccessor');
@@ -23,10 +23,9 @@ var optimizedVertices = [ 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0
     0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 
     -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5 ];
 
-describe('cacheOptimization', function() {
+describe('optimizeForVertexCache', function() {
     it('reorders indices', function(done) {
-        var options = {};
-        expect(readGltf(gltfPath, options)
+        expect(readGltf(gltfPath)
             .then(function(gltf) {
                 addDefaults(gltf);
                 var indexAccessorId = gltf.meshes[Object.keys(gltf.meshes)[0]].primitives[0].indices;
@@ -34,7 +33,7 @@ describe('cacheOptimization', function() {
                 // Rewrite indices to be forcibly unoptimized
                 writeAccessor(gltf, indexAccessor, unoptimizedIndices);
             
-                cacheOptimization(gltf);
+                optimizeForVertexCache(gltf);
                 var indices = [];
                 readAccessor(gltf, gltf.accessors[indexAccessorId], indices);
             
@@ -43,8 +42,7 @@ describe('cacheOptimization', function() {
     });
 
     it('reorders independent attribute accessors', function(done) {
-        var options = {};
-        expect(readGltf(gltfPath, options)
+        expect(readGltf(gltfPath)
             .then(function(gltf) {
                 addDefaults(gltf);
                 var positionAccessor = gltf.accessors.accessor_23;
@@ -57,7 +55,7 @@ describe('cacheOptimization', function() {
                 var positions = [];
                 readAccessor(gltf, positionAccessor, positions);
             
-                cacheOptimization(gltf);
+                optimizeForVertexCache(gltf);
             
                 expect(positions).toEqual(unpackedOptimizedVertices);
             }), done).toResolve();
@@ -79,7 +77,7 @@ describe('cacheOptimization', function() {
             }
         };
         spyOn(GeometryPipeline, 'reorderForPostVertexCache');
-        cacheOptimization(gltf);
+        optimizeForVertexCache(gltf);
         expect(GeometryPipeline.reorderForPostVertexCache).not.toHaveBeenCalled();
     });
 });
