@@ -11,6 +11,8 @@ var Pipeline = require('../lib/Pipeline');
 var processFileToDisk = Pipeline.processFileToDisk;
 
 var argv = require('yargs')
+    .usage('Usage: $0 -i inputPath -o outputPath')
+    .example('$0 -i ./specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf -o output.gltf')
     .help('h')
     .alias('h', 'help')
     .options({
@@ -121,7 +123,7 @@ for (var option in aoOptions) {
 console.log(argv.ao);
 
 var gltfPath = argv.i;
-var outputPath = defaultValue(argv.o, argv._[0]);
+var outputPath = argv.o;
 
 if (!defined(outputPath)) {
     var outputFileExtension;
