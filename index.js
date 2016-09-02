@@ -4,7 +4,7 @@ module.exports = {
     addDefaults : require('./lib/addDefaults'),
     addExtensionsUsed : require('./lib/addExtensionsUsed'),
     addPipelineExtras : require('./lib/addPipelineExtras'),
-    bakeAmbientOcclusion : require('./lib/AmbientOcclusion').bakeAmbientOcclusion,
+    bakeAmbientOcclusion : require('./lib/bakeAmbientOcclusion'),
     byteLengthForComponentType : require('./lib/byteLengthForComponentType'),
     combineMeshes : require('./lib/combineMeshes'),
     combineNodes : require('./lib/combineNodes'),
