@@ -30,17 +30,17 @@ var argv = require('yargs')
         },
         'binary': {
             alias: 'b',
-            describe: 'Writes binary glTF file using KHR_binary_glTF extension.',
+            describe: 'Write binary glTF file using KHR_binary_glTF extension.',
             type: 'boolean'
         },
         'separate': {
             alias: 's',
-            describe: 'Writes separate geometry/animation data files, shader files, and textures instead of embedding them in the glTF asset.',
+            describe: 'Write separate geometry/animation data files, shader files, and textures instead of embedding them in the glTF asset.',
             type: 'boolean'
         },
         'separateImage': {
             alias: 't',
-            describe: 'Writes out separate textures, but embeds geometry/animation data files and shader files in the glTF asset.',
+            describe: 'Write out separate textures, but embeds geometry/animation data files and shader files in the glTF asset.',
             type: 'boolean'
         },
         'quantize': {
@@ -63,7 +63,7 @@ var argv = require('yargs')
             type: 'boolean'
         },
         'ao.enable': {
-            describe: 'Bake ambient occlusion (to vertex data by default). If other `ao` flags are enabled, this is implicitly true',
+            describe: 'Bake ambient occlusion (to vertex data by default). If other `ao` flags are enabled, this is implicitly true.',
             group: 'Options: Ambient Occlusion',
             type: 'boolean'
         },
