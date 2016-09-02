@@ -104,7 +104,12 @@ function processB3dm(b3dmPath) {
             batchTableBuffer = buffer.slice(20, 20 + batchTableByteLength);
             var glbBuffer = buffer.slice(20 + batchTableByteLength, byteLength);
             var gltf = parseBinaryGltf(glbBuffer);
-            deleteNormals(gltf);
+            if (argv.deleteNormals) {
+                deleteNormals(gltf);
+            }
+            if (argv.cleanMaterials) {
+                cleanMaterials(gltf);
+            }
             sanitizeMaterials(gltf);
             generateNormals(gltf, options);
             patchMaterialsForBatchId(gltf);
