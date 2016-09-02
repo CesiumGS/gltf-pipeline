@@ -110,7 +110,6 @@ function processB3dm(b3dmPath) {
             if (argv.cleanMaterials) {
                 cleanMaterials(gltf);
             }
-            sanitizeMaterials(gltf);
             generateNormals(gltf, options);
             patchMaterialsForBatchId(gltf);
             var rtcCenter = Cartesian3.unpack(gltf.extensions.CESIUM_RTC.center);
@@ -178,7 +177,7 @@ function deleteNormals(gltf) {
     }
 }
 
-function sanitizeMaterials(gltf) {
+function cleanMaterials(gltf) {
     var materials = gltf.materials;
     for (var materialId in materials) {
         if (materials.hasOwnProperty(materialId)) {
