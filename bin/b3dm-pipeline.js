@@ -38,6 +38,8 @@ if (process.argv.length < 3 || defined(argv.h) || defined(argv.help)) {
         '  -n --encodeNormals, oct-encode the normals of this model.\n' +
         '  -c --compressTextureCoordinates, compress the texture coordinates of this model.\n' +
         '  -f --faceNormals, if normals are missing, they should be generated using the face normal\n' +
+        '     --deleteNormals, delete the existing normals so that they will be regenerated\n' +
+        '     --cleanMaterials, sets default specular and diffuse to reasonable values\n' +
         '  -z --gzip, the output should be gzipped\n' +
         '     --ao: Bake ambient occlusion to vertex data using default settings ONLY. When specifying other settings, do not use `--ao` on its own. Default: inactive.\n' +
         '     --ao.toTexture: Bake AO to existing diffuse textures instead of to vertices. Does not modify shaders. Default: inactive.\n' +
@@ -102,6 +104,8 @@ function processB3dm(b3dmPath) {
             batchTableBuffer = buffer.slice(20, 20 + batchTableByteLength);
             var glbBuffer = buffer.slice(20 + batchTableByteLength, byteLength);
             var gltf = parseBinaryGltf(glbBuffer);
+            deleteNormals(gltf);
+            sanitizeMaterials(gltf);
             generateNormals(gltf, options);
             patchMaterialsForBatchId(gltf);
             var rtcCenter = Cartesian3.unpack(gltf.extensions.CESIUM_RTC.center);
@@ -139,4 +143,43 @@ function readB3dm(b3dmPath) {
             }
             return buffer;
         });
+}
+
+function deleteNormals(gltf) {
+    var meshes = gltf.meshes;
+    var materials = gltf.materials;
+    var techniques = gltf.techniques;
+    for (var meshId in meshes) {
+        if (meshes.hasOwnProperty(meshId)) {
+            var mesh = meshes[meshId];
+            var primitives = mesh.primitives;
+            var primitivesLength = primitives.length;
+            for (var i = 0; i < primitivesLength; i++) {
+                var primitive = primitives[i];
+                var attributes = primitive.attributes;
+                delete attributes.NORMAL;
+                var materialId = primitive.material;
+                if (defined(materialId)) {
+                    var material = materials[materialId];
+                    var techniqueId = material.technique;
+                    if (defined(techniqueId)) {
+                        var technique = techniques[techniqueId];
+                        delete technique.attributes.a_normal;
+                        delete technique.parameters.normal;
+                    }
+                }
+            }
+        }
+    }
+}
+
+function sanitizeMaterials(gltf) {
+    var materials = gltf.materials;
+    for (var materialId in materials) {
+        if (materials.hasOwnProperty(materialId)) {
+            var material = materials[materialId];
+            material.values.specular = [0, 0, 0, 1];
+            material.values.diffuse = [1, 1, 0.5, 1];
+        }
+    }
 }
