@@ -86,6 +86,8 @@ if (defined(directory)) {
 
 function processB3dm(b3dmPath) {
     var batchLength;
+    var batchTableByteLengthJson;
+    var batchTableByteLengthBinary;
     var batchTableByteLength;
     var batchTableBuffer;
     return readB3dm(b3dmPath)
@@ -99,10 +101,12 @@ function processB3dm(b3dmPath) {
                 throw new DeveloperError('version must be 1, not ' + version);
             }
             var byteLength = buffer.readUInt32LE(8);
-            batchLength = buffer.readUInt32LE(12);
-            batchTableByteLength = buffer.readUInt32LE(16);
-            batchTableBuffer = buffer.slice(20, 20 + batchTableByteLength);
-            var glbBuffer = buffer.slice(20 + batchTableByteLength, byteLength);
+            batchTableByteLengthJson = buffer.readUInt32LE(12);
+            batchTableByteLengthBinary = buffer.readUInt32LE(16);
+            batchTableByteLength = batchTableByteLengthJson + batchTableByteLengthBinary;
+            batchLength = buffer.readUInt32LE(20);
+            batchTableBuffer = buffer.slice(24, 24 + batchTableByteLength);
+            var glbBuffer = buffer.slice(24 + batchTableByteLength, byteLength);
             var gltf = parseBinaryGltf(glbBuffer);
             if (argv.deleteNormals) {
                 deleteNormals(gltf);
@@ -120,12 +124,13 @@ function processB3dm(b3dmPath) {
         })
         .then(function(gltf) {
             var glb = getBinaryGltf(gltf, !separate, !separateImage).glb;
-            var header = new Buffer(20);
+            var header = new Buffer(24);
             header.write('b3dm');
             header.writeUInt32LE(1, 4);                                                 // version
             header.writeUInt32LE(header.length + batchTableByteLength + glb.length, 8); // byteLength
-            header.writeUInt32LE(batchLength, 12);                                      // batchLength
-            header.writeUInt32LE(batchTableByteLength, 16);                             // batchTableByteLength
+            header.writeUInt32LE(batchTableByteLengthJson, 12);                         // jsonBatchTableByteLength
+            header.writeUInt32LE(batchTableByteLengthBinary, 16);                       // binaryBatchTableByteLength
+            header.writeUInt32LE(batchLength, 20);                                      // batchLength
             var outputBuffer = Buffer.concat([header, batchTableBuffer, glb]);
             if (gzip) {
                 return zlibGzip(outputBuffer);
