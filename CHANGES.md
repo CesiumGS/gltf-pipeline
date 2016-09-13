@@ -5,6 +5,7 @@ Change Log
 
 * Added `MergeDuplicateProperties` for stages merging duplicate glTF properties, like materials and shaders. [#152](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/152)
   * `mergeDuplicateAccessors` is now a part of this stage.
+* `quantizedAttributes` has an optional `normalized` flag to use the glTF 1.0.1 `accessor.normalized` for a higher precision decode matrix.
 
 ### 0.1.0-alpha4 - 2016-08-25
 
