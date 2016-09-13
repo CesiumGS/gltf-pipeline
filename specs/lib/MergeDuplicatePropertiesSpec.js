@@ -7,8 +7,8 @@ var MergeDuplicateProperties = require('../../lib/MergeDuplicateProperties');
 var WebGLConstants = Cesium.WebGLConstants;
 
 describe('MergeDuplicateProperties', function() {
-    var mergeDuplicateAccessors = MergeDuplicateProperties.mergeDuplicateAccessors;
-    describe('mergeDuplicateAccessors', function() {
+    var mergeAccessors = MergeDuplicateProperties.mergeAccessors;
+    describe('mergeAccessors', function() {
         var testGltf = {
             accessors: {
                 accessorA: {
@@ -70,7 +70,7 @@ describe('MergeDuplicateProperties', function() {
             gltfBuffer.extras._pipeline.source = buffer;
             gltfBuffer.byteLength = buffer.length;
             gltf.bufferViews.bufferView.byteLength = buffer.length;
-            mergeDuplicateAccessors(gltf);
+            mergeAccessors(gltf);
             expect(Object.keys(gltf.accessors).length).toEqual(1);
             expect(gltf.meshes.meshA.primitives[0].attributes.TEST).toEqual(gltf.meshes.meshB.primitives[0].attributes.TEST);
         });
@@ -99,7 +99,7 @@ describe('MergeDuplicateProperties', function() {
                     }
                 ]
             };
-            mergeDuplicateAccessors(gltf);
+            mergeAccessors(gltf);
             expect(Object.keys(gltf.accessors).length).toEqual(1);
             expect(gltf.meshes.meshA.primitives[0].attributes.TEST).toEqual(gltf.meshes.meshB.primitives[0].attributes.TEST);
             expect(gltf.meshes.meshA.primitives[0].attributes.TEST).toEqual(gltf.meshes.meshC.primitives[0].attributes.TEST);
@@ -130,15 +130,15 @@ describe('MergeDuplicateProperties', function() {
                 ]
 
             };
-            mergeDuplicateAccessors(gltf);
+            mergeAccessors(gltf);
             expect(Object.keys(gltf.accessors).length).toEqual(2);
             expect(gltf.meshes.meshA.primitives[0].attributes.TEST).toEqual(gltf.meshes.meshB.primitives[0].attributes.TEST);
             expect(gltf.meshes.meshA.primitives[0].attributes.TEST).not.toEqual(gltf.meshes.meshC.primitives[0].attributes.TEST);
         });
     });
 
-    var mergeDuplicateShaders = MergeDuplicateProperties.mergeDuplicateShaders;
-    describe('mergeDuplicateShaders', function() {
+    var mergeShaders = MergeDuplicateProperties.mergeShaders;
+    describe('mergeShaders', function() {
         var testShaderBufferOne = new Buffer('test shader one', 'utf8');
         var testShaderBufferTwo = new Buffer('test shader two', 'utf8');
         it('merges duplicate shaders', function() {
@@ -188,7 +188,7 @@ describe('MergeDuplicateProperties', function() {
                     }
                 }
             };
-            mergeDuplicateShaders(gltf);
+            mergeShaders(gltf);
             var programs = gltf.programs;
             expect(programs.programOne.fragmentShader).toBe('FSOne');
             expect(programs.programOne.vertexShader).toBe('VSOne');
@@ -197,8 +197,8 @@ describe('MergeDuplicateProperties', function() {
         });
     });
 
-    var mergeDuplicatePrograms = MergeDuplicateProperties.mergeDuplicatePrograms;
-    describe('mergeDuplicatePrograms', function() {
+    var mergePrograms = MergeDuplicateProperties.mergePrograms;
+    describe('mergePrograms', function() {
         it('merges duplicate programs', function() {
             var gltf = {
                 programs: {
@@ -227,7 +227,7 @@ describe('MergeDuplicateProperties', function() {
                     }
                 }
             };
-            mergeDuplicatePrograms(gltf);
+            mergePrograms(gltf);
             var techniques = gltf.techniques;
             expect(techniques.techniqueOne.program).toBe('programOne');
             expect(techniques.techniqueTwo.program).toBe('programOne');
@@ -235,8 +235,8 @@ describe('MergeDuplicateProperties', function() {
         });
     });
 
-    var mergeDuplicateTechniques = MergeDuplicateProperties.mergeDuplicateTechniques;
-    describe('mergeDuplicateTechniques', function() {
+    var mergeTechniques = MergeDuplicateProperties.mergeTechniques;
+    describe('mergeTechniques', function() {
         it('merges duplicate techniques', function() {
             var gltf = {
                 techniques : {
@@ -274,7 +274,7 @@ describe('MergeDuplicateProperties', function() {
                     }
                 }
             };
-            mergeDuplicateTechniques(gltf);
+            mergeTechniques(gltf);
             var materials = gltf.materials;
             expect(materials.materialOne.technique).toBe('techniqueOne');
             expect(materials.materialTwo.technique).toBe('techniqueTwo');
@@ -282,8 +282,8 @@ describe('MergeDuplicateProperties', function() {
         });
     });
 
-    var mergeDuplicateMaterials = MergeDuplicateProperties.mergeDuplicateMaterials;
-    describe('mergeDuplicateMaterials', function() {
+    var mergeMaterials = MergeDuplicateProperties.mergeMaterials;
+    describe('mergeMaterials', function() {
         it('merges duplicate materials', function() {
             var gltf = {
                 meshes : {
@@ -332,7 +332,7 @@ describe('MergeDuplicateProperties', function() {
                     }
                 }
             };
-            mergeDuplicateMaterials(gltf);
+            mergeMaterials(gltf);
             var meshes = gltf.meshes;
             var meshOne = meshes.meshOne;
             var meshOnePrimitives = meshOne.primitives;
