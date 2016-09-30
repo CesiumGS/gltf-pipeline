@@ -3,7 +3,6 @@
 var Cesium = require('cesium');
 var path = require('path');
 
-var defaultValue = Cesium.defaultValue;
 var defined = Cesium.defined;
 
 var Pipeline = require('../lib/Pipeline');
