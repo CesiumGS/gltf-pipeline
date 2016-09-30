@@ -65,19 +65,19 @@ var argv = require('yargs')
             type: 'boolean'
         },
         'ao.enable': {
+            default: false,
             describe: 'Bake ambient occlusion (to vertex data by default). If other `ao` flags are enabled, this is implicitly true.',
-            group: 'Options: Ambient Occlusion',
-            type: 'boolean'
+            group: 'Options: Ambient Occlusion'
         },
         'ao.toTexture': {
+            default: false,
             describe: 'Bake AO to existing diffuse textures instead of vertices. Does not modify shaders.',
-            group: 'Options: Ambient Occlusion',
-            type: 'boolean'
+            group: 'Options: Ambient Occlusion'
         },
         'ao.groundPlane': {
+            default: false,
             describe: 'Simulate a ground plane at the lowest point of the model when baking AO.',
-            group: 'Options: Ambient Occlusion',
-            type: 'boolean'
+            group: 'Options: Ambient Occlusion'
         },
         'ao.ambientShadowContribution': {
             default: 0.5,
@@ -103,20 +103,6 @@ for (var i = 0; i < nargs; i++) {
     var arg = process.argv[i];
     if (arg.indexOf('ao') >= 0) {
         argv.ao.enable = true;
-    }
-}
-
-/*
- * yargs puts our dot-notated boolean arguments into an array for some reason
- * This can be removed once: https://github.com/yargs/yargs/issues/617 is resolved
- */
-var aoOptions = argv.ao;
-for (var option in aoOptions) {
-    if (aoOptions.hasOwnProperty(option)) {
-        var value = aoOptions[option];
-        if (Array.isArray(value)) {
-            aoOptions[option] = value[value.length - 1];
-        }
     }
 }
 
