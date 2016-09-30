@@ -7,9 +7,9 @@ var path = require('path');
 var defaultValue = Cesium.defaultValue;
 var defined = Cesium.defined;
 
-var gltfPipeline = require('../lib/gltfPipeline');
+var Pipeline = require('../lib/Pipeline');
 
-var processFileToDisk = gltfPipeline.processFileToDisk;
+var processFileToDisk = Pipeline.processFileToDisk;
 
 if (process.argv.length < 3 || defined(argv.h) || defined(argv.help)) {
     var help =
@@ -75,5 +75,9 @@ var options = {
     quantize : quantize
 };
 
+console.time('optimize');
 // Node automatically waits for all promises to terminate
-processFileToDisk(gltfPath, outputPath, options);
+processFileToDisk(gltfPath, outputPath, options)
+    .then(function() {
+        console.timeEnd('optimize');
+    });

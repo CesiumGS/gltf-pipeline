@@ -10,8 +10,7 @@ var primitiveType = 4;
 
 describe('gltfPrimitiveToCesiumGeometry', function() {
     it('returns a geometry', function(done) {
-        var options = {};
-        expect(readGltf(gltfPath, options)
+        expect(readGltf(gltfPath)
             .then(function(gltf) {
                 addDefaults(gltf);
                 var primitive = gltf.meshes[Object.keys(gltf.meshes)[0]].primitives[0];
