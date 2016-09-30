@@ -106,8 +106,6 @@ for (var i = 0; i < nargs; i++) {
     }
 }
 
-console.log(argv.ao);
-
 var gltfPath = argv.i;
 var outputPath = argv.o;
 
