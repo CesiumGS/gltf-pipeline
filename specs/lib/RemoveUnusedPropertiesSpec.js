@@ -10,8 +10,8 @@ var fsReadFile = Promise.promisify(fs.readFile);
 var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestUnusedTree.gltf';
 
 describe('RemoveUnusedProperties', function() {
-    var removeUnusedNodes = RemoveUnusedProperties.removeUnusedNodes;
-    describe('removeUnusedNodes', function () {
+    var removeNodes = RemoveUnusedProperties.removeNodes;
+    describe('removeNodes', function () {
         it('removes an isolated node', function () {
             var gltf = {
                 "nodes": {
@@ -38,7 +38,7 @@ describe('RemoveUnusedProperties', function() {
                     }
                 }
             };
-            removeUnusedNodes(gltf);
+            removeNodes(gltf);
             expect(gltf.nodes.unusedNodeId).not.toBeDefined();
             expect(Object.keys(gltf.nodes).length).toEqual(4);
         });
@@ -64,7 +64,7 @@ describe('RemoveUnusedProperties', function() {
                     "defaultScene": {}
                 }
             };
-            removeUnusedNodes(gltf);
+            removeNodes(gltf);
             expect(gltf.nodes.node_3).not.toBeDefined();
             expect(gltf.nodes.left_node).not.toBeDefined();
             expect(gltf.nodes.right_node).not.toBeDefined();
@@ -110,7 +110,7 @@ describe('RemoveUnusedProperties', function() {
                     }
                 }
             };
-            removeUnusedNodes(gltf);
+            removeNodes(gltf);
             expect(gltf.nodes.unusedRootId).not.toBeDefined();
             expect(gltf.nodes.unusedLeftId).not.toBeDefined();
             expect(gltf.nodes.unusedRightId).not.toBeDefined();
@@ -144,7 +144,7 @@ describe('RemoveUnusedProperties', function() {
                 }
             };
 
-            removeUnusedNodes(gltf);
+            removeNodes(gltf);
             expect(gltf.nodes.node_3).toBeDefined();
             expect(gltf.nodes.left_node).toBeDefined();
             expect(gltf.nodes.right_node).toBeDefined();
@@ -153,8 +153,8 @@ describe('RemoveUnusedProperties', function() {
         });
     });
 
-    var removeUnusedSkins = RemoveUnusedProperties.removeUnusedSkins;
-    describe('removeUnusedSkins', function () {
+    var removeSkins = RemoveUnusedProperties.removeSkins;
+    describe('removeSkins', function () {
         it('removes a skin', function () {
             var gltf = {
                 "nodes": {
@@ -177,7 +177,7 @@ describe('RemoveUnusedProperties', function() {
                     }
                 }
             };
-            removeUnusedSkins(gltf);
+            removeSkins(gltf);
             expect(gltf.skins.unusedSkinId).not.toBeDefined();
             expect(Object.keys(gltf.skins).length).toEqual(1);
         });
@@ -198,14 +198,14 @@ describe('RemoveUnusedProperties', function() {
                     }
                 }
             };
-            removeUnusedSkins(gltf);
+            removeSkins(gltf);
             expect(gltf.skins["Armature_Cylinder-skin"]).toBeDefined();
             expect(Object.keys(gltf.skins).length).toEqual(1);
         });
     });
 
-    var removeUnusedCameras = RemoveUnusedProperties.removeUnusedCameras;
-    describe('removeUnusedCameras', function () {
+    var removeCameras = RemoveUnusedProperties.removeCameras;
+    describe('removeCameras', function () {
         it('removes a camera', function () {
             var gltf = {
                 "cameras": {
@@ -234,7 +234,7 @@ describe('RemoveUnusedProperties', function() {
                     }
                 }
             };
-            removeUnusedCameras(gltf);
+            removeCameras(gltf);
             expect(gltf.cameras.unusedCameraId).not.toBeDefined();
             expect(Object.keys(gltf.cameras).length).toEqual(1);
         });
@@ -258,14 +258,14 @@ describe('RemoveUnusedProperties', function() {
                     }
                 }
             };
-            removeUnusedCameras(gltf);
+            removeCameras(gltf);
             expect(gltf.cameras.camera_0).toBeDefined();
             expect(Object.keys(gltf.cameras).length).toEqual(1);
         });
     });
 
-    var removeUnusedMeshes = RemoveUnusedProperties.removeUnusedMeshes;
-    describe('removeUnusedMeshes', function () {
+    var removeMeshes = RemoveUnusedProperties.removeMeshes;
+    describe('removeMeshes', function () {
         it('removes a mesh', function () {
             var gltf = {
                 "meshes": {
@@ -280,7 +280,7 @@ describe('RemoveUnusedProperties', function() {
                     }
                 }
             };
-            removeUnusedMeshes(gltf);
+            removeMeshes(gltf);
             expect(gltf.meshes.unusedMeshId).not.toBeDefined();
             expect(Object.keys(gltf.meshes).length).toEqual(1);
         });
@@ -298,14 +298,14 @@ describe('RemoveUnusedProperties', function() {
                     }
                 }
             };
-            removeUnusedMeshes(gltf);
+            removeMeshes(gltf);
             expect(gltf.meshes["Geometry-mesh002"]).toBeDefined();
             expect(Object.keys(gltf.meshes).length).toEqual(1);
         });
     });
 
-    var removeUnusedAccessors = RemoveUnusedProperties.removeUnusedAccessors;
-    describe('removeUnusedAccessors', function () {
+    var removeAccessors = RemoveUnusedProperties.removeAccessors;
+    describe('removeAccessors', function () {
         it('removes an accessor', function () {
             var gltf = {
                 "accessors": {
@@ -372,7 +372,7 @@ describe('RemoveUnusedProperties', function() {
                     }
                 }
             };
-            removeUnusedAccessors(gltf);
+            removeAccessors(gltf);
             expect(gltf.accessors.unusedAccessorId).not.toBeDefined();
             expect(Object.keys(gltf.accessors).length).toEqual(4);
         });
@@ -437,7 +437,7 @@ describe('RemoveUnusedProperties', function() {
                 }
             };
 
-            removeUnusedAccessors(gltf);
+            removeAccessors(gltf);
             expect(gltf.accessors["IBM_Armature_Cylinder-skin"]).toBeDefined();
             expect(gltf.accessors.accessor_16).toBeDefined();
             expect(gltf.accessors.accessor_18).toBeDefined();
@@ -446,8 +446,8 @@ describe('RemoveUnusedProperties', function() {
         });
     });
 
-    var removeUnusedMaterials = RemoveUnusedProperties.removeUnusedMaterials;
-    describe('removeUnusedMaterials', function () {
+    var removeMaterials = RemoveUnusedProperties.removeMaterials;
+    describe('removeMaterials', function () {
         it('removes a material', function () {
             var gltf = {
                 "materials": {
@@ -478,7 +478,7 @@ describe('RemoveUnusedProperties', function() {
                     }
                 }
             };
-            removeUnusedMaterials(gltf);
+            removeMaterials(gltf);
             expect(gltf.materials.unusedMaterialId).not.toBeDefined();
             expect(Object.keys(gltf.materials).length).toEqual(1);
         });
@@ -505,14 +505,14 @@ describe('RemoveUnusedProperties', function() {
                     }
                 }
             };
-            removeUnusedMaterials(gltf);
+            removeMaterials(gltf);
             expect(gltf.materials["Effect-Texture"]).toBeDefined();
             expect(Object.keys(gltf.materials).length).toEqual(1);
         });
     });
 
-    var removeUnusedBufferViews = RemoveUnusedProperties.removeUnusedBufferViews;
-    describe('removeUnusedBufferViews', function () {
+    var removeBufferViews = RemoveUnusedProperties.removeBufferViews;
+    describe('removeBufferViews', function () {
         it('removes a bufferView', function () {
             var gltf = {
                 "accessors": {
@@ -540,7 +540,7 @@ describe('RemoveUnusedProperties', function() {
                     }
                 }
             };
-            removeUnusedBufferViews(gltf);
+            removeBufferViews(gltf);
             expect(gltf.bufferViews.unusedBufferViewId).not.toBeDefined();
             expect(Object.keys(gltf.bufferViews).length).toEqual(1);
         });
@@ -566,14 +566,14 @@ describe('RemoveUnusedProperties', function() {
                     }
                 }
             };
-            removeUnusedBufferViews(gltf);
+            removeBufferViews(gltf);
             expect(gltf.bufferViews.bufferView_29).toBeDefined();
             expect(Object.keys(gltf.bufferViews).length).toEqual(1);
         });
     });
 
-    var removeUnusedTechniques = RemoveUnusedProperties.removeUnusedTechniques;
-    describe('removeUnusedTechniques', function () {
+    var removeTechniques = RemoveUnusedProperties.removeTechniques;
+    describe('removeTechniques', function () {
         it('removes a technique', function () {
             var gltf = {
                 "materials": {
@@ -640,7 +640,7 @@ describe('RemoveUnusedProperties', function() {
                     }
                 }
             };
-            removeUnusedTechniques(gltf);
+            removeTechniques(gltf);
             expect(gltf.techniques.unusedTechniqueId).not.toBeDefined();
             expect(Object.keys(gltf.techniques).length).toEqual(1);
         });
@@ -685,14 +685,14 @@ describe('RemoveUnusedProperties', function() {
                     }
                 }
             };
-            removeUnusedTechniques(gltf);
+            removeTechniques(gltf);
             expect(gltf.techniques.technique0).toBeDefined();
             expect(Object.keys(gltf.techniques).length).toEqual(1);
         });
     });
 
-    var removeUnusedTextures = RemoveUnusedProperties.removeUnusedTextures;
-    describe('removeUnusedTextures', function () {
+    var removeTextures = RemoveUnusedProperties.removeTextures;
+    describe('removeTextures', function () {
         it('removes a texture', function () {
             var gltf = {
                 "materials": {
@@ -726,7 +726,7 @@ describe('RemoveUnusedProperties', function() {
                     }
                 }
             };
-            removeUnusedTextures(gltf);
+            removeTextures(gltf);
             expect(gltf.textures.unusedTextureId).not.toBeDefined();
             expect(Object.keys(gltf.textures).length).toEqual(1);
         });
@@ -759,7 +759,7 @@ describe('RemoveUnusedProperties', function() {
                     }
                 }
             };
-            removeUnusedTextures(gltf);
+            removeTextures(gltf);
             expect(gltf.textures.unusedTextureId).not.toBeDefined();
             expect(Object.keys(gltf.textures).length).toEqual(1);
         });
@@ -793,7 +793,7 @@ describe('RemoveUnusedProperties', function() {
                     }
                 }
             };
-            removeUnusedTextures(gltf);
+            removeTextures(gltf);
             expect(gltf.textures.texture_Image0001).toBeDefined();
             expect(Object.keys(gltf.textures).length).toEqual(1);
         });
@@ -822,14 +822,14 @@ describe('RemoveUnusedProperties', function() {
                     }
                 }
             };
-            removeUnusedTextures(gltf);
+            removeTextures(gltf);
             expect(gltf.textures.texture_Image0001).toBeDefined();
             expect(Object.keys(gltf.textures).length).toEqual(1);
         });
     });
 
-    var removeUnusedBuffers = RemoveUnusedProperties.removeUnusedBuffers;
-    describe('removeUnusedBuffers', function () {
+    var removeBuffers = RemoveUnusedProperties.removeBuffers;
+    describe('removeBuffers', function () {
         it('removes a buffer', function () {
             var gltf = {
                 "bufferViews": {
@@ -853,7 +853,7 @@ describe('RemoveUnusedProperties', function() {
                     }
                 }
             };
-            removeUnusedBuffers(gltf);
+            removeBuffers(gltf);
             expect(gltf.buffers.unusedBufferId).not.toBeDefined();
             expect(Object.keys(gltf.buffers).length).toEqual(1);
         });
@@ -876,14 +876,14 @@ describe('RemoveUnusedProperties', function() {
                     }
                 }
             };
-            removeUnusedBuffers(gltf);
+            removeBuffers(gltf);
             expect(gltf.buffers.CesiumTexturedBoxTest).toBeDefined();
             expect(Object.keys(gltf.buffers).length).toEqual(1);
         });
     });
 
-    var removeUnusedPrograms = RemoveUnusedProperties.removeUnusedPrograms;
-    describe('removeUnusedPrograms', function () {
+    var removePrograms = RemoveUnusedProperties.removePrograms;
+    describe('removePrograms', function () {
         it('removes a program', function () {
             var gltf = {
                 "programs": {
@@ -931,7 +931,7 @@ describe('RemoveUnusedProperties', function() {
                     }
                 }
             };
-            removeUnusedPrograms(gltf);
+            removePrograms(gltf);
             expect(gltf.programs.unusedProgramId).not.toBeDefined();
             expect(Object.keys(gltf.programs).length).toEqual(1);
         });
@@ -976,14 +976,14 @@ describe('RemoveUnusedProperties', function() {
                     }
                 }
             };
-            removeUnusedPrograms(gltf);
+            removePrograms(gltf);
             expect(gltf.programs.program_0).toBeDefined();
             expect(Object.keys(gltf.programs).length).toEqual(1);
         });
     });
 
-    var removeUnusedImages = RemoveUnusedProperties.removeUnusedImages;
-    describe('removeUnusedImages', function() {
+    var removeImages = RemoveUnusedProperties.removeImages;
+    describe('removeImages', function() {
         it('removes an image', function() {
             var gltf = {
                 "images": {
@@ -1007,7 +1007,7 @@ describe('RemoveUnusedProperties', function() {
                     }
                 }
             };
-            removeUnusedImages(gltf);
+            removeImages(gltf);
             expect(gltf.images.unusedId).not.toBeDefined();
             expect(Object.keys(gltf.images).length).toEqual(1);
         });
@@ -1031,14 +1031,14 @@ describe('RemoveUnusedProperties', function() {
                     }
                 }
             };
-            removeUnusedImages(gltf);
+            removeImages(gltf);
             expect(gltf.images.Image0001).toBeDefined();
             expect(Object.keys(gltf.images).length).toEqual(1);
         });
     });
 
-    var removeUnusedSamplers = RemoveUnusedProperties.removeUnusedSamplers;
-    describe('removeUnusedSamplers', function() {
+    var removeSamplers = RemoveUnusedProperties.removeSamplers;
+    describe('removeSamplers', function() {
         it('removes a sampler', function() {
             var gltf = {
                 "samplers": {
@@ -1066,7 +1066,7 @@ describe('RemoveUnusedProperties', function() {
                     }
                 }
             };
-            removeUnusedSamplers(gltf);
+            removeSamplers(gltf);
             expect(gltf.samplers.unusedSamplerId).not.toBeDefined();
             expect(Object.keys(gltf.samplers).length).toEqual(1);
         });
@@ -1092,14 +1092,14 @@ describe('RemoveUnusedProperties', function() {
                     }
                 }
             };
-            removeUnusedSamplers(gltf);
+            removeSamplers(gltf);
             expect(gltf.samplers.sampler_0).toBeDefined();
             expect(Object.keys(gltf.samplers).length).toEqual(1);
         });
     });
 
-    var removeUnusedShaders = RemoveUnusedProperties.removeUnusedShaders;
-    describe('removeUnusedShaders', function() {
+    var removeShaders = RemoveUnusedProperties.removeShaders;
+    describe('removeShaders', function() {
         it('removes a shader', function() {
             var gltf = {
                 "programs": {
@@ -1128,7 +1128,7 @@ describe('RemoveUnusedProperties', function() {
                     }
                 }
             };
-            removeUnusedShaders(gltf);
+            removeShaders(gltf);
             expect(gltf.shaders.unusedShaderId).not.toBeDefined();
             expect(Object.keys(gltf.shaders).length).toEqual(2);
         });
@@ -1157,15 +1157,15 @@ describe('RemoveUnusedProperties', function() {
                     }
                 }
             };
-            removeUnusedShaders(gltf);
+            removeShaders(gltf);
             expect(gltf.shaders.CesiumTexturedBoxTest0FS).toBeDefined();
             expect(gltf.shaders.CesiumTexturedBoxTest0VS).toBeDefined();
             expect(Object.keys(gltf.shaders).length).toEqual(2);
         });
     });
 
-    var removeUnusedPrimitiveAttributes = RemoveUnusedProperties.removeUnusedPrimitiveAttributes;
-    describe('removeUnusedPrimitiveAttributes', function() {
+    var removePrimitiveAttributes = RemoveUnusedProperties.removePrimitiveAttributes;
+    describe('removePrimitiveAttributes', function() {
         it('removes unused primitive attributes', function() {
             var gltf = {
                 meshes : {
@@ -1206,7 +1206,7 @@ describe('RemoveUnusedProperties', function() {
                     }
                 }
             };
-            removeUnusedPrimitiveAttributes(gltf);
+            removePrimitiveAttributes(gltf);
             var attributes = gltf.meshes.mesh.primitives[0].attributes;
             expect(attributes.KEEP_ATTRIBUTE_1).toBeDefined();
             expect(attributes.KEEP_ATTRIBUTE_2).toBeDefined();
@@ -1216,13 +1216,13 @@ describe('RemoveUnusedProperties', function() {
         });
     });
 
-    var removeAllUnused = RemoveUnusedProperties.removeAllUnused;
-    describe('removeAllUnused', function() {
+    var removeAll = RemoveUnusedProperties.removeAll;
+    describe('removeAll', function() {
         it('removes a tree of objects', function (done) {
             expect(fsReadFile(gltfPath)
                 .then(function (data) {
                     var gltf = JSON.parse(data);
-                    removeAllUnused(gltf);
+                    removeAll(gltf);
 
                     expect(gltf.accessors.accessor_23).not.toBeDefined();
                     expect(gltf.accessors.animAccessor_0).not.toBeDefined();
@@ -1268,7 +1268,7 @@ describe('RemoveUnusedProperties', function() {
                     var gltf = JSON.parse(data);
                     gltf.scenes.defaultScene.nodes[0] = 'node_3';
                     gltf.animations.animation_0.parameters.TIME = 'animAccessor_0';
-                    removeAllUnused(gltf);
+                    removeAll(gltf);
 
                     expect(gltf.accessors.accessor_23).toBeDefined();
                     expect(gltf.accessors.animAccessor_0).toBeDefined();
