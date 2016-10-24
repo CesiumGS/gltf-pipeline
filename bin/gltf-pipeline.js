@@ -167,7 +167,7 @@ if (fileExtension === '.b3dm') {
             console.timeEnd('optimize');
         });
 } else {
-    processFileToDisk(path, outputPath, options)
+    processFileToDisk(inputPath, outputPath, options)
         .then(function() {
             console.timeEnd('optimize');
         });
