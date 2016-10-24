@@ -10,6 +10,7 @@ var zlib = require('zlib');
 var Pipeline = require('../lib/Pipeline');
 var addCesiumRTC = require('../lib/addCesiumRTC');
 var getBinaryGltf = require('../lib/getBinaryGltf');
+var loadGltfUris = require('../lib/loadGltfUris');
 var parseBinaryGltf = require('../lib/parseBinaryGltf');
 
 var Cartesian3 = Cesium.Cartesian3;
@@ -85,6 +86,7 @@ if (!defined(outputPath)) {
 
 var options = {
     aoOptions : aoOptions,
+    basePath : path.dirname(inputPath),
     binary : binary,
     compressTextureCoordinates : compressTextureCoordinates,
     embed : !separate,
@@ -130,10 +132,14 @@ if (fileExtension === '.b3dm') {
             batchTableBinaryByteLength = buffer.readUInt32LE(16);
             batchLength = buffer.readUInt32LE(20);
 
-            batchTable = buffer.slice(24, 24 + batchTableJSONByteLength + batchTableBinaryByteLength);
-            var glbBuffer = buffer.slice(24 + batchTable.length, byteLength);
+            var headerSize = 24;
+            batchTable = buffer.slice(headerSize, headerSize + batchTableJSONByteLength + batchTableBinaryByteLength);
+            var glbBuffer = buffer.slice(headerSize + batchTable.length, byteLength);
             var gltf = parseBinaryGltf(glbBuffer);
-            return processJSONWithExtras(gltf, options);
+            return loadGltfUris(gltf, options)
+                .then(function(gltf) {
+                    return processJSONWithExtras(gltf, options);
+                });
         })
         .then(function(gltf) {
             var rtcCenter = Cartesian3.unpack(gltf.extensions.CESIUM_RTC.center);
