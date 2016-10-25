@@ -1,12 +1,14 @@
 <component name="libraryTable">
-  <library name="TypeScriptDefinitions" type="javaScript">
+  <library name="typings" type="javaScript">
     <properties>
       <sourceFilesUrls>
-        <item url="file://$PROJECT_DIR$/TypeScriptDefinitions" />
+        <item url="file://$PROJECT_DIR$/typings" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
       <root url="file://$PROJECT_DIR$/TypeScriptDefinitions" />
+      <root url="file://$PROJECT_DIR$/TypeScriptDefinitions" />
+      <root url="file://$PROJECT_DIR$/typings" />
     </CLASSES>
     <SOURCES />
   </library>
