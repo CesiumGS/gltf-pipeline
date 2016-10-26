@@ -30,18 +30,15 @@ node ./bin/gltf-pipeline.js ./specs/data/boxTexturedUnoptimized/CesiumTexturedBo
 
 |Flag|Description|Required|
 |----|-----------|--------|
-|`-i`, `--input`|Path to the input file.| :white_check_mark: Yes|
-|`-o`, `--output`|Directory or filename for the exported file.|No|
+|`-i`, `--input`|Path to the input glTF file.| :white_check_mark: Yes|
+|`-o`, `--output`|Directory or filename for the exported glTF file.|No|
 |`-b`, `--binary`|Write binary glTF file.|No, default `false`|
 |`-s`, `--separate`|Writes out separate geometry/animation data files, shader files and textures instead of embedding them in the glTF file.|No, default `false`|
 |`-h`, `--help`|Display help|No|
 |`-t`, `--separateTexture`|Write out separate textures, but embed geometry/animation data files, and shader files.|No, default `false`|
 |`-q`, `--quantize`|Quantize attributes using WEB3D_quantized_attributes extension.|No, default `false`|
 |`-n`, `--encodeNormals`|Oct-encode the normals of this model.|No, default `false`|
-|`-c`, `--compressTextureCoordinates`|Compress the texture coordinates of this model.|No, default `false`|                                                                                      
-|`-r`, `--removeNormals`|Strips off existing normals, allowing them to be regenerated.|No, default `false`|
-|`-f`, `--faceNormals`|If normals are missing, they should be generated using the face normal.|No, default `false`|
-|`-z`, `--gzip`|Gzip the output (only valid for .b3dm inputs).|No, default `false`|
+|`-c`, `--compressTextureCoordinates`|Compress the texture coordinates of this model.|No, default `false`|
 |`--ao`|Bake ambient occlusion to vertex data using default settings __only__. When specifying other settings, do not use `--ao` on its own. Advanced settings in `lib/bakeAmbientOcclusion.js`|No, default `false`|
 |`--ao.toTexture`|Bake AO to existing diffuse textures instead of to vertices. Does not modify shaders.|No, default `false`|
 |`--ao.groundPlane`|Simulate a groundplane at the lowest point of the model when baking AO.|No, default `false`|

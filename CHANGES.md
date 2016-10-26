@@ -8,7 +8,7 @@ Change Log
   * `RemoveUnusedProperties` stage names are changed from `removeUnusedXXX` to `removeXXX`. `MergeDuplicateProperties` conforms to this naming convention.
 * `quantizedAttributes` has an optional `normalized` flag to use the glTF 1.0.1 `accessor.normalized` for a higher precision decode matrix.
 * Added support for generating hard normals with the `-f` flag and for removing normals with `-r`. [#173](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/173)
-* Added support for passing b3dm assets through glTF pipeline. [#175](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/175)
+* Preserve non-default shader attributes when generating shaders. [#175](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/175)
 
 ### 0.1.0-alpha4 - 2016-08-25
 
@@ -21,7 +21,7 @@ Change Log
   * `bakeAmbientOcclusion` now takes a glTF asset as its first parameter to match the function signature of other stages.
   * All `removeUnused` stages have been consolidated to `RemoveUnusedProperties` to clean up the global scope.
   * `readBufferComponentType` and `writeBufferComponentType` have been renamed to `readBufferComponent` and `writeBufferComponent` respectively.
-  
+
 ### 0.1.0-alpha3 - 2016-07-25
 
 * Converted the API to now use promises instead of callbacks. [#135](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/135)
