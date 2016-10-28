@@ -2,6 +2,9 @@
 node_modules
 npm-debug.log
 
+# TypeScript definitions
+typings
+
 # WebStorm user-specific
 .idea/workspace.xml
 .idea/tasks.xml
@@ -11,3 +14,5 @@ coverage
 output
 test
 specs/data/boxTexturedUnoptimized/output
+doc
+*.tgz
