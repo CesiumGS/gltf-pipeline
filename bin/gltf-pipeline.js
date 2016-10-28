@@ -2,22 +2,20 @@
 'use strict';
 var Cesium = require('cesium');
 var path = require('path');
-
-var defined = Cesium.defined;
-
 var Pipeline = require('../lib/Pipeline');
 
+var defaultValue = Cesium.defaultValue;
+var defined = Cesium.defined;
 var processFileToDisk = Pipeline.processFileToDisk;
 
 var argv = require('yargs')
-    .usage('Usage: $0 -i inputPath -o outputPath')
-    .example('$0 -i ./specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf -o output.gltf')
+    .usage('Usage: node $0 -i inputPath -o outputPath')
+    .example('node $0 -i ./specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf -o output.gltf')
     .help('h')
     .alias('h', 'help')
     .options({
         'input': {
             alias: 'i',
-            demand: true,
             describe: 'input=PATH, Read unoptimized glTF from the specified file.',
             group: 'Options:', // make sure 'Options:' is listed first
             normalize: true,
@@ -105,8 +103,8 @@ for (var i = 0; i < nargs; i++) {
     }
 }
 
-var gltfPath = argv.i;
-var outputPath = argv.o;
+var gltfPath = defaultValue(argv.i, argv._[0]);
+var outputPath = defaultValue(argv.o, argv._[1]);
 
 if (!defined(outputPath)) {
     var outputFileExtension;
