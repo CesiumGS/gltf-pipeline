@@ -9,7 +9,6 @@ var Jasmine = require('jasmine');
 var JasmineSpecReporter = require('jasmine-spec-reporter');
 var open = require('open');
 var path = require('path');
-var request = require('request');
 var yargs = require('yargs');
 
 var defined = Cesium.defined;
@@ -78,29 +77,4 @@ gulp.task('coverage', function () {
         stdio: [process.stdin, process.stdout, process.stderr]
     });
     open('coverage/lcov-report/index.html');
-});
-
-function copyModule(module) {
-    var tsName = module + '.d.ts';
-    var srcUrl = 'https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/master/' + module + '/' + tsName;
-    var desPath = path.join('TypeScriptDefinitions', tsName);
-
-    request.get({
-        url: srcUrl
-    }, function (error, response) {
-        if (error) {
-            console.log(error);
-            return;
-        }
-        if (response.statusCode >= 200 && response.statusCode < 300) {
-            fsExtra.outputFileSync(desPath, response.body);
-        }
-    });
-}
-
-gulp.task('update-ts-definitions', function () {
-    fsExtra.removeSync('TypeScriptDefinitions');
-    var packageJson = require('./package.json');
-    Object.keys(packageJson.dependencies).forEach(copyModule);
-    Object.keys(packageJson.devDependencies).forEach(copyModule);
 });
