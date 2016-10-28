@@ -3,7 +3,11 @@ Change Log
 
 ### Next Release
 
+* Added `MergeDuplicateProperties` for stages merging duplicate glTF properties, like materials and shaders. [#152](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/152)
+  * `mergeDuplicateAccessors` is now a part of this stage.
+  * `RemoveUnusedProperties` stage names are changed from `removeUnusedXXX` to `removeXXX`. `MergeDuplicateProperties` conforms to this naming convention.
 * `quantizedAttributes` has an optional `normalized` flag to use the glTF 1.0.1 `accessor.normalized` for a higher precision decode matrix.
+* Fixed an issue where pipeline extras are not removed when running `Pipeline.processJSON` and `Pipeline.processFile`.
 
 ### 0.1.0-alpha4 - 2016-08-25
 
