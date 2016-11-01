@@ -401,6 +401,17 @@ describe('addDefaults', function() {
             }), done).toResolve();
     });
 
+    it('Adds _3DTILESDIFFUSE semantic to the technique\'s diffuse parameter when optimizeForCesium is true', function(done) {
+        expect(readGltf(gltfTransparentPath)
+            .then(function (gltf) {
+                addDefaults(gltf, {
+                    optimizeForCesium : true
+                });
+                var technique = gltf.techniques[Object.keys(gltf.techniques)[0]];
+                expect(technique.parameters.diffuse.semantic).toEqual('_3DTILESDIFFUSE');
+            }), done).toResolve();
+    });
+
     it('generates techniques and nodes for KHR_materials_common lights', function() {
         var gltf = {
             "materials": {
@@ -525,7 +536,7 @@ describe('addDefaults', function() {
         }
     });
 
-    it('modelMaterialCommon uses the Cesium sun as its default light source when the optimizeForCesium flag is set', function() {
+    it('modelMaterialCommon works with optimizeForCesium', function() {
         var gltf = {
             "materials": {
                 "material1": {
@@ -542,8 +553,15 @@ describe('addDefaults', function() {
         addDefaults(gltfClone, {
             optimizeForCesium : true
         });
+
+        // Uses the Cesium sun as its default light source
         var fragmentShaderSource = gltfClone.shaders.fragmentShader0.extras._pipeline.source;
         expect(fragmentShaderSource.indexOf('czm_sunDirectionEC') > -1).toBe(true);
+
+        // Adds the _3DTILESDIFFUSE flag
+        var technique = gltfClone.techniques[Object.keys(gltfClone.techniques)[0]];
+        expect(technique.parameters.diffuse.semantic).toEqual('_3DTILESDIFFUSE');
+
 
         gltfClone = clone(gltf);
         addDefaults(gltfClone);
