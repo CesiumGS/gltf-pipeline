@@ -3,6 +3,7 @@ Change Log
 
 ### Next Release
 
+* The `_3DTILESDIFFUSE` semantic is added to the model's technique when `optimizeForCesium` is true.
 * `quantizedAttributes` has an optional `normalized` flag to use the glTF 1.0.1 `accessor.normalized` for a higher precision decode matrix.
 
 ### 0.1.0-alpha4 - 2016-08-25
