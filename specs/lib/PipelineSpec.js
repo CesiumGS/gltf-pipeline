@@ -5,7 +5,6 @@ var path = require('path');
 var Promise = require('bluebird');
 
 var Pipeline = require('../../lib/Pipeline');
-var addPipelineExtras = require('../../lib/addPipelineExtras');
 var readGltf = require('../../lib/readGltf');
 
 var processFile = Pipeline.processFile;
@@ -24,14 +23,16 @@ var outputGlbPath = './output/CesiumTexturedBoxTest.glb';
 describe('Pipeline', function() {
     it('optimizes a gltf JSON with embedded resources', function(done) {
         var gltfCopy;
-        expect(readGltf(gltfEmbeddedPath)
-            .then(function(gltf) {
-                gltfCopy = clone(gltf);
+        expect(fsExtraReadFile(gltfEmbeddedPath)
+            .then(function(data) {
+                var gltf = JSON.parse(data);
+                gltfCopy = clone(gltfCopy);
                 return processJSON(gltf);
             })
             .then(function(gltf) {
                 expect(gltf).toBeDefined();
                 expect(clone(gltf)).not.toEqual(gltfCopy);
+                expect(gltf.scenes.defaultScene.extras).toBeUndefined();
             }), done).toResolve();
     });
     
@@ -44,12 +45,12 @@ describe('Pipeline', function() {
             .then(function(data) {
                 var gltf = JSON.parse(data);
                 gltfCopy = clone(gltfCopy);
-                addPipelineExtras(gltf);
                 return processJSON(gltf, options);
             })
             .then(function(gltf) {
                 expect(gltf).toBeDefined();
                 expect(clone(gltf)).not.toEqual(gltfCopy);
+                expect(gltf.scenes.defaultScene.extras).toBeUndefined();
             }), done).toResolve();
     });
 
@@ -63,6 +64,7 @@ describe('Pipeline', function() {
             .then(function(gltf) {
                 expect(gltf).toBeDefined();
                 expect(clone(gltf)).not.toEqual(gltfCopy);
+                expect(gltf.scenes.defaultScene.extras).toBeUndefined();
             }), done).toResolve();
     });
 
@@ -76,6 +78,7 @@ describe('Pipeline', function() {
             .then(function(gltf) {
                 expect(gltf).toBeDefined();
                 expect(clone(gltf)).not.toEqual(gltfCopy);
+                expect(gltf.scenes.defaultScene.extras).toBeUndefined();
             }), done).toResolve();
     });
 
