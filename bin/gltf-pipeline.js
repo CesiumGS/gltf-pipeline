@@ -23,7 +23,7 @@ if (process.argv.length < 3 || defined(argv.h) || defined(argv.help)) {
         '  -n --encodeNormals, oct-encode the normals of this model.\n' +
         '  -c --compressTextureCoordinates, compress the texture coordinates of this model.\n' +
         '  -r --removeNormals, strips off existing normals, allowing them to be regenerated.\n' +
-        '  -f --faceNormals, if normals are missing, they should be generated using the face normal\n' +
+        '  -f --faceNormals, if normals are missing, they should be generated using the face normal.\n' +
         '     --ao: Bake ambient occlusion to vertex data using default settings ONLY. When specifying other settings, do not use `--ao` on its own. Default: inactive.\n' +
         '     --ao.toTexture: Bake AO to existing diffuse textures instead of to vertices. Does not modify shaders. Default: inactive.\n' +
         '     --ao.groundPlane: Simulate a ground plane at the lowest point of the model when baking AO. Default: inactive.\n' +
