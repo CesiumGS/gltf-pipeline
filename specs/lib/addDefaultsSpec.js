@@ -569,6 +569,73 @@ describe('addDefaults', function() {
         expect(fragmentShaderSource.indexOf('czm_sunDirectionEC') > -1).toBe(false);
     });
 
+    it('modelMaterialCommon add nonstandard semantic', function() {
+        var gltf = {
+            "accessors": {
+                "accessor_3": {
+                    "componentType": 5123,
+                    "type": "SCALAR"
+                }
+            },
+            "extensionsUsed": [
+                "KHR_materials_common"
+            ],
+            "meshes": {
+                "mesh1" : {
+                    "primitives": [
+                        {
+                            "attributes": {
+                                "NORMAL": "accessor_1",
+                                "POSITION": "accessor_2",
+                                "BATCHID": "accessor_3"
+                            },
+                            "indices": "accessor_4",
+                            "material": "material1",
+                            "mode": 4
+                        }
+                    ]
+                }
+            },
+            "materials": {
+                "material1": {
+                    "extensions": {
+                        "KHR_materials_common": {
+                            "doubleSided": false,
+                            "jointCount": 0,
+                            "technique": "PHONG",
+                            "transparent": false,
+                            "values": {
+                                "diffuse": [
+                                    0.3999999910593033,
+                                    0.3999999910593033,
+                                    0.3999999910593033,
+                                    1
+                                ]
+                            }
+                        }
+                    },
+                    "name": "material1"
+                }
+            }
+        };
+
+        var gltfClone = clone(gltf);
+        addDefaults(gltfClone);
+
+        // Uses the Cesium sun as its default light source
+        var vertexShaderSource = gltfClone.shaders.vertexShader0.extras._pipeline.source;
+        expect(vertexShaderSource.indexOf('a_batchid') > -1).toBe(true);
+
+        var material = gltfClone.materials.material1;
+
+        var technique = gltfClone.techniques[material.technique];
+        expect(technique.attributes.a_batchid).toEqual('batchid');
+        expect(technique.parameters.batchid.semantic).toEqual('BATCHID');
+
+        var program = gltfClone.programs[technique.program];
+        expect(program.attributes.indexOf('a_batchid') > -1).toBe(true);
+    });
+
     it('Adds mesh properties', function() {
         var gltf = {
             "meshes": {
