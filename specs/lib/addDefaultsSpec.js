@@ -622,18 +622,16 @@ describe('addDefaults', function() {
         var gltfClone = clone(gltf);
         addDefaults(gltfClone);
 
-        // Uses the Cesium sun as its default light source
-        var vertexShaderSource = gltfClone.shaders.vertexShader0.extras._pipeline.source;
-        expect(vertexShaderSource.indexOf('a_batchid') > -1).toBe(true);
-
         var material = gltfClone.materials.material1;
-
         var technique = gltfClone.techniques[material.technique];
         expect(technique.attributes.a_batchid).toEqual('batchid');
         expect(technique.parameters.batchid.semantic).toEqual('BATCHID');
 
         var program = gltfClone.programs[technique.program];
         expect(program.attributes.indexOf('a_batchid') > -1).toBe(true);
+
+        var vertexShaderSource = gltfClone.shaders[program.vertexShader].extras._pipeline.source;
+        expect(vertexShaderSource.indexOf('a_batchid') > -1).toBe(true);
     });
 
     it('Adds mesh properties', function() {
