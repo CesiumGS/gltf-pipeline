@@ -58,6 +58,16 @@ var argv = yargs
             describe: 'Compress the testure coordinates of this glTF asset.',
             type: 'boolean'
         },
+        'removeNormals': {
+            alias: 'r',
+            describe: 'Strips off existing normals, allowing them to be regenerated.',
+            type: 'boolean'
+        },
+        'faceNormals': {
+            alias: 'f',
+            describe: 'If normals are missing, they should be generated using the face normal.',
+            type: 'boolean'
+        },
         'cesium': {
             describe: 'Optimize the glTF for Cesium by using the sun as a default light source.',
             type: 'boolean'
@@ -127,14 +137,16 @@ if (!defined(outputPath)) {
 }
 
 var options = {
-    binary : argv.b,
-    embed : !argv.s,
-    embedImage : !argv.t,
-    quantize : argv.q,
-    encodeNormals : argv.n,
-    compressTextureCoordinates : argv.c,
-    aoOptions : argv.ao,
-    optimizeForCesium : argv.cesium
+    aoOptions: argv.ao,
+    binary: argv.b,
+    compressTextureCoordinates: argv.c,
+    embed: !argv.s,
+    embedImage: !argv.t,
+    encodeNormals: argv.n,
+    faceNormals: argv.f,
+    removeNormals: argv.r,
+    quantize: argv.q,
+    optimizeForCesium: argv.cesium
 };
 
 console.time('optimize');

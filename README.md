@@ -39,6 +39,8 @@ node ./bin/gltf-pipeline.js -i ./specs/data/boxTexturedUnoptimized/CesiumTexture
 |`--quantize`, `-q`|Quantize the attributes of this glTF asset using the WEB3D_quantized_attributes extension.|No, default `false`|
 |`--encodeNormals`, `-n`|Oct-encode the normals of this glTF asset.|No, default `false`|
 |`--compressTextureCoordinates`, `-c`|Compress the testure coordinates of this glTF asset.|No, default `false`|
+|`-r`, `--removeNormals`|Strips off existing normals, allowing them to be regenerated.|No, default `false`|
+|`-f`, `--faceNormals`|If normals are missing, they should be generated using the face normal.|No, default `false`|
 |`--ao.enable`|Bake ambient occlusion (to vertex data by default). If other `ao` flags are enabled, this is implicitly true. Advanced settings in `lib/bakeAmbientOcclusion.js`|No, default `false`|
 |`--ao.toTexture`|Bake AO to existing diffuse textures instead of to vertices. Does not modify shaders.|No, default `false`|
 |`--ao.groundPlane`|Simulate a groundplane at the lowest point of the model when baking AO.|No, default `false`|
