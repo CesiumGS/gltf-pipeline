@@ -2,13 +2,14 @@
 'use strict';
 var Cesium = require('cesium');
 var path = require('path');
+var yargs = require('yargs');
 var Pipeline = require('../lib/Pipeline');
 
 var defaultValue = Cesium.defaultValue;
 var defined = Cesium.defined;
 var processFileToDisk = Pipeline.processFileToDisk;
 
-var argv = require('yargs')
+var argv = yargs
     .usage('Usage: node $0 -i inputPath -o outputPath')
     .example('node $0 -i ./specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf -o output.gltf')
     .help('h')
@@ -105,6 +106,11 @@ for (var i = 0; i < nargs; i++) {
 
 var gltfPath = defaultValue(argv.i, argv._[0]);
 var outputPath = defaultValue(argv.o, argv._[1]);
+
+if (!defined(gltfPath)) {
+    yargs.showHelp();
+    return;
+}
 
 if (!defined(outputPath)) {
     var outputFileExtension;
