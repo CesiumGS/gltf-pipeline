@@ -401,6 +401,17 @@ describe('addDefaults', function() {
             }), done).toResolve();
     });
 
+    it('Adds _3DTILESDIFFUSE semantic to the technique\'s diffuse parameter when optimizeForCesium is true', function(done) {
+        expect(readGltf(gltfTransparentPath)
+            .then(function (gltf) {
+                addDefaults(gltf, {
+                    optimizeForCesium : true
+                });
+                var technique = gltf.techniques[Object.keys(gltf.techniques)[0]];
+                expect(technique.parameters.diffuse.semantic).toEqual('_3DTILESDIFFUSE');
+            }), done).toResolve();
+    });
+
     it('generates techniques and nodes for KHR_materials_common lights', function() {
         var gltf = {
             "materials": {
@@ -525,7 +536,7 @@ describe('addDefaults', function() {
         }
     });
 
-    it('modelMaterialCommon uses the Cesium sun as its default light source when the optimizeForCesium flag is set', function() {
+    it('modelMaterialCommon works with optimizeForCesium', function() {
         var gltf = {
             "materials": {
                 "material1": {
@@ -542,13 +553,85 @@ describe('addDefaults', function() {
         addDefaults(gltfClone, {
             optimizeForCesium : true
         });
+
+        // Uses the Cesium sun as its default light source
         var fragmentShaderSource = gltfClone.shaders.fragmentShader0.extras._pipeline.source;
         expect(fragmentShaderSource.indexOf('czm_sunDirectionEC') > -1).toBe(true);
+
+        // Adds the _3DTILESDIFFUSE flag
+        var technique = gltfClone.techniques[Object.keys(gltfClone.techniques)[0]];
+        expect(technique.parameters.diffuse.semantic).toEqual('_3DTILESDIFFUSE');
+
 
         gltfClone = clone(gltf);
         addDefaults(gltfClone);
         fragmentShaderSource = gltfClone.shaders.fragmentShader0.extras._pipeline.source;
         expect(fragmentShaderSource.indexOf('czm_sunDirectionEC') > -1).toBe(false);
+    });
+
+    it('modelMaterialCommon add nonstandard semantic', function() {
+        var gltf = {
+            "accessors": {
+                "accessor_3": {
+                    "componentType": 5123,
+                    "type": "SCALAR"
+                }
+            },
+            "extensionsUsed": [
+                "KHR_materials_common"
+            ],
+            "meshes": {
+                "mesh1" : {
+                    "primitives": [
+                        {
+                            "attributes": {
+                                "NORMAL": "accessor_1",
+                                "POSITION": "accessor_2",
+                                "BATCHID": "accessor_3"
+                            },
+                            "indices": "accessor_4",
+                            "material": "material1",
+                            "mode": 4
+                        }
+                    ]
+                }
+            },
+            "materials": {
+                "material1": {
+                    "extensions": {
+                        "KHR_materials_common": {
+                            "doubleSided": false,
+                            "jointCount": 0,
+                            "technique": "PHONG",
+                            "transparent": false,
+                            "values": {
+                                "diffuse": [
+                                    0.3999999910593033,
+                                    0.3999999910593033,
+                                    0.3999999910593033,
+                                    1
+                                ]
+                            }
+                        }
+                    },
+                    "name": "material1"
+                }
+            }
+        };
+
+        var gltfClone = clone(gltf);
+        addDefaults(gltfClone);
+
+        var material = gltfClone.materials.material1;
+        var technique = gltfClone.techniques[material.technique];
+        expect(technique.attributes.a_batchid).toEqual('batchid');
+        expect(technique.parameters.batchid.semantic).toEqual('BATCHID');
+
+        var program = gltfClone.programs[technique.program];
+        expect(program.attributes.indexOf('a_batchid') > -1).toBe(true);
+
+        var vertexShaderSource = gltfClone.shaders[program.vertexShader].extras._pipeline.source;
+        expect(vertexShaderSource.indexOf('a_batchid') > -1).toBe(true);
     });
 
     it('Adds mesh properties', function() {
