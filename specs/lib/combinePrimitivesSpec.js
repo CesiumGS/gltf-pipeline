@@ -454,7 +454,7 @@ describe('combinePrimitives', function() {
                     primitives: [{
                         attributes: {
                             A: 'accessorOneA',
-                            B: 'accessorOneB'
+                            B: 'accessorTwoB'
                         },
                         extras: {
                             _pipeline: {}
@@ -462,7 +462,7 @@ describe('combinePrimitives', function() {
                     }, {
                         attributes: {
                             A: 'accessorOneA',
-                            B: 'accessorTwoB'
+                            B: 'accessorOneB'
                         },
                         extras: {
                             _pipeline: {}
