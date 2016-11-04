@@ -145,8 +145,8 @@ var options = {
     encodeNormals: argv.n,
     faceNormals: argv.f,
     removeNormals: argv.r,
-    quantize: argv.q,
-    optimizeForCesium: argv.cesium
+    optimizeForCesium: argv.cesium,
+    quantize: argv.q
 };
 
 console.time('optimize');
