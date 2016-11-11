@@ -23,29 +23,30 @@ npm install
 
 Command-Line Example:
 ```
-node ./bin/gltf-pipeline.js ./specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf -o output.gltf
+node ./bin/gltf-pipeline.js -i ./specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf -o output.gltf
 ```
 
 ### Command-Line Flags
 
 |Flag|Description|Required|
 |----|-----------|--------|
-|`-i`, `--input`|Path to the input glTF file.| :white_check_mark: Yes|
-|`-o`, `--output`|Directory or filename for the exported glTF file.|No|
-|`-b`, `--binary`|Write binary glTF file.|No, default `false`|
-|`-s`, `--separate`|Writes out separate geometry/animation data files, shader files and textures instead of embedding them in the glTF file.|No, default `false`|
-|`-h`, `--help`|Display help|No|
-|`-t`, `--separateTexture`|Write out separate textures, but embed geometry/animation data files, and shader files.|No, default `false`|
-|`-q`, `--quantize`|Quantize attributes using WEB3D_quantized_attributes extension.|No, default `false`|
-|`-n`, `--encodeNormals`|Oct-encode the normals of this model.|No, default `false`|
-|`-c`, `--compressTextureCoordinates`|Compress the texture coordinates of this model.|No, default `false`|                                                                                      
-|`-r`, `--removeNormals`|Strips off existing normals, allowing them to be regenerated.|No, default `false`|
-|`-f`, `--faceNormals`|If normals are missing, they should be generated using the face normal.|No, default `false`|
-|`--ao`|Bake ambient occlusion to vertex data using default settings __only__. When specifying other settings, do not use `--ao` on its own. Advanced settings in `lib/bakeAmbientOcclusion.js`|No, default `false`|
+|`--help`, `-h`|Display help|No|
+|`--input`, `-i`|input=PATH, Read unoptimized glTF from the specified file.|:white_check_mark: Yes|
+|`--output`, `-o`|output=PATH, Write optimized glTF to the specified file.|No|
+|`--binary`, `-b`|Write binary glTF file using KHR_binary_glTF extension.|No, default `false`|
+|`--separate`, `-s`|Write separate geometry/animation data files, shader files, and textures instead of embedding them in the glTF asset.|No, default `false`|
+|`--separateTexture`, `-t`|Write out separate textures, but embeds geometry/animation data files and shader files in the glTF asset.|No, default `false`|
+|`--quantize`, `-q`|Quantize the attributes of this glTF asset using the WEB3D_quantized_attributes extension.|No, default `false`|
+|`--encodeNormals`, `-n`|Oct-encode the normals of this glTF asset.|No, default `false`|
+|`--compressTextureCoordinates`, `-c`|Compress the testure coordinates of this glTF asset.|No, default `false`|
+|`--removeNormals`, `-r`|Strips off existing normals, allowing them to be regenerated.|No, default `false`|
+|`--faceNormals`, `-f`|If normals are missing, they should be generated using the face normal.|No, default `false`|
+|`--cesium`, `-c`|Optimize the glTF for Cesium by using the sun as a default light source.|No, default `false`|
+|`--ao.enable`|Bake ambient occlusion (to vertex data by default). If other `ao` flags are enabled, this is implicitly true. Advanced settings in `lib/bakeAmbientOcclusion.js`|No, default `false`|
 |`--ao.toTexture`|Bake AO to existing diffuse textures instead of to vertices. Does not modify shaders.|No, default `false`|
 |`--ao.groundPlane`|Simulate a groundplane at the lowest point of the model when baking AO.|No, default `false`|
 |`--ao.ambientShadowContribution`|Amount of AO to show when blending between shader computed lighting and AO. 1.0 is full AO, 0.5 is a 50/50 blend.|No, default `0.5`|
-|`--ao.quality`|Valid settings are high, medium, and low.|No, default `low`|
+|`--ao.quality`|Quality to use when baking AO. Valid settings are high, medium, and low.|No, default `low`|
 
 ## Build Instructions
 
