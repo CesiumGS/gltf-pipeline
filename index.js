@@ -25,6 +25,7 @@ module.exports = {
     octEncodeNormals : require('./lib/octEncodeNormals'),
     optimizeForVertexCache : require('./lib/optimizeForVertexCache'),
     packArray : require('./lib/packArray'),
+    parseArguments : require('./lib/parseArguments'),
     parseBinaryGltf : require('./lib/parseBinaryGltf'),
     Pipeline : require('./lib/Pipeline'),
     quantizeAttributes : require('./lib/quantizeAttributes'),
