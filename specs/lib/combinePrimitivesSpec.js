@@ -1,122 +1,530 @@
 'use strict';
+var Cesium = require('cesium');
+var clone = require('clone');
 var combinePrimitives = require('../../lib/combinePrimitives');
-var readGltf = require('../../lib/readGltf');
+var readAccessor = require('../../lib/readAccessor');
 var removePipelineExtras = require('../../lib/removePipelineExtras');
 
-var boxPath = './specs/data/combineObjects/box.gltf';
-var doubleBoxToCombinePath = './specs/data/combineObjects/doubleBoxToCombine.gltf';
-var doubleBoxNotCombinedPath = './specs/data/combineObjects/doubleBoxNotCombined.gltf';
-var fiveBoxPath = './specs/data/combineObjects/fiveBox.gltf';
+var WebGLConstants = Cesium.WebGLConstants;
 
 describe('combinePrimitives', function() {
-    it('does not affect single primitives', function(done){
-        expect(readGltf(boxPath)
-            .then(function(gltf) {
-                var box = gltf;
-                var stringBox = JSON.stringify(box);
-                combinePrimitives(box);
-                expect(stringBox).toEqual(JSON.stringify(box));
-        }), done).toResolve();
+    var arrayOneA = new Float32Array([1, 2, 3]);
+    var bufferOneA = new Buffer(arrayOneA.buffer);
+    var arrayTwoA = new Float32Array([4, 5, 6]);
+    var bufferTwoA = new Buffer(arrayTwoA.buffer);
+    var arrayOneB = new Float32Array([1, 2, 3]);
+    var arrayTwoB = new Float32Array([5, 6, 7, 8]);
+    var bufferTwoB = new Buffer(arrayTwoB.buffer);
+
+    it('combines two primitives without indices by concatenating them', function() {
+        var buffer = Buffer.concat([bufferOneA, bufferTwoA]);
+        var gltf = {
+            accessors : {
+                accessorOneA : {
+                    bufferView : 'bufferView',
+                    byteOffset : 0,
+                    byteStride : 0,
+                    componentType : WebGLConstants.FLOAT,
+                    count : arrayOneA.length,
+                    type : 'SCALAR'
+                },
+                accessorTwoA : {
+                    bufferView : 'bufferView',
+                    byteOffset : bufferOneA.length,
+                    byteStride : 0,
+                    componentType : WebGLConstants.FLOAT,
+                    count : arrayTwoA.length,
+                    type : 'SCALAR'
+                }
+            },
+            bufferViews : {
+                bufferView : {
+                    buffer : 'buffer',
+                    byteLength : buffer.length,
+                    byteOffset : 0
+                }
+            },
+            buffers : {
+                buffer : {
+                    byteLength : buffer.length,
+                    extras : {
+                        _pipeline : {
+                            source : buffer
+                        }
+                    }
+                }
+            },
+            meshes : {
+                mesh : {
+                    primitives : [{
+                            attributes : {
+                                A : 'accessorOneA'
+                            },
+                            extras : {
+                                _pipeline : {}
+                            }
+                        }, {
+                            attributes : {
+                                A : 'accessorTwoA'
+                            },
+                            extras : {
+                                _pipeline : {}
+                            }
+                        }]
+                }
+            }
+        };
+        combinePrimitives(gltf);
+        var accessors = gltf.accessors;
+        var primitives = gltf.meshes.mesh.primitives;
+        expect(primitives.length).toEqual(1);
+        var primitive = primitives[0];
+        expect(primitive.indices).toBeDefined();
+        var indices = [];
+        readAccessor(gltf, accessors[primitive.indices], indices);
+        expect(indices).toEqual([0, 1, 2, 3, 4, 5]);
+        var attribute = [];
+        readAccessor(gltf, accessors[primitive.attributes.A], attribute);
+        expect(attribute).toEqual([1, 2, 3, 4, 5, 6]);
     });
 
-    it('does not combine two primitives', function(done) {
-        expect(readGltf(doubleBoxNotCombinedPath)
-            .then(function(gltf) {
-                var doubleBoxNotCombined = gltf;
-                var stringDoubleBoxNotCombined = JSON.stringify(doubleBoxNotCombined);
-                combinePrimitives(doubleBoxNotCombined);
-                expect(stringDoubleBoxNotCombined).toEqual(JSON.stringify(doubleBoxNotCombined));
-            }), done).toResolve();
+    it('combines two primitives with indices by concatenating them', function() {
+        var indicesOne = new Uint16Array([2, 0, 1]);
+        var bufferIndicesOne = new Buffer(indicesOne.buffer);
+        var indicesTwo = new Uint16Array([1, 2, 0]);
+        var bufferIndicesTwo = new Buffer(indicesTwo.buffer);
+        var buffer = Buffer.concat([bufferOneA, bufferTwoA, bufferIndicesOne, bufferIndicesTwo]);
+        var gltf = {
+            accessors : {
+                accessorOneA : {
+                    bufferView : 'bufferView',
+                    byteOffset : 0,
+                    byteStride : 0,
+                    componentType : WebGLConstants.FLOAT,
+                    count : arrayOneA.length,
+                    type : 'SCALAR'
+                },
+                accessorTwoA : {
+                    bufferView : 'bufferView',
+                    byteOffset : bufferOneA.length,
+                    byteStride : 0,
+                    componentType : WebGLConstants.FLOAT,
+                    count : arrayTwoA.length,
+                    type : 'SCALAR'
+                },
+                indicesOne : {
+                    bufferView : 'bufferView',
+                    byteOffset : bufferOneA.length + bufferTwoA.length,
+                    byteStride : 0,
+                    componentType : WebGLConstants.UNSIGNED_SHORT,
+                    count : indicesOne.length,
+                    type : 'SCALAR'
+                },
+                indicesTwo : {
+                    bufferView : 'bufferView',
+                    byteOffset : bufferOneA.length + bufferTwoA.length + bufferIndicesOne.length,
+                    byteStride : 0,
+                    componentType : WebGLConstants.UNSIGNED_SHORT,
+                    count : indicesOne.length,
+                    type : 'SCALAR'
+                }
+            },
+            bufferViews : {
+                bufferView : {
+                    buffer : 'buffer',
+                    byteLength : buffer.length,
+                    byteOffset : 0
+                }
+            },
+            buffers : {
+                buffer : {
+                    byteLength : buffer.length,
+                    extras : {
+                        _pipeline : {
+                            source : buffer
+                        }
+                    }
+                }
+            },
+            meshes : {
+                mesh : {
+                    primitives : [{
+                        attributes : {
+                            A : 'accessorOneA'
+                        },
+                        indices : 'indicesOne',
+                        extras : {
+                            _pipeline : {}
+                        }
+                    }, {
+                        attributes : {
+                            A : 'accessorTwoA'
+                        },
+                        indices : 'indicesTwo',
+                        extras : {
+                            _pipeline : {}
+                        }
+                    }]
+                }
+            }
+        };
+        combinePrimitives(gltf);
+        var accessors = gltf.accessors;
+        var primitives = gltf.meshes.mesh.primitives;
+        expect(primitives.length).toEqual(1);
+        var primitive = primitives[0];
+        var indices = [];
+        readAccessor(gltf, accessors[primitive.indices], indices);
+        expect(indices).toEqual([2, 0, 1, 4, 5, 3]);
+        var attribute = [];
+        readAccessor(gltf, accessors[primitive.attributes.A], attribute);
+        expect(attribute).toEqual([1, 2, 3, 4, 5, 6]);
     });
 
-    it('combines two primitives', function(done) {
-        expect(readGltf(doubleBoxToCombinePath)
-            .then(function(gltf) {
-                var doubleBoxToCombine = gltf;
-    
-                combinePrimitives(doubleBoxToCombine);
-                removePipelineExtras(doubleBoxToCombine);
-                
-                expect(doubleBoxToCombine.meshes.meshTest.primitives.length).toEqual(1);
-                expect(doubleBoxToCombine.meshes.meshTest.primitives[0].material).toEqual('Effect_outer');
-                expect(doubleBoxToCombine.meshes.meshTest.primitives[0].mode).toEqual(4);
-                expect(doubleBoxToCombine.meshes.meshTest.primitives[0].indices).toEqual('meshTest_INDEX_accessor_0');
-    
-                expect(doubleBoxToCombine.meshes.meshTest.primitives[0].attributes).toEqual({
-                    "NORMAL": 'meshTest_NORMAL_accessor_0',
-                    "POSITION": 'meshTest_POSITION_accessor_0',
-                    "TEXCOORD_0": 'meshTest_TEXCOORD_0_accessor_0'
-                });
-    
-                expect(doubleBoxToCombine.accessors.meshTest_INDEX_accessor_0).toEqual({
-                    "bufferView": "meshTest_INDEX_bufferView_0",
-                    "byteOffset": 0,
-                    "byteStride": 0,
-                    "componentType": 5123,
-                    "type": "SCALAR",
-                    "count": 516,
-                    "max": [319],
-                    "min": [0]
-                });
-    
-                expect(doubleBoxToCombine.accessors.meshTest_POSITION_accessor_0).toEqual({
-                    "bufferView": "meshTest_POSITION_bufferView_0",
-                    "byteOffset": 0,
-                    "byteStride": 12,
-                    "componentType": 5126,
-                    "type": "VEC3",
-                    "count": 320,
-                    "max": [0.5, 0.5, 0.5],
-                    "min": [-0.5, -0.5, -0.5]
-                });
-                expect(doubleBoxToCombine.bufferViews.meshTest_INDEX_bufferView_0.buffer).toEqual('meshTest_INDEX_buffer_0');
-            }), done).toResolve();
+    it('combines two primitives with shared attribute accessors by merging them', function() {
+        var indicesOne = new Uint16Array([0, 2]);
+        var bufferIndicesOne = new Buffer(indicesOne.buffer);
+        var indicesTwo = new Uint16Array([2, 1]);
+        var bufferIndicesTwo = new Buffer(indicesTwo.buffer);
+        var buffer = Buffer.concat([bufferOneA, bufferIndicesOne, bufferIndicesTwo]);
+        var gltf = {
+            accessors : {
+                accessorOneA : {
+                    bufferView : 'bufferView',
+                    byteOffset : 0,
+                    byteStride : 0,
+                    componentType : WebGLConstants.FLOAT,
+                    count : arrayOneA.length,
+                    type : 'SCALAR'
+                },
+                indicesOne : {
+                    bufferView : 'bufferView',
+                    byteOffset : bufferOneA.length,
+                    byteStride : 0,
+                    componentType : WebGLConstants.UNSIGNED_SHORT,
+                    count : indicesOne.length,
+                    type : 'SCALAR'
+                },
+                indicesTwo : {
+                    bufferView : 'bufferView',
+                    byteOffset : bufferOneA.length + bufferIndicesOne.length,
+                    byteStride : 0,
+                    componentType : WebGLConstants.UNSIGNED_SHORT,
+                    count : indicesOne.length,
+                    type : 'SCALAR'
+                }
+            },
+            bufferViews : {
+                bufferView : {
+                    buffer : 'buffer',
+                    byteLength : buffer.length,
+                    byteOffset : 0
+                }
+            },
+            buffers : {
+                buffer : {
+                    byteLength : buffer.length,
+                    extras : {
+                        _pipeline : {
+                            source : buffer
+                        }
+                    }
+                }
+            },
+            meshes : {
+                mesh : {
+                    primitives : [{
+                        attributes : {
+                            A : 'accessorOneA'
+                        },
+                        indices : 'indicesOne',
+                        extras : {
+                            _pipeline : {}
+                        }
+                    }, {
+                        attributes : {
+                            A : 'accessorOneA'
+                        },
+                        indices : 'indicesTwo',
+                        extras : {
+                            _pipeline : {}
+                        }
+                    }]
+                }
+            }
+        };
+        combinePrimitives(gltf);
+        var accessors = gltf.accessors;
+        var primitives = gltf.meshes.mesh.primitives;
+        expect(primitives.length).toEqual(1);
+        var primitive = primitives[0];
+        var indices = [];
+        readAccessor(gltf, accessors[primitive.indices], indices);
+        expect(indices).toEqual([0, 2, 2, 1]);
+        var attribute = [];
+        readAccessor(gltf, accessors[primitive.attributes.A], attribute);
+        expect(attribute).toEqual([1, 2, 3]);
     });
 
-    it('combines some primitives', function(done){
-        expect(readGltf(fiveBoxPath)
-            .then(function(gltf){
-                var fiveBox = gltf;
-                combinePrimitives(fiveBox);
-                expect(fiveBox.meshes.meshTest.primitives.length).toEqual(3);
-    
-                expect(Object.keys(fiveBox.accessors).indexOf('meshTest_INDEX_accessor_0')).not.toEqual(-1);
-                expect(Object.keys(fiveBox.accessors).indexOf('meshTest_POSITION_accessor_0')).not.toEqual(-1);
-                expect(Object.keys(fiveBox.accessors).indexOf('meshTest_INDEX_accessor_1')).not.toEqual(-1);
-                expect(Object.keys(fiveBox.accessors).indexOf('meshTest_POSITION_accessor_1')).not.toEqual(-1);
-                expect(Object.keys(fiveBox.bufferViews).indexOf('meshTest_INDEX_bufferView_0')).not.toEqual(-1);
-                expect(Object.keys(fiveBox.bufferViews).indexOf('meshTest_POSITION_bufferView_0')).not.toEqual(-1);
-                expect(Object.keys(fiveBox.bufferViews).indexOf('meshTest_INDEX_bufferView_1')).not.toEqual(-1);
-                expect(Object.keys(fiveBox.bufferViews).indexOf('meshTest_POSITION_bufferView_1')).not.toEqual(-1);
-                expect(Object.keys(fiveBox.buffers).indexOf('meshTest_INDEX_buffer_0')).not.toEqual(-1);
-                expect(Object.keys(fiveBox.buffers).indexOf('meshTest_POSITION_buffer_0')).not.toEqual(-1);
-                expect(Object.keys(fiveBox.buffers).indexOf('meshTest_INDEX_buffer_1')).not.toEqual(-1);
-                expect(Object.keys(fiveBox.buffers).indexOf('meshTest_POSITION_buffer_1')).not.toEqual(-1);
-    
-                expect(fiveBox.accessors.meshTest_INDEX_accessor_1.bufferView).toEqual('meshTest_INDEX_bufferView_1');
-                expect(fiveBox.bufferViews.meshTest_INDEX_bufferView_1.buffer).toEqual('meshTest_INDEX_buffer_1');
-            }), done).toResolve();
+    it('combines three primitives, merging two and then concatenating the result with the third', function() {
+        var indicesOne = new Uint16Array([0, 2]);
+        var bufferIndicesOne = new Buffer(indicesOne.buffer);
+        var indicesTwo = new Uint16Array([2, 1]);
+        var bufferIndicesTwo = new Buffer(indicesTwo.buffer);
+        var indicesThree = new Uint16Array([0, 1, 2, 3, 2, 1]);
+        var bufferIndicesThree = new Buffer(indicesThree.buffer);
+        var buffer = Buffer.concat([bufferOneA, bufferTwoB, bufferIndicesOne, bufferIndicesTwo, bufferIndicesThree]);
+        var gltf = {
+            accessors : {
+                accessorOneA : {
+                    bufferView : 'bufferView',
+                    byteOffset : 0,
+                    byteStride : 0,
+                    componentType : WebGLConstants.FLOAT,
+                    count : arrayOneA.length,
+                    type : 'SCALAR'
+                },
+                accessorTwoB : {
+                    bufferView : 'bufferView',
+                    byteOffset : bufferOneA.length,
+                    byteStride : 0,
+                    componentType : WebGLConstants.FLOAT,
+                    count : arrayTwoB.length,
+                    type : 'SCALAR'
+                },
+                indicesOne : {
+                    bufferView : 'bufferView',
+                    byteOffset : bufferOneA.length + bufferTwoB.length,
+                    byteStride : 0,
+                    componentType : WebGLConstants.UNSIGNED_SHORT,
+                    count : indicesOne.length,
+                    type : 'SCALAR'
+                },
+                indicesTwo : {
+                    bufferView : 'bufferView',
+                    byteOffset : bufferOneA.length + bufferTwoB.length + bufferIndicesOne.length,
+                    byteStride : 0,
+                    componentType : WebGLConstants.UNSIGNED_SHORT,
+                    count : indicesTwo.length,
+                    type : 'SCALAR'
+                },
+                indicesThree : {
+                    bufferView : 'bufferView',
+                    byteOffset : bufferOneA.length + bufferTwoB.length + bufferIndicesOne.length + bufferIndicesTwo.length,
+                    byteStride : 0,
+                    componentType : WebGLConstants.UNSIGNED_SHORT,
+                    count : indicesThree.length,
+                    type : 'SCALAR'
+                }
+            },
+            bufferViews : {
+                bufferView : {
+                    buffer : 'buffer',
+                    byteLength : buffer.length,
+                    byteOffset : 0
+                }
+            },
+            buffers : {
+                buffer : {
+                    byteLength : buffer.length,
+                    extras : {
+                        _pipeline : {
+                            source : buffer
+                        }
+                    }
+                }
+            },
+            meshes : {
+                mesh : {
+                    primitives : [{
+                        attributes : {
+                            A : 'accessorOneA'
+                        },
+                        indices : 'indicesOne',
+                        extras : {
+                            _pipeline : {}
+                        }
+                    }, {
+                        attributes : {
+                            A : 'accessorOneA'
+                        },
+                        indices : 'indicesTwo',
+                        extras : {
+                            _pipeline : {}
+                        }
+                    }, {
+                        attributes : {
+                            A : 'accessorTwoB'
+                        },
+                        indices : 'indicesThree',
+                        extras : {
+                            _pipeline : {}
+                        }
+                    }]
+                }
+            }
+        };
+        combinePrimitives(gltf);
+        var accessors = gltf.accessors;
+        var primitives = gltf.meshes.mesh.primitives;
+        expect(primitives.length).toEqual(1);
+        var primitive = primitives[0];
+        var indices = [];
+        readAccessor(gltf, accessors[primitive.indices], indices);
+        expect(indices).toEqual([0, 1, 2, 3, 2, 1, 4, 6, 6, 5]);
+        var attribute = [];
+        readAccessor(gltf, accessors[primitive.attributes.A], attribute);
+        expect(attribute).toEqual([5, 6, 7, 8, 1, 2, 3]);
     });
 
-    it('throws a type error', function(done) {
-        expect(readGltf(doubleBoxToCombinePath)
-            .then(function (gltf) {
-                var typeError = gltf;
-                typeError.accessors.accessor_29.type = 'VEC3';
-                expect(function () {
-                    combinePrimitives(typeError);
-                }).toThrowDeveloperError();
-            }), done).toResolve();
+    it('doesn\'t combine primitive that has attribute accessors that are different sizes', function() {
+        var gltf = {
+            accessors: {
+                accessorOneA: {
+                    componentType: WebGLConstants.FLOAT,
+                    count: arrayOneA.length,
+                    type: 'SCALAR'
+                },
+                accessorOneB: {
+                    componentType: WebGLConstants.FLOAT,
+                    count: arrayOneB.length,
+                    type: 'SCALAR'
+                },
+                accessorTwoA: {
+                    componentType: WebGLConstants.UNSIGNED_SHORT,
+                    count: arrayTwoA.length,
+                    type: 'SCALAR'
+                },
+                accessorTwoB: {
+                    componentType: WebGLConstants.UNSIGNED_SHORT,
+                    count: arrayTwoB.length,
+                    type: 'SCALAR'
+                }
+            },
+            meshes: {
+                mesh: {
+                    primitives: [{
+                        attributes: {
+                            A: 'accessorOneA',
+                            B: 'accessorOneB'
+                        },
+                        extras: {
+                            _pipeline: {}
+                        }
+                    }, {
+                        attributes: {
+                            A: 'accessorTwoA',
+                            B: 'accessorTwoB'
+                        },
+                        extras: {
+                            _pipeline: {}
+                        }
+                    }]
+                }
+            }
+        };
+        var originalGltf = clone(gltf);
+        combinePrimitives(gltf);
+        delete gltf.meshes.mesh.primitives[0].extras._pipeline.conflicts;
+        delete gltf.meshes.mesh.primitives[1].extras._pipeline.conflicts;
+        expect(gltf).toEqual(originalGltf);
     });
 
-    it ('throws a componentType error', function(done) {
-        expect(readGltf(doubleBoxToCombinePath)
-            .then(function(gltf){
-                var componentTypeError = gltf;
-                componentTypeError.accessors.accessor_29.componentType = 5126;
-                expect(function () {
-                    combinePrimitives(componentTypeError);
-                }).toThrowDeveloperError();
-            }), done).toResolve();
+    it('doesn\'t combine primitives that share only a single attribute accessor', function() {
+        var gltf = {
+            accessors: {
+                accessorOneA: {
+                    componentType: WebGLConstants.FLOAT,
+                    count: arrayOneA.length,
+                    type: 'SCALAR'
+                },
+                accessorOneB: {
+                    componentType: WebGLConstants.FLOAT,
+                    count: arrayOneB.length,
+                    type: 'SCALAR'
+                },
+                accessorTwoB: {
+                    componentType: WebGLConstants.UNSIGNED_SHORT,
+                    count: arrayTwoB.length,
+                    type: 'SCALAR'
+                }
+            },
+            meshes: {
+                mesh: {
+                    primitives: [{
+                        attributes: {
+                            A: 'accessorOneA',
+                            B: 'accessorTwoB'
+                        },
+                        extras: {
+                            _pipeline: {}
+                        }
+                    }, {
+                        attributes: {
+                            A: 'accessorOneA',
+                            B: 'accessorOneB'
+                        },
+                        extras: {
+                            _pipeline: {}
+                        }
+                    }]
+                }
+            }
+        };
+        var originalGltf = clone(gltf);
+        combinePrimitives(gltf);
+        delete gltf.meshes.mesh.primitives[0].extras._pipeline.conflicts;
+        delete gltf.meshes.mesh.primitives[1].extras._pipeline.conflicts;
+        expect(gltf).toEqual(originalGltf);
+    });
+
+    it('doesn\'t combine primitives with different materials', function() {
+        var gltf = {
+            meshes : {
+                mesh: {
+                    primitives: [{
+                        material: 'materialOne',
+                        extras: {
+                            _pipeline: {}
+                        }
+                    }, {
+                        material: 'materialTwo',
+                        extras: {
+                            _pipeline: {}
+                        }
+                    }]
+                }
+            }
+        };
+        var originalGltf = clone(gltf);
+        combinePrimitives(gltf);
+        delete gltf.meshes.mesh.primitives[0].extras._pipeline.conflicts;
+        delete gltf.meshes.mesh.primitives[1].extras._pipeline.conflicts;
+        expect(gltf).toEqual(originalGltf);
+    });
+
+    it('doesn\'t combine primitives with different modes', function() {
+        var gltf = {
+            meshes : {
+                mesh: {
+                    primitives: [{
+                        mode: 0,
+                        extras: {
+                            _pipeline: {}
+                        }
+                    }, {
+                        mode: 1,
+                        extras: {
+                            _pipeline: {}
+                        }
+                    }]
+                }
+            }
+        };
+        var originalGltf = clone(gltf);
+        combinePrimitives(gltf);
+        delete gltf.meshes.mesh.primitives[0].extras._pipeline.conflicts;
+        delete gltf.meshes.mesh.primitives[1].extras._pipeline.conflicts;
+        expect(gltf).toEqual(originalGltf);
     });
 });

@@ -57,7 +57,7 @@ describe('changeAccessorComponentType', function() {
         expect(Object.keys(gltf.buffers).length).toBe(1);
         var accessorReader = new AccessorReader(gltf, accessor);
         var components = [];
-        while (accessorReader.hasNext()) {
+        while (!accessorReader.pastEnd()) {
             accessorReader.read(components);
             expect(components[0]).toBe(accessorReader.index);
             accessorReader.next();
@@ -102,7 +102,7 @@ describe('changeAccessorComponentType', function() {
         expect(Object.keys(gltf.buffers).length).toBe(1);
         var accessorReader = new AccessorReader(gltf, accessor);
         var components = [];
-        while (accessorReader.hasNext()) {
+        while (!accessorReader.pastEnd()) {
             accessorReader.read(components);
             expect(components[0]).toBe(accessorReader.index);
             accessorReader.next();
@@ -147,7 +147,7 @@ describe('changeAccessorComponentType', function() {
         expect(Object.keys(gltf.buffers).length).toBe(2);
         var accessorReader = new AccessorReader(gltf, accessor);
         var components = [];
-        while (accessorReader.hasNext()) {
+        while (!accessorReader.pastEnd()) {
             accessorReader.read(components);
             expect(components[0]).toBe(accessorReader.index);
             accessorReader.next();

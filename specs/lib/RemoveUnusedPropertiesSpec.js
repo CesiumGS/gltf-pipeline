@@ -269,7 +269,9 @@ describe('RemoveUnusedProperties', function() {
         it('removes a mesh', function () {
             var gltf = {
                 "meshes": {
-                    "Geometry-mesh002": {},
+                    "Geometry-mesh002": {
+                        primitives: [{}]
+                    },
                     "unusedMeshId": {}
                 },
                 "nodes": {
@@ -288,7 +290,9 @@ describe('RemoveUnusedProperties', function() {
         it('does not remove any meshes', function () {
             var gltf = {
                 "meshes": {
-                    "Geometry-mesh002": {}
+                    "Geometry-mesh002": {
+                        primitives: [{}]
+                    }
                 },
                 "nodes": {
                     "Geometry-mesh002Node": {
