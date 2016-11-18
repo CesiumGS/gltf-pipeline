@@ -44,7 +44,7 @@ node ./bin/gltf-pipeline.js -i ./specs/data/boxTexturedUnoptimized/CesiumTexture
 |`--cesium`, `-c`|Optimize the glTF for Cesium by using the sun as a default light source.|No, default `false`|
 |`--kmc.enable`|Materials should be expressed using the KHR_materials_common extension. If other `kmc` flags are enabled, this is implicitly true.|No, default `false`|
 |`--kmc.doubleSided`|Declares whether backface culling should be disabled.|No, default `false`|
-|`--kmc.technique`|The lighting model to use.|No, default `PHONG`|
+|`--kmc.technique`|The lighting model to use.|No, default `BLINN`|
 |`--ao.enable`|Bake ambient occlusion (to vertex data by default). If other `ao` flags are enabled, this is implicitly true. Advanced settings in `lib/bakeAmbientOcclusion.js`|No, default `false`|
 |`--ao.toTexture`|Bake AO to existing diffuse textures instead of to vertices. Does not modify shaders.|No, default `false`|
 |`--ao.groundPlane`|Simulate a groundplane at the lowest point of the model when baking AO.|No, default `false`|
