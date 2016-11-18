@@ -1,7 +1,8 @@
 Change Log
 ==========
 
-### Next Release
+### 0.1.0-alpha6 - 2016-11-18
+
 * Fixed `combinePrimitives` stage and re-added it to the pipeline. [#108](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/issues/108)
 * Expose parsing argument arrays into an options object via `parseArguments`. [#183](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/183)
 
