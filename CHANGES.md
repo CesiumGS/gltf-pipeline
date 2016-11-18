@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+### Next Release
+* `modelMaterialsCommon` renamed to `processModelMaterialsCommon`.
+* Added `generateModelMaterialsCommon` and command line `kmc` flags for generating models with the `KHR_materials_common` extension.
+
 ### 0.1.0-alpha6 - 2016-11-18
 
 * Fixed `combinePrimitives` stage and re-added it to the pipeline. [#108](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/issues/108)
