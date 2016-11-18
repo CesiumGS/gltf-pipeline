@@ -41,4 +41,35 @@ describe('generateModelMaterialsCommon', function() {
         expect(values.ambient).toEqual([0, 0, 0, 1]);
         expect(values.otherAttribute).toBe(true);
     });
+
+    fit('generates lights from a technique', function() {
+        var gltf = {
+            materials : {
+               material : {
+                   technique : 'technique'
+               }
+            },
+            nodes : {
+                lightNode : {}
+            },
+            techniques : {
+                technique : {
+                    parameters : {
+                        light0Color : {
+                            value : [1, 1, 0.5]
+                        },
+                        light0Transform : {
+                            node : 'lightNode'
+                        }
+                    }
+                }
+            }
+        };
+        generateModelMaterialsCommon(gltf);
+        expect(gltf.nodes.lightNode.extensions.KHR_materials_common.light).toBe('light0');
+        var lights = gltf.extensions.KHR_materials_common.lights;
+        expect(lights.defaultAmbient.ambient.color).toEqual([1, 1, 1]);
+        expect(lights.light0.directional.color).toEqual([1, 1, 0.5]);
+        expect(gltf.techniques).not.toBeDefined();
+    });
 });
