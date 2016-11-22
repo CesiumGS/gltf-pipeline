@@ -22,7 +22,13 @@ describe('generateModelMaterialsCommon', function() {
                     values : {
                         ambient : [0, 0, 0, 1],
                         otherAttribute : true
-                    }
+                    },
+                    technique: 'technique'
+                }
+            },
+            techniques : {
+                technique : {
+                    parameters : {}
                 }
             }
         };
@@ -42,7 +48,7 @@ describe('generateModelMaterialsCommon', function() {
         expect(values.otherAttribute).toBe(true);
     });
 
-    fit('generates lights from a technique', function() {
+    it('generates lights from a technique', function() {
         var gltf = {
             materials : {
                material : {
@@ -55,6 +61,7 @@ describe('generateModelMaterialsCommon', function() {
             techniques : {
                 technique : {
                     parameters : {
+                        ambient : {},
                         light0Color : {
                             value : [1, 1, 0.5]
                         },
@@ -71,5 +78,51 @@ describe('generateModelMaterialsCommon', function() {
         expect(lights.defaultAmbient.ambient.color).toEqual([1, 1, 1]);
         expect(lights.light0.directional.color).toEqual([1, 1, 0.5]);
         expect(gltf.techniques).not.toBeDefined();
+    });
+
+    it('declares jointCount for skinned nodes', function() {
+        var gltf = {
+            accessors : {
+                accessor : {
+                    count : 4
+                }
+            },
+            materials : {
+                material : {
+                    technique : 'technique'
+                }
+            },
+            meshes : {
+                mesh : {
+                    primitives : [
+                        {
+                            material : 'material'
+                        }
+                    ]
+                }
+            },
+            nodes : {
+                skinnedNode : {
+                    meshes : [
+                        'mesh'
+                    ],
+                    skin : 'skin'
+                }
+            },
+            skins : {
+                skin : {
+                    inverseBindMatrices : 'accessor'
+                }
+            },
+            techniques : {
+                technique : {
+                    parameters : {}
+                }
+            }
+        };
+        generateModelMaterialsCommon(gltf);
+        var material = gltf.materials.material;
+        var materialsCommon = material.extensions.KHR_materials_common;
+        expect(materialsCommon.jointCount).toBe(4);
     });
 });
