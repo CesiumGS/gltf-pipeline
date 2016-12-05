@@ -3,6 +3,8 @@ Change Log
 
 ### Next Release
 
+* `modelMaterialsCommon` renamed to `processModelMaterialsCommon`.
+* Added `generateModelMaterialsCommon` and command line `kmc` flags for generating models with the `KHR_materials_common` extension.
 * Added `updateVersion` stage for transitioning assets between glTF version and migrated any glTF 0.8 code out of `addDefaults`
 
 ### 0.1.0-alpha6 - 2016-11-18
