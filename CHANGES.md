@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+### Next Release
+
+* Added `updateVersion` stage for transitioning assets between glTF version and migrated any glTF 0.8 code out of `addDefaults`
+
 ### 0.1.0-alpha6 - 2016-11-18
 
 * Fixed `combinePrimitives` stage and re-added it to the pipeline. [#108](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/issues/108)

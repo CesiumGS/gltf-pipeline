@@ -37,6 +37,7 @@ module.exports = {
     RemoveUnusedProperties : require('./lib/RemoveUnusedProperties'),
     removeUnusedVertices : require('./lib/removeUnusedVertices'),
     uninterleaveAndPackBuffers : require('./lib/uninterleaveAndPackBuffers'),
+    updateVersion : require('./lib/updateVersion'),
     writeAccessor : require('./lib/writeAccessor'),
     writeBinaryGltf : require('./lib/writeBinaryGltf'),
     writeBufferComponent : require('./lib/writeBufferComponent'),

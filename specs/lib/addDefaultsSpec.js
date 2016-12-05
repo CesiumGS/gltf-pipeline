@@ -34,8 +34,6 @@ describe('addDefaults', function() {
         addDefaults(gltf);
         var accessor = gltf.accessors.accessorId;
         expect(accessor.byteStride).toEqual(0);
-        expect(accessor.min).toBeDefined();
-        expect(accessor.max).toBeDefined();
     });
 
     it('Adds animation properties', function() {
@@ -91,17 +89,9 @@ describe('addDefaults', function() {
         expect(gltf.asset.premultipliedAlpha).toEqual(false);
         expect(gltf.asset.profile).toBeDefined();
         expect(gltf.asset.profile.api).toEqual('WebGL');
-        expect(gltf.asset.profile.version).toEqual('1.0.2');
+        expect(gltf.asset.profile.version).toEqual('1.0');
     });
 
-    it('Updates version property from glTF 0.8', function() {
-        var gltf = {
-            "version" : 0.8
-        };
-
-        addDefaults(gltf);
-        expect(gltf.asset.version).toEqual('0.8');
-    });
 
     it('Adds buffer properties', function() {
         var gltf = {
@@ -663,25 +653,6 @@ describe('addDefaults', function() {
         expect(gltf.meshes.meshId.primitives[0].mode).toEqual(WebGLConstants.TRIANGLES);
     });
 
-    it('glTF 0.8 to 1.0, primitive.primitive -> primitive.mode', function() {
-        var gltf = {
-            "meshes": {
-                "meshId": {
-                    "primitives": [
-                        {
-                            "indices": "accessorId",
-                            "material": "materialId",
-                            "primitive": 5
-                        }
-                    ]
-                }
-            }
-        };
-
-        addDefaults(gltf);
-        expect(gltf.meshes.meshId.primitives[0].mode).toEqual(WebGLConstants.TRIANGLE_STRIP);
-    });
-
     it('Adds node properties', function() {
         var gltf = {
             "nodes": {
@@ -716,40 +687,6 @@ describe('addDefaults', function() {
 
         addDefaults(gltf);
         expect(gltf.nodes.nodeId.translation).toEqual([0.0, 0.0, 0.0]);
-        expect(gltf.nodes.nodeId.rotation).toEqual([0.0, 0.0, 0.0, 1.0]);
-    });
-
-    it('glTF 0.8 to 1.0, node.instanceSkin -> node', function() {
-        var gltf = {
-            "nodes": {
-                "nodeId": {
-                    "instanceSkin": {
-                        "skeletons": {},
-                        "skin": {},
-                        "meshes": {}
-                    }
-                }
-            }
-        };
-
-        addDefaults(gltf);
-        expect(gltf.nodes.nodeId.skeletons).toBeDefined();
-        expect(gltf.nodes.nodeId.skin).toBeDefined();
-        expect(gltf.nodes.nodeId.meshes).toBeDefined();
-        expect(gltf.nodes.nodeId.instanceSkin).not.toBeDefined();
-    });
-
-    it('glTF 0.8 to 1.0, axis angle -> quaternion', function() {
-        var gltf = {
-            "version": 0.8,
-            "nodes": {
-                "nodeId": {
-                    "rotation": [1.0, 0.0, 0.0, 0.0]
-                }
-            }
-        };
-
-        addDefaults(gltf);
         expect(gltf.nodes.nodeId.rotation).toEqual([0.0, 0.0, 0.0, 1.0]);
     });
 
@@ -829,19 +766,6 @@ describe('addDefaults', function() {
         expect(gltf.textures.textureId.internalFormat).toEqual(6408);
         expect(gltf.textures.textureId.target).toEqual(WebGLConstants.TEXTURE_2D);
         expect(gltf.textures.textureId.type).toEqual(WebGLConstants.UNSIGNED_BYTE);
-    });
-
-
-    it('glTF 0.8 to 1.0, allExtensions -> extensionsUsed', function() {
-        var gltf = {
-            "allExtensions": [
-                "KHR_materials_common"
-            ]
-        };
-
-        addDefaults(gltf);
-        expect(gltf.allExtensions).not.toBeDefined();
-        expect(gltf.extensionsUsed).toBeDefined();
     });
 
     it('Adds empty top-level properties', function() {
