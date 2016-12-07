@@ -1,7 +1,11 @@
 language: node_js
 node_js:
-  - 4
+  - "4
+  - "6"
 script:
   - npm run jsHint -- --failTaskOnError
   - npm run test -- --failTaskOnError --suppressPassed
-after_success: 'npm run coveralls'
+after_success:
+## We only need to run coveralls for one node version (doesn't matter which one).
+## We also ignore publishing failures, since restarting an existing travis build would otherwise break.
+  - if node --version | grep -q ^v6 ; npm run coveralls ; fi
