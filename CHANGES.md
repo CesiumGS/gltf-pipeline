@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-### Next Release
+### 0.1.0-alpha7 - 2016-12-08
 * `modelMaterialsCommon` renamed to `processModelMaterialsCommon`.
 * Added `generateModelMaterialsCommon` and command line `kmc` flags for generating models with the `KHR_materials_common` extension.
 
