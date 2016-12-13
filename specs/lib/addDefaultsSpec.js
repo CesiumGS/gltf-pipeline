@@ -562,7 +562,6 @@ describe('addDefaults', function() {
         var technique = gltfClone.techniques[Object.keys(gltfClone.techniques)[0]];
         expect(technique.parameters.diffuse.semantic).toEqual('_3DTILESDIFFUSE');
 
-
         gltfClone = clone(gltf);
         addDefaults(gltfClone);
         fragmentShaderSource = gltfClone.shaders.fragmentShader0.extras._pipeline.source;
@@ -630,7 +629,7 @@ describe('addDefaults', function() {
         var program = gltfClone.programs[technique.program];
         expect(program.attributes.indexOf('a_batchid') > -1).toBe(true);
 
-        var vertexShaderSource = gltfClone.shaders[program.vertexShader].extras._pipeline.source;
+        var vertexShaderSource = gltfClone.shaders[program.vertexShader].extras._pipeline.source.toString();
         expect(vertexShaderSource.indexOf('a_batchid') > -1).toBe(true);
     });
 
