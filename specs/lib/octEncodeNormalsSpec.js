@@ -108,7 +108,10 @@ describe('octEncodeNormals', function() {
            var encodedBuffer = buffer.extras._pipeline.source;
            expect(encodedBuffer.length).toEqual(6);
            expect(encodedBuffer.length).toEqual(buffer.byteLength);
-    
+
+           var vs = gltf.shaders.VS.extras._pipeline.source;
+           expect(Buffer.isBuffer(vs)).toBe(true);
+
            var normal = new Cartesian3();
            for (var i = 0; i < normalAccessor.count; i++) {
                var compressed = Cartesian2.unpack(encodedBuffer, i*2);

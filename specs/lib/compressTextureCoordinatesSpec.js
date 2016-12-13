@@ -108,6 +108,9 @@ describe('compressTextureCoordinates', function() {
             expect(encodedBuffer.length).toEqual(12);
             expect(encodedBuffer.length).toEqual(buffer.byteLength);
 
+            var vs = gltf.shaders.VS.extras._pipeline.source;
+            expect(Buffer.isBuffer(vs)).toBe(true);
+
             var texCoord = new Cartesian2();
             for (var i = 0; i < texCoordAccessor.count; i++) {
                 var encoded = encodedBuffer.readFloatLE(i * 4);
