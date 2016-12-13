@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-### 0.1.0-alpha8 - 2016-12-08
+### 0.1.0-alpha8 - 2016-12-13
 * Fixed issue with embedding base64 encoded shader strings inside the glTF.
 
 ### 0.1.0-alpha7 - 2016-12-08
