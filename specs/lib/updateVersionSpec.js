@@ -6,11 +6,12 @@ var updateVersion = require('../../lib/updateVersion');
 var WebGLConstants = Cesium.WebGLConstants;
 
 describe('updateVersion', function() {
-    it('throws an error if gltf has no version', function() {
+    it('defaults to 1.0 if gltf has no version', function() {
         var gltf = {};
-        expect(function() {
-            updateVersion(gltf);
-        }).toThrowDeveloperError();
+        updateVersion(gltf, {
+            targetVersion: '1.0'
+        });
+        expect(gltf.asset.version).toEqual('1.0');
     });
 
     it('updates empty glTF with version from 0.8 to 1.1', function() {
