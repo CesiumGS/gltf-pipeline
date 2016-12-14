@@ -158,7 +158,9 @@ describe('updateVersion', function() {
                         {
                             attributes: {
                                 TEXCOORD: 'accessor_texcoord',
-                                COLOR: 'accessor_color'
+                                COLOR: 'accessor_color',
+                                APPLICATIONSPECIFIC: 'accessor',
+                                _TEMPERATURE: 'accessor_temperature'
                             },
                             indices: 'accessor_indices'
                         }
@@ -191,6 +193,9 @@ describe('updateVersion', function() {
                         },
                         color: {
                             semantic: 'COLOR'
+                        },
+                        application: {
+                            semantic: 'APPLICATIONSPECIFIC'
                         }
                     }
                 }
@@ -273,6 +278,7 @@ describe('updateVersion', function() {
         expect(technique.parameters.lightAttenuation.value).toEqual([1.0]);
         expect(technique.parameters.texcoord.semantic).toEqual('TEXCOORD_0');
         expect(technique.parameters.color.semantic).toEqual('COLOR_0');
+        expect(technique.parameters.application.semantic).toEqual('_APPLICATIONSPECIFIC');
         var states = technique.states;
         expect(states.enable).toEqual([]);
         expect(states.functions.scissor).not.toBeDefined();
@@ -286,6 +292,9 @@ describe('updateVersion', function() {
         expect(primitive.attributes.TEXCOORD_0).toEqual('accessor_texcoord');
         expect(primitive.attributes.COLOR).not.toBeDefined();
         expect(primitive.attributes.COLOR_0).toEqual('accessor_color');
+        expect(primitive.attributes.APPLICATIONSPECIFIC).not.toBeDefined();
+        expect(primitive.attributes._APPLICATIONSPECIFIC).toEqual('accessor');
+        expect(primitive.attributes._TEMPERATURE).toEqual('accessor_temperature');
         var nodes = gltf.nodes;
         var rootNode = nodes.rootNode;
         expect(rootNode.children).toEqual(['jointNodeOne', 'meshNode']);
