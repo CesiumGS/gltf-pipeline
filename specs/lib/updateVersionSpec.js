@@ -20,7 +20,7 @@ describe('updateVersion', function() {
         };
         updateVersion(gltf);
         expect(gltf.version).not.toBeDefined();
-        expect(gltf.asset.version).toBe('1.1');
+        expect(gltf.asset.version).toEqual('1.1');
     });
 
     it('updates empty glTF with version 1.0 to 1.1', function() {
@@ -30,7 +30,7 @@ describe('updateVersion', function() {
             }
         };
         updateVersion(gltf);
-        expect(gltf.asset.version).toBe('1.1');
+        expect(gltf.asset.version).toEqual('1.1');
     });
 
     it('updates glTF from 0.8 to 1.0', function() {
@@ -94,22 +94,22 @@ describe('updateVersion', function() {
         updateVersion(gltf, {
             targetVersion: '1.0'
         });
-        expect(gltf.asset.version).toBe('1.0');
+        expect(gltf.asset.version).toEqual('1.0');
         expect(gltf.asset.profile).toEqual({});
         expect(gltf.version).not.toBeDefined();
         expect(gltf.extensionsUsed).toEqual(['extension']);
         var material = gltf.materials.material;
-        expect(material.technique).toBe('technique');
+        expect(material.technique).toEqual('technique');
         expect(material.values).toEqual({
             'ambient': [0.0, 0.0, 0.0, 1.0]
         });
         var primitive = gltf.meshes.mesh.primitives[0];
         expect(primitive.primitive).not.toBeDefined();
-        expect(primitive.mode).toBe(WebGLConstants.TRIANGLES);
+        expect(primitive.mode).toEqual(WebGLConstants.TRIANGLES);
         var node = gltf.nodes.node;
         expect(node.rotation).toEqual([0.0, 0.0, 0.0, 1.0]);
         expect(node.skeletons).toEqual(['skeleton']);
-        expect(node.skin).toBe('skin');
+        expect(node.skin).toEqual('skin');
         expect(node.meshes).toEqual(['mesh']);
         var technique = gltf.techniques.technique;
         expect(technique.pass).not.toBeDefined();
@@ -117,7 +117,7 @@ describe('updateVersion', function() {
         expect(technique.attributes).toEqual({
             attribute: 'TEST_ATTRIBUTE'
         });
-        expect(technique.program).toBe('program');
+        expect(technique.program).toEqual('program');
         expect(technique.uniforms).toEqual({
             uniform: 'TEST_UNIFORM'
         });
@@ -125,7 +125,7 @@ describe('updateVersion', function() {
     });
 
     it('updates glTF from 1.0 to 1.1', function() {
-        var buffer = new Buffer(new Int16Array([-2.0, 1.0, 0.0, 1.0, 2.0, 3.0]).buffer);
+        var arrayBuffer = new Buffer(new Int16Array([-2.0, 1.0, 0.0, 1.0, 2.0, 3.0]).buffer);
         var gltf = {
             asset: {
                 profile: {
@@ -147,6 +147,11 @@ describe('updateVersion', function() {
                     }
                 }
             },
+            extensionsUsed: [
+                'KHR_materials_common',
+                'WEB3D_quantized_attributes',
+                'UNKOWN_EXTENSION'
+            ],
             meshes: {
                 mesh: {
                     primitives: [
@@ -154,7 +159,8 @@ describe('updateVersion', function() {
                             attributes: {
                                 TEXCOORD: 'accessor_texcoord',
                                 COLOR: 'accessor_color'
-                            }
+                            },
+                            indices: 'accessor_indices'
                         }
                     ]
                 }
@@ -168,6 +174,14 @@ describe('updateVersion', function() {
             },
             techniques: {
                 technique: {
+                    states: {
+                        enable: [ WebGLConstants.SCISSOR_TEST ],
+                        functions: {
+                            blendColor: [-1.0, 0.0, 0.0, 2.0],
+                            depthRange: [1.0, -1.0],
+                            scissor: [0.0, 0.0, 0.0, 0.0]
+                        }
+                    },
                     parameters: {
                         lightAttenuation: {
                             value: 1.0
@@ -189,22 +203,32 @@ describe('updateVersion', function() {
                     componentType: WebGLConstants.SHORT,
                     count: 6,
                     type: 'SCALAR'
+                },
+                accessor_indices: {
+                    componentType: WebGLConstants.UNSIGNED_INT
                 }
             },
             bufferViews: {
                 bufferView: {
                     buffer: 'buffer',
-                    byteLength: buffer.length,
                     byteOffset: 0
                 }
             },
             buffers: {
                 buffer: {
-                    byteLength: buffer.length,
+                    type: 'arraybuffer',
                     extras: {
                         _pipeline: {
-                            source: buffer
+                            source: arrayBuffer
                         }
+                    }
+                }
+            },
+            cameras: {
+                camera: {
+                    perspective: {
+                        aspectRatio : 0.0,
+                        yfov : 0.0
                     }
                 }
             },
@@ -229,25 +253,39 @@ describe('updateVersion', function() {
             targetVersion: '1.1'
         });
         expect(gltf.asset.profile.version).toEqual('1.0');
+        var extensionsUsed = gltf.extensionsUsed;
+        expect(extensionsUsed).toEqual(['UNKOWN_EXTENSION']);
+        var extensionsRequired = gltf.extensionsRequired;
+        expect(extensionsRequired).toEqual([
+            'KHR_materials_common',
+            'WEB3D_quantized_attributes'
+        ]);
+        var glExtensionsUsed = gltf.glExtensionsUsed;
+        expect(glExtensionsUsed).toEqual(['OES_element_index_uint']);
         var animation = gltf.animations.animation;
         var sampler = animation.samplers.sampler;
-        expect(sampler.input).toBe('accessor_input');
-        expect(sampler.output).toBe('accessor_output');
+        expect(sampler.input).toEqual('accessor_input');
+        expect(sampler.output).toEqual('accessor_output');
         expect(animation.parameters).not.toBeDefined();
         var material = gltf.materials.material;
         expect(material.values.shininess).toEqual([1.0]);
         var technique = gltf.techniques.technique;
         expect(technique.parameters.lightAttenuation.value).toEqual([1.0]);
-        expect(technique.parameters.texcoord.semantic).toBe('TEXCOORD_0');
-        expect(technique.parameters.color.semantic).toBe('COLOR_0');
+        expect(technique.parameters.texcoord.semantic).toEqual('TEXCOORD_0');
+        expect(technique.parameters.color.semantic).toEqual('COLOR_0');
+        var states = technique.states;
+        expect(states.enable).toEqual([]);
+        expect(states.functions.scissor).not.toBeDefined();
+        expect(states.functions.blendColor).toEqual([0.0, 0.0, 0.0, 1.0]);
+        expect(states.functions.depthRange).toEqual([0.0, 0.0]);
         var accessor = gltf.accessors.accessor;
         expect(accessor.min).toEqual([-2.0]);
         expect(accessor.max).toEqual([3.0]);
         var primitive = gltf.meshes.mesh.primitives[0];
         expect(primitive.attributes.TEXCOORD).not.toBeDefined();
-        expect(primitive.attributes.TEXCOORD_0).toBe('accessor_texcoord');
+        expect(primitive.attributes.TEXCOORD_0).toEqual('accessor_texcoord');
         expect(primitive.attributes.COLOR).not.toBeDefined();
-        expect(primitive.attributes.COLOR_0).toBe('accessor_color');
+        expect(primitive.attributes.COLOR_0).toEqual('accessor_color');
         var nodes = gltf.nodes;
         var rootNode = nodes.rootNode;
         expect(rootNode.children).toEqual(['jointNodeOne', 'meshNode']);
@@ -262,5 +300,38 @@ describe('updateVersion', function() {
         var jointNodeTwoSkeleton = nodes['jointNodeTwo-skeleton'];
         expect(jointNodeTwoSkeleton.translation).toEqual([1.0, 0.0, 0.0]);
         expect(nodes.jointNodeTwo).not.toBeDefined();
+        var camera = gltf.cameras.camera;
+        expect(camera.perspective.aspectRatio).not.toBeDefined();
+        expect(camera.perspective.yfov).toEqual(1.0);
+        var buffer = gltf.buffers.buffer;
+        expect(buffer.type).not.toBeDefined();
+        expect(buffer.byteLength).toEqual(arrayBuffer.length);
+        var bufferView = gltf.bufferViews.bufferView;
+        expect(bufferView.byteLength).toEqual(arrayBuffer.length);
+    });
+
+    it('does not add glExtensionsUsed if primitive indices are not UNSIGNED_INT', function() {
+       var gltf = {
+           asset: {
+               version: '1.0'
+           },
+           accessors: {
+               indices_accessor: {
+                   componentType: WebGLConstants.UNSIGNED_SHORT
+               }
+           },
+           meshes : {
+               mesh : {
+                   primitives : [
+                       {
+                           indices: 'indices_accessor'
+                       }
+                   ]
+               }
+           }
+       };
+       updateVersion(gltf);
+       expect(gltf.asset.version).toEqual('1.1');
+       expect(gltf.glExtensionsUsed).not.toBeDefined();
     });
 });
