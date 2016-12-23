@@ -35,13 +35,13 @@ node ./bin/gltf-pipeline.js -i ./specs/data/boxTexturedUnoptimized/CesiumTexture
 |`--output`, `-o`|output=PATH, Write optimized glTF to the specified file.|No|
 |`--binary`, `-b`|Write binary glTF file using KHR_binary_glTF extension.|No, default `false`|
 |`--separate`, `-s`|Write separate geometry/animation data files, shader files, and textures instead of embedding them in the glTF asset.|No, default `false`|
-|`--separateTexture`, `-t`|Write out separate textures, but embeds geometry/animation data files and shader files in the glTF asset.|No, default `false`|
+|`--separateImage`, `-t`|Write out separate textures, but embeds geometry/animation data files and shader files in the glTF asset.|No, default `false`|
 |`--quantize`, `-q`|Quantize the attributes of this glTF asset using the WEB3D_quantized_attributes extension.|No, default `false`|
 |`--encodeNormals`, `-n`|Oct-encode the normals of this glTF asset.|No, default `false`|
 |`--compressTextureCoordinates`, `-c`|Compress the testure coordinates of this glTF asset.|No, default `false`|
 |`--removeNormals`, `-r`|Strips off existing normals, allowing them to be regenerated.|No, default `false`|
 |`--faceNormals`, `-f`|If normals are missing, they should be generated using the face normal.|No, default `false`|
-|`--cesium`, `-c`|Optimize the glTF for Cesium by using the sun as a default light source.|No, default `false`|
+|`--cesium`|Optimize the glTF for Cesium by using the sun as a default light source.|No, default `false`|
 |`--kmc.enable`|Materials should be expressed using the KHR_materials_common extension. If other `kmc` flags are enabled, this is implicitly true.|No, default `false`|
 |`--kmc.doubleSided`|Declares whether backface culling should be disabled.|No, default `false`|
 |`--kmc.technique`|The lighting model to use.|No, default `PHONG`|
@@ -50,6 +50,12 @@ node ./bin/gltf-pipeline.js -i ./specs/data/boxTexturedUnoptimized/CesiumTexture
 |`--ao.groundPlane`|Simulate a groundplane at the lowest point of the model when baking AO.|No, default `false`|
 |`--ao.ambientShadowContribution`|Amount of AO to show when blending between shader computed lighting and AO. 1.0 is full AO, 0.5 is a 50/50 blend.|No, default `0.5`|
 |`--ao.quality`|Quality to use when baking AO. Valid settings are high, medium, and low.|No, default `low`|
+|`--texcomp.enable`|Compress textures.|No, default `false`|
+|`--texcomp.format`|The compressed texture format.|No, unless `texcomp.enable` is defined.|
+|`--texcomp.quality`|The compressed texture quality from 0 to 10.|No, default `5`|
+|`--texcomp.bitrate`|The bitrate when using the pvrtc or astc formats|No, default `2.0`|
+|`--texcomp.blockSize`|The block size for astc compression. Smaller block sizes result in higher bitrates. This value is ignored if options.bitrate is also set.|No, default `8x8`|
+|`--texcomp.alphaBit`|Store a single bit for alpha. Not supported for all compression formats or tools.|No, default `false`|
 
 ## Build Instructions
 
@@ -93,6 +99,10 @@ The documentation will be placed in the `doc` folder.
 ## Contributions
 
 Pull requests are appreciated!  Please use the same [Contributor License Agreement (CLA)](https://github.com/AnalyticalGraphicsInc/cesium/blob/master/CONTRIBUTING.md) and [Coding Guide](https://github.com/AnalyticalGraphicsInc/cesium/blob/master/Documentation/Contributors/CodingGuide/README.md) used for [Cesium](http://cesiumjs.org/).
+
+## Attribution
+
+This product includes components of the PowerVR Tools Software from Imagination Technologies Limited.
 
 ---
 
