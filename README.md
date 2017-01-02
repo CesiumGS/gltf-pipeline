@@ -41,6 +41,7 @@ node ./bin/gltf-pipeline.js -i ./specs/data/boxTexturedUnoptimized/CesiumTexture
 |`--compressTextureCoordinates`, `-c`|Compress the testure coordinates of this glTF asset.|No, default `false`|
 |`--removeNormals`, `-r`|Strips off existing normals, allowing them to be regenerated.|No, default `false`|
 |`--faceNormals`, `-f`|If normals are missing, they should be generated using the face normal.|No, default `false`|
+|`--tangentsBinormals`|If normals and texture coordinates are given, generate tangents and binormals.|No, default `false`|
 |`--cesium`, `-c`|Optimize the glTF for Cesium by using the sun as a default light source.|No, default `false`|
 |`--kmc.enable`|Materials should be expressed using the KHR_materials_common extension. If other `kmc` flags are enabled, this is implicitly true.|No, default `false`|
 |`--kmc.doubleSided`|Declares whether backface culling should be disabled.|No, default `false`|
