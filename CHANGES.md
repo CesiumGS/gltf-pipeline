@@ -1,6 +1,16 @@
 Change Log
 ==========
 
+### Next release
+* Added `compressTextures` stage to compress input textures to a variety of compressed texture formats.
+
+### 0.1.0-alpha9 - 2017-01-03
+* Fixed issue with embedding base64 encoded shader strings for assets using the KHR_materials_common extension
+
+### 0.1.0-alpha8 - 2016-12-13
+* Fixed issue with embedding base64 encoded shader strings inside the glTF.
+* Added `-p` flag for preserving the glTF hierarchy. Optimization stages are not run when this flag is enabled.
+
 ### 0.1.0-alpha7 - 2016-12-08
 * `modelMaterialsCommon` renamed to `processModelMaterialsCommon`.
 * Added `generateModelMaterialsCommon` and command line `kmc` flags for generating models with the `KHR_materials_common` extension.
