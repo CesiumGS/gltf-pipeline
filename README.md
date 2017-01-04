@@ -55,7 +55,7 @@ node ./bin/gltf-pipeline.js -i ./specs/data/boxTexturedUnoptimized/CesiumTexture
 |`--texcomp.quality`|The compressed texture quality from 0 to 10.|No, default `5`|
 |`--texcomp.bitrate`|The bitrate when using the pvrtc or astc formats|No, default `2.0`|
 |`--texcomp.blockSize`|The block size for astc compression. Smaller block sizes result in higher bitrates. This value is ignored if options.bitrate is also set.|No, default `8x8`|
-|`--texcomp.alphaBit`|Store a single bit for alpha. Not supported for all compression formats or tools.|No, default `false`|
+|`--texcomp.alphaBit`|Store a single bit for alpha. Only supported for etc2.|No, default `false`|
 
 ## Build Instructions
 
