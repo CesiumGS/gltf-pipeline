@@ -1,6 +1,9 @@
 Change Log
 ==========
 
+### 0.1.0-alpha9 - 2017-01-03
+* Fixed issue with embedding base64 encoded shader strings for assets using the KHR_materials_common extension
+
 ### 0.1.0-alpha8 - 2016-12-13
 * Fixed issue with embedding base64 encoded shader strings inside the glTF.
 * Added `-p` flag for preserving the glTF hierarchy. Optimization stages are not run when this flag is enabled.
