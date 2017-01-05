@@ -14,7 +14,6 @@ var fsExtraStat = Promise.promisify(fsExtra.stat);
 
 var defined = Cesium.defined;
 var DeveloperError = Cesium.DeveloperError;
-var WebGLConstants = Cesium.WebGLConstants;
 
 var basePath = './specs/data/boxTexturedUnoptimized/';
 var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf';
@@ -26,12 +25,6 @@ var jpegPath = 'Cesium_Logo_Flat.jpeg';
 var pngPath = 'Cesium_Logo_Flat.png';
 var gifPath = 'Cesium_Logo_Flat.gif';
 var decalPath = 'Cesium_Logo_Flat_Decal.png'; // Contains alpha channel
-
-// etc2comp only supports png input so this is a good test case for handling different input image formats
-var etc1Compression = {
-    format : 'etc1'
-};
-var etc1Format = WebGLConstants.COMPRESSED_RGB_ETC1_WEBGL;
 
 function getCompressedTexture(gltfPath, imagePath, options) {
     return fsExtraReadJson(gltfPath)
@@ -89,6 +82,12 @@ function directoryExists(directory) {
             return false;
         });
 }
+
+// etc2comp only supports png input so this is a good test case for handling different input image formats
+var etc1Compression = {
+    format : 'etc1'
+};
+var etc1Format = 0x8D64; // COMPRESSED_RGB_ETC1_WEBGL;
 
 describe('compressTextures', function() {
     it('compresses external jpg', function(done) {
@@ -173,7 +172,7 @@ describe('compressTextures', function() {
             format : 'pvrtc1',
             bitrate : 2.0
         };
-        var expectedFormat = WebGLConstants.COMPRESSED_RGBA_PVRTC_2BPPV1_IMG;
+        var expectedFormat = 0x8C03; // COMPRESSED_RGBA_PVRTC_2BPPV1_IMG;
         expect(verifyKTX(gltfPath, decalPath, options, expectedFormat), done).toResolve();
     });
 
@@ -182,7 +181,7 @@ describe('compressTextures', function() {
             format : 'pvrtc1',
             bitrate : 4.0
         };
-        var expectedFormat = WebGLConstants.COMPRESSED_RGBA_PVRTC_4BPPV1_IMG;
+        var expectedFormat = 0x8C02; // COMPRESSED_RGBA_PVRTC_4BPPV1_IMG;
         expect(verifyKTX(gltfPath, decalPath, options, expectedFormat), done).toResolve();
     });
 
@@ -191,7 +190,7 @@ describe('compressTextures', function() {
             format : 'pvrtc1',
             bitrate : 2.0
         };
-        var expectedFormat = WebGLConstants.COMPRESSED_RGB_PVRTC_2BPPV1_IMG;
+        var expectedFormat = 0x8C01; // COMPRESSED_RGB_PVRTC_2BPPV1_IMG;
         expect(verifyKTX(gltfPath, pngPath, options, expectedFormat), done).toResolve();
     });
 
@@ -200,7 +199,7 @@ describe('compressTextures', function() {
             format : 'pvrtc1',
             bitrate : 4.0
         };
-        var expectedFormat = WebGLConstants.COMPRESSED_RGB_PVRTC_4BPPV1_IMG;
+        var expectedFormat = 0x8C00; // COMPRESSED_RGB_PVRTC_4BPPV1_IMG;
         expect(verifyKTX(gltfPath, pngPath, options, expectedFormat), done).toResolve();
     });
 
@@ -231,7 +230,7 @@ describe('compressTextures', function() {
             format : 'etc1'
         };
 
-        var expectedFormat = WebGLConstants.COMPRESSED_RGB_ETC1_WEBGL;
+        var expectedFormat = 0x8D64; // COMPRESSED_RGB_ETC1_WEBGL;
         expect(verifyKTX(gltfPath, pngPath, options, expectedFormat), done).toResolve();
     });
 
@@ -271,7 +270,7 @@ describe('compressTextures', function() {
             format : 'dxt1'
         };
 
-        var expectedFormat = WebGLConstants.COMPRESSED_RGB_S3TC_DXT1_EXT;
+        var expectedFormat = 0x83F0; // COMPRESSED_RGB_S3TC_DXT1_EXT;
         expect(verifyKTX(gltfPath, pngPath, options, expectedFormat), done).toResolve();
     });
 
@@ -280,7 +279,7 @@ describe('compressTextures', function() {
             format : 'dxt1'
         };
 
-        var expectedFormat = WebGLConstants.COMPRESSED_RGBA_S3TC_DXT1_EXT;
+        var expectedFormat = 0x83F1; // COMPRESSED_RGBA_S3TC_DXT1_EXT;
         expect(verifyKTX(gltfPath, decalPath, options, expectedFormat), done).toResolve();
     });
 
@@ -289,7 +288,7 @@ describe('compressTextures', function() {
             format : 'dxt3'
         };
 
-        var expectedFormat = WebGLConstants.COMPRESSED_RGBA_S3TC_DXT3_EXT;
+        var expectedFormat = 0x83F2; // COMPRESSED_RGBA_S3TC_DXT3_EXT;
         expect(verifyKTX(gltfPath, pngPath, options, expectedFormat), done).toResolve();
     });
 
@@ -298,7 +297,7 @@ describe('compressTextures', function() {
             format : 'dxt5'
         };
 
-        var expectedFormat = WebGLConstants.COMPRESSED_RGBA_S3TC_DXT5_EXT;
+        var expectedFormat = 0x83F3; // COMPRESSED_RGBA_S3TC_DXT5_EXT;
         expect(verifyKTX(gltfPath, pngPath, options, expectedFormat), done).toResolve();
     });
 
