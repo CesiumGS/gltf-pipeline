@@ -50,11 +50,10 @@ node ./bin/gltf-pipeline.js -i ./specs/data/boxTexturedUnoptimized/CesiumTexture
 |`--ao.groundPlane`|Simulate a groundplane at the lowest point of the model when baking AO.|No, default `false`|
 |`--ao.ambientShadowContribution`|Amount of AO to show when blending between shader computed lighting and AO. 1.0 is full AO, 0.5 is a 50/50 blend.|No, default `0.5`|
 |`--ao.quality`|Quality to use when baking AO. Valid settings are high, medium, and low.|No, default `low`|
-|`--texcomp.enable`|Compress textures.|No, default `false`|
-|`--texcomp.format`|The compressed texture format.|No, unless `texcomp.enable` is defined.|
+|`--texcomp.format`|The compressed texture format. Must be one of the following: `pvrtc1`, `pvrtc2`, `etc1`, `etc2`, `astc`, `dxt1`, `dxt3`, `dxt5`, `crunch-dxt1`, `crunch-dxt3`, `crunch-dxt5`|No, unless other texcomp options are set.|
 |`--texcomp.quality`|The compressed texture quality from 0 to 10.|No, default `5`|
-|`--texcomp.bitrate`|The bitrate when using the pvrtc or astc formats|No, default `2.0`|
-|`--texcomp.blockSize`|The block size for astc compression. Smaller block sizes result in higher bitrates. This value is ignored if options.bitrate is also set.|No, default `8x8`|
+|`--texcomp.bitrate`|The bitrate when using the pvrtc or astc formats. For pvrtc formats this value must be `2.0` or `4.0`.|No, default `2.0`|
+|`--texcomp.blockSize`|The block size for astc compression. Smaller block sizes result in higher bitrates. This value is ignored if `options.bitrate` is also set. Must be one of the following: `4x4`, `5x4`, `5x5`, `6x5`, `6x6`, `8x5`, `8x6`, `8x8`, `10x5`, `10x6`, `10x8`, `10x10`, `12x10`, `12x12`|No, default `8x8`|
 |`--texcomp.alphaBit`|Store a single bit for alpha. Only supported for etc2.|No, default `false`|
 
 ## Build Instructions
@@ -71,6 +70,15 @@ To run JSHint automatically when a file is saved, run the following and leave it
 ```
 npm run jsHint-watch
 ```
+
+This project bundles several native binaries for texture compression.
+
+* [PVRTexTool (https://community.imgtec.com/developers/powervr/tools/pvrtextool/) - Windows, macOS, and Linux binaries are provided by the PowerVR SDK.
+* [etc2comp](https://github.com/google/etc2comp) - Windows, macOS, and Linux binaries built from source.
+* [crunch](https://github.com/BinomialLLC/crunch) - Windows binary built from [crunch](https://github.com/BinomialLLC/crunch), macOS binary built from [BKcore/crunch-osx](https://github.com/BKcore/crunch-osx), Linux binary built from [tomerb/linux_fixes](https://github.com/tomerb/crunch/tree/linux_fixes).
+* [astc-encoder](https://github.com/ARM-software/astc-encoder) - Windows, macOS, and Linux binaries built from source.
+
+Run the help command for each tool for a more detailed description of the supported command-line options.
 
 ### Running Test Coverage
 
@@ -103,6 +111,7 @@ Pull requests are appreciated!  Please use the same [Contributor License Agreeme
 ## Attribution
 
 This product includes components of the PowerVR Tools Software from Imagination Technologies Limited.
+https://community.imgtec.com/developers/powervr/powervr-tools-software-eula/
 
 ---
 

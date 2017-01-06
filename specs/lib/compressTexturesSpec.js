@@ -7,10 +7,10 @@ var fsExtra = require('fs-extra');
 var path = require('path');
 var Promise = require('bluebird');
 var compressTextures = require('../../lib/compressTextures');
+var directoryExists = require('../../lib/directoryExists');
 var Pipeline = require('../../lib/Pipeline');
 
 var fsExtraReadJson = Promise.promisify(fsExtra.readJson);
-var fsExtraStat = Promise.promisify(fsExtra.stat);
 
 var defined = Cesium.defined;
 var DeveloperError = Cesium.DeveloperError;
@@ -26,7 +26,7 @@ var pngPath = 'Cesium_Logo_Flat.png';
 var gifPath = 'Cesium_Logo_Flat.gif';
 var decalPath = 'Cesium_Logo_Flat_Decal.png'; // Contains alpha channel
 
-function getCompressedTexture(gltfPath, imagePath, options) {
+function compressTexture(gltfPath, imagePath, options) {
     return fsExtraReadJson(gltfPath)
         .then(function(gltf) {
             if (defined(imagePath)) {
@@ -45,7 +45,7 @@ function getCompressedTexture(gltfPath, imagePath, options) {
 }
 
 function verifyKTX(gltfPath, imagePath, options, expectedFormat) {
-    return getCompressedTexture(gltfPath, imagePath, options)
+    return compressTexture(gltfPath, imagePath, options)
         .then(function(uri) {
             var buffer = dataUriToBuffer(uri);
             var internalFormat = buffer.readUInt32LE(28);
@@ -61,25 +61,9 @@ function verifyKTX(gltfPath, imagePath, options, expectedFormat) {
 }
 
 function verifyCrunch(gltfPath, imagePath, options) {
-    return getCompressedTexture(gltfPath, imagePath, options)
+    return compressTexture(gltfPath, imagePath, options)
         .then(function(uri) {
-            // TODO : Do more verification: width, height, and expectedFormat - this requires a .crn reader
             expect(uri.indexOf('image/crn') >= 0).toBe(true);
-        });
-}
-
-function directoryExists(directory) {
-    return fsExtraStat(directory)
-        .then(function(stats) {
-            return stats.isDirectory();
-        })
-        .catch(function(err) {
-            // If the directory doesn't exist the error code is ENOENT.
-            // Otherwise something else went wrong - permission issues, etc.
-            if (err.code !== 'ENOENT') {
-                throw err;
-            }
-            return false;
         });
 }
 
@@ -90,6 +74,11 @@ var etc1Compression = {
 var etc1Format = 0x8D64; // COMPRESSED_RGB_ETC1_WEBGL;
 
 describe('compressTextures', function() {
+    beforeEach(function() {
+        // Suppress console warnings that image is being resized
+        spyOn(console, 'log');
+    });
+
     it('compresses external jpg', function(done) {
         expect(verifyKTX(gltfPath, jpgPath, etc1Compression, etc1Format), done).toResolve();
     });
@@ -404,8 +393,8 @@ describe('compressTextures', function() {
                 quality : 5
             };
             promises.push(Promise.all([
-                getCompressedTexture(gltfPath, pngPath, lowQuality),
-                getCompressedTexture(gltfPath, pngPath, highQuality)
+                compressTexture(gltfPath, pngPath, lowQuality),
+                compressTexture(gltfPath, pngPath, highQuality)
             ]).then(compareUris));
         }
 
