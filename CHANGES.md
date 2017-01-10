@@ -3,6 +3,8 @@ Change Log
 
 ### Next release
 * Added `compressTextures` stage to compress input textures to a variety of compressed texture formats.
+
+### 0.1.0-alpha10 - 2017-01-10
 * Added `tangentsBitangents` generation option
 
 ### 0.1.0-alpha9 - 2017-01-03
