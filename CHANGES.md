@@ -1,6 +1,9 @@
 Change Log
 ==========
 
+### 0.1.0-alpha10 - 2017-01-09
+* Added `tangentsBitangents` generation option
+
 ### 0.1.0-alpha9 - 2017-01-03
 * Fixed issue with embedding base64 encoded shader strings for assets using the KHR_materials_common extension
 
