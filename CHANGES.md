@@ -3,6 +3,7 @@ Change Log
 
 ### Next release
 * Added `compressTextures` stage to compress input textures to a variety of compressed texture formats.
+* Added `tangentsBitangents` generation option
 
 ### 0.1.0-alpha9 - 2017-01-03
 * Fixed issue with embedding base64 encoded shader strings for assets using the KHR_materials_common extension
