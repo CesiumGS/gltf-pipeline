@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-### 0.1.0-alpha10 - 2017-01-09
+### 0.1.0-alpha10 - 2017-01-10
 * Added `tangentsBitangents` generation option
 
 ### 0.1.0-alpha9 - 2017-01-03
