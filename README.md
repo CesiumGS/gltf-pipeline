@@ -80,6 +80,8 @@ This project bundles several native binaries for texture compression.
 * [crunch](https://github.com/BinomialLLC/crunch) - Windows binary built from [crunch](https://github.com/BinomialLLC/crunch), macOS binary built from [BKcore/crunch-osx](https://github.com/BKcore/crunch-osx), Linux binary built from [tomerb/linux_fixes](https://github.com/tomerb/crunch/tree/linux_fixes).
 * [astc-encoder](https://github.com/ARM-software/astc-encoder) - Windows, macOS, and Linux binaries built from source.
 
+On Linux you may need to install g++ 4.8 as some of the tools link to the libgcc and libstdc++ runtimes.
+
 Run the help command for each tool for a more detailed description of the supported command-line options.
 
 ### Running Test Coverage
