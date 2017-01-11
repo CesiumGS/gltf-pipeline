@@ -298,14 +298,6 @@ describe('compressTextures', function() {
         expect(verifyCrunch(gltfPath, pngPath, options), done).toResolve();
     });
 
-    it('crunch-dxt3', function(done) {
-        var options = {
-            format : 'crunch-dxt3'
-        };
-
-        expect(verifyCrunch(gltfPath, pngPath, options), done).toResolve();
-    });
-
     it('crunch-dxt5', function(done) {
         var options = {
             format : 'crunch-dxt5'
@@ -373,7 +365,7 @@ describe('compressTextures', function() {
     });
 
     it('sets quality', function(done) {
-        var formats = ['pvrtc1', 'pvrtc2', 'etc1', 'etc2', 'astc', 'dxt1', 'dxt3', 'dxt5', 'crunch-dxt1', 'crunch-dxt3', 'crunch-dxt5'];
+        var formats = ['pvrtc1', 'pvrtc2', 'etc1', 'etc2', 'astc', 'dxt1', 'dxt3', 'dxt5', 'crunch-dxt1', 'crunch-dxt5'];
         var promises = [];
         var length = formats.length;
 
