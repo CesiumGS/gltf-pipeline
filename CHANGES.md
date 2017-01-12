@@ -1,6 +1,9 @@
 Change Log
 ==========
 
+### 0.1.0-alpha11 - 2017-01-12
+* Change Cesium `Geometry`'s and `VertexFormat`'s `binormal` attribute to bitangent.
+
 ### 0.1.0-alpha10 - 2017-01-10
 * Added `tangentsBitangents` generation option
 
