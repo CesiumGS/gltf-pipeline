@@ -87,7 +87,7 @@ describe('compressTextureCoordinates', function() {
             },
             shaders : {
                 VS : {
-                    type: WebGLConstants.VERTEX_SHADER,
+                    type : WebGLConstants.VERTEX_SHADER,
                     extras : {
                         _pipeline : {
                             source : ''
@@ -110,7 +110,7 @@ describe('compressTextureCoordinates', function() {
             expect(encodedBuffer.length).toEqual(buffer.byteLength);
 
             var vs = gltf.shaders.VS.extras._pipeline.source;
-            expect(typeof vs).toEqual('string')
+            expect(typeof vs).toEqual('string');
 
             var texCoord = new Cartesian2();
             for (var i = 0; i < texCoordAccessor.count; i++) {
