@@ -91,6 +91,15 @@ The documentation will be placed in the `doc` folder.
 * To debug the tests in Webstorm, open the Gulp tab, right click the `test` task, and click `Debug 'test'`.
 * To run a single test, change the test function from `it` to `fit`.
 
+## Deploying to npm
+
+* Update the `version` in [package.json](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/blob/master/package.json) to match the latest version in [CHANGES.md](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/blob/master/CHANGES.md), then run
+```
+npm run prepublish
+npm publish
+```
+Contact [@lilleyse](https://github.com/lilleyse) if you need access to publish.
+
 ## Contributions
 
 Pull requests are appreciated!  Please use the same [Contributor License Agreement (CLA)](https://github.com/AnalyticalGraphicsInc/cesium/blob/master/CONTRIBUTING.md) and [Coding Guide](https://github.com/AnalyticalGraphicsInc/cesium/blob/master/Documentation/Contributors/CodingGuide/README.md) used for [Cesium](http://cesiumjs.org/).
