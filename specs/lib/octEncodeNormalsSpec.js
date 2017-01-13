@@ -90,7 +90,7 @@ describe('octEncodeNormals', function() {
                    type: WebGLConstants.VERTEX_SHADER,
                    extras : {
                        _pipeline : {
-                           source : new Buffer('')
+                           source : ''
                        }
                    }
                }
@@ -110,7 +110,7 @@ describe('octEncodeNormals', function() {
            expect(encodedBuffer.length).toEqual(buffer.byteLength);
 
            var vs = gltf.shaders.VS.extras._pipeline.source;
-           expect(Buffer.isBuffer(vs)).toBe(true);
+           expect(typeof vs).toEqual('string');
 
            var normal = new Cartesian3();
            for (var i = 0; i < normalAccessor.count; i++) {
@@ -289,7 +289,7 @@ describe('octEncodeNormals', function() {
                     type: WebGLConstants.VERTEX_SHADER,
                     extras : {
                         _pipeline : {
-                            source : new Buffer('')
+                            source : ''
                         }
                     }
                 },
@@ -297,7 +297,7 @@ describe('octEncodeNormals', function() {
                     type: WebGLConstants.VERTEX_SHADER,
                     extras : {
                         _pipeline : {
-                            source : new Buffer('')
+                            source : ''
                         }
                     }
                 }

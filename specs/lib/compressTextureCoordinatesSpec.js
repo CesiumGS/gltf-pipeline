@@ -1,9 +1,10 @@
 'use strict';
 var Cesium = require('cesium');
+var compressTextureCoordinates = require('../../lib/compressTextureCoordinates');
+
 var AttributeCompression = Cesium.AttributeCompression;
 var Cartesian2 = Cesium.Cartesian2;
 var WebGLConstants = Cesium.WebGLConstants;
-var compressTextureCoordinates = require('../../lib/compressTextureCoordinates');
 
 describe('compressTextureCoordinates', function() {
     it('compresses texture coordinates', function(done) {
@@ -86,10 +87,10 @@ describe('compressTextureCoordinates', function() {
             },
             shaders : {
                 VS : {
-                    type: WebGLConstants.VERTEX_SHADER,
+                    type : WebGLConstants.VERTEX_SHADER,
                     extras : {
                         _pipeline : {
-                            source : new Buffer('')
+                            source : ''
                         }
                     }
                 }
@@ -109,7 +110,7 @@ describe('compressTextureCoordinates', function() {
             expect(encodedBuffer.length).toEqual(buffer.byteLength);
 
             var vs = gltf.shaders.VS.extras._pipeline.source;
-            expect(Buffer.isBuffer(vs)).toBe(true);
+            expect(typeof vs).toEqual('string');
 
             var texCoord = new Cartesian2();
             for (var i = 0; i < texCoordAccessor.count; i++) {
@@ -295,7 +296,7 @@ describe('compressTextureCoordinates', function() {
                     type: WebGLConstants.VERTEX_SHADER,
                     extras : {
                         _pipeline : {
-                            source : new Buffer('')
+                            source : ''
                         }
                     }
                 },
@@ -303,7 +304,7 @@ describe('compressTextureCoordinates', function() {
                     type: WebGLConstants.VERTEX_SHADER,
                     extras : {
                         _pipeline : {
-                            source : new Buffer('')
+                            source : ''
                         }
                     }
                 }
