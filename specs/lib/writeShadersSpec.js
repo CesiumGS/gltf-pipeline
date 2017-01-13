@@ -29,8 +29,7 @@ describe('writeShaders', function() {
                             "extras": {
                                 "_pipeline": {
                                     "source": fragmentShaderData,
-                                    "extension": '.glsl',
-                                    "deleteExtras": true
+                                    "extension": '.glsl'
                                 }
                             }
                         }

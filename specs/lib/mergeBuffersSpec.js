@@ -28,8 +28,7 @@ describe('mergeBuffers', function() {
                     "extras": {
                         "_pipeline": {
                           "source": buffer0,
-                          "extension": ".bin",
-                          "deleteExtras": true
+                          "extension": ".bin"
                         }
                     }
                 },
@@ -40,8 +39,7 @@ describe('mergeBuffers', function() {
                     "extras": {
                         "_pipeline": {
                           "source": buffer1,
-                          "extension": ".bin",
-                          "deleteExtras": true
+                          "extension": ".bin"
                         }
                     }
                 }
@@ -71,8 +69,7 @@ describe('mergeBuffers', function() {
                     "extras": {
                         "_pipeline": {
                           "source": bufferMerged,
-                          "extension": ".bin",
-                          "deleteExtras": true
+                          "extension": ".bin"
                         }
                     }
                 }

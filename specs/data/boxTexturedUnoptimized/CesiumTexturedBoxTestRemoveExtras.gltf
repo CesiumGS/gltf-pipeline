@@ -89,9 +89,7 @@
                 "shininess": 256
             },
             "extras": {
-                "_pipeline": {
-                    "deleteExtras": true
-                }
+                "_pipeline": {}
             }
         }
     },
@@ -109,16 +107,12 @@
                     "material": "Effect-Texture",
                     "mode": 4,
                     "extras": {
-                        "_pipeline": {
-                            "deleteExtras": true
-                        }
+                        "_pipeline": {}
                     }
                 }
             ],
             "extras": {
-                "_pipeline": {
-                    "deleteExtras": true
-                }
+                "_pipeline": {}
             }
         }
     },
@@ -130,9 +124,7 @@
             ],
             "name": "Mesh",
             "extras": {
-                "_pipeline": {
-                    "deleteExtras": true
-                }
+                "_pipeline": {}
             }
         }
     },
@@ -146,9 +138,7 @@
             "fragmentShader": "CesiumTexturedBoxTest0FS",
             "vertexShader": "CesiumTexturedBoxTest0VS",
             "extras": {
-                "_pipeline": {
-                    "deleteExtras": true
-                }
+                "_pipeline": {}
             }
         }
     },
@@ -159,9 +149,7 @@
             "wrapS": 10497,
             "wrapT": 10497,
             "extras": {
-                "_pipeline": {
-                    "deleteExtras": true
-                }
+                "_pipeline": {}
             }
         }
     },
@@ -172,9 +160,7 @@
                 "node_3"
             ],
             "extras": {
-                "_pipeline": {
-                    "deleteExtras": true
-                }
+                "_pipeline": {}
             }
         }
     },
