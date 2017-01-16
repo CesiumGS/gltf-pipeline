@@ -93,11 +93,34 @@ The documentation will be placed in the `doc` folder.
 
 ## Deploying to npm
 
-* Update the `version` in [package.json](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/blob/master/package.json) to match the latest version in [CHANGES.md](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/blob/master/CHANGES.md), then run
+* Proofread [CHANGES.md](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/blob/master/CHANGES.md).
+* Update the `version` in [package.json](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/blob/master/package.json) to match the latest version in [CHANGES.md](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/blob/master/CHANGES.md).
+* Make sure to run the tests and ensure they pass.
+* If any changes are required, commit and push them to the repository.
+* Create and test the package.
+```
+## NPM Pack
+## Creates tarball. Verify using 7-zip (or your favorite archiver).
+## If you find unexpected/unwanted files, add them to .npmignore, and then run npm pack again.
+npm pack
+
+## Test the package
+## Copy and install the package in a temporary directory
+mkdir temp && cp <tarball> temp/
+npm install --production <tarball>
+node -e "var test = require('gltf-pipeline');" # No output on success
+
+# If module has executables, then test those now.
+```
+* Tag and push the release.
+  * `git tag -a <version> -m "<message>"`
+  * `git push origin <version>`
+* Publish
 ```
 npm run prepublish
 npm publish
 ```
+
 Contact [@lilleyse](https://github.com/lilleyse) if you need access to publish.
 
 ## Contributions
