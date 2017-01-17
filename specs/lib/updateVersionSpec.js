@@ -232,25 +232,38 @@ describe('updateVersion', function() {
             cameras: {
                 camera: {
                     perspective: {
-                        aspectRatio : 0.0,
-                        yfov : 0.0
+                        aspectRatio: 0.0,
+                        yfov: 0.0
                     }
                 }
             },
             nodes: {
+                rootTransform: {
+                    children: [
+                        'skeletonNode',
+                        'meshNode'
+                    ],
+                    matrix: [
+                        1, 0,  0, 0,
+                        0, 0, -1, 0,
+                        0, 1,  0, 0,
+                        0, 0,  0, 1
+                    ]
+                },
+                skeletonNode: {},
                 meshNode: {
-                    meshes: ['mesh']
-                },
-                rootNode: {
-                    children: ['jointNodeOne', 'jointNodeTwo', 'meshNode']
-                },
-                jointNodeOne: {
-                    jointName: 'jointOne',
-                    meshes: ['mesh']
-                },
-                jointNodeTwo: {
-                    jointName: 'jointTwo',
-                    translation: [1.0, 0.0, 0.0]
+                    skin: 'someSkin',
+                    skeletons: [
+                        'skeletonNode'
+                    ]
+                }
+            },
+            scene: 'defaultScene',
+            scenes: {
+                defaultScene: {
+                    nodes: [
+                        'rootTransform'
+                    ]
                 }
             }
         };
@@ -295,20 +308,12 @@ describe('updateVersion', function() {
         expect(primitive.attributes.APPLICATIONSPECIFIC).not.toBeDefined();
         expect(primitive.attributes._APPLICATIONSPECIFIC).toEqual('accessor');
         expect(primitive.attributes._TEMPERATURE).toEqual('accessor_temperature');
-        var nodes = gltf.nodes;
-        var rootNode = nodes.rootNode;
-        expect(rootNode.children).toEqual(['jointNodeOne', 'meshNode']);
-        var rootNodeSkeleton = nodes['rootNode-skeleton'];
-        expect(rootNodeSkeleton.matrix).toBeDefined();
-        expect(rootNodeSkeleton.children).toEqual(['jointNodeTwo-skeleton', 'jointNodeOne-skeleton']);
-        var jointNodeOneSkeleton = nodes['jointNodeOne-skeleton'];
-        expect(jointNodeOneSkeleton.meshes).not.toBeDefined();
-        var jointNodeOne = nodes.jointNodeOne;
-        expect(jointNodeOne.meshes).toEqual(['mesh']);
-        expect(jointNodeOne.jointName).not.toBeDefined();
-        var jointNodeTwoSkeleton = nodes['jointNodeTwo-skeleton'];
-        expect(jointNodeTwoSkeleton.translation).toEqual([1.0, 0.0, 0.0]);
-        expect(nodes.jointNodeTwo).not.toBeDefined();
+        var rootTransform = gltf.nodes.rootTransform;
+        var rootSkeletonNode = gltf.nodes['root-skeletonNode'];
+        var scene = gltf.scenes.defaultScene;
+        expect(scene.nodes).toEqual(['rootTransform', 'root-skeletonNode']);
+        expect(rootTransform.children).toEqual(['meshNode']);
+        expect(rootSkeletonNode.matrix).toEqual(rootTransform.matrix);
         var camera = gltf.cameras.camera;
         expect(camera.perspective.aspectRatio).not.toBeDefined();
         expect(camera.perspective.yfov).toEqual(1.0);
