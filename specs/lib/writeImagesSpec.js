@@ -28,8 +28,7 @@ describe('writeImages', function() {
                             "extras": {
                                 "_pipeline": {
                                     "source": imageData,
-                                    "extension": '.png',
-                                    "deleteExtras": true
+                                    "extension": '.png'
                                 }
                             }
                         }

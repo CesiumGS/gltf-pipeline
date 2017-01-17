@@ -41,6 +41,7 @@ node ./bin/gltf-pipeline.js -i ./specs/data/boxTexturedUnoptimized/CesiumTexture
 |`--compressTextureCoordinates`, `-c`|Compress the testure coordinates of this glTF asset.|No, default `false`|
 |`--removeNormals`, `-r`|Strips off existing normals, allowing them to be regenerated.|No, default `false`|
 |`--faceNormals`, `-f`|If normals are missing, they should be generated using the face normal.|No, default `false`|
+|`--tangentsBitangents`|If normals and texture coordinates are given, generate tangents and bitangents.|No, default `false`|
 |`--cesium`, `-c`|Optimize the glTF for Cesium by using the sun as a default light source.|No, default `false`|
 |`--kmc.enable`|Materials should be expressed using the KHR_materials_common extension. If other `kmc` flags are enabled, this is implicitly true.|No, default `false`|
 |`--kmc.doubleSided`|Declares whether backface culling should be disabled.|No, default `false`|
@@ -89,6 +90,38 @@ The documentation will be placed in the `doc` folder.
 
 * To debug the tests in Webstorm, open the Gulp tab, right click the `test` task, and click `Debug 'test'`.
 * To run a single test, change the test function from `it` to `fit`.
+
+## Deploying to npm
+
+* Proofread [CHANGES.md](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/blob/master/CHANGES.md).
+* Update the `version` in [package.json](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/blob/master/package.json) to match the latest version in [CHANGES.md](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/blob/master/CHANGES.md).
+* Make sure to run the tests and ensure they pass.
+* If any changes are required, commit and push them to the repository.
+* Create and test the package.
+```
+## NPM Pack
+## Creates tarball. Verify using 7-zip (or your favorite archiver).
+## If you find unexpected/unwanted files, add them to .npmignore, and then run npm pack again.
+npm pack
+
+## Test the package
+## Copy and install the package in a temporary directory
+mkdir temp && cp <tarball> temp/
+npm install --production <tarball>
+node -e "var test = require('gltf-pipeline');" # No output on success
+
+# If module has executables, then test those now.
+```
+* Tag and push the release.
+  * `git tag -a <version> -m "<message>"`
+  * `git push origin <version>`
+* Publish
+```
+npm run prepublish
+npm publish
+```
+
+Contact [@lilleyse](https://github.com/lilleyse) if you need access to publish.
 
 ## Contributions
 
