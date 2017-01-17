@@ -3,6 +3,7 @@ Change Log
 
 ### 0.1.0-alpha10 - 2017-01-10
 * Added `tangentsBitangents` generation option
+* Added `updateVersion` stage for transitioning assets between glTF version and migrated any glTF 0.8 code out of `addDefaults`
 
 ### 0.1.0-alpha9 - 2017-01-03
 * Fixed issue with embedding base64 encoded shader strings for assets using the KHR_materials_common extension
@@ -14,7 +15,6 @@ Change Log
 ### 0.1.0-alpha7 - 2016-12-08
 * `modelMaterialsCommon` renamed to `processModelMaterialsCommon`.
 * Added `generateModelMaterialsCommon` and command line `kmc` flags for generating models with the `KHR_materials_common` extension.
-* Added `updateVersion` stage for transitioning assets between glTF version and migrated any glTF 0.8 code out of `addDefaults`
 
 ### 0.1.0-alpha6 - 2016-11-18
 
