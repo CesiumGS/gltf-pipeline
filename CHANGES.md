@@ -1,6 +1,9 @@
 Change Log
 ==========
 
+### 0.1.0-alpha11 - ??
+* Fixed a bug in `addPipelineExtras` that made it try to add extras to null objects.
+
 ### 0.1.0-alpha10 - 2017-01-10
 * Added `tangentsBitangents` generation option
 
