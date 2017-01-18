@@ -6,23 +6,6 @@
             "componentType": 5123,
             "count": 36,
             "type": "SCALAR"
-        },
-        "accessor_25": {
-            "bufferView": "bufferView_29",
-            "byteOffset": 0,
-            "componentType": 5123,
-            "count": 36,
-            "type": "SCALAR",
-            "min": [
-                null,
-                null,
-                null
-            ],
-            "max": [
-                null,
-                null,
-                null
-            ]
         }
     },
     "animations": {
