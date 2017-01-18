@@ -1,6 +1,9 @@
 Change Log
 ==========
 
+### 0.1.0-alpha11 - ??
+* Optimized `mergeBuffers` to avoid repeated copies, drastically improving performance when there are lots of buffers to merge.
+
 ### 0.1.0-alpha10 - 2017-01-10
 * Added `tangentsBitangents` generation option
 
