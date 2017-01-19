@@ -3,6 +3,7 @@ Change Log
 
 ### 0.1.0-alpha11 - ??
 * Optimized `mergeBuffers` to avoid repeated copies, drastically improving performance when there are lots of buffers to merge.
+* Fixed a bug in `addPipelineExtras` that made it try to add extras to null objects.
 
 ### 0.1.0-alpha10 - 2017-01-10
 * Added `tangentsBitangents` generation option

@@ -59,4 +59,26 @@ describe('addPipelineExtras', function() {
         expect(gltf.textures.texture_Image0001.extras._pipeline).toBeDefined();
         expect(gltf.textures.texture_Image0001.extras.misc).toBeDefined();
     });
+
+    it('does not attempt to add extras to null objects', function() {
+        gltf.accessors.accessor_25 = {
+            "bufferView": "bufferView_29",
+            "byteOffset": 0,
+            "componentType": 5123,
+            "count": 36,
+            "type": "SCALAR",
+            "min": [
+                null,
+                null,
+                null
+            ],
+            "max": [
+                null,
+                null,
+                null
+            ]
+        };
+        addPipelineExtras(gltf);
+        expect(gltf.accessors.accessor_25).toBeDefined();
+    });
 });
