@@ -51,7 +51,7 @@ node ./bin/gltf-pipeline.js -i ./specs/data/boxTexturedUnoptimized/CesiumTexture
 |`--ao.groundPlane`|Simulate a groundplane at the lowest point of the model when baking AO.|No, default `false`|
 |`--ao.ambientShadowContribution`|Amount of AO to show when blending between shader computed lighting and AO. 1.0 is full AO, 0.5 is a 50/50 blend.|No, default `0.5`|
 |`--ao.quality`|Quality to use when baking AO. Valid settings are high, medium, and low.|No, default `low`|
-|`--texcomp.format`|The compressed texture format. Must be one of the following: `pvrtc1`, `pvrtc2`, `etc1`, `etc2`, `astc`, `dxt1`, `dxt3`, `dxt5`, `crunch-dxt1`, `crunch-dxt5`|No, unless other texcomp options are set.|
+|`--texcomp.format`|The compressed texture format. Multiple formats may be supplied by repeating this flag. Must be one of the following: `pvrtc1`, `pvrtc2`, `etc1`, `etc2`, `astc`, `dxt1`, `dxt3`, `dxt5`, `crunch-dxt1`, `crunch-dxt5`|No, unless other texcomp options are set.|
 |`--texcomp.quality`|The compressed texture quality from 0 to 10.|No, default `5`|
 |`--texcomp.bitrate`|The bitrate when using the pvrtc or astc formats. For pvrtc formats this value must be `2.0` or `4.0`.|No, default `2.0`|
 |`--texcomp.blockSize`|The block size for astc compression. Smaller block sizes result in higher bitrates. This value is ignored if `options.bitrate` is also set. Must be one of the following: `4x4`, `5x4`, `5x5`, `6x5`, `6x6`, `8x5`, `8x6`, `8x8`, `10x5`, `10x6`, `10x8`, `10x10`, `12x10`, `12x12`|No, default `8x8`|

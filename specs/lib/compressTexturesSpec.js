@@ -6,6 +6,7 @@ var dataUriToBuffer = require('data-uri-to-buffer');
 var fsExtra = require('fs-extra');
 var path = require('path');
 var Promise = require('bluebird');
+var compressTexture = require('../../lib/compressTexture');
 var compressTextures = require('../../lib/compressTextures');
 var directoryExists = require('../../lib/directoryExists');
 var Pipeline = require('../../lib/Pipeline');
@@ -14,6 +15,7 @@ var fsExtraReadJson = Promise.promisify(fsExtra.readJson);
 
 var defined = Cesium.defined;
 var DeveloperError = Cesium.DeveloperError;
+var WebGLConstants = Cesium.WebGLConstants;
 
 var basePath = './specs/data/boxTexturedUnoptimized/';
 var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf';
@@ -26,13 +28,12 @@ var pngPath = 'Cesium_Logo_Flat.png';
 var gifPath = 'Cesium_Logo_Flat.gif';
 var decalPath = 'Cesium_Logo_Flat_Decal.png'; // Contains alpha channel
 
-function compressTexture(gltfPath, imagePath, options) {
+function compressGltfTexture(gltfPath, imagePath, options) {
     return fsExtraReadJson(gltfPath)
         .then(function(gltf) {
             if (defined(imagePath)) {
                 gltf.images.Image0001.uri = imagePath;
             }
-            options.enable = true;
             var pipelineOptions = {
                 textureCompressionOptions : options,
                 basePath : basePath
@@ -45,7 +46,7 @@ function compressTexture(gltfPath, imagePath, options) {
 }
 
 function verifyKTX(gltfPath, imagePath, options, expectedFormat) {
-    return compressTexture(gltfPath, imagePath, options)
+    return compressGltfTexture(gltfPath, imagePath, options)
         .then(function(uri) {
             var buffer = dataUriToBuffer(uri);
             var internalFormat = buffer.readUInt32LE(28);
@@ -61,7 +62,7 @@ function verifyKTX(gltfPath, imagePath, options, expectedFormat) {
 }
 
 function verifyCrunch(gltfPath, imagePath, options) {
-    return compressTexture(gltfPath, imagePath, options)
+    return compressGltfTexture(gltfPath, imagePath, options)
         .then(function(uri) {
             expect(uri.indexOf('image/crn') >= 0).toBe(true);
         });
@@ -109,7 +110,7 @@ describe('compressTextures', function() {
     it('throws with undefined format', function() {
         var gltf = {};
         expect(function() {
-            compressTextures(gltf);
+            compressTexture(gltf, 'Image0001');
         }).toThrowDeveloperError();
     });
 
@@ -119,7 +120,7 @@ describe('compressTextures', function() {
             format : 'invalid-format'
         };
         expect(function() {
-            compressTextures(gltf, options);
+            compressTexture(gltf, 'Image0001', options);
         }).toThrowDeveloperError();
     });
 
@@ -130,7 +131,7 @@ describe('compressTextures', function() {
             quality : 11
         };
         expect(function() {
-            compressTextures(gltf, options);
+            compressTexture(gltf, 'Image0001', options);
         }).toThrowDeveloperError();
     });
 
@@ -141,7 +142,7 @@ describe('compressTextures', function() {
             bitrate : 3.0
         };
         expect(function() {
-            compressTextures(gltf, options);
+            compressTexture(gltf, 'Image0001', options);
         }).toThrowDeveloperError();
     });
 
@@ -152,7 +153,7 @@ describe('compressTextures', function() {
             blockSize : '1x1'
         };
         expect(function() {
-            compressTextures(gltf, options);
+            compressTexture(gltf, 'Image0001', options);
         }).toThrowDeveloperError();
     });
 
@@ -385,8 +386,8 @@ describe('compressTextures', function() {
                 quality : 5
             };
             promises.push(Promise.all([
-                compressTexture(gltfPath, pngPath, lowQuality),
-                compressTexture(gltfPath, pngPath, highQuality)
+                compressGltfTexture(gltfPath, pngPath, lowQuality),
+                compressGltfTexture(gltfPath, pngPath, highQuality)
             ]).then(compareUris));
         }
 
@@ -421,5 +422,24 @@ describe('compressTextures', function() {
                         expect(exists).toBe(false);
                     });
             }), done).toRejectWith(DeveloperError);
+    });
+
+    it('sets sampler minFilter to a non-mipmap format', function(done) {
+        var options = {
+            format : 'etc1'
+        };
+        expect(fsExtraReadJson(gltfPath)
+            .then(function(gltf) {
+                var sampler = gltf.samplers.sampler_0;
+                expect(sampler.minFilter).toBe(WebGLConstants.LINEAR_MIPMAP_LINEAR);
+                var pipelineOptions = {
+                    textureCompressionOptions : options,
+                    basePath : basePath
+                };
+                return Pipeline.processJSON(gltf, pipelineOptions)
+                    .then(function() {
+                        expect(sampler.minFilter).toBe(WebGLConstants.LINEAR);
+                    });
+            }), done).toResolve();
     });
 });
