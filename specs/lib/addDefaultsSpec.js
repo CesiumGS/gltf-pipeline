@@ -299,8 +299,12 @@ describe('addDefaults', function() {
         };
 
         addDefaults(gltf);
-        expect(gltf.nodes.nodeId.children).toEqual([]);
-        expect(gltf.nodes.nodeId.matrix).toEqual([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
+        var node = gltf.nodes.nodeId;
+        expect(node.children).toEqual([]);
+        expect(node.matrix).toEqual([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
+        expect(node.translation).not.toBeDefined();
+        expect(node.rotation).not.toBeDefined();
+        expect(node.scale).not.toBeDefined();
 
         gltf = {
             "nodes": {
