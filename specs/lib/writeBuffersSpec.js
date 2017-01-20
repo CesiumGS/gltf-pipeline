@@ -28,8 +28,7 @@ describe('writeBuffers', function() {
                             "extras": {
                                 "_pipeline": {
                                     "source": bufferData,
-                                    "extension": '.bin',
-                                    "deleteExtras": true
+                                    "extension": '.bin'
                                 }
                             }
                         }
