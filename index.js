@@ -36,6 +36,7 @@ module.exports = {
     removePipelineExtras : require('./lib/removePipelineExtras'),
     RemoveUnusedProperties : require('./lib/RemoveUnusedProperties'),
     removeUnusedVertices : require('./lib/removeUnusedVertices'),
+    triangleAxisAlignedBoundingBoxOverlap : require('./lib/triangleAxisAlignedBoundingBoxOverlap'),
     uninterleaveAndPackBuffers : require('./lib/uninterleaveAndPackBuffers'),
     writeAccessor : require('./lib/writeAccessor'),
     writeBinaryGltf : require('./lib/writeBinaryGltf'),
