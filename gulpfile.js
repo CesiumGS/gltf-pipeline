@@ -40,11 +40,15 @@ gulp.task('jsHint-watch', function () {
 });
 
 function excludeCompressedTextures(jasmine) {
+    var excludedSpecs = ['compressTexturesSpec.js', 'compressTexturesMultipleFormatsSpec.js'];
     var specFiles = jasmine.specFiles;
-    var length = specFiles.length;
-    for (var i = 0; i < length; ++i) {
-        if (specFiles[i].indexOf('compressTexturesSpec.js') > -1) {
-            break;
+    var specsLength = specFiles.length;
+    var excludedLength = excludedSpecs.length;
+    for (var i = 0; i < specsLength; ++i) {
+        for (var j = 0; j < excludedLength; ++j) {
+            if (specFiles[i].indexOf(excludedSpecs[j]) > -1) {
+                break;
+            }
         }
     }
     specFiles.splice(i, 1);
@@ -86,7 +90,11 @@ gulp.task('coverage', function () {
 
     // Exclude compressTexturesSpec from coverage for Travis builds
     // Travis runs Ubuntu 12.04.5 which has glibc 2.15, while crunch requires glibc 2.22 or higher
-    var additionalExcludes = defined(argv.excludeCompressedTextures) ? 'specs/lib/compressedTexturesSpec.js' : '';
+    var additionalExcludes = '';
+    if (defined(argv.excludeCompressedTextures)) {
+        additionalExcludes += 'specs/lib/compressedTexturesSpec.js';
+        additionalExcludes += 'specs/lib/compressTexturesMultipleFormatsSpec.js';
+    }
 
     child_process.execSync('istanbul' +
         ' cover' +
