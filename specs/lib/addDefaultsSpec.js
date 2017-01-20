@@ -34,8 +34,6 @@ describe('addDefaults', function() {
         addDefaults(gltf);
         var accessor = gltf.accessors.accessorId;
         expect(accessor.byteStride).toEqual(0);
-        expect(accessor.min).toBeDefined();
-        expect(accessor.max).toBeDefined();
     });
 
     it('Adds animation properties', function() {
@@ -91,16 +89,7 @@ describe('addDefaults', function() {
         expect(gltf.asset.premultipliedAlpha).toEqual(false);
         expect(gltf.asset.profile).toBeDefined();
         expect(gltf.asset.profile.api).toEqual('WebGL');
-        expect(gltf.asset.profile.version).toEqual('1.0.2');
-    });
-
-    it('Updates version property from glTF 0.8', function() {
-        var gltf = {
-            "version" : 0.8
-        };
-
-        addDefaults(gltf);
-        expect(gltf.asset.version).toEqual('0.8');
+        expect(gltf.asset.profile.version).toEqual('1.0.3');
     });
 
     it('Adds buffer properties', function() {
@@ -146,146 +135,6 @@ describe('addDefaults', function() {
         var materialsCopy = clone(gltf.materials);
         addDefaults(gltf);
         expect(gltf.materials).toEqual(materialsCopy);
-    });
-
-    it('do not change if the material has a non-KHR_materials_common extension', function() {
-        var gltf = {
-            "materials": {
-                "lambert1": {
-                    "extensions": {
-                        "not_KHR_materials_common" : {
-                            "technique" : "LAMBERT",
-                            "values": {
-                                "diffuse": [0.5, 0.5, 0.5, 1.0]
-                            }
-                        }
-                    }
-                }
-            },
-            "extensionsUsed": [
-                "not_KHR_materials_common"
-            ]
-        };
-        var materialsCopy = clone(gltf.materials);
-        addDefaults(gltf);
-        expect(gltf.materials).toEqual(materialsCopy);
-    });
-
-    it('generates a material if no technique or extension values are given', function() {
-        var gltf = {
-            "materials": {
-                "material1": {
-                    "values": {
-                        "ambient": [0, 0, 0, 1],
-                        "diffuse": [1, 0, 0, 1],
-                        "emission": "texture_file2"
-                    }
-                }
-            }
-        };
-        var expectValues = {
-            "ambient": [0, 0, 0, 1],
-            "diffuse": [1, 0, 0, 1],
-            "emission": "texture_file2",
-            "specular": [0, 0, 0, 1],
-            "shininess": 0.0,
-            "transparency": 1.0
-        };
-
-        var expectedStates = {
-            enable: [
-                WebGLConstants.CULL_FACE,
-                WebGLConstants.DEPTH_TEST
-            ]
-        };
-
-        var options = {
-            technique: 'PHONG'
-        };
-
-        var gltfClone;
-        var materialID;
-
-        // default lambert
-        gltfClone = clone(gltf);
-        addDefaults(gltfClone);
-        expect(Object.keys(gltfClone.materials).length > 0).toEqual(true);
-        expect(Object.keys(gltfClone.techniques).length > 0).toEqual(true);
-        expect(gltfClone.techniques[Object.keys(gltfClone.techniques)[0]].states).toEqual(expectedStates);
-
-        for (materialID in gltfClone.materials) {
-            if (gltfClone.materials.hasOwnProperty(materialID)) {
-                expect(gltfClone.materials[materialID].values).toEqual(expectValues);
-            }
-        }
-
-        // constant
-        gltfClone = clone(gltf);
-        addDefaults(gltfClone, options);
-        expect(Object.keys(gltfClone.materials).length > 0).toEqual(true);
-        expect(Object.keys(gltfClone.techniques).length > 0).toEqual(true);
-        expect(gltfClone.techniques[Object.keys(gltfClone.techniques)[0]].states).toEqual(expectedStates);
-        for (materialID in gltfClone.materials) {
-            if (gltfClone.materials.hasOwnProperty(materialID)) {
-                expect(gltfClone.materials[materialID].values).toEqual(expectValues);
-            }
-        }
-
-        gltf = {
-            "materials": {
-                "lambert-1": {
-                    "values": {
-                        "ambient": [0, 0, 0, 1],
-                        "diffuse": [1, 0, 0, 1],
-                        "emission": "texture_file2",
-                        "shininess": 10.0
-                    }
-                }
-            }
-        };
-
-        expectValues = {
-            "ambient": [0, 0, 0, 1],
-            "diffuse": [1, 0, 0, 1],
-            "emission": "texture_file2",
-            "specular": [0, 0, 0, 1],
-            "shininess": 10.0,
-            "transparency": 1.0
-        };
-
-        // default blinn
-        gltfClone = clone(gltf);
-        addDefaults(gltfClone);
-        expect(Object.keys(gltfClone.materials).length > 0).toEqual(true);
-        expect(Object.keys(gltfClone.techniques).length > 0).toEqual(true);
-        expect(gltfClone.techniques[Object.keys(gltfClone.techniques)[0]].states).toEqual(expectedStates);
-        for (materialID in gltfClone.materials) {
-            if (gltfClone.materials.hasOwnProperty(materialID)) {
-                expect(gltfClone.materials[materialID].values).toEqual(expectValues);
-            }
-        }
-
-        // phong
-        gltfClone = clone(gltf);
-        addDefaults(gltfClone, options);
-        expect(Object.keys(gltfClone.materials).length > 0).toEqual(true);
-        expect(Object.keys(gltfClone.techniques).length > 0).toEqual(true);
-        expect(gltfClone.techniques[Object.keys(gltfClone.techniques)[0]].states).toEqual(expectedStates);
-        for (materialID in gltfClone.materials) {
-            if (gltfClone.materials.hasOwnProperty(materialID)) {
-                expect(gltfClone.materials[materialID].values).toEqual(expectValues);
-            }
-        }
-
-        // check that shader source is in extras._pipeline.source
-        var shaders = gltfClone.shaders;
-        expect(Object.keys(shaders).length > 0).toEqual(true);
-        for (var shaderID in shaders) {
-            if (shaders.hasOwnProperty(shaderID)) {
-                var shader = shaders[shaderID];
-                expect(shader.extras._pipeline.source).toBeDefined();
-            }
-        }
     });
 
     var alphaBlendState = {
@@ -412,227 +261,6 @@ describe('addDefaults', function() {
             }), done).toResolve();
     });
 
-    it('generates techniques and nodes for KHR_materials_common lights', function() {
-        var gltf = {
-            "materials": {
-                "material1": {
-                    "values": {
-                        "ambient": [0, 0, 0, 1],
-                        "diffuse": [0, 0, 0, 1],
-                        "emission": [0, 0, 0, 1]
-                    }
-                }
-            },
-            "nodes": {
-                "node1": {
-                    "children": [],
-                    "extensions": {
-                        "KHR_materials_common": {
-                            "light": "ambientLight"
-                        }
-                    }
-                },
-                "node2": {
-                    "children": [],
-                    "extensions": {
-                        "KHR_materials_common": {
-                            "light": "directionalLight"
-                        }
-                    }
-                },
-                "node3": {
-                    "children": [],
-                    "extensions": {
-                        "KHR_materials_common": {
-                            "light": "pointLight"
-                        }
-                    }
-                },
-                "node4": {
-                    "children": [],
-                    "extensions": {
-                        "KHR_materials_common": {
-                            "light": "spotLight"
-                        }
-                    }
-                }
-
-            },
-            "extensionsUsed": [
-                "KHR_materials_common"
-            ],
-            "extensions": {
-                "KHR_materials_common" : {
-                    "lights": {
-                        "ambientLight": {
-                            "ambient": {
-                                "color": [
-                                    1,
-                                    1,
-                                    1
-                                ]
-                            },
-                            "type": "ambient"
-                        },
-                        "directionalLight": {
-                            "directional": {
-                                "color": [
-                                    1,
-                                    1,
-                                    1
-                                ]
-                            },
-                            "type": "directional"
-                        },
-                        "pointLight": {
-                            "point": {
-                                "color": [
-                                    1,
-                                    1,
-                                    1
-                                ]
-                            },
-                            "constantAttenuation": 0.0,
-                            "distance": 0.0,
-                            "linearAttenuation": 1.0,
-                            "quadraticAttenuation":1.0,
-                            "type": "point"
-                        },
-                        "spotLight": {
-                            "spot": {
-                                "spot": [
-                                    1,
-                                    1,
-                                    1
-                                ]
-                            },
-                            "constantAttenuation": 0.0,
-                            "distance": 0.0,
-                            "linearAttenuation": 1.0,
-                            "quadraticAttenuation":1.0,
-                            "falloffAngle": 1.5,
-                            "falloffExponent": 0.0,
-                            "type": "spot"
-                        }
-                    }
-                }
-            }
-        };
-        var expectValues = {
-            "ambient": [0, 0, 0, 1],
-            "diffuse": [0, 0, 0, 1],
-            "emission": [0, 0, 0, 1],
-            "specular": [0, 0, 0, 1],
-            "shininess": 0.0,
-            "transparency": 1.0
-        };
-        addDefaults(gltf);
-        expect(Object.keys(gltf.materials).length > 0).toEqual(true);
-        expect(Object.keys(gltf.techniques).length > 0).toEqual(true);
-        for (var materialID in gltf.materials) {
-            if (gltf.materials.hasOwnProperty(materialID)) {
-                expect(gltf.materials[materialID].values).toEqual(expectValues);
-            }
-        }
-    });
-
-    it('modelMaterialCommon works with optimizeForCesium', function() {
-        var gltf = {
-            "materials": {
-                "material1": {
-                    "values": {
-                        "ambient": [0, 0, 0, 1],
-                        "diffuse": [1, 0, 0, 1],
-                        "emission": "texture_file2"
-                    }
-                }
-            }
-        };
-
-        var gltfClone = clone(gltf);
-        addDefaults(gltfClone, {
-            optimizeForCesium : true
-        });
-
-        // Uses the Cesium sun as its default light source
-        var fragmentShaderSource = gltfClone.shaders.fragmentShader0.extras._pipeline.source;
-        expect(fragmentShaderSource.indexOf('czm_sunDirectionEC') > -1).toBe(true);
-
-        // Adds the _3DTILESDIFFUSE flag
-        var technique = gltfClone.techniques[Object.keys(gltfClone.techniques)[0]];
-        expect(technique.parameters.diffuse.semantic).toEqual('_3DTILESDIFFUSE');
-
-        gltfClone = clone(gltf);
-        addDefaults(gltfClone);
-        fragmentShaderSource = gltfClone.shaders.fragmentShader0.extras._pipeline.source;
-        expect(fragmentShaderSource.indexOf('czm_sunDirectionEC') > -1).toBe(false);
-    });
-
-    it('modelMaterialCommon add nonstandard semantic', function() {
-        var gltf = {
-            "accessors": {
-                "accessor_3": {
-                    "componentType": 5123,
-                    "type": "SCALAR"
-                }
-            },
-            "extensionsUsed": [
-                "KHR_materials_common"
-            ],
-            "meshes": {
-                "mesh1" : {
-                    "primitives": [
-                        {
-                            "attributes": {
-                                "NORMAL": "accessor_1",
-                                "POSITION": "accessor_2",
-                                "BATCHID": "accessor_3"
-                            },
-                            "indices": "accessor_4",
-                            "material": "material1",
-                            "mode": 4
-                        }
-                    ]
-                }
-            },
-            "materials": {
-                "material1": {
-                    "extensions": {
-                        "KHR_materials_common": {
-                            "doubleSided": false,
-                            "jointCount": 0,
-                            "technique": "PHONG",
-                            "transparent": false,
-                            "values": {
-                                "diffuse": [
-                                    0.3999999910593033,
-                                    0.3999999910593033,
-                                    0.3999999910593033,
-                                    1
-                                ]
-                            }
-                        }
-                    },
-                    "name": "material1"
-                }
-            }
-        };
-
-        var gltfClone = clone(gltf);
-        addDefaults(gltfClone);
-
-        var material = gltfClone.materials.material1;
-        var technique = gltfClone.techniques[material.technique];
-        expect(technique.attributes.a_batchid).toEqual('batchid');
-        expect(technique.parameters.batchid.semantic).toEqual('BATCHID');
-
-        var program = gltfClone.programs[technique.program];
-        expect(program.attributes.indexOf('a_batchid') > -1).toBe(true);
-
-        var vertexShaderSource = gltfClone.shaders[program.vertexShader].extras._pipeline.source.toString();
-        expect(vertexShaderSource.indexOf('a_batchid') > -1).toBe(true);
-    });
-
     it('Adds mesh properties', function() {
         var gltf = {
             "meshes": {
@@ -660,25 +288,6 @@ describe('addDefaults', function() {
         addDefaults(gltf);
         expect(gltf.meshes.meshId.primitives[0].attributes).toBeDefined();
         expect(gltf.meshes.meshId.primitives[0].mode).toEqual(WebGLConstants.TRIANGLES);
-    });
-
-    it('glTF 0.8 to 1.0, primitive.primitive -> primitive.mode', function() {
-        var gltf = {
-            "meshes": {
-                "meshId": {
-                    "primitives": [
-                        {
-                            "indices": "accessorId",
-                            "material": "materialId",
-                            "primitive": 5
-                        }
-                    ]
-                }
-            }
-        };
-
-        addDefaults(gltf);
-        expect(gltf.meshes.meshId.primitives[0].mode).toEqual(WebGLConstants.TRIANGLE_STRIP);
     });
 
     it('Adds node properties', function() {
@@ -715,40 +324,6 @@ describe('addDefaults', function() {
 
         addDefaults(gltf);
         expect(gltf.nodes.nodeId.translation).toEqual([0.0, 0.0, 0.0]);
-        expect(gltf.nodes.nodeId.rotation).toEqual([0.0, 0.0, 0.0, 1.0]);
-    });
-
-    it('glTF 0.8 to 1.0, node.instanceSkin -> node', function() {
-        var gltf = {
-            "nodes": {
-                "nodeId": {
-                    "instanceSkin": {
-                        "skeletons": {},
-                        "skin": {},
-                        "meshes": {}
-                    }
-                }
-            }
-        };
-
-        addDefaults(gltf);
-        expect(gltf.nodes.nodeId.skeletons).toBeDefined();
-        expect(gltf.nodes.nodeId.skin).toBeDefined();
-        expect(gltf.nodes.nodeId.meshes).toBeDefined();
-        expect(gltf.nodes.nodeId.instanceSkin).not.toBeDefined();
-    });
-
-    it('glTF 0.8 to 1.0, axis angle -> quaternion', function() {
-        var gltf = {
-            "version": 0.8,
-            "nodes": {
-                "nodeId": {
-                    "rotation": [1.0, 0.0, 0.0, 0.0]
-                }
-            }
-        };
-
-        addDefaults(gltf);
         expect(gltf.nodes.nodeId.rotation).toEqual([0.0, 0.0, 0.0, 1.0]);
     });
 
@@ -810,8 +385,6 @@ describe('addDefaults', function() {
         expect(gltf.skins.skinId.bindShapeMatrix).toEqual([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
     });
 
-    // TODO: tests for techniqueDefaults()
-
     it('Adds texture properties', function() {
         var gltf = {
             "textures": {
@@ -828,19 +401,6 @@ describe('addDefaults', function() {
         expect(gltf.textures.textureId.internalFormat).toEqual(6408);
         expect(gltf.textures.textureId.target).toEqual(WebGLConstants.TEXTURE_2D);
         expect(gltf.textures.textureId.type).toEqual(WebGLConstants.UNSIGNED_BYTE);
-    });
-
-
-    it('glTF 0.8 to 1.0, allExtensions -> extensionsUsed', function() {
-        var gltf = {
-            "allExtensions": [
-                "KHR_materials_common"
-            ]
-        };
-
-        addDefaults(gltf);
-        expect(gltf.allExtensions).not.toBeDefined();
-        expect(gltf.extensionsUsed).toBeDefined();
     });
 
     it('Adds empty top-level properties', function() {
