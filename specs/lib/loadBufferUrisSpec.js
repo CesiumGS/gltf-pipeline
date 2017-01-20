@@ -28,7 +28,7 @@ describe('loadBufferUris', function() {
                 throw err;
             });
     });
-    
+
     it('loads an external buffer', function(done) {
         var gltf = {
             "buffers": {
