@@ -44,14 +44,14 @@ function excludeCompressedTextures(jasmine) {
     var specFiles = jasmine.specFiles;
     var specsLength = specFiles.length;
     var excludedLength = excludedSpecs.length;
-    for (var i = 0; i < specsLength; ++i) {
+    for (var i = specsLength - 1; i >= 0; --i) {
         for (var j = 0; j < excludedLength; ++j) {
             if (specFiles[i].indexOf(excludedSpecs[j]) > -1) {
+                specFiles.splice(i, 1);
                 break;
             }
         }
     }
-    specFiles.splice(i, 1);
 }
 
 gulp.task('test', function (done) {
@@ -92,7 +92,7 @@ gulp.task('coverage', function () {
     // Travis runs Ubuntu 12.04.5 which has glibc 2.15, while crunch requires glibc 2.22 or higher
     var additionalExcludes = '';
     if (defined(argv.excludeCompressedTextures)) {
-        additionalExcludes += 'specs/lib/compressedTexturesSpec.js';
+        additionalExcludes += 'specs/lib/compressTexturesSpec.js';
         additionalExcludes += 'specs/lib/compressTexturesMultipleFormatsSpec.js';
     }
 
