@@ -113,7 +113,7 @@ describe('getBinaryGltf', function() {
         var gltf = clone(testData.gltf);
         var glbData = getBinaryGltf(gltf, false, false);
         var body = glbData.body;
-        
+
         var binaryBody = testData.buffer;
         expect(bufferEqual(binaryBody, body)).toBe(true);
     });

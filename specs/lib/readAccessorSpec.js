@@ -23,7 +23,7 @@ describe('readAccessor', function() {
                 boxGltf = gltf;
             }), done).toResolve();
     });
-    
+
     function testContainmentAndFit(min, max, data, type) {
         // check if the data in values is bounded by min and max precisely
         var minInValues = new Array(min.length).fill(Number.POSITIVE_INFINITY);

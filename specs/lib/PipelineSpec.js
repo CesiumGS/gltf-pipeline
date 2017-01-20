@@ -35,7 +35,7 @@ describe('Pipeline', function() {
                 expect(gltf.scenes.defaultScene.extras).toBeUndefined();
             }), done).toResolve();
     });
-    
+
     it('optimizes a gltf JSON with external resources', function(done) {
         var options = {
             basePath : path.dirname(gltfPath)
@@ -115,7 +115,7 @@ describe('Pipeline', function() {
     it('will write a file from JSON', function(done) {
         var spy = spyOn(fsExtra, 'outputJsonAsync').and.callFake(function() {});
         var processOptions = {
-            createDirectory : false, 
+            createDirectory : false,
             basePath : path.dirname(gltfPath)
         };
         expect(readGltf(gltfPath)
