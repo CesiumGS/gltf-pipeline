@@ -25,8 +25,8 @@ var environmentSeparator = process.platform === 'win32' ? ';' : ':';
 var nodeBinaries = path.join(__dirname, 'node_modules', '.bin');
 process.env.PATH += environmentSeparator + nodeBinaries;
 
-var jsHintFiles = ['**/*.js', '!node_modules/**', '!coverage/**', '!doc/**'];
-var specFiles = ['**/*.js', '!node_modules/**', '!coverage/**'];
+var jsHintFiles = ['**/*.js', '!node_modules/**', '!coverage/**', '!doc/**', '!dist/**'];
+var specFiles = ['**/*.js', '!node_modules/**', '!coverage/**', '!dist/**'];
 
 gulp.task('jsHint', function () {
     var stream = gulp.src(jsHintFiles)
@@ -76,7 +76,7 @@ gulp.task('coverage', function () {
         ' cover' +
         ' --include-all-sources' +
         ' --dir coverage' +
-        ' -x "specs/** coverage/** index.js gulpfile.js"' +
+        ' -x "specs/** coverage/** dist/** index.js gulpfile.js"' +
         ' node_modules/jasmine/bin/jasmine.js' +
         ' JASMINE_CONFIG_PATH=specs/jasmine.json', {
         stdio: [process.stdin, process.stdout, process.stderr]
@@ -172,7 +172,7 @@ function amdify(source, subDependencyMapping) {
         '        ' + definePathsHeader + '\n' +
         '    ], function(\n' +
         '        ' + defineVariablesHeader + ') {\n    ';
-    var defineFooter = '\n});';
+    var defineFooter = '\n});\n';
     if (defined(returnValue)) {
         defineFooter = '\n    return ' + returnValue + ';' + defineFooter;
     }
