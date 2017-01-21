@@ -67,6 +67,15 @@ To run JSHint automatically when a file is saved, run the following and leave it
 npm run jsHint-watch
 ```
 
+### Building for Cesium integration
+
+Some functionality of gltf-pipeline is used by Cesium as a third party library. The necessary files can be generated using:
+```
+npm run build-cesium
+```
+
+This will output a portion of the gltf-pipeline code into the `dist/cesium` folder, reformatted into AMD style for use with RequireJS and Cesium in the browser.
+
 ### Running Test Coverage
 
 Coverage uses [istanbul](https://github.com/gotwarlost/istanbul).  Run:
