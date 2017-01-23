@@ -2,10 +2,10 @@
 var fs = require('fs');
 var addDefaults = require('../../lib/addDefaults');
 var addPipelineExtras = require('../../lib/addPipelineExtras');
-var getStatistics = require('../../lib/computeStatistics').getStatistics;
+var getStatistics = require('../../lib/getStatistics');
 var readGltf = require('../../lib/readGltf');
 
-describe('computeStatistics', function() {
+describe('getStatistics', function() {
     it('should return stats for simple box test', function(done){
         expect(readGltf('specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf')
             .then(function(gltf) {
@@ -16,7 +16,7 @@ describe('computeStatistics', function() {
                 expect(stats.numberOfExternalRequests).toEqual(4);
 
                 expect(stats.numberOfDrawCalls).toEqual(1);
-                expect(stats.numberOfRenderedPrimitives).toEqual(0);
+                expect(stats.numberOfRenderedPrimitives).toEqual(12);
 
                 expect(stats.numberOfNodes).toEqual(4);
                 expect(stats.numberOfMeshes).toEqual(1);
@@ -35,7 +35,7 @@ describe('computeStatistics', function() {
                 expect(stats.numberOfExternalRequests).toEqual(3);
 
                 expect(stats.numberOfDrawCalls).toEqual(1);
-                expect(stats.numberOfRenderedPrimitives).toEqual(0);
+                expect(stats.numberOfRenderedPrimitives).toEqual(188);
 
                 expect(stats.numberOfNodes).toEqual(5);
                 expect(stats.numberOfMeshes).toEqual(1);
