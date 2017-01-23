@@ -187,16 +187,12 @@ describe('addDefaults', function() {
         };
 
         addPipelineExtras(gltf);
-        loadGltfUris(gltf)
+        expect(loadGltfUris(gltf)
             .then(function() {
                 addDefaults(gltf);
                 var technique = gltf.techniques[Object.keys(gltf.techniques)[0]];
                 expect(technique.states).toEqual(alphaBlendState);
-                done();
-            })
-            .catch(function(err) {
-                throw err;
-            });
+            }), done).toResolve();
     });
 
     it('generates a material with alpha blending if the diffuse color is transparent and no technique or extension values are given', function() {
@@ -238,7 +234,6 @@ describe('addDefaults', function() {
                 var gltf = JSON.parse(data);
                 var originalState = gltf.techniques[Object.keys(gltf.techniques)[0]].states;
                 expect(originalState).not.toEqual(alphaBlendState);
-
                 return readGltf(gltfTransparentPath);
             })
             .then(function (gltf) {
@@ -315,8 +310,10 @@ describe('addDefaults', function() {
         };
 
         addDefaults(gltf);
+        expect(gltf.nodes.nodeId.translation).toEqual([0.0, 0.0, 0.0]);
         expect(gltf.nodes.nodeId.rotation).toEqual([0.0, 0.0, 0.0, 1.0]);
         expect(gltf.nodes.nodeId.scale).toEqual([1.0, 1.0, 1.0]);
+        expect(gltf.nodes.nodeId.matrix).not.toBeDefined();
 
         gltf = {
             "nodes": {
@@ -329,6 +326,8 @@ describe('addDefaults', function() {
         addDefaults(gltf);
         expect(gltf.nodes.nodeId.translation).toEqual([0.0, 0.0, 0.0]);
         expect(gltf.nodes.nodeId.rotation).toEqual([0.0, 0.0, 0.0, 1.0]);
+        expect(gltf.nodes.nodeId.scale).toEqual([1.0, 1.0, 1.0]);
+        expect(gltf.nodes.nodeId.matrix).not.toBeDefined();
     });
 
     it('Adds program properties', function() {

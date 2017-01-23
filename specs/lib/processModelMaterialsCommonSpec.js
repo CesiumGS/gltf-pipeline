@@ -192,9 +192,9 @@ describe('processModelMaterialsCommon', function() {
                             'transparent': false,
                             'values': {
                                 'diffuse': [
-                                    0.3999999910593033,
-                                    0.3999999910593033,
-                                    0.3999999910593033,
+                                    0.4,
+                                    0.4,
+                                    0.4,
                                     1
                                 ]
                             }
