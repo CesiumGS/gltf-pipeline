@@ -32,6 +32,9 @@ describe('updateVersion', function() {
             allExtensions: [
                 'extension'
             ],
+            lights : {
+                'someLight' : true
+            },
             materials: {
                 material: {
                     instanceTechnique: {
@@ -88,6 +91,9 @@ describe('updateVersion', function() {
         expect(gltf.asset.profile).toEqual({});
         expect(gltf.version).not.toBeDefined();
         expect(gltf.extensionsUsed).toEqual(['extension']);
+        expect(gltf.extensions.KHR_materials_common.lights).toEqual({
+            someLight : true
+        });
         var material = gltf.materials.material;
         expect(material.technique).toEqual('technique');
         expect(material.values).toEqual({
