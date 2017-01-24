@@ -65,7 +65,7 @@ describe('writeImages', function() {
             embedImage : true,
             createDirectory : true
         };
-        
+
         expect(writeGltf(gltf, options)
             .then(function() {
                 expect(gltf.images.Cesium_Logo_Flat_Low.extras).not.toBeDefined();
@@ -81,7 +81,7 @@ describe('writeImages', function() {
             embedImage : false,
             createDirectory : true
         };
-        
+
         expect(writeGltf(gltf, options)
             .then(function() {
                 expect(gltf.images.Cesium_Logo_Flat_Low.extras).not.toBeDefined();

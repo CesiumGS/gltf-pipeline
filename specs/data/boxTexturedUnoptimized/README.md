@@ -1,4 +1,4 @@
-This is the same as 
+This is the same as
 
    https://github.com/KhronosGroup/glTF/tree/master/sampleModels/boxTextured/glTF
 
