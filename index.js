@@ -16,6 +16,7 @@ module.exports = {
     generateNormals : require('./lib/generateNormals'),
     getAccessorByteStride : require('./lib/getAccessorByteStride'),
     getBinaryGltf : require('./lib/getBinaryGltf'),
+    getStatistics : require('./lib/getStatistics'),
     getUniqueId : require('./lib/getUniqueId'),
     loadGltfUris : require('./lib/loadGltfUris'),
     mergeBuffers : require('./lib/mergeBuffers'),
