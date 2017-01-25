@@ -53,7 +53,7 @@
         "Effect-Texture": {
             "technique": "technique0",
             "values": {
-                "diffuse": "texture_Image0001"
+                "diffuse": ["texture_Image0001"]
             }
         }
     },

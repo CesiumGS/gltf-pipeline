@@ -58,8 +58,8 @@ describe('getBinaryGltf', function() {
 
         expect(header.toString('utf8', 0, 4)).toEqual('glTF');
         expect(header.readUInt32LE(4)).toEqual(1);
-        expect(header.readUInt32LE(8)).toEqual(17742);
-        expect(header.readUInt32LE(12)).toEqual(3932);
+        expect(header.readUInt32LE(8)).toEqual(17782);
+        expect(header.readUInt32LE(12)).toEqual(3972);
         expect(header.readUInt32LE(16)).toEqual(0);
     });
 
@@ -70,8 +70,8 @@ describe('getBinaryGltf', function() {
 
         expect(header.toString('utf8', 0, 4)).toEqual('glTF');
         expect(header.readUInt32LE(4)).toEqual(1);
-        expect(header.readUInt32LE(8)).toEqual(4372);
-        expect(header.readUInt32LE(12)).toEqual(3512);
+        expect(header.readUInt32LE(8)).toEqual(4412);
+        expect(header.readUInt32LE(12)).toEqual(3552);
         expect(header.readUInt32LE(16)).toEqual(0);
     });
 

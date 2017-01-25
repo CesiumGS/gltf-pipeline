@@ -33,6 +33,16 @@ describe('updateVersion', function() {
         expect(gltf.asset.version).toEqual('2.0');
     });
 
+    it('updates a glTF with non-standard version to 2.0', function() {
+        var gltf = {
+            asset : {
+                version: '1.0.1'
+            }
+        };
+        updateVersion(gltf);
+        expect(gltf.asset.version).toEqual('2.0');
+    });
+
     it('updates glTF from 0.8 to 1.0', function() {
         var gltf = {
             version: '0.8',
@@ -278,7 +288,11 @@ describe('updateVersion', function() {
         });
         expect(gltf.asset.profile.version).toEqual('1.0');
         var extensionsUsed = gltf.extensionsUsed;
-        expect(extensionsUsed).toEqual(['UNKOWN_EXTENSION']);
+        expect(extensionsUsed).toEqual([
+            'KHR_materials_common',
+            'WEB3D_quantized_attributes',
+            'UNKOWN_EXTENSION'
+        ]);
         var extensionsRequired = gltf.extensionsRequired;
         expect(extensionsRequired).toEqual([
             'KHR_materials_common',

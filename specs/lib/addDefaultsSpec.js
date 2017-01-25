@@ -77,7 +77,6 @@ describe('addDefaults', function() {
 
         addDefaults(gltf);
         expect(gltf.animations.animationId.channels).toEqual([]);
-        expect(gltf.animations.animationId.parameters).toEqual({});
         expect(gltf.animations.animationId.samplers).toEqual({});
     });
 

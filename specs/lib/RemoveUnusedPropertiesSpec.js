@@ -351,8 +351,10 @@ describe('RemoveUnusedProperties', function() {
                 },
                 "animations": {
                     "animation_0": {
-                        "parameters": {
-                            "TIME": "animAccessor_0"
+                        "samplers": {
+                            "sampler": {
+                                "input": "animAccessor_0"
+                            }
                         }
                     }
                 },
@@ -415,8 +417,10 @@ describe('RemoveUnusedProperties', function() {
                 },
                 "animations": {
                     "animation_0": {
-                        "parameters": {
-                            "TIME": "animAccessor_0"
+                        "samplers": {
+                            "sampler": {
+                                "input": "animAccessor_0"
+                            }
                         }
                     }
                 },
@@ -704,7 +708,7 @@ describe('RemoveUnusedProperties', function() {
                         "name": "Texture",
                         "technique": "technique0",
                         "values": {
-                            "diffuse": "texture_Image0001",
+                            "diffuse": ["texture_Image0001"],
                             "shininess": 256,
                             "specular": [
                                 0.2,
@@ -742,7 +746,7 @@ describe('RemoveUnusedProperties', function() {
                         "parameters": {
                             "diffuse": {
                                 "type": 35678,
-                                "value": "texture_Image0001"
+                                "value": ["texture_Image0001"]
                             }
                         },
                         "program": "program_0"
@@ -775,8 +779,8 @@ describe('RemoveUnusedProperties', function() {
                         "name": "Texture",
                         "technique": "technique0",
                         "values": {
-                            "diffuse": "texture_Image0001",
-                            "shininess": 256,
+                            "diffuse": ["texture_Image0001"],
+                            "shininess": [256],
                             "specular": [
                                 0.2,
                                 0.2,
@@ -809,7 +813,7 @@ describe('RemoveUnusedProperties', function() {
                         "parameters": {
                             "diffuse": {
                                 "type": 35678,
-                                "value": "texture_Image0001"
+                                "value": ["texture_Image0001"]
                             }
                         },
                         "program": "program_0"
@@ -1271,7 +1275,11 @@ describe('RemoveUnusedProperties', function() {
                 .then(function (data) {
                     var gltf = JSON.parse(data);
                     gltf.scenes.defaultScene.nodes[0] = 'node_3';
-                    gltf.animations.animation_0.parameters.TIME = 'animAccessor_0';
+                    gltf.animations.animation_0.samplers = {
+                        sampler : {
+                            input : 'animAccessor_0'
+                        }
+                    };
                     removeAll(gltf);
 
                     expect(gltf.accessors.accessor_23).toBeDefined();
