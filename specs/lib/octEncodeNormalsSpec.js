@@ -100,10 +100,10 @@ describe('octEncodeNormals', function() {
            var normalAccessor = gltf.accessors.normalAccessor;
            expect(normalAccessor.componentType).toEqual(WebGLConstants.UNSIGNED_BYTE);
            expect(normalAccessor.type).toEqual('VEC2');
-    
+
            var technique = gltf.techniques.technique;
            expect(technique.parameters.normal.type).toEqual(WebGLConstants.INT_VEC2);
-    
+
            var buffer = gltf.buffers.buffer;
            var encodedBuffer = buffer.extras._pipeline.source;
            expect(encodedBuffer.length).toEqual(6);

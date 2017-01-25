@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+### 0.1.0-alpha11 - ??
+* Optimized `mergeBuffers` to avoid repeated copies, drastically improving performance when there are lots of buffers to merge.
+* Fixed a bug in `addPipelineExtras` that made it try to add extras to null objects.
+* Expose `triangleAxisAlignedBoundingBoxOverlap`, an implementation of Tomas Akenine-Möller algorithm for determining if a triangle overlaps an axis aligned bounding box.
+* Merged [gltf-statistics](https://github.com/AnalyticalGraphicsInc/gltf-statistics) as a stage in the pipeline.
+
 ### 0.1.0-alpha10 - 2017-01-10
 * Added `tangentsBitangents` generation option
 * Added `updateVersion` stage for transitioning assets between glTF version and migrated any glTF 0.8 code out of `addDefaults`

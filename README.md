@@ -42,6 +42,7 @@ node ./bin/gltf-pipeline.js -i ./specs/data/boxTexturedUnoptimized/CesiumTexture
 |`--removeNormals`, `-r`|Strips off existing normals, allowing them to be regenerated.|No, default `false`|
 |`--faceNormals`, `-f`|If normals are missing, they should be generated using the face normal.|No, default `false`|
 |`--tangentsBitangents`|If normals and texture coordinates are given, generate tangents and bitangents.|No, default `false`|
+|`--stats`|Print statistics to console for input and output glTF files.|No, default `false`|
 |`--cesium`, `-c`|Optimize the glTF for Cesium by using the sun as a default light source.|No, default `false`|
 |`--kmc.enable`|Materials should be expressed using the KHR_materials_common extension. If other `kmc` flags are enabled, this is implicitly true.|No, default `false`|
 |`--kmc.doubleSided`|Declares whether backface culling should be disabled.|No, default `false`|
@@ -66,6 +67,15 @@ To run JSHint automatically when a file is saved, run the following and leave it
 ```
 npm run jsHint-watch
 ```
+
+### Building for Cesium integration
+
+Some functionality of gltf-pipeline is used by Cesium as a third party library. The necessary files can be generated using:
+```
+npm run build-cesium
+```
+
+This will output a portion of the gltf-pipeline code into the `dist/cesium` folder, reformatted into AMD style for use with RequireJS and Cesium in the browser.
 
 ### Running Test Coverage
 

@@ -11,6 +11,7 @@ typings
 
 # Generate data
 coverage
+dist
 output
 test
 specs/data/boxTexturedUnoptimized/output
