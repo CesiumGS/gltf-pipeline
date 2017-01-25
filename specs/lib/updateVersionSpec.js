@@ -14,23 +14,23 @@ describe('updateVersion', function() {
         expect(gltf.asset.version).toEqual('1.0');
     });
 
-    it('updates empty glTF with version from 0.8 to 1.1', function() {
+    it('updates empty glTF with version from 0.8 to 2.0', function() {
         var gltf = {
             version: '0.8'
         };
         updateVersion(gltf);
         expect(gltf.version).not.toBeDefined();
-        expect(gltf.asset.version).toEqual('1.1');
+        expect(gltf.asset.version).toEqual('2.0');
     });
 
-    it('updates empty glTF with version 1.0 to 1.1', function() {
+    it('updates empty glTF with version 1.0 to 2.0', function() {
         var gltf = {
             asset : {
                 version: '1.0'
             }
         };
         updateVersion(gltf);
-        expect(gltf.asset.version).toEqual('1.1');
+        expect(gltf.asset.version).toEqual('2.0');
     });
 
     it('updates glTF from 0.8 to 1.0', function() {
@@ -42,6 +42,9 @@ describe('updateVersion', function() {
             allExtensions: [
                 'extension'
             ],
+            lights : {
+                'someLight' : true
+            },
             materials: {
                 material: {
                     instanceTechnique: {
@@ -98,6 +101,9 @@ describe('updateVersion', function() {
         expect(gltf.asset.profile).toEqual({});
         expect(gltf.version).not.toBeDefined();
         expect(gltf.extensionsUsed).toEqual(['extension']);
+        expect(gltf.extensions.KHR_materials_common.lights).toEqual({
+            someLight : true
+        });
         var material = gltf.materials.material;
         expect(material.technique).toEqual('technique');
         expect(material.values).toEqual({
@@ -124,7 +130,7 @@ describe('updateVersion', function() {
         expect(technique.states).toEqual(['TEST_STATE']);
     });
 
-    it('updates glTF from 1.0 to 1.1', function() {
+    it('updates glTF from 1.0 to 2.0', function() {
         var arrayBuffer = new Buffer(new Int16Array([-2.0, 1.0, 0.0, 1.0, 2.0, 3.0]).buffer);
         var gltf = {
             asset: {
@@ -345,7 +351,7 @@ describe('updateVersion', function() {
            }
        };
        updateVersion(gltf);
-       expect(gltf.asset.version).toEqual('1.1');
+       expect(gltf.asset.version).toEqual('2.0');
        expect(gltf.glExtensionsUsed).not.toBeDefined();
     });
 });
