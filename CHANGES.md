@@ -6,11 +6,12 @@ Change Log
 * Fixed a bug in `addPipelineExtras` that made it try to add extras to null objects.
 * Expose `triangleAxisAlignedBoundingBoxOverlap`, an implementation of Tomas Akenine-Möller algorithm for determining if a triangle overlaps an axis aligned bounding box.
 * Merged [gltf-statistics](https://github.com/AnalyticalGraphicsInc/gltf-statistics) as a stage in the pipeline.
-* Added glTF `1.0` -> `2.0` into `updateVersion` and pipeline stages now follow the `2.0` specification. [#223](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/223) 
+* Added `updateVersion` stage for upgrading the glTF version of an asset, including upgrading from `1.0` to `2.0`. [#223](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/223) 
+   * All pipeline stages now operator on glTF `2.0` assets.
+   * `addDefaults` no longer automatically upgrades glTF `0.8` to `1.0`.
 
 ### 0.1.0-alpha10 - 2017-01-10
 * Added `tangentsBitangents` generation option
-* Added `updateVersion` stage for transitioning assets between glTF version and migrated any glTF 0.8 code out of `addDefaults`
 
 ### 0.1.0-alpha9 - 2017-01-03
 * Fixed issue with embedding base64 encoded shader strings for assets using the KHR_materials_common extension
