@@ -56,7 +56,7 @@
   },
   "scripts": {
     "build-cesium": "gulp build-cesium",
-    "build-cesium-simplify": "gulp build-cesium-simplify",
+    "build-cesium-combine": "gulp build-cesium-combine",
     "prepublish": "typings install",
     "jsdoc": "jsdoc ./lib -R ./README.md -d doc",
     "jsHint": "gulp jsHint",

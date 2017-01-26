@@ -182,7 +182,7 @@ function amdify(source, subDependencyMapping) {
     return outputSource;
 }
 
-function simplify(source) {
+function combine(source) {
     var fullMatch;
     var variableName;
     var requirePath;
@@ -215,7 +215,7 @@ function simplify(source) {
         findRequire = findRequireRegex.exec(source);
     }
 
-    // simplify source
+    // combine source
     // indent
     outputSource = outputSource.replace(/\n/g, '\n    ');
     // wrap define header
@@ -273,9 +273,9 @@ gulp.task('build-cesium', function () {
     });
 });
 
-gulp.task('build-cesium-simplify', function () {
+gulp.task('build-cesium-combine', function () {
     var basePath = 'lib';
-    var outputDir = 'dist/cesium-simple';
+    var outputDir = 'dist/cesium-combined';
     var files = [
         'getStatistics.js'
     ];
@@ -284,7 +284,7 @@ gulp.task('build-cesium-simplify', function () {
         return fsExtraReadFile(filePath)
             .then(function(buffer) {
                 var source = buffer.toString();
-                source = simplify(source);
+                source = combine(source);
                 var outputPath = path.join(outputDir, fileName);
                 return fsExtraOutputFile(outputPath, source);
             });
