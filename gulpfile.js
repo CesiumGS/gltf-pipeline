@@ -218,25 +218,5 @@ gulp.task('build-cesium', function () {
                 var outputPath = path.join(outputDir, fileName);
                 return fsExtraOutputFile(outputPath, source);
             });
-    })
-        .then(function() {
-            var definePathsHeader = '\'' + files.join('\',\n        \'') + '\'';
-            var variables = [];
-            var filesLength = files.length;
-            var body = '    var GltfPipeline = {};\n';
-            for (var i = 0; i < filesLength; i++) {
-                var strippedName = files[i].replace('.js', '');
-                variables.push(strippedName);
-                body += '    GltfPipeline.' + strippedName + ' = ' + strippedName + ';\n';
-            }
-            var defineVariablesHeader = variables.join(',\n        ');
-            var defineHeader = '/*global define*/\n' +
-                'define([\n' +
-                '        ' + definePathsHeader + '\n' +
-                '    ], function(\n' +
-                '        ' + defineVariablesHeader + ') {\n\n';
-            var defineFooter = '    return GltfPipeline;\n});\n';
-            var outputPath = path.join(outputDir, 'GltfPipeline.js');
-            return fsExtraOutputFile(outputPath, defineHeader + body + defineFooter);
-        });
+    });
 });
