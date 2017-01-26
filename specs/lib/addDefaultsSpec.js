@@ -428,4 +428,50 @@ describe('addDefaults', function() {
         expect(gltf.techniques).toBeDefined();
         expect(gltf.textures).toBeDefined();
     });
+
+    it('Adds the default material if a mesh has an undefined material', function() {
+        var gltf = {
+            meshes: {
+                mesh: {
+                    primitives: [
+                        {},
+                        {}
+                    ]
+                }
+            }
+        };
+        addDefaults(gltf);
+
+        var mesh = gltf.meshes.mesh;
+        var meshMaterial = mesh.primitives[0].material;
+        expect(meshMaterial).toBeDefined();
+        expect(mesh.primitives[1].material).toEqual(meshMaterial);
+
+        expect(gltf.materials[meshMaterial]).toBeDefined();
+    });
+
+    it('Adds the default technique, program and shader if a material has an undefined technique', function() {
+        var gltf = {
+            materials: {
+                material0: {},
+                material1: {}
+            }
+        };
+
+        addDefaults(gltf);
+
+        var techniqueId = gltf.materials.material0.technique;
+        expect(gltf.materials.material1.technique).toEqual(techniqueId);
+        var technique = gltf.techniques[techniqueId];
+        expect(technique).toBeDefined();
+        var programId = technique.program;
+        var program = gltf.programs[programId];
+        expect(program).toBeDefined();
+        var vertexShaderId = program.vertexShader;
+        var fragmentShaderId = program.fragmentShader;
+        var vertexShader = gltf.shaders[vertexShaderId];
+        var fragmentShader = gltf.shaders[fragmentShaderId];
+        expect(vertexShader).toBeDefined();
+        expect(fragmentShader).toBeDefined();
+    });
 });
