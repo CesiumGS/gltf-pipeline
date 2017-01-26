@@ -2,6 +2,7 @@ module.exports = {
     AccessorReader : require('./lib/AccessorReader'),
     addCesiumRTC : require('./lib/addCesiumRTC'),
     addDefaults : require('./lib/addDefaults'),
+    addExtensionsRequired : require('./lib/addExtensionsRequired'),
     addExtensionsUsed : require('./lib/addExtensionsUsed'),
     addPipelineExtras : require('./lib/addPipelineExtras'),
     bakeAmbientOcclusion : require('./lib/bakeAmbientOcclusion'),
