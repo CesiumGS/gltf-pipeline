@@ -200,6 +200,7 @@ gulp.task('build-cesium', function () {
         'numberOfComponentsForType.js',
         'parseBinaryGltf.js',
         'processModelMaterialsCommon.js',
+        'removePipelineExtras.js',
         'techniqueParameterForSemantic.js',
         'updateVersion.js'
     ];
