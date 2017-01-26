@@ -182,6 +182,63 @@ function amdify(source, subDependencyMapping) {
     return outputSource;
 }
 
+function simplify(source) {
+    var fullMatch;
+    var variableName;
+    var requirePath;
+
+    source = source.replace(/\r\n/g, '\n');
+    var outputSource = source;
+
+    // find module exports
+    var returnValue;
+    var findModuleExportsRegex = /module.exports\s*=\s*(.*?);\n/;
+    var findModuleExports = findModuleExportsRegex.exec(source);
+    if (defined(findModuleExports && findModuleExports.length > 0)) {
+        fullMatch = findModuleExports[0];
+        returnValue = findModuleExports[1];
+        // remove module.exports from output source
+        outputSource = outputSource.replace(fullMatch, '');
+    }
+
+    // create require mapping for dependencies
+    var findRequireRegex = /var\s+(.+?)\s*=\s*require\('(.+?)'\);\n/g;
+    var findRequire = findRequireRegex.exec(source);
+    var requireMapping = {};
+    while (defined(findRequire) && findRequire.length > 0) {
+        fullMatch = findRequire[0];
+        variableName = findRequire[1];
+        requirePath = findRequire[2];
+        requireMapping[variableName] = requirePath;
+        // remove requires from output source
+        outputSource = outputSource.replace(fullMatch, '');
+        findRequire = findRequireRegex.exec(source);
+    }
+
+    // simplify source
+    // indent
+    outputSource = outputSource.replace(/\n/g, '\n    ');
+    // wrap define header
+    var variables = [];
+    var paths = [];
+    for (var variable in requireMapping) {
+        if (requireMapping.hasOwnProperty(variable)) {
+            variables.push(variable);
+            paths.push(requireMapping[variable]);
+        }
+    }
+    var defineHeader = '/*global define*/\n' +
+        'var ' + returnValue + ' = (function() {\n    ';
+    var defineFooter = '\n}());\n';
+    if (defined(returnValue)) {
+        defineFooter = '\n    return ' + returnValue + ';' + defineFooter;
+    }
+    outputSource = defineHeader + outputSource + defineFooter;
+    // remove repeat newlines
+    outputSource = outputSource.replace(/\n\s*\n/g, '\n\n');
+    return outputSource;
+}
+
 gulp.task('build-cesium', function () {
     var basePath = 'lib';
     var outputDir = 'dist/cesium';
@@ -192,6 +249,7 @@ gulp.task('build-cesium', function () {
         'byteLengthForComponentType.js',
         'findAccessorMinMax.js',
         'getAccessorByteStride.js',
+        'getStatistics.js',
         'getUniqueId.js',
         'numberOfComponentsForType.js',
         'parseBinaryGltf.js',
@@ -209,6 +267,24 @@ gulp.task('build-cesium', function () {
             .then(function(buffer) {
                 var source = buffer.toString();
                 source = amdify(source, subDependencyMapping);
+                var outputPath = path.join(outputDir, fileName);
+                return fsExtraOutputFile(outputPath, source);
+            });
+    });
+});
+
+gulp.task('build-cesium-simplify', function () {
+    var basePath = 'lib';
+    var outputDir = 'dist/cesium-simple';
+    var files = [
+        'getStatistics.js'
+    ];
+    Promise.map(files, function(fileName) {
+        var filePath = path.join(basePath, fileName);
+        return fsExtraReadFile(filePath)
+            .then(function(buffer) {
+                var source = buffer.toString();
+                source = simplify(source);
                 var outputPath = path.join(outputDir, fileName);
                 return fsExtraOutputFile(outputPath, source);
             });
