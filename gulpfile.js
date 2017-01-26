@@ -196,7 +196,8 @@ gulp.task('build-cesium', function () {
         'numberOfComponentsForType.js',
         'parseBinaryGltf.js',
         'processModelMaterialsCommon.js',
-        'techniqueParameterForSemantic.js'
+        'techniqueParameterForSemantic.js',
+        'updateVersion.js'
     ];
     var subDependencyMapping = {
         cesium : {
