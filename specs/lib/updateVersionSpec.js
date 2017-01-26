@@ -200,6 +200,9 @@ describe('updateVersion', function() {
                             scissor: [0.0, 0.0, 0.0, 0.0]
                         }
                     },
+                    attributes: {
+                        a_application: 'application'
+                    },
                     parameters: {
                         lightAttenuation: {
                             value: 1.0
@@ -211,7 +214,19 @@ describe('updateVersion', function() {
                             semantic: 'COLOR'
                         },
                         application: {
-                            semantic: 'APPLICATIONSPECIFIC'
+                            semantic: 'APPLICATIONSPECIFIC',
+                            count: 1,
+                            value: 2
+                        },
+                        jointMatrix: {
+                            semantic: 'JOINTMATRIX',
+                            count: 2
+                        },
+                        notJointMatrix: {
+                            count: 3
+                        },
+                        notJointMatrixWithSemantic: {
+                            count: 4
                         }
                     }
                 }
@@ -309,6 +324,7 @@ describe('updateVersion', function() {
         expect(material.values.shininess).toEqual([1.0]);
         var technique = gltf.techniques.technique;
         expect(technique.parameters.lightAttenuation.value).toEqual([1.0]);
+        expect(technique.parameters.application.value).not.toBeDefined();
         expect(technique.parameters.texcoord.semantic).toEqual('TEXCOORD_0');
         expect(technique.parameters.color.semantic).toEqual('COLOR_0');
         expect(technique.parameters.application.semantic).toEqual('_APPLICATIONSPECIFIC');
@@ -342,6 +358,10 @@ describe('updateVersion', function() {
         expect(buffer.byteLength).toEqual(arrayBuffer.length);
         var bufferView = gltf.bufferViews.bufferView;
         expect(bufferView.byteLength).toEqual(arrayBuffer.length);
+        expect(technique.parameters.application.count).toEqual(1);
+        expect(technique.parameters.jointMatrix.count).toEqual(2);
+        expect(technique.parameters.notJointMatrix.count).not.toBeDefined();
+        expect(technique.parameters.notJointMatrixWithSemantic.count).not.toBeDefined();
     });
 
     it('does not add glExtensionsUsed if primitive indices are not UNSIGNED_INT', function() {
