@@ -6,7 +6,7 @@ Change Log
 * Fixed a bug in `addPipelineExtras` that made it try to add extras to null objects.
 * Expose `triangleAxisAlignedBoundingBoxOverlap`, an implementation of Tomas Akenine-Möller algorithm for determining if a triangle overlaps an axis aligned bounding box.
 * Merged [gltf-statistics](https://github.com/AnalyticalGraphicsInc/gltf-statistics) as a stage in the pipeline.
-* Added `updateVersion` stage for patching glTF `0.8` -> `1.0` changes; `addDefaults` no longer calls `processModelMaterialsCommon`. [#223](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/223) 
+* Added glTF `1.0` -> `2.0` into `updateVersion` and pipeline stages now follow the `2.0` specification. [#223](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/223) 
 
 ### 0.1.0-alpha10 - 2017-01-10
 * Added `tangentsBitangents` generation option
