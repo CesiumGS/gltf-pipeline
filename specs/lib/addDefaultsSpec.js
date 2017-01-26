@@ -88,7 +88,7 @@ describe('addDefaults', function() {
         expect(gltf.asset.premultipliedAlpha).toEqual(false);
         expect(gltf.asset.profile).toBeDefined();
         expect(gltf.asset.profile.api).toEqual('WebGL');
-        expect(gltf.asset.profile.version).toEqual('1.0.3');
+        expect(gltf.asset.profile.version).toEqual('1.0');
     });
 
     it('Adds buffer properties', function() {
