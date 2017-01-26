@@ -457,7 +457,6 @@ describe('addDefaults', function() {
                 material1: {}
             }
         };
-
         addDefaults(gltf);
 
         var techniqueId = gltf.materials.material0.technique;
@@ -473,5 +472,16 @@ describe('addDefaults', function() {
         var fragmentShader = gltf.shaders[fragmentShaderId];
         expect(vertexShader).toBeDefined();
         expect(fragmentShader).toBeDefined();
+    });
+
+    it('Selects a default scene if none is present', function() {
+       var gltf = {
+           scenes: {
+               scene: {}
+           }
+       };
+       addDefaults(gltf);
+
+       expect(gltf.scene).toEqual('scene');
     });
 });
