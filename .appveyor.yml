@@ -1,0 +1,24 @@
+# Builds are whole numbered
+version: '{build}'
+
+clone_depth: 50
+
+environment:
+  matrix:
+    - nodejs_version: "4"
+    - nodejs_version: "6"
+
+install:
+  # Get the latest stable version of Node.js
+  - ps: Install-Product node $env:nodejs_version
+  # install modules
+  - npm install
+
+test_script:
+  - node --version
+  - npm --version
+  - npm run jsHint -- --failTaskOnError
+  - npm run test -- --failTaskOnError --suppressPassed
+
+# Don't actually build.
+build: off
