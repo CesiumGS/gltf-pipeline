@@ -29,7 +29,7 @@ describe('loadImageUris', function() {
                 throw err;
             });
     });
-    
+
     it('loads an external image', function(done) {
         var gltf = {
             "images": {
@@ -129,7 +129,7 @@ describe('loadImageUris', function() {
                 expect(jimpImage).toBeDefined();
                 expect(jimpImage.bitmap.width).toEqual(8);
                 expect(jimpImage.bitmap.height).toEqual(8);
-        
+
                 var jimpScratch = gltf.extras._pipeline.jimpScratch;
                 expect(jimpScratch).toBeDefined();
                 expect(jimpScratch.bitmap.width).toEqual(1);

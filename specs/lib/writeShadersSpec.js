@@ -67,7 +67,7 @@ describe('writeShaders', function() {
             embedImage : true,
             createDirectory : true
         };
-        
+
         expect(writeGltf(gltf, options)
             .then(function() {
                 expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras).not.toBeDefined();

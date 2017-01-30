@@ -48,6 +48,7 @@ node ./bin/gltf-pipeline.js -i ./specs/data/boxTexturedUnoptimized/CesiumTexture
 |`--faceNormals`, `-f`|If normals are missing, they should be generated using the face normal.|No, default `false`|
 |`--cesium`|Optimize the glTF for Cesium by using the sun as a default light source.|No, default `false`|
 |`--tangentsBitangents`|If normals and texture coordinates are given, generate tangents and bitangents.|No, default `false`|
+|`--stats`|Print statistics to console for input and output glTF files.|No, default `false`|
 |`--kmc.enable`|Materials should be expressed using the KHR_materials_common extension. If other `kmc` flags are enabled, this is implicitly true.|No, default `false`|
 |`--kmc.doubleSided`|Declares whether backface culling should be disabled.|No, default `false`|
 |`--kmc.technique`|The lighting model to use.|No, default `PHONG`|
@@ -77,6 +78,15 @@ To run JSHint automatically when a file is saved, run the following and leave it
 npm run jsHint-watch
 ```
 
+### Building for Cesium integration
+
+Some functionality of gltf-pipeline is used by Cesium as a third party library. The necessary files can be generated using:
+```
+npm run build-cesium
+```
+
+This will output a portion of the gltf-pipeline code into the `dist/cesium` folder, reformatted into AMD style for use with RequireJS and Cesium in the browser.
+
 ### Third-party tools
 
 This project bundles several native binaries for texture compression.
@@ -89,6 +99,7 @@ This project bundles several native binaries for texture compression.
 On Linux you may need to install g++ 4.8 as some of the tools link to the libgcc and libstdc++ runtimes.
 
 Run the help command for each tool for a more detailed description of the supported command-line options.
+
 
 ### Running Test Coverage
 
