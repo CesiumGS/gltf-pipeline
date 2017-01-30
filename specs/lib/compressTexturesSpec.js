@@ -456,6 +456,9 @@ describe('compressTextures', function() {
         }, {
             format : 'astc',
             blockSize : '8x8'
+        }, {
+            format : 'crunch-dxt1',
+            quality : 5
         }];
 
         expect(readGltf(gltfEmbeddedPath)
@@ -468,11 +471,15 @@ describe('compressTextures', function() {
                         var compressedImages = image.extras.compressedImage3DTiles;
                         var s3tcImagePipelineExtras = compressedImages.s3tc.extras._pipeline;
                         var astcImagePipelineExtras = compressedImages.astc.extras._pipeline;
+                        var crunchImagePipelineExtras = compressedImages.crunch.extras._pipeline;
                         expect(image.uri).toBe(defaultImageUri);
                         expect(s3tcImagePipelineExtras.source).toBeDefined();
                         expect(s3tcImagePipelineExtras.extension).toEqual('.ktx');
                         expect(astcImagePipelineExtras.source).toBeDefined();
                         expect(astcImagePipelineExtras.extension).toEqual('.ktx');
+                        expect(crunchImagePipelineExtras.source).toBeDefined();
+                        expect(crunchImagePipelineExtras.extension).toEqual('.crn');
+
                     });
             }), done).toResolve();
     });
