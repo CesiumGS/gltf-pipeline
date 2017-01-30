@@ -45,7 +45,7 @@ function compressGltfTexture(gltfPath, imagePath, options) {
             return Pipeline.processJSON(gltf, pipelineOptions)
                 .then(function(gltf) {
                     // Return the first compressed image
-                    var compressedImages = image.extras.compressedImages3DTiles;
+                    var compressedImages = image.extras.compressedImage3DTiles;
                     return compressedImages[Object.keys(compressedImages)[0]].uri;
                 });
         });
@@ -465,7 +465,7 @@ describe('compressTextures', function() {
                 return compressTextures(gltf, optionsArray)
                     .then(function() {
                         var image = gltf.images.Image0001;
-                        var compressedImages = image.extras.compressedImages3DTiles;
+                        var compressedImages = image.extras.compressedImage3DTiles;
                         var s3tcImagePipelineExtras = compressedImages.s3tc.extras._pipeline;
                         var astcImagePipelineExtras = compressedImages.astc.extras._pipeline;
                         expect(image.uri).toBe(defaultImageUri);
