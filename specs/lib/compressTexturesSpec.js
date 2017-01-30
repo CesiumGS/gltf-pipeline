@@ -10,6 +10,7 @@ var compressTexture = require('../../lib/compressTexture');
 var compressTextures = require('../../lib/compressTextures');
 var directoryExists = require('../../lib/directoryExists');
 var Pipeline = require('../../lib/Pipeline');
+var readGltf = require('../../lib/readGltf');
 
 var fsExtraReadJson = Promise.promisify(fsExtra.readJson);
 
@@ -28,11 +29,14 @@ var pngPath = 'Cesium_Logo_Flat.png';
 var gifPath = 'Cesium_Logo_Flat.gif';
 var decalPath = 'Cesium_Logo_Flat_Decal.png'; // Contains alpha channel
 
+var defaultImageUri = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII='; // 1x1 white png
+
 function compressGltfTexture(gltfPath, imagePath, options) {
     return fsExtraReadJson(gltfPath)
         .then(function(gltf) {
+            var image = gltf.images.Image0001;
             if (defined(imagePath)) {
-                gltf.images.Image0001.uri = imagePath;
+                image.uri = imagePath;
             }
             var pipelineOptions = {
                 textureCompressionOptions : options,
@@ -40,7 +44,9 @@ function compressGltfTexture(gltfPath, imagePath, options) {
             };
             return Pipeline.processJSON(gltf, pipelineOptions)
                 .then(function(gltf) {
-                    return gltf.images.Image0001.uri;
+                    // Return the first compressed image
+                    var compressedImages = image.extras.compressedImages3DTiles;
+                    return compressedImages[Object.keys(compressedImages)[0]].uri;
                 });
         });
 }
@@ -441,5 +447,44 @@ describe('compressTextures', function() {
                         expect(sampler.minFilter).toBe(WebGLConstants.LINEAR);
                     });
             }), done).toResolve();
+    });
+
+    it('compresses textures into multiple formats', function(done) {
+        var optionsArray = [{
+            format : 'dxt1',
+            quality : 5
+        }, {
+            format : 'astc',
+            blockSize : '8x8'
+        }];
+
+        expect(readGltf(gltfEmbeddedPath)
+            .then(function(gltf) {
+                var images = gltf.images;
+                expect(Object.keys(images).length).toBe(1);
+                return compressTextures(gltf, optionsArray)
+                    .then(function() {
+                        var image = gltf.images.Image0001;
+                        var compressedImages = image.extras.compressedImages3DTiles;
+                        var s3tcImagePipelineExtras = compressedImages.s3tc.extras._pipeline;
+                        var astcImagePipelineExtras = compressedImages.astc.extras._pipeline;
+                        expect(image.uri).toBe(defaultImageUri);
+                        expect(s3tcImagePipelineExtras.source).toBeDefined();
+                        expect(s3tcImagePipelineExtras.extension).toEqual('.ktx');
+                        expect(astcImagePipelineExtras.source).toBeDefined();
+                        expect(astcImagePipelineExtras.extension).toEqual('.ktx');
+                    });
+            }), done).toResolve();
+    });
+
+    it('throws if optionsArray is undefined or length 0', function() {
+        var gltf = {};
+        expect(function() {
+            compressTextures(gltf);
+        }).toThrowDeveloperError();
+
+        expect(function() {
+            compressTextures(gltf, []);
+        }).toThrowDeveloperError();
     });
 });
