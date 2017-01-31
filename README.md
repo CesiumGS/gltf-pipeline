@@ -77,7 +77,7 @@ npm run build-cesium
 
 This will output a portion of the gltf-pipeline code into the `dist/cesium` folder, reformatted into AMD style for use with RequireJS and Cesium in the browser.
 
-### Building for Other integration
+### Building for other integration
 
 Some functionality of gltf-pipeline is used by other projects along with Cesium as a third party library. The necessary files can be generated using:
 ```
