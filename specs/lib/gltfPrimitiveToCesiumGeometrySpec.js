@@ -15,11 +15,11 @@ describe('gltfPrimitiveToCesiumGeometry', function() {
                 addDefaults(gltf);
                 var primitive = gltf.meshes[Object.keys(gltf.meshes)[0]].primitives[0];
                 var geometry = gltfPrimitiveToCesiumGeometry(gltf, primitive);
-    
+
                 var indicesAccessor = gltf.accessors[primitive.indices];
                 var indices = [];
                 readAccessor(gltf, indicesAccessor, indices);
-                
+
                 var positionAccessor = gltf.accessors[primitive.attributes.POSITION];
                 var positions = [];
                 var positionType = readAccessor(gltf, positionAccessor, positions);
@@ -29,12 +29,12 @@ describe('gltfPrimitiveToCesiumGeometry', function() {
                 var normals = [];
                 var normalType = readAccessor(gltf, normalAccessor, normals);
                 var packedNormals = packArray(normals, normalType);
-    
+
                 var textureAccessor = gltf.accessors[primitive.attributes.TEXCOORD_0];
                 var coordinates = [];
                 var coordinateType = readAccessor(gltf, textureAccessor, coordinates);
                 var packedCoordinates = packArray(coordinates, coordinateType);
-                
+
                 expect(geometry.attributes.position.values).toEqual(new Float64Array(packedPositions));
                 expect(geometry.attributes.normal.values).toEqual(new Float32Array(packedNormals));
                 expect(geometry.attributes.st.values).toEqual(new Float32Array(packedCoordinates));

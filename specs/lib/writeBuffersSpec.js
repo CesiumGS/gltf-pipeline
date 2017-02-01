@@ -28,8 +28,7 @@ describe('writeBuffers', function() {
                             "extras": {
                                 "_pipeline": {
                                     "source": bufferData,
-                                    "extension": '.bin',
-                                    "deleteExtras": true
+                                    "extension": '.bin'
                                 }
                             }
                         }
@@ -66,7 +65,7 @@ describe('writeBuffers', function() {
             embedImage : true,
             createDirectory : true
         };
-        
+
         expect(writeGltf(gltf, options)
             .then(function() {
                 expect(gltf.buffers.CesiumTexturedBoxTest.extras).not.toBeDefined();

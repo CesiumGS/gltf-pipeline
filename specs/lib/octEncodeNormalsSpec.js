@@ -90,7 +90,7 @@ describe('octEncodeNormals', function() {
                    type: WebGLConstants.VERTEX_SHADER,
                    extras : {
                        _pipeline : {
-                           source : new Buffer('')
+                           source : ''
                        }
                    }
                }
@@ -100,17 +100,17 @@ describe('octEncodeNormals', function() {
            var normalAccessor = gltf.accessors.normalAccessor;
            expect(normalAccessor.componentType).toEqual(WebGLConstants.UNSIGNED_BYTE);
            expect(normalAccessor.type).toEqual('VEC2');
-    
+
            var technique = gltf.techniques.technique;
            expect(technique.parameters.normal.type).toEqual(WebGLConstants.INT_VEC2);
-    
+
            var buffer = gltf.buffers.buffer;
            var encodedBuffer = buffer.extras._pipeline.source;
            expect(encodedBuffer.length).toEqual(6);
            expect(encodedBuffer.length).toEqual(buffer.byteLength);
 
            var vs = gltf.shaders.VS.extras._pipeline.source;
-           expect(Buffer.isBuffer(vs)).toBe(true);
+           expect(typeof vs).toEqual('string');
 
            var normal = new Cartesian3();
            for (var i = 0; i < normalAccessor.count; i++) {
@@ -289,7 +289,7 @@ describe('octEncodeNormals', function() {
                     type: WebGLConstants.VERTEX_SHADER,
                     extras : {
                         _pipeline : {
-                            source : new Buffer('')
+                            source : ''
                         }
                     }
                 },
@@ -297,7 +297,7 @@ describe('octEncodeNormals', function() {
                     type: WebGLConstants.VERTEX_SHADER,
                     extras : {
                         _pipeline : {
-                            source : new Buffer('')
+                            source : ''
                         }
                     }
                 }

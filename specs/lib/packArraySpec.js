@@ -37,7 +37,7 @@ describe('packArray', function() {
         var packed = packArray(packedCartesians, WebGLConstants.FLOAT);
         expect(packed).toEqual(packedCartesians);
     });
-    
+
     it('packs an array with Cartesians', function() {
         var array2 = packArray(cartesian2, WebGLConstants.FLOAT_VEC2);
         var array3 = packArray(cartesian3, WebGLConstants.FLOAT_VEC3);
@@ -52,7 +52,7 @@ describe('packArray', function() {
         var array2 = packArray(matrix2, WebGLConstants.FLOAT_MAT2);
         var array3 = packArray(matrix3, WebGLConstants.FLOAT_MAT3);
         var array4 = packArray(matrix4, WebGLConstants.FLOAT_MAT4);
-        
+
         expect(array2).toEqual(packedMatrix2);
         expect(array3).toEqual(packedMatrix3);
         expect(array4).toEqual(packedMatrix4);

@@ -55,6 +55,8 @@
     "typings": "^2.0.0"
   },
   "scripts": {
+    "build-cesium": "gulp build-cesium",
+    "build-cesium-combine": "gulp build-cesium-combine",
     "prepublish": "typings install",
     "jsdoc": "jsdoc ./lib -R ./README.md -d doc",
     "jsHint": "gulp jsHint",

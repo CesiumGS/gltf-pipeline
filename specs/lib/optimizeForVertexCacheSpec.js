@@ -18,9 +18,9 @@ var unoptimizedVertices = [ 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5,
     0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, 0.5,
     -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5,
     0.5, 0.5, -0.5 ];
-var optimizedVertices = [ 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 
+var optimizedVertices = [ 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5,
     -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5,
-    0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 
+    0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5,
     -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5 ];
 
 describe('optimizeForVertexCache', function() {
@@ -32,11 +32,11 @@ describe('optimizeForVertexCache', function() {
                 var indexAccessor = gltf.accessors[indexAccessorId];
                 // Rewrite indices to be forcibly unoptimized
                 writeAccessor(gltf, indexAccessor, unoptimizedIndices);
-            
+
                 optimizeForVertexCache(gltf);
                 var indices = [];
                 readAccessor(gltf, gltf.accessors[indexAccessorId], indices);
-            
+
                 expect(indices).toEqual(optimizedIndices);
             }), done).toResolve();
     });
@@ -54,9 +54,9 @@ describe('optimizeForVertexCache', function() {
                 writeAccessor(gltf, positionAccessor, unoptimizedVertices);
                 var positions = [];
                 readAccessor(gltf, positionAccessor, positions);
-            
+
                 optimizeForVertexCache(gltf);
-            
+
                 expect(positions).toEqual(unpackedOptimizedVertices);
             }), done).toResolve();
     });
