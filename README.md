@@ -100,6 +100,14 @@ On Linux you may need to install g++ 4.8 as some of the tools link to the libgcc
 
 Run the help command for each tool for a more detailed description of the supported command-line options.
 
+### Building for other integration
+
+Some functionality of gltf-pipeline is used by other projects along with Cesium as a third party library. The necessary files can be generated using:
+```
+npm run build-cesium-combine
+```
+
+This will output a portion of the gltf-pipeline code into the `dist/cesium-combined` folder, reformatted into self-contained file. Currently, only files that have no other local dependencies are allowed.
 
 ### Running Test Coverage
 

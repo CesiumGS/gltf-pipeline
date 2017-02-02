@@ -29,7 +29,7 @@
     "async": "^2.1.4",
     "bluebird": "^3.4.6",
     "buffer-equal": "^1.0.0",
-    "cesium": "^1.29",
+    "cesium": "^1.30.0",
     "clone": "^2.1.0",
     "data-uri-to-buffer": "^0.0.4",
     "deep-equal": "^1.0.1",
@@ -57,6 +57,7 @@
   },
   "scripts": {
     "build-cesium": "gulp build-cesium",
+    "build-cesium-combine": "gulp build-cesium-combine",
     "prepublish": "typings install",
     "jsdoc": "jsdoc ./lib -R ./README.md -d doc",
     "jsHint": "gulp jsHint",

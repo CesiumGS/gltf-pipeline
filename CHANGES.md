@@ -7,7 +7,9 @@ Change Log
 * Fixed a bug in `addPipelineExtras` that made it try to add extras to null objects.
 * Expose `triangleAxisAlignedBoundingBoxOverlap`, an implementation of Tomas Akenine-Möller algorithm for determining if a triangle overlaps an axis aligned bounding box.
 * Merged [gltf-statistics](https://github.com/AnalyticalGraphicsInc/gltf-statistics) as a stage in the pipeline.
-* Added `updateVersion` stage for patching glTF `0.8` -> `1.0` changes; `addDefaults` no longer calls `processModelMaterialsCommon`. [#223](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/223) 
+* Added `updateVersion` stage for patching glTF `0.8` -> `1.0` changes; `addDefaults` no longer calls `processModelMaterialsCommon`. [#223](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/223)
+* Added `build-cesium-combined` command to gulp file for generating simple files for other projects. [#231](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/231).
+* Change Cesium `Geometry`'s and `VertexFormat`'s `binormal` attribute to bitangent.
 
 ### 0.1.0-alpha10 - 2017-01-10
 * Added `tangentsBitangents` generation option
