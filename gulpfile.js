@@ -44,9 +44,29 @@ gulp.task('jsHint-watch', function () {
     gulp.watch(jsHintFiles, ['jsHint']);
 });
 
+function excludeCompressedTextures(jasmine) {
+    var excludedSpecs = ['compressTexturesSpec.js', 'compressTexturesMultipleFormatsSpec.js'];
+    var specFiles = jasmine.specFiles;
+    var specsLength = specFiles.length;
+    var excludedLength = excludedSpecs.length;
+    for (var i = specsLength - 1; i >= 0; --i) {
+        for (var j = 0; j < excludedLength; ++j) {
+            if (specFiles[i].indexOf(excludedSpecs[j]) > -1) {
+                specFiles.splice(i, 1);
+                break;
+            }
+        }
+    }
+}
+
 gulp.task('test', function (done) {
     var jasmine = new Jasmine();
     jasmine.loadConfigFile('specs/jasmine.json');
+    if (defined(argv.excludeCompressedTextures)) {
+        // Exclude compressTexturesSpec for Travis builds
+        // Travis runs Ubuntu 12.04.5 which has glibc 2.15, while crunch requires glibc 2.22 or higher
+        excludeCompressedTextures(jasmine);
+    }
     jasmine.addReporter(new JasmineSpecReporter({
         displaySuccessfulSpec: !defined(argv.suppressPassed) || !argv.suppressPassed
     }));
@@ -72,11 +92,20 @@ gulp.task('test-watch', function () {
 
 gulp.task('coverage', function () {
     fsExtra.removeSync('coverage/server');
+
+    // Exclude compressTexturesSpec from coverage for Travis builds
+    // Travis runs Ubuntu 12.04.5 which has glibc 2.15, while crunch requires glibc 2.22 or higher
+    var additionalExcludes = '';
+    if (defined(argv.excludeCompressedTextures)) {
+        additionalExcludes += 'specs/lib/compressTexturesSpec.js';
+        additionalExcludes += 'specs/lib/compressTexturesMultipleFormatsSpec.js';
+    }
+
     child_process.execSync('istanbul' +
         ' cover' +
         ' --include-all-sources' +
         ' --dir coverage' +
-        ' -x "specs/** coverage/** dist/** index.js gulpfile.js"' +
+        ' -x "specs/** coverage/** dist/** index.js gulpfile.js"' + additionalExcludes +
         ' node_modules/jasmine/bin/jasmine.js' +
         ' JASMINE_CONFIG_PATH=specs/jasmine.json', {
         stdio: [process.stdin, process.stdout, process.stderr]

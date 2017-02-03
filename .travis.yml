@@ -4,7 +4,7 @@ node_js:
   - "6"
 script:
   - npm run jsHint -- --failTaskOnError
-  - npm run test -- --failTaskOnError --suppressPassed
+  - npm run test -- --failTaskOnError --suppressPassed --excludeCompressedTextures
 after_success:
 ## We only need to run coveralls for one node version (doesn't matter which one).
 ## We also ignore publishing failures, since restarting an existing travis build would otherwise break.

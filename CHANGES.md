@@ -2,6 +2,7 @@ Change Log
 ==========
 
 ### 0.1.0-alpha11 - ??
+* Added `compressTextures` stage to compress input textures to a variety of compressed texture formats.
 * Optimized `mergeBuffers` to avoid repeated copies, drastically improving performance when there are lots of buffers to merge.
 * Fixed a bug in `addPipelineExtras` that made it try to add extras to null objects.
 * Expose `triangleAxisAlignedBoundingBoxOverlap`, an implementation of Tomas Akenine-Möller algorithm for determining if a triangle overlaps an axis aligned bounding box.
