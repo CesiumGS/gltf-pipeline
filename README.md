@@ -16,7 +16,7 @@ gltf-pipeline can be used as a command-line tool or Node.js module.
 
 ## Instructions
 
-Clone this repo and install [Node.js](http://nodejs.org/).  From the root directory of this repo, run:
+Clone this repo and install [Node.js 6.x or later](http://nodejs.org/).  From the root directory of this repo, run:
 ```
 npm install
 ```
