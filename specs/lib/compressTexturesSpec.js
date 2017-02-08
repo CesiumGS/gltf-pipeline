@@ -371,18 +371,15 @@ describe('compressTextures', function() {
         expect(verifyKTX(gltfPath, pngPath, options, expectedFormat), done).toResolve();
     });
 
-    it('sets quality', function(done) {
-        var formats = ['pvrtc1', 'pvrtc2', 'etc1', 'etc2', 'astc', 'dxt1', 'dxt3', 'dxt5', 'crunch-dxt1', 'crunch-dxt5'];
-        var promises = [];
-        var length = formats.length;
+    var formats = ['pvrtc1', 'pvrtc2', 'etc1', 'etc2', 'astc', 'dxt1', 'dxt3', 'dxt5', 'crunch-dxt1', 'crunch-dxt5'];
 
-        function compareUris(uris) {
-            expect(uris[0]).not.toEqual(uris[1]);
-        }
+    function addSetsQualityTest(format) {
+        it('sets quality for format ' + format, function(done) {
+            var promises = [];
+            function compareUris(uris) {
+                expect(uris[0]).not.toEqual(uris[1]);
+            }
 
-        // For each texture format encode at low and medium quality and compare results
-        for (var i = 0; i < length; ++i) {
-            var format = formats[i];
             var lowQuality = {
                 format : format,
                 quality : 1
@@ -391,14 +388,19 @@ describe('compressTextures', function() {
                 format : format,
                 quality : 5
             };
+
             promises.push(Promise.all([
                 compressGltfTexture(gltfPath, pngPath, lowQuality),
                 compressGltfTexture(gltfPath, pngPath, highQuality)
             ]).then(compareUris));
-        }
 
-        expect(Promise.all(promises), done).toResolve();
-    });
+            expect(Promise.all(promises), done).toResolve();
+        });
+    }
+
+    for(var i = 0; i < formats.length; ++i) {
+        addSetsQualityTest(formats[i]);
+    }
 
     it('tempDirectory is removed when compression succeeds', function(done) {
         spyOn(fsExtra, 'writeFileAsync').and.callThrough();
