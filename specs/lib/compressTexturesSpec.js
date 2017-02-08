@@ -74,6 +74,29 @@ function verifyCrunch(gltfPath, imagePath, options) {
         });
 }
 
+function setFormatQuality(gltfPath, pngPath, format, done) {
+    var promises = [];
+    function compareUris(uris) {
+        expect(uris[0]).not.toEqual(uris[1]);
+    }
+
+    var lowQuality = {
+        format : format,
+        quality : 1
+    };
+    var highQuality = {
+        format : format,
+        quality : 5
+    };
+
+    promises.push(Promise.all([
+        compressGltfTexture(gltfPath, pngPath, lowQuality),
+        compressGltfTexture(gltfPath, pngPath, highQuality)
+    ]).then(compareUris));
+
+    expect(Promise.all(promises), done).toResolve();
+}
+
 // etc2comp only supports png input so this is a good test case for handling different input image formats
 var etc1Compression = {
     format : 'etc1'
@@ -371,36 +394,45 @@ describe('compressTextures', function() {
         expect(verifyKTX(gltfPath, pngPath, options, expectedFormat), done).toResolve();
     });
 
-    var formats = ['pvrtc1', 'pvrtc2', 'etc1', 'etc2', 'astc', 'dxt1', 'dxt3', 'dxt5', 'crunch-dxt1', 'crunch-dxt5'];
+    it('sets quality for format pvrtc1', function(done) {
+        setFormatQuality(gltfPath, pngPath, 'pvrtc1', done);
+    });
 
-    function addSetsQualityTest(format) {
-        it('sets quality for format ' + format, function(done) {
-            var promises = [];
-            function compareUris(uris) {
-                expect(uris[0]).not.toEqual(uris[1]);
-            }
+    it('sets quality for format pvrtc2', function(done) {
+        setFormatQuality(gltfPath, pngPath, 'pvrtc2', done);
+    });
 
-            var lowQuality = {
-                format : format,
-                quality : 1
-            };
-            var highQuality = {
-                format : format,
-                quality : 5
-            };
+    it('sets quality for format etc1', function(done) {
+        setFormatQuality(gltfPath, pngPath, 'etc1', done);
+    });
 
-            promises.push(Promise.all([
-                compressGltfTexture(gltfPath, pngPath, lowQuality),
-                compressGltfTexture(gltfPath, pngPath, highQuality)
-            ]).then(compareUris));
+    it('sets quality for format etc2', function(done) {
+        setFormatQuality(gltfPath, pngPath, 'etc2', done);
+    });
 
-            expect(Promise.all(promises), done).toResolve();
-        });
-    }
+    it('sets quality for format astc', function(done) {
+        setFormatQuality(gltfPath, pngPath, 'astc', done);
+    });
 
-    for(var i = 0; i < formats.length; ++i) {
-        addSetsQualityTest(formats[i]);
-    }
+    it('sets quality for format dxt1', function(done) {
+        setFormatQuality(gltfPath, pngPath, 'dxt1', done);
+    });
+
+    it('sets quality for format dxt3', function(done) {
+        setFormatQuality(gltfPath, pngPath, 'dxt3', done);
+    });
+
+    it('sets quality for format dxt5', function(done) {
+        setFormatQuality(gltfPath, pngPath, 'dxt5', done);
+    });
+
+    it('sets quality for format crunch-dxt1', function(done) {
+        setFormatQuality(gltfPath, pngPath, 'crunch-dxt1', done);
+    });
+
+    it('sets quality for format crunch-dxt5', function(done) {
+        setFormatQuality(gltfPath, pngPath, 'crunch-dxt5', done);
+    });
 
     it('tempDirectory is removed when compression succeeds', function(done) {
         spyOn(fsExtra, 'writeFileAsync').and.callThrough();
