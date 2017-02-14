@@ -15,14 +15,14 @@ var fiveBoxPath = './specs/data/combineObjects/fiveBox.gltf';
 describe('NodeHelpers', function() {
     var testScene = {
         "nodes": [
-            "leftElbow",
-            "rightWrist"
+            1,
+            5
         ]
     };
-    var testNodes = {
-        "leftShoulder": {
+    var testNodes = [
+        {
             "children": [
-                "leftElbow"
+                1
             ],
             "translation": [
                 1, 0, 0
@@ -31,9 +31,9 @@ describe('NodeHelpers', function() {
                 "_pipeline": {}
             }
         },
-        "leftElbow": {
+        {
             "children": [
-                "leftWrist"
+                2
             ],
             "translation": [
                 1, 0, 0
@@ -42,10 +42,10 @@ describe('NodeHelpers', function() {
                 "_pipeline": {}
             }
         },
-        "leftWrist": {
+        {
             "children": [
-                "leftPinkie",
-                "leftThumb"
+                3,
+                4
             ],
             "translation": [
                 1, 0, 0
@@ -54,7 +54,7 @@ describe('NodeHelpers', function() {
                 "_pipeline": {}
             }
         },
-        "leftPinkie": {
+        {
             "children": [
             ],
             "translation": [
@@ -64,7 +64,7 @@ describe('NodeHelpers', function() {
                 "_pipeline": {}
             }
         },
-        "leftThumb": {
+        {
             "children": [
             ],
             "translation": [
@@ -74,10 +74,10 @@ describe('NodeHelpers', function() {
                 "_pipeline": {}
             }
         },
-        "rightWrist": {
+        {
             "children": [
-                "rightPinkie",
-                "rightThumb"
+                6,
+                7
             ],
             "translation": [
                 -1, 0, 0
@@ -86,7 +86,7 @@ describe('NodeHelpers', function() {
                 "_pipeline": {}
             }
         },
-        "rightPinkie": {
+        {
             "children": [
             ],
             "translation": [
@@ -96,7 +96,7 @@ describe('NodeHelpers', function() {
                 "_pipeline": {}
             }
         },
-        "rightThumb": {
+        {
             "children": [
             ],
             "translation": [
@@ -106,7 +106,7 @@ describe('NodeHelpers', function() {
                 "_pipeline": {}
             }
         }
-    };
+    ];
 
     it('correctly gets the local matrix of a node that has a local matrix', function() {
         var testNode = {
@@ -170,8 +170,8 @@ describe('NodeHelpers', function() {
             0, 0, 1, 0,
             -1, 0, 0, 1
         ]);
-        var actualLeftPinkie = testNodesClone.leftPinkie.extras._pipeline.flatTransform;
-        var actualRightWrist = testNodesClone.rightWrist.extras._pipeline.flatTransform;
+        var actualLeftPinkie = testNodesClone[3].extras._pipeline.flatTransform;
+        var actualRightWrist = testNodesClone[5].extras._pipeline.flatTransform;
         expect(Matrix4.equalsEpsilon(actualLeftPinkie, expectLeftPinkie, CesiumMath.EPSILON7)).toEqual(true);
         expect(Matrix4.equalsEpsilon(actualRightWrist, expectRightWrist, CesiumMath.EPSILON7)).toEqual(true);
     });
@@ -211,19 +211,19 @@ describe('NodeHelpers', function() {
 
     it('maps meshes to nodes', function() {
         var gltf = {
-            meshes : {
-                mesh : {}
-            },
-            nodes : {
-                nodeA : {
-                    meshes : ['mesh']
+            meshes : [
+                {}
+            ],
+            nodes : [
+                {
+                    mesh : 0
                 },
-                nodeB : {
-                    meshes : ['mesh']
+                {
+                    mesh : 0
                 }
-            }
+            ]
         };
         var meshesToNodes = NodeHelpers.mapMeshesToNodes(gltf);
-        expect(meshesToNodes.mesh).toEqual(['nodeA', 'nodeB']);
+        expect(meshesToNodes[0]).toEqual([0, 1]);
     });
 });

@@ -28,12 +28,11 @@ function cloneGltfWithJimps(gltf) {
     var originalJimp = gltf.extras._pipeline.jimpScratch;
     gltfClone.extras._pipeline.jimpScratch = originalJimp.clone();
     var images = gltfClone.images;
-    for (var imageID in images) {
-        if (images.hasOwnProperty(imageID)) {
-            var image = images[imageID];
-            originalJimp = gltf.images[imageID].extras._pipeline.jimpImage;
-            image.extras._pipeline.jimpImage = originalJimp.clone();
-        }
+    var imagesLength = images.length;
+    for (var imageId = 0; imageId < imagesLength; imageId++) {
+        var image = images[imageId];
+        originalJimp = gltf.images[imageId].extras._pipeline.jimpImage;
+        image.extras._pipeline.jimpImage = originalJimp.clone();
     }
     return gltfClone;
 }
@@ -84,64 +83,64 @@ describe('AmbientOcclusion', function() {
     var dataBuffer = Buffer.concat([indicesBuffer, positionsBuffer, normalsBuffer, uvsBuffer]);
 
     var testGltf = {
-        "accessors": {
-            "accessor_index": {
-                "bufferView": "index_view",
+        "accessors": [
+            {
+                "bufferView": 0,
                 "byteOffset": 0,
                 "componentType": 5123,
                 "count": 6,
                 "type": "SCALAR"
             },
-            "accessor_position": {
-                "bufferView": "position_view",
+            {
+                "bufferView": 1,
                 "byteOffset": 0,
                 "componentType": 5126,
                 "count": 4,
                 "type": "VEC3"
             },
-            "accessor_normal": {
-                "bufferView": "normal_view",
+            {
+                "bufferView": 2,
                 "byteOffset": 0,
                 "componentType": 5126,
                 "count": 4,
                 "type": "VEC3"
             },
-            "accessor_uv": {
-                "bufferView": "uv_view",
+            {
+                "bufferView": 3,
                 "byteOffset": 0,
                 "componentType": 5126,
                 "count": 4,
                 "type": "VEC2"
             }
-        },
-        "bufferViews": {
-            "index_view": {
-                "buffer": "buffer_0",
+        ],
+        "bufferViews": [
+            {
+                "buffer": 0,
                 "byteOffset": 0,
                 "byteLength": 6 * 2,
                 "target": 34963
             },
-            "position_view": {
-                "buffer": "buffer_0",
+            {
+                "buffer": 0,
                 "byteOffset": 6 * 2,
                 "byteLength": 4 * 3 * 4,
                 "target": 34962
             },
-            "normal_view": {
-                "buffer": "buffer_0",
+            {
+                "buffer": 0,
                 "byteOffset": 6 * 2 + (4 * 3 * 4),
                 "byteLength": 4 * 3 * 4,
                 "target": 34962
             },
-            "uv_view": {
-                "buffer": "buffer_0",
+            {
+                "buffer": 0,
                 "byteOffset": 6 * 2 + (4 * 3 * 4) * 2,
                 "byteLength": 4 * 2 * 4,
                 "target": 34962
             }
-        },
-        "buffers": {
-            "buffer_0": {
+        ],
+        "buffers": [
+            {
                 "uri": "data:",
                 "byteLength": indicesLength * 2 + (positionsLength + normalsLength + uvsLength) * 4,
                 "extras": {
@@ -150,17 +149,17 @@ describe('AmbientOcclusion', function() {
                     }
                 }
             }
-        },
-        "scene": "defaultScene",
-        "scenes": {
-            "defaultScene": {
+        ],
+        "scene": 0,
+        "scenes": [
+            {
                 "nodes": [
-                    "squareNode"
+                    0
                 ]
             }
-        },
-        "nodes": {
-            "squareNode": {
+        ],
+        "nodes": [
+            {
                 "children": [],
                 "matrix": [
                     2, 0, 0, 0,
@@ -168,33 +167,31 @@ describe('AmbientOcclusion', function() {
                     0, 0, 2, 0,
                     0, 0, 0, 1
                 ],
-                "meshes": [
-                    "mesh_square"
-                ],
+                "mesh": 0,
                 "name": "square",
                 "extras": {
                     "_pipeline": {}
                 }
             }
-        },
-        "meshes": {
-            "mesh_square": {
+        ],
+        "meshes": [
+            {
                 "name": "square",
                 "primitives": [
                     {
                         "attributes": {
-                            "POSITION": "accessor_position",
-                            "NORMAL": "accessor_normal",
-                            "TEXCOORD_0": "accessor_uv"
+                            "POSITION": 1,
+                            "NORMAL": 2,
+                            "TEXCOORD_0": 3,
                         },
-                        "indices": "accessor_index",
+                        "indices": 0,
                         "extras": {
                             "_pipeline": {}
                         }
                     }
                 ]
             }
-        }
+        ]
     };
 
     beforeAll(function(done) {

@@ -20,64 +20,53 @@ var gltfTransparentPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBox
 describe('addDefaults', function() {
     it('Adds accessor properties', function() {
         var gltf = {
-            "accessors": {
-                "accessorId": {
-                    "bufferView": "bufferViewId",
-                    "byteOffset": 0,
-                    "componentType": 5123,
-                    "count": 36,
-                    "type": "SCALAR"
-                }
-            }
+            "accessors": [{
+                "bufferView": 0,
+                "byteOffset": 0,
+                "componentType": 5123,
+                "count": 36,
+                "type": "SCALAR"
+            }]
         };
 
         addDefaults(gltf);
-        var accessor = gltf.accessors.accessorId;
+        var accessor = gltf.accessors[0];
         expect(accessor.byteStride).toEqual(0);
     });
 
     it('Adds animation properties', function() {
         var gltf = {
-            "animations": {
-                "animationId": {
-                    "channels": [
-                        {
-                            "sampler": "samplerId",
-                            "target": {
-                                "id": "jointId",
-                                "path": "rotation"
-                            }
-                        }
-                    ],
-                    "parameters": {
-                        "TIME": "timeAccessorId",
-                        "rotation": "rotationAccessorId"
-                    },
-                    "samplers": {
-                        "samplerId": {
-                            "input": "TIME",
-                            "output": "rotation"
+            "animations": [{
+                "channels": [
+                    {
+                        "sampler": 0,
+                        "target": {
+                            "id": 0,
+                            "path": "rotation"
                         }
                     }
-                }
-            }
+                ],
+                "samplers": [{
+                    "input": 0,
+                    "output": 1
+                }]
+            }]
         };
 
         addDefaults(gltf);
-        expect(gltf.animations.animationId.samplers.samplerId.interpolation).toEqual('LINEAR');
+        expect(gltf.animations[0].samplers[0].interpolation).toEqual('LINEAR');
     });
 
     it('Adds animation empty properties', function() {
         var gltf = {
-            "animations": {
-                "animationId" : {
-                }
-            }
+            "animations": [
+                {}
+            ]
         };
 
         addDefaults(gltf);
-        expect(gltf.animations.animationId.channels).toEqual([]);
-        expect(gltf.animations.animationId.samplers).toEqual({});
+        expect(gltf.animations[0].channels).toEqual([]);
+        expect(gltf.animations[0].samplers).toEqual([]);
     });
 
     it('Adds asset properties', function() {
@@ -93,43 +82,37 @@ describe('addDefaults', function() {
 
     it('Adds buffer properties', function() {
         var gltf = {
-            "buffers": {
-                "bufferId": {
-                    "byteLength": 840,
-                    "uri": "buffer.bin"
-                }
-            }
+            "buffers": [{
+                "byteLength": 840,
+                "uri": "buffer.bin"
+            }]
         };
 
         addDefaults(gltf);
-        expect(gltf.buffers.bufferId.type).toEqual('arraybuffer');
+        expect(gltf.buffers[0].type).toEqual('arraybuffer');
     });
 
     it('does not change the material if the material has a technique', function() {
         var gltf = {
-            "techniques": {
-                "technique1": {
-                    "states": {
-                        "enable": [
-                            2929,
-                            2884
-                        ]
-                    }
+            "techniques": [{
+                "states": {
+                    "enable": [
+                        2929,
+                        2884
+                    ]
                 }
-            },
-            "materials": {
-                "blinn-1": {
-                    "technique": "technique1",
-                    "values": {
-                        "ambient": [0, 0, 0, 1],
-                        "diffuse": [1, 0, 0, 1],
-                        "emission": "texture_file2",
-                        "shininess": 38.4,
-                        "specular": [0, 0, 0, 1]
-                    },
-                    "name": "blinn1"
-                }
-            }
+            }],
+            "materials": [{
+                "technique": 0,
+                "values": {
+                    "ambient": [0, 0, 0, 1],
+                    "diffuse": [1, 0, 0, 1],
+                    "emission": [0],
+                    "shininess": [38.4],
+                    "specular": [0, 0, 0, 1]
+                },
+                "name": "blinn1"
+            }]
         };
         var materialsCopy = clone(gltf.materials);
         addDefaults(gltf);
@@ -158,57 +141,51 @@ describe('addDefaults', function() {
 
     it('generates a material with alpha blending if the diffuse texture is transparent and no technique or extension values are given', function(done) {
         var gltf = {
-            "textures": {
-                "texture0001": {
-                    "format": 6408,
-                    "internalFormat": 6408,
-                    "sampler": "sampler_0",
-                    "source": "Image0001",
-                    "target": 3553,
-                    "type": 5121
+            "textures": [{
+                "format": 6408,
+                "internalFormat": 6408,
+                "sampler": 0,
+                "source": 0,
+                "target": 3553,
+                "type": 5121
+            }],
+            "images": [{
+                "name": "Image0001",
+                "uri": transparentImageUri
+            }],
+            "materials": [{
+                "values": {
+                    "ambient": [0, 0, 0, 1],
+                    "diffuse": [0],
+                    "emission": [1, 0, 0, 1]
                 }
-            },
-            "images": {
-                "Image0001": {
-                    "name": "Image0001",
-                    "uri": transparentImageUri
-                }
-            },
-            "materials": {
-                "material1": {
-                    "values": {
-                        "ambient": [0, 0, 0, 1],
-                        "diffuse": "texture0001",
-                        "emission": [1, 0, 0, 1]
-                    }
-                }
-            }
+            }]
         };
 
         addPipelineExtras(gltf);
         expect(loadGltfUris(gltf)
             .then(function() {
                 addDefaults(gltf);
-                var technique = gltf.techniques[Object.keys(gltf.techniques)[0]];
+                var technique = gltf.techniques[0];
                 expect(technique.states).toEqual(alphaBlendState);
             }), done).toResolve();
     });
 
     it('generates a material with alpha blending if the diffuse color is transparent and no technique or extension values are given', function() {
         var gltf = {
-            "materials": {
-                "material1": {
+            "materials": [
+                {
                     "values": {
                         "ambient": [0, 0, 0, 1],
                         "diffuse": [1, 0, 0, 0.5],
                         "emission": [1, 0, 0, 1]
                     }
                 }
-            }
+            ]
         };
 
         addDefaults(gltf);
-        var technique = gltf.techniques[Object.keys(gltf.techniques)[0]];
+        var technique = gltf.techniques[0];
         expect(technique.states).toEqual(alphaBlendState);
     });
 
@@ -216,13 +193,13 @@ describe('addDefaults', function() {
         expect(fsReadFile(gltfTransparentPath)
             .then(function(data) {
                 var gltf = JSON.parse(data);
-                var originalState = gltf.techniques[Object.keys(gltf.techniques)[0]].states;
+                var originalState = gltf.techniques[0].states;
                 expect(originalState).not.toEqual(alphaBlendState);
                 return readGltf(gltfTransparentPath);
             })
             .then(function (gltf) {
                 addDefaults(gltf);
-                var technique = gltf.techniques[Object.keys(gltf.techniques)[0]];
+                var technique = gltf.techniques[0];
                 expect(technique.states).toEqual(alphaBlendState);
             }), done).toResolve();
     });
@@ -231,15 +208,15 @@ describe('addDefaults', function() {
         expect(fsReadFile(gltfTransparentPath)
             .then(function(data) {
                 var gltf = JSON.parse(data);
-                var originalState = gltf.techniques[Object.keys(gltf.techniques)[0]].states;
+                var originalState = gltf.techniques[0].states;
                 expect(originalState).not.toEqual(alphaBlendState);
                 return readGltf(gltfTransparentPath);
             })
             .then(function (gltf) {
-                var material = gltf.materials[Object.keys(gltf.materials)[0]];
+                var material = gltf.materials[0];
                 material.values.diffuse = [1, 0, 0, 0.5];
                 addDefaults(gltf);
-                var technique = gltf.techniques[Object.keys(gltf.techniques)[0]];
+                var technique = gltf.techniques[0];
                 expect(technique.states).toEqual(alphaBlendState);
             }), done).toResolve();
     });
@@ -250,25 +227,24 @@ describe('addDefaults', function() {
                 addDefaults(gltf, {
                     optimizeForCesium : true
                 });
-                var technique = gltf.techniques[Object.keys(gltf.techniques)[0]];
+                var technique = gltf.techniques[0];
                 expect(technique.parameters.diffuse.semantic).toEqual('_3DTILESDIFFUSE');
             }), done).toResolve();
     });
 
     it('Adds mesh properties', function() {
         var gltf = {
-            "meshes": {
-                "meshId": {
-                }
-            }
+            "meshes": [
+                {}
+            ]
         };
 
         addDefaults(gltf);
-        expect(gltf.meshes.meshId.primitives).toEqual([]);
+        expect(gltf.meshes[0].primitives).toEqual([]);
 
         gltf = {
-            "meshes": {
-                "meshId": {
+            "meshes": [
+                {
                     "primitives": [
                         {
                             "indices": "accessorId",
@@ -276,24 +252,23 @@ describe('addDefaults', function() {
                         }
                     ]
                 }
-            }
+            ]
         };
 
         addDefaults(gltf);
-        expect(gltf.meshes.meshId.primitives[0].attributes).toBeDefined();
-        expect(gltf.meshes.meshId.primitives[0].mode).toEqual(WebGLConstants.TRIANGLES);
+        expect(gltf.meshes[0].primitives[0].attributes).toBeDefined();
+        expect(gltf.meshes[0].primitives[0].mode).toEqual(WebGLConstants.TRIANGLES);
     });
 
     it('Adds node properties', function() {
         var gltf = {
-            "nodes": {
-                "nodeId": {
-                }
-            }
+            "nodes": [
+                {}
+            ]
         };
 
         addDefaults(gltf);
-        var node = gltf.nodes.nodeId;
+        var node = gltf.nodes[0];
         expect(node.children).toEqual([]);
         expect(node.matrix).toEqual([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
         expect(node.translation).not.toBeDefined();
@@ -301,108 +276,106 @@ describe('addDefaults', function() {
         expect(node.scale).not.toBeDefined();
 
         gltf = {
-            "nodes": {
-                "nodeId": {
+            "nodes": [
+                {
                     "translation": [0.0, 0.0, 0.0]
                 }
-            }
+            ]
         };
 
         addDefaults(gltf);
-        expect(gltf.nodes.nodeId.translation).toEqual([0.0, 0.0, 0.0]);
-        expect(gltf.nodes.nodeId.rotation).toEqual([0.0, 0.0, 0.0, 1.0]);
-        expect(gltf.nodes.nodeId.scale).toEqual([1.0, 1.0, 1.0]);
-        expect(gltf.nodes.nodeId.matrix).not.toBeDefined();
+        expect(gltf.nodes[0].translation).toEqual([0.0, 0.0, 0.0]);
+        expect(gltf.nodes[0].rotation).toEqual([0.0, 0.0, 0.0, 1.0]);
+        expect(gltf.nodes[0].scale).toEqual([1.0, 1.0, 1.0]);
+        expect(gltf.nodes[0].matrix).not.toBeDefined();
 
         gltf = {
-            "nodes": {
-                "nodeId": {
+            "nodes": [
+                {
                     "scale": [1.0, 1.0, 1.0]
                 }
-            }
+            ]
         };
 
         addDefaults(gltf);
-        expect(gltf.nodes.nodeId.translation).toEqual([0.0, 0.0, 0.0]);
-        expect(gltf.nodes.nodeId.rotation).toEqual([0.0, 0.0, 0.0, 1.0]);
-        expect(gltf.nodes.nodeId.scale).toEqual([1.0, 1.0, 1.0]);
-        expect(gltf.nodes.nodeId.matrix).not.toBeDefined();
+        expect(gltf.nodes[0].translation).toEqual([0.0, 0.0, 0.0]);
+        expect(gltf.nodes[0].rotation).toEqual([0.0, 0.0, 0.0, 1.0]);
+        expect(gltf.nodes[0].scale).toEqual([1.0, 1.0, 1.0]);
+        expect(gltf.nodes[0].matrix).not.toBeDefined();
     });
 
     it('Adds program properties', function() {
         var gltf = {
-            "programs": {
-                "programId": {
-                    "fragmentShader": "bufferId0FS",
-                    "vertexShader": "bufferId0VS"
+            "programs": [
+                {
+                    "fragmentShader": 0,
+                    "vertexShader": 1
                 }
-            }
+            ]
         };
 
         addDefaults(gltf);
-        expect(gltf.programs.programId.attributes).toEqual([]);
+        expect(gltf.programs[0].attributes).toEqual([]);
     });
 
     it('Adds sampler properties', function() {
         var gltf = {
-            "samplers": {
-                "samplerId": {
-                }
-            }
+            "samplers": [
+                {}
+            ]
         };
 
         addDefaults(gltf);
-        expect(gltf.samplers.samplerId.magFilter).toEqual(WebGLConstants.LINEAR);
-        expect(gltf.samplers.samplerId.minFilter).toEqual(WebGLConstants.NEAREST_MIPMAP_LINEAR);
-        expect(gltf.samplers.samplerId.wrapS).toEqual(WebGLConstants.REPEAT);
-        expect(gltf.samplers.samplerId.wrapT).toEqual(WebGLConstants.REPEAT);
+        expect(gltf.samplers[0].magFilter).toEqual(WebGLConstants.LINEAR);
+        expect(gltf.samplers[0].minFilter).toEqual(WebGLConstants.NEAREST_MIPMAP_LINEAR);
+        expect(gltf.samplers[0].wrapS).toEqual(WebGLConstants.REPEAT);
+        expect(gltf.samplers[0].wrapT).toEqual(WebGLConstants.REPEAT);
     });
 
     it('Adds scene properties', function() {
         var gltf = {
-            "scenes": {
-                "defaultScene": {
-                }
-            }
+            "scenes": [
+                {}
+            ]
         };
 
         addDefaults(gltf);
-        expect(gltf.scenes.defaultScene.nodes).toEqual([]);
+        expect(gltf.scenes[0].nodes).toEqual([]);
     });
 
     it('Adds skin properties', function() {
         var gltf = {
-            "skins": {
-                "skinId": {
-                    "inverseBindMatrices": "accessorId",
+            "skins": [
+                {
+                    "inverseBindMatrices": 0,
                     "jointNames": [
                         "jointId"
                     ],
                     "name": "Armature"
                 }
-            }
+            ]
         };
 
         addDefaults(gltf);
-        expect(gltf.skins.skinId.bindShapeMatrix).toEqual([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
+        expect(gltf.skins[0].bindShapeMatrix).toEqual([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
     });
 
     it('Adds texture properties', function() {
         var gltf = {
-            "textures": {
-                "textureId": {
+            "textures": [
+                {
                     "format": 6408,
-                    "sampler": "samplerId",
-                    "source": "Image0001"
+                    "sampler": 0,
+                    "source": 0
                 }
-            }
+            ]
         };
 
         addDefaults(gltf);
-        expect(gltf.textures.textureId.format).toEqual(WebGLConstants.RGBA);
-        expect(gltf.textures.textureId.internalFormat).toEqual(6408);
-        expect(gltf.textures.textureId.target).toEqual(WebGLConstants.TEXTURE_2D);
-        expect(gltf.textures.textureId.type).toEqual(WebGLConstants.UNSIGNED_BYTE);
+        expect(gltf.textures[0].format).toEqual(WebGLConstants.RGBA);
+        expect(gltf.textures[0].internalFormat).toEqual(6408);
+        expect(gltf.textures[0].target).toEqual(WebGLConstants.TEXTURE_2D);
+        expect(gltf.textures[0].type).toEqual(WebGLConstants.UNSIGNED_BYTE);
     });
 
     it('Adds empty top-level properties', function() {
@@ -431,18 +404,18 @@ describe('addDefaults', function() {
 
     it('Adds the default material if a mesh has an undefined material', function() {
         var gltf = {
-            meshes: {
-                mesh: {
+            meshes: [
+                {
                     primitives: [
                         {},
                         {}
                     ]
                 }
-            }
+            ]
         };
         addDefaults(gltf);
 
-        var mesh = gltf.meshes.mesh;
+        var mesh = gltf.meshes[0];
         var meshMaterial = mesh.primitives[0].material;
         expect(meshMaterial).toBeDefined();
         expect(mesh.primitives[1].material).toEqual(meshMaterial);
@@ -452,15 +425,15 @@ describe('addDefaults', function() {
 
     it('Adds the default technique, program and shader if a material has an undefined technique', function() {
         var gltf = {
-            materials: {
-                material0: {},
-                material1: {}
-            }
+            materials: [
+                {},
+                {}
+            ]
         };
         addDefaults(gltf);
 
-        var techniqueId = gltf.materials.material0.technique;
-        expect(gltf.materials.material1.technique).toEqual(techniqueId);
+        var techniqueId = gltf.materials[0].technique;
+        expect(gltf.materials[1].technique).toEqual(techniqueId);
         var technique = gltf.techniques[techniqueId];
         expect(technique).toBeDefined();
         var programId = technique.program;
@@ -476,12 +449,12 @@ describe('addDefaults', function() {
 
     it('Selects a default scene if none is present', function() {
        var gltf = {
-           scenes: {
-               scene: {}
-           }
+           scenes: [
+               {}
+           ]
        };
        addDefaults(gltf);
 
-       expect(gltf.scene).toEqual('scene');
+       expect(gltf.scene).toEqual(0);
     });
 });
