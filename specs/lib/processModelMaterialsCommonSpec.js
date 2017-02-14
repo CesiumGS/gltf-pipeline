@@ -8,17 +8,17 @@ var clone = Cesium.clone;
 describe('processModelMaterialsCommon', function() {
     it('generates techniques and nodes for KHR_materials_common lights', function() {
         var gltf = {
-            materials: {
-                material1: {
+            materials: [
+                {
                     extensions : {
                         KHR_materials_common : {
                             technique : 'BLINN'
                         }
                     }
                 }
-            },
-            nodes: {
-                node1: {
+            ],
+            nodes: [
+                {
                     children: [],
                     extensions: {
                         KHR_materials_common: {
@@ -26,7 +26,7 @@ describe('processModelMaterialsCommon', function() {
                         }
                     }
                 },
-                node2: {
+                {
                     children: [],
                     extensions: {
                         KHR_materials_common: {
@@ -34,7 +34,7 @@ describe('processModelMaterialsCommon', function() {
                         }
                     }
                 },
-                node3: {
+                {
                     children: [],
                     extensions: {
                         KHR_materials_common: {
@@ -42,7 +42,7 @@ describe('processModelMaterialsCommon', function() {
                         }
                     }
                 },
-                node4: {
+                {
                     children: [],
                     extensions: {
                         KHR_materials_common: {
@@ -50,27 +50,26 @@ describe('processModelMaterialsCommon', function() {
                         }
                     }
                 }
-
-            },
+            ],
             extensionsUsed: [
                 'KHR_materials_common'
             ],
             extensions: {
                 KHR_materials_common : {
-                    lights: {
-                        ambientLight: {
+                    lights: [
+                        {
                             ambient: {
                                 color: [1.0, 1.0, 1.0]
                             },
                             type: 'ambient'
                         },
-                        directionalLight: {
+                        {
                             directional: {
                                 color: [1.0, 1.0, 1.0]
                             },
                             type: 'directional'
                         },
-                        pointLight: {
+                        {
                             point: {
                                 color: [1.0, 1.0, 1.0]
                             },
@@ -80,7 +79,7 @@ describe('processModelMaterialsCommon', function() {
                             quadraticAttenuation: 1.0,
                             type: 'point'
                         },
-                        spotLight: {
+                        {
                             spot: {
                                 spot: [1.0, 1.0, 1.0]
                             },
@@ -92,7 +91,7 @@ describe('processModelMaterialsCommon', function() {
                             falloffExponent: 0.0,
                             type: 'spot'
                         }
-                    }
+                    ]
                 }
             }
         };
@@ -101,35 +100,36 @@ describe('processModelMaterialsCommon', function() {
             diffuse: [0.0, 0.0, 0.0, 1.0],
             emission: [0.0, 0.0, 0.0, 1.0],
             specular: [0.0, 0.0, 0.0, 1.0],
-            shininess: 0.0,
-            transparency: 1.0
+            shininess: [0.0],
+            transparency: [1.0]
         };
         addDefaults(gltf);
         processModelMaterialsCommon(gltf);
-        expect(Object.keys(gltf.materials).length > 0).toEqual(true);
-        expect(Object.keys(gltf.techniques).length > 0).toEqual(true);
-        for (var materialID in gltf.materials) {
-            if (gltf.materials.hasOwnProperty(materialID)) {
-                expect(gltf.materials[materialID].values).toEqual(expectValues);
-            }
+        expect(gltf.materials.length).toBeGreaterThan(0)
+        expect(gltf.techniques.length).toBeGreaterThan(0);
+        var materialsLength = gltf.materials.length;
+        for (var materialId = 0; materialId < materialsLength; materialId++) {
+          expect(gltf.materials[materialId].values).toEqual(expectValues);
         }
     });
 
     it('works with optimizeForCesium', function() {
         var gltf = {
             extensionsUsed: ['KHR_materials_common'],
-            materials: {
-                material1: {
+            materials: [
+                {
                     extensions: {
                         KHR_materials_common: {
                             technique: 'BLINN',
-                            ambient: [0.0, 0.0, 0.0, 1.0],
-                            diffuse: [1.0, 0.0, 0.0, 1.0],
-                            emission: 'texture_file2'
+                            values: {
+                                ambient: [0.0, 0.0, 0.0, 1.0],
+                                diffuse: [1.0, 0.0, 0.0, 1.0],
+                                emission: [0]
+                            }
                         }
                     }
                 }
-            }
+            ]
         };
 
         var gltfClone = clone(gltf, true);
@@ -140,57 +140,57 @@ describe('processModelMaterialsCommon', function() {
         processModelMaterialsCommon(gltfClone, options);
 
         // Uses the Cesium sun as its default light source
-        var fragmentShaderSource = gltfClone.shaders.fragmentShader0.extras._pipeline.source;
+        var fragmentShaderSource = gltfClone.shaders[gltfClone.programs[0].fragmentShader].extras._pipeline.source;
         expect(fragmentShaderSource.indexOf('czm_sunDirectionEC') > -1).toBe(true);
 
         // Adds the _3DTILESDIFFUSE flag
-        var technique = gltfClone.techniques[Object.keys(gltfClone.techniques)[0]];
+        var technique = gltfClone.techniques[0];
         expect(technique.parameters.diffuse.semantic).toEqual('_3DTILESDIFFUSE');
 
         gltfClone = clone(gltf, true);
         addDefaults(gltfClone);
         processModelMaterialsCommon(gltfClone);
 
-        fragmentShaderSource = gltfClone.shaders.fragmentShader0.extras._pipeline.source;
+        fragmentShaderSource = gltfClone.shaders[gltfClone.programs[0].fragmentShader].extras._pipeline.source;
         expect(fragmentShaderSource.indexOf('czm_sunDirectionEC') > -1).toBe(false);
     });
 
     it('adds nonstandard semantic', function() {
         var gltf = {
-            'accessors': {
-                'accessor_3': {
-                    'componentType': 5123,
-                    'type': 'SCALAR'
+            accessors: [
+                {
+                    componentType: 5123,
+                    type: 'SCALAR'
                 }
-            },
-            'extensionsUsed': [
+            ],
+            extensionsUsed: [
                 'KHR_materials_common'
             ],
-            'meshes': {
-                'mesh1' : {
-                    'primitives': [
+            meshes: [
+                {
+                    primitives: [
                         {
-                            'attributes': {
-                                'NORMAL': 'accessor_1',
-                                'POSITION': 'accessor_2',
-                                'BATCHID': 'accessor_3'
+                            attributes: {
+                                NORMAL: 1,
+                                POSITION: 2,
+                                _BATCHID: 0
                             },
-                            'indices': 'accessor_4',
-                            'material': 'material1',
-                            'mode': 4
+                            indices: 3,
+                            material: 0,
+                            mode: 4
                         }
                     ]
                 }
-            },
-            'materials': {
-                'material1': {
-                    'extensions': {
-                        'KHR_materials_common': {
-                            'doubleSided': false,
-                            'jointCount': 0,
-                            'technique': 'PHONG',
-                            'transparent': false,
-                            'values': {
+            ],
+            materials: [
+                {
+                    extensions: {
+                        KHR_materials_common: {
+                            doubleSided: false,
+                            jointCount: 0,
+                            technique: 'PHONG',
+                            transparent: false,
+                            values: {
                                 'diffuse': [
                                     0.4,
                                     0.4,
@@ -200,19 +200,19 @@ describe('processModelMaterialsCommon', function() {
                             }
                         }
                     },
-                    'name': 'material1'
+                    name: 'material1'
                 }
-            }
+            ]
         };
 
         var gltfClone = clone(gltf);
         addDefaults(gltfClone);
         processModelMaterialsCommon(gltfClone);
 
-        var material = gltfClone.materials.material1;
+        var material = gltfClone.materials[0];
         var technique = gltfClone.techniques[material.technique];
         expect(technique.attributes.a_batchid).toEqual('batchid');
-        expect(technique.parameters.batchid.semantic).toEqual('BATCHID');
+        expect(technique.parameters.batchid.semantic).toEqual('_BATCHID');
 
         var program = gltfClone.programs[technique.program];
         expect(program.attributes.indexOf('a_batchid') > -1).toBe(true);
