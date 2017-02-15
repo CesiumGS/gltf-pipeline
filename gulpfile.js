@@ -44,9 +44,29 @@ gulp.task('jsHint-watch', function () {
     gulp.watch(jsHintFiles, ['jsHint']);
 });
 
+function excludeCompressedTextures(jasmine) {
+    var excludedSpecs = ['compressTexturesSpec.js', 'compressTexturesMultipleFormatsSpec.js'];
+    var specFiles = jasmine.specFiles;
+    var specsLength = specFiles.length;
+    var excludedLength = excludedSpecs.length;
+    for (var i = specsLength - 1; i >= 0; --i) {
+        for (var j = 0; j < excludedLength; ++j) {
+            if (specFiles[i].indexOf(excludedSpecs[j]) > -1) {
+                specFiles.splice(i, 1);
+                break;
+            }
+        }
+    }
+}
+
 gulp.task('test', function (done) {
     var jasmine = new Jasmine();
     jasmine.loadConfigFile('specs/jasmine.json');
+    if (defined(argv.excludeCompressedTextures)) {
+        // Exclude compressTexturesSpec for Travis builds
+        // Travis runs Ubuntu 12.04.5 which has glibc 2.15, while crunch requires glibc 2.22 or higher
+        excludeCompressedTextures(jasmine);
+    }
     jasmine.addReporter(new JasmineSpecReporter({
         displaySuccessfulSpec: !defined(argv.suppressPassed) || !argv.suppressPassed
     }));
@@ -72,11 +92,20 @@ gulp.task('test-watch', function () {
 
 gulp.task('coverage', function () {
     fsExtra.removeSync('coverage/server');
+
+    // Exclude compressTexturesSpec from coverage for Travis builds
+    // Travis runs Ubuntu 12.04.5 which has glibc 2.15, while crunch requires glibc 2.22 or higher
+    var additionalExcludes = '';
+    if (defined(argv.excludeCompressedTextures)) {
+        additionalExcludes += 'specs/lib/compressTexturesSpec.js';
+        additionalExcludes += 'specs/lib/compressTexturesMultipleFormatsSpec.js';
+    }
+
     child_process.execSync('istanbul' +
         ' cover' +
         ' --include-all-sources' +
         ' --dir coverage' +
-        ' -x "specs/** coverage/** dist/** index.js gulpfile.js"' +
+        ' -x "specs/** coverage/** dist/** index.js gulpfile.js"' + additionalExcludes +
         ' node_modules/jasmine/bin/jasmine.js' +
         ' JASMINE_CONFIG_PATH=specs/jasmine.json', {
         stdio: [process.stdin, process.stdout, process.stderr]
@@ -186,6 +215,63 @@ function amdify(source, subDependencyMapping) {
     return outputSource;
 }
 
+function combine(source) {
+    var fullMatch;
+    var variableName;
+    var requirePath;
+
+    source = source.replace(/\r\n/g, '\n');
+    var outputSource = source;
+
+    // find module exports
+    var returnValue;
+    var findModuleExportsRegex = /module.exports\s*=\s*(.*?);\n/;
+    var findModuleExports = findModuleExportsRegex.exec(source);
+    if (defined(findModuleExports && findModuleExports.length > 0)) {
+        fullMatch = findModuleExports[0];
+        returnValue = findModuleExports[1];
+        // remove module.exports from output source
+        outputSource = outputSource.replace(fullMatch, '');
+    }
+
+    // create require mapping for dependencies
+    var findRequireRegex = /var\s+(.+?)\s*=\s*require\('(.+?)'\);\n/g;
+    var findRequire = findRequireRegex.exec(source);
+    var requireMapping = {};
+    while (defined(findRequire) && findRequire.length > 0) {
+        fullMatch = findRequire[0];
+        variableName = findRequire[1];
+        requirePath = findRequire[2];
+        requireMapping[variableName] = requirePath;
+        // remove requires from output source
+        outputSource = outputSource.replace(fullMatch, '');
+        findRequire = findRequireRegex.exec(source);
+    }
+
+    // combine source
+    // indent
+    outputSource = outputSource.replace(/\n/g, '\n    ');
+    // wrap define header
+    var variables = [];
+    var paths = [];
+    for (var variable in requireMapping) {
+        if (requireMapping.hasOwnProperty(variable)) {
+            variables.push(variable);
+            paths.push(requireMapping[variable]);
+        }
+    }
+    var defineHeader = '/*global define*/\n' +
+        'var ' + returnValue + ' = (function() {\n    ';
+    var defineFooter = '\n}());\n';
+    if (defined(returnValue)) {
+        defineFooter = '\n    return ' + returnValue + ';' + defineFooter;
+    }
+    outputSource = defineHeader + outputSource + defineFooter;
+    // remove repeat newlines
+    outputSource = outputSource.replace(/\n\s*\n/g, '\n\n');
+    return outputSource;
+}
+
 gulp.task('build-cesium', function () {
     var basePath = 'lib';
     var outputDir = 'dist/cesium';
@@ -196,6 +282,7 @@ gulp.task('build-cesium', function () {
         'byteLengthForComponentType.js',
         'findAccessorMinMax.js',
         'getAccessorByteStride.js',
+        'getStatistics.js',
         'getUniqueId.js',
         'numberOfComponentsForType.js',
         'parseBinaryGltf.js',
@@ -215,6 +302,24 @@ gulp.task('build-cesium', function () {
             .then(function(buffer) {
                 var source = buffer.toString();
                 source = amdify(source, subDependencyMapping);
+                var outputPath = path.join(outputDir, fileName);
+                return fsExtraOutputFile(outputPath, source);
+            });
+    });
+});
+
+gulp.task('build-cesium-combine', function () {
+    var basePath = 'lib';
+    var outputDir = 'dist/cesium-combined';
+    var files = [
+        'getStatistics.js'
+    ];
+    Promise.map(files, function(fileName) {
+        var filePath = path.join(basePath, fileName);
+        return fsExtraReadFile(filePath)
+            .then(function(buffer) {
+                var source = buffer.toString();
+                source = combine(source);
                 var outputPath = path.join(outputDir, fileName);
                 return fsExtraOutputFile(outputPath, source);
             });

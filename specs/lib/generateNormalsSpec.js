@@ -1,6 +1,7 @@
 'use strict';
 var clone = require('clone');
 var fs = require('fs');
+var addPipelineExtras = require('../../lib/addPipelineExtras');
 var readGltf = require('../../lib/readGltf');
 var generateNormals = require('../../lib/generateNormals');
 
@@ -15,10 +16,12 @@ describe('generateNormals', function(){
         readGltf(gltfNoNormalsPath)
             .then(function(gltf) {
                 gltfNoNormals = gltf;
+                addPipelineExtras(gltfNoNormals);
                 return readGltf(gltfNormalsPath);
             })
             .then(function(gltf) {
                 gltfNormals = gltf;
+                addPipelineExtras(gltfNormals);
                 done();
             });
     });

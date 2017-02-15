@@ -1,9 +1,11 @@
 'use strict';
 var Cesium = require('cesium');
 var addDefaults = require('../../lib/addDefaults');
+var addPipelineExtras = require('../../lib/addPipelineExtras');
 var processModelMaterialsCommon = require('../../lib/processModelMaterialsCommon');
 
 var clone = Cesium.clone;
+var WebGLConstants = Cesium.WebGLConstants;
 
 describe('processModelMaterialsCommon', function() {
     it('generates techniques and nodes for KHR_materials_common lights', function() {
@@ -104,6 +106,7 @@ describe('processModelMaterialsCommon', function() {
             transparency: [1.0]
         };
         addDefaults(gltf);
+        addPipelineExtras(gltf);
         processModelMaterialsCommon(gltf);
         expect(gltf.materials.length).toBeGreaterThan(0)
         expect(gltf.techniques.length).toBeGreaterThan(0);
@@ -137,6 +140,7 @@ describe('processModelMaterialsCommon', function() {
             optimizeForCesium : true
         };
         addDefaults(gltfClone, options);
+        addPipelineExtras(gltfClone);
         processModelMaterialsCommon(gltfClone, options);
 
         // Uses the Cesium sun as its default light source
@@ -149,6 +153,7 @@ describe('processModelMaterialsCommon', function() {
 
         gltfClone = clone(gltf, true);
         addDefaults(gltfClone);
+        addPipelineExtras(gltfClone);
         processModelMaterialsCommon(gltfClone);
 
         fragmentShaderSource = gltfClone.shaders[gltfClone.programs[0].fragmentShader].extras._pipeline.source;
@@ -207,6 +212,7 @@ describe('processModelMaterialsCommon', function() {
 
         var gltfClone = clone(gltf);
         addDefaults(gltfClone);
+        addPipelineExtras(gltfClone);
         processModelMaterialsCommon(gltfClone);
 
         var material = gltfClone.materials[0];
@@ -219,5 +225,78 @@ describe('processModelMaterialsCommon', function() {
 
         var vertexShaderSource = gltfClone.shaders[program.vertexShader].extras._pipeline.source.toString();
         expect(vertexShaderSource.indexOf('a_batchid') > -1).toBe(true);
+    });
+
+    it('splits two materials with different types for JOINT and WEIGHT', function() {
+        var gltf = {
+            accessors: {
+                jointAccessor_0: {
+                    componentType: WebGLConstants.FLOAT,
+                    type: 'VEC4'
+                },
+                weightAccessor_0: {
+                    componentType: WebGLConstants.FLOAT,
+                    type: 'VEC4'
+                },
+                jointAccessor_1: {
+                    componentType: WebGLConstants.FLOAT,
+                    type: 'MAT3'
+                },
+                weightAccessor_1: {
+                    componentType: WebGLConstants.FLOAT,
+                    type: 'MAT3'
+                }
+            },
+            extensionsUsed: [
+                'KHR_materials_common'
+            ],
+            materials: {
+                material: {
+                    extensions: {
+                        KHR_materials_common: {
+                            jointCount: 14,
+                            technique: 'BLINN'
+                        }
+                    }
+                }
+            },
+            meshes: {
+                meshVec4: {
+                    primitives: [{
+                        attributes: {
+                            JOINT: 'jointAccessor_0',
+                            WEIGHT: 'weightAccessor_0'
+                        },
+                        material: 'material'
+                    }]
+                },
+                meshMat3: {
+                    primitives: [{
+                        attributes: {
+                            JOINT: 'jointAccessor_1',
+                            WEIGHT: 'weightAccessor_1'
+                        },
+                        material: 'material'
+                    }]
+                }
+            }
+        };
+        addDefaults(gltf);
+        addPipelineExtras(gltf);
+        processModelMaterialsCommon(gltf);
+
+        var meshes = gltf.meshes;
+        var primitiveVec4 = meshes.meshVec4.primitives[0];
+        var primitiveMat3 = meshes.meshMat3.primitives[0];
+        var materialVec4Id = primitiveVec4.material;
+        var materialMat3Id = primitiveMat3.material;
+        expect(materialVec4Id).not.toEqual(materialMat3Id);
+
+        var materials = gltf.materials;
+        var techniques = gltf.techniques;
+        var techniqueVec4 = techniques[materials[materialVec4Id].technique];
+        var techniqueMat3 = techniques[materials[materialMat3Id].technique];
+        expect(techniqueVec4.parameters.joint.type).toEqual(WebGLConstants.FLOAT_VEC4);
+        expect(techniqueMat3.parameters.joint.type).toEqual(WebGLConstants.FLOAT_MAT3);
     });
 });
