@@ -180,6 +180,7 @@ describe('NodeHelpers', function() {
         fsReadFile(fiveBoxPath)
             .then(function(data) {
                 var gltf = JSON.parse(data);
+                var materials = gltf.materials;
                 var scene = gltf.scenes[gltf.scene];
 
                 var functionParameters = {
@@ -197,10 +198,10 @@ describe('NodeHelpers', function() {
                 NodeHelpers.forEachPrimitiveInScene(gltf, scene, primitiveFunction, functionParameters);
 
                 expect(functionParameters.numberPrimitives).toEqual(5);
-                expect(functionParameters.primitiveMeshIDs[0]).toEqual('meshTest_0');
-                expect(functionParameters.primitiveMeshIDs[4]).toEqual('meshTest_4');
-                expect(functionParameters.materialIDs[0]).toEqual('Effect_outer');
-                expect(functionParameters.materialIDs[2]).toEqual('Effect_inner');
+                expect(functionParameters.primitiveMeshIDs[0]).toEqual('0_0');
+                expect(functionParameters.primitiveMeshIDs[4]).toEqual('0_4');
+                expect(materials[functionParameters.materialIDs[0]].name).toEqual('inner');
+                expect(materials[functionParameters.materialIDs[2]].name).toEqual('outer');
 
                 done();
             })

@@ -6,10 +6,12 @@ var dataUriToBuffer = require('data-uri-to-buffer');
 var fsExtra = require('fs-extra');
 var path = require('path');
 var Promise = require('bluebird');
+var addDefaults = require('../../lib/addDefaults');
+var addPipelineExtras = require('../../lib/addPipelineExtras');
 var compressTexture = require('../../lib/compressTexture');
 var compressTextures = require('../../lib/compressTextures');
 var directoryExists = require('../../lib/directoryExists');
-var Pipeline = require('../../lib/Pipeline');
+var loadGltfUris = require('../../lib/loadGltfUris');
 var readGltf = require('../../lib/readGltf');
 
 var fsExtraReadJson = Promise.promisify(fsExtra.readJson);
@@ -34,7 +36,7 @@ var defaultImageUri = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQ
 function compressGltfTexture(gltfPath, imagePath, options) {
     return fsExtraReadJson(gltfPath)
         .then(function(gltf) {
-            var image = gltf.images.Image0001;
+            var image = gltf.images[0];
             if (defined(imagePath)) {
                 image.uri = imagePath;
             }
@@ -42,7 +44,12 @@ function compressGltfTexture(gltfPath, imagePath, options) {
                 textureCompressionOptions : options,
                 basePath : basePath
             };
-            return Pipeline.processJSON(gltf, pipelineOptions)
+            addPipelineExtras(gltf);
+            addDefaults(gltf);
+            return loadGltfUris(gltf, pipelineOptions)
+                .then(function(gltf) {
+                    return compressTextures(gltf, options);
+                })
                 .then(function(gltf) {
                     // Return the first compressed image
                     var compressedImages = image.extras.compressedImage3DTiles;
@@ -109,7 +116,7 @@ describe('compressTextures', function() {
         spyOn(console, 'log');
     });
 
-    it('compresses external jpg', function(done) {
+    fit('compresses external jpg', function(done) {
         expect(verifyKTX(gltfPath, jpgPath, etc1Compression, etc1Format), done).toResolve();
     });
 
