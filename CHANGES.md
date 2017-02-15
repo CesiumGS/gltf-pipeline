@@ -11,7 +11,7 @@ Change Log
 * Added `build-cesium-combined` command to gulp file for generating simple files for other projects. [#231](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/231).
 * Change Cesium `Geometry`'s and `VertexFormat`'s `binormal` attribute to bitangent.
 * `updateVersion` stage for upgrades the glTF version of an asset from `1.0` to `2.0`. [#223](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/223) 
-   * All pipeline stages now operat on glTF `2.0` assets.
+   * All pipeline stages now operate on glTF `2.0` assets.
 
 ### 0.1.0-alpha10 - 2017-01-10
 * Added `tangentsBitangents` generation option
