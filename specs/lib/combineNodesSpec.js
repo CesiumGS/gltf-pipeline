@@ -9,103 +9,108 @@ var readAccessor = require('../../lib/readAccessor');
 describe('combineNodes', function() {
     it('reduces a scene with extra nodes to a single node', function() {
         var gltf = {
-            nodes : {
-                nodeA : {},
-                nodeB : {},
-                nodeC : {}
-            },
-            scenes : {
-                scene : {
+            nodes : [
+                {},
+                {},
+                {}
+            ],
+            scenes : [
+                {
                     nodes : [
-                        'nodeA',
-                        'nodeB',
-                        'nodeC'
+                        0,
+                        1,
+                        2
                     ]
                 }
-            }
+            ]
         };
         combineNodes(gltf);
-        expect(Object.keys(gltf.nodes).length).toEqual(1);
+        expect(gltf.nodes.length).toEqual(1);
     });
 
     it('preserves camera node', function() {
         var gltf = {
-            nodes : {
-                nodeA : {
-                    children : ['nodeB']
+            nodes : [
+                {
+                    children : [1]
                 },
-                nodeB : {
-                    children : ['nodeC']
+                {
+                    children : [2]
                 },
-                nodeC : {
-                    camera : 'camera'
+                {
+                    camera : 0
                 }
-            },
-            scenes : {
-                scene : {
-                    nodes : ['nodeA']
+            ],
+            scenes : [
+                {
+                    nodes : [0]
                 }
-            }
+            ]
         };
         combineNodes(gltf);
         var nodes = gltf.nodes;
-        expect(nodes.nodeC).toBeDefined();
+        expect(nodes.length).toEqual(1);
+        expect(nodes[0].camera).toBeDefined();
     });
 
-    it('preserve joint node', function() {
+    it('preserves joint node', function() {
         var gltf = {
-            nodes : {
-                nodeA : {
-                    children : ['nodeB']
+            nodes : [
+                {
+                    children : [1]
                 },
-                nodeB : {
-                    children : ['nodeC']
+                {
+                    children : [2]
                 },
-                nodeC : {
+                {
                     jointName : 'joint'
                 }
-            },
-            scenes : {
-                scene : {
-                    nodes : ['nodeA']
+            ],
+            scenes : [
+                {
+                    nodes : [0]
                 }
-            }
+            ]
         };
         combineNodes(gltf);
         var nodes = gltf.nodes;
-        expect(nodes.nodeC).toBeDefined();
+        expect(nodes.length).toEqual(1);
+        expect(nodes[0].jointName).toEqual('joint');
     });
 
     it('handles crossed mesh dependencies', function() {
         var gltf = {
-            meshes : {
-                mesh : {}
-            },
-            nodes : {
-                nodeA : {
-                    meshes : ['mesh']
+            meshes : [
+                {
+                    primitives: [{}]
+                }
+            ],
+            nodes : [
+                {
+                    mesh: 0
                 },
-                nodeB : {
-                    meshes : ['mesh']
+                {
+                    mesh: 0
                 }
-            },
-            scenes : {
-                scene : {
-                    nodes : ['nodeA', 'nodeB']
+            ],
+            scenes : [
+                {
+                    nodes : [0, 1]
                 }
-            }
+            ]
         };
         combineNodes(gltf);
         var nodes = gltf.nodes;
-        expect(nodes.nodeA).toBeDefined();
-        expect(nodes.nodeB).toBeDefined();
+        expect(nodes.length).toEqual(2);
+        expect(nodes[0].mesh).toEqual(0);
+        expect(nodes[1].mesh).toEqual(0);
     });
 
     it('flattens out unnecessary node chains', function() {
         var gltf = {
-            nodes : {
-                nodeA : {
-                    children : ['nodeB'],
+            nodes : [
+                {
+                    children : [1],
                     matrix : [
                         1.0, 0.0, 0.0, 0.0,
                         0.0, 2.0, 0.0, 0.0,
@@ -113,8 +118,8 @@ describe('combineNodes', function() {
                         1.0, 2.0, 3.0, 1.0
                     ]
                 },
-                nodeB : {
-                    children : ['nodeC'],
+                {
+                    children : [2],
                     matrix : [
                         4.0, 0.0, 0.0, 0.0,
                         0.0, 5.0, 0.0, 0.0,
@@ -122,20 +127,21 @@ describe('combineNodes', function() {
                         4.0, 5.0, 6.0, 1.0
                     ]
                 },
-                nodeC : {
-                    camera : ''
+                {
+                    camera : 0
                 }
-            },
-            scenes : {
-                scene : {
-                    nodes : ['nodeA']
+            ],
+            scenes : [
+                {
+                    nodes : [0]
                 }
-            }
+            ]
         };
         combineNodes(gltf);
         var nodes = gltf.nodes;
-        var cameraNode = nodes.nodeC;
-        expect(cameraNode).toBeDefined();
+        expect(nodes.length).toEqual(1);
+        var cameraNode = nodes[0];
+        expect(cameraNode.camera).toEqual(0);
         expect(cameraNode.matrix).toEqual([
             4.0,  0.0,  0.0, 0.0,
             0.0, 10.0,  0.0, 0.0,
@@ -146,52 +152,53 @@ describe('combineNodes', function() {
 
     it('doesn\'t modify nodes targeted for animation', function() {
         var gltf = {
-            animations : {
-                animation : {
+            animations : [
+                {
                     channels : [
                         {
                             target: {
-                                id: 'nodeA'
+                                id: 0
                             }
                         }
                     ]
                 }
-            },
-            nodes : {
-                nodeA : {}
-            },
-            scenes : {
-                scene : {
-                    nodes : ['nodeA']
+            ],
+            nodes : [
+                {}
+            ],
+            scenes : [
+                {
+                    nodes : [0]
                 }
-            }
+            ]
         };
         combineNodes(gltf);
-        expect(gltf.nodes.nodeA).toBeDefined();
+        var nodes = gltf.nodes;
+        expect(nodes.length).toEqual(1);
     });
 
     it('doesn\'t modify nodes targeted from technique parameters', function() {
         var gltf = {
-            nodes : {
-                nodeA : {}
-            },
-            scenes : {
-                scene : {
-                    nodes : ['nodeA']
+            nodes : [
+                {}
+            ],
+            scenes : [
+                {
+                    nodes : [0]
                 }
-            },
-            techniques : {
-                technique : {
+            ],
+            techniques : [
+                {
                     parameters : {
                         lightTransform : {
-                            node : 'nodeA'
+                            node : 0
                         }
                     }
                 }
-            }
+            ]
         };
         combineNodes(gltf);
-        expect(gltf.nodes.nodeA).toBeDefined();
+        expect(gltf.nodes.length).toEqual(1);
     });
 
     it('transforms mesh primitives from a child node and passes it to the parent', function() {
@@ -204,48 +211,48 @@ describe('combineNodes', function() {
         var indicesBuffer = new Buffer(indices.buffer);
         var buffer = Buffer.concat([attributesBuffer, indicesBuffer]);
         var gltf = {
-            accessors : {
-                positionAccessor : {
-                    bufferView : 'attributesBufferView',
+            accessors : [
+                {
+                    bufferView : 0,
                     byteOffset : 0,
                     byteStride : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : positions.length / 3,
                     type : "VEC3"
                 },
-                normalAccessor : {
-                    bufferView : 'attributesBufferView',
+                {
+                    bufferView : 0,
                     byteOffset : normalsBuffer.length,
                     byteStride : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : normals.length / 3,
                     type : "VEC3"
                 },
-                indicesAccessor : {
-                    bufferView : 'indicesBufferView',
+                {
+                    bufferView : 1,
                     byteOffset : 0,
                     byteStride : 0,
                     componentType : WebGLConstants.UNSIGNED_SHORT,
                     count : indices.length,
                     type : "SCALAR"
                 }
-            },
-            bufferViews : {
-                attributesBufferView : {
-                    buffer : 'buffer',
+            ],
+            bufferViews : [
+                {
+                    buffer : 0,
                     byteLength : attributesBuffer.length,
                     byteOffset : 0,
                     target : WebGLConstants.ARRAY_BUFFER
                 },
-                indicesBufferView : {
-                    buffer : 'buffer',
+                {
+                    buffer : 0,
                     byteLength : indicesBuffer.length,
                     byteOffset : attributesBuffer.length,
                     target : WebGLConstants.ELEMENT_ARRAY_BUFFER
                 }
-            },
-            buffers : {
-                buffer : {
+            ],
+            buffers : [
+                {
                     type : "arraybuffer",
                     byteLength : buffer.length,
                     extras : {
@@ -254,49 +261,49 @@ describe('combineNodes', function() {
                         }
                     }
                 }
-            },
-            meshes : {
-                mesh : {
+            ],
+            meshes : [
+                {
                     primitives : [
                         {
                             attributes : {
-                                NORMAL : 'normalAccessor',
-                                POSITION : 'positionAccessor'
+                                NORMAL : 1,
+                                POSITION : 0
                             },
-                            indices : 'indicesAccessor'
+                            indices : 2
                         }
                     ]
                 }
-            },
-            nodes : {
-                nodeA : {
-                    children : ['nodeB']
+            ],
+            nodes : [
+                {
+                    children : [1]
                 },
-                nodeB : {
-                    meshes : ['mesh'],
+                {
+                    mesh : 0,
                     matrix : [1.0, 0.0, 0.0, 0.0,
                               0.0, 1.0, 0.0, 0.0,
                               0.0, 0.0, 1.0, 0.0,
                               1.0, 2.0, 3.0, 1.0]
                 }
-            },
-            scenes : {
-                scene : {
-                    nodes : ['nodeA']
+            ],
+            scenes : [
+                {
+                    nodes : [0]
                 }
-            }
+            ]
         };
         combineNodes(gltf);
         var accessors = gltf.accessors;
         var nodes = gltf.nodes;
-        var rootNodeId = Object.keys(nodes)[0];
+        var rootNodeId = gltf.scenes[0].nodes[0];
         var rootNode = nodes[rootNodeId];
-        expect(rootNode.meshes[0]).toEqual('mesh');
+        expect(rootNode.mesh).toEqual(0);
 
         var cartesianPositions = [];
         var cartesianNormals = [];
-        readAccessor(gltf, accessors.positionAccessor, cartesianPositions);
-        readAccessor(gltf, accessors.normalAccessor, cartesianNormals);
+        readAccessor(gltf, accessors[0], cartesianPositions);
+        readAccessor(gltf, accessors[1], cartesianNormals);
         expect(cartesianPositions.length).toEqual(cartesianNormals.length);
 
         var length = cartesianPositions.length;
@@ -326,56 +333,56 @@ describe('combineNodes', function() {
         var allIndicesBuffer = Buffer.concat([indicesBuffer, overlappedIndicesBuffer]);
         var buffer = Buffer.concat([attributesBuffer, allIndicesBuffer]);
         var gltf = {
-            accessors : {
-                positionAccessor : {
-                    bufferView : 'attributesBufferView',
+            accessors : [
+                {
+                    bufferView : 0,
                     byteOffset : 0,
                     byteStride : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : positions.length / 3,
                     type : "VEC3"
                 },
-                normalAccessor : {
-                    bufferView : 'attributesBufferView',
+                {
+                    bufferView : 0,
                     byteOffset : normalsBuffer.length,
                     byteStride : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : normals.length / 3,
                     type : "VEC3"
                 },
-                indicesAccessor : {
-                    bufferView : 'indicesBufferView',
+                {
+                    bufferView : 1,
                     byteOffset : 0,
                     byteStride : 0,
                     componentType : WebGLConstants.UNSIGNED_SHORT,
                     count : indices.length,
                     type : "SCALAR"
                 },
-                overlappedIndicesAccessor : {
-                    bufferView : 'indicesBufferView',
-                    byteOffset : indicesBuffer.length,
-                    byteStride : 0,
-                    componentType : WebGLConstants.UNSIGNED_SHORT,
-                    count : overlappedIndices.length,
-                    type : "SCALAR"
+                {
+                    bufferView: 1,
+                    byteOffset: indicesBuffer.length,
+                    byteStride: 0,
+                    componentType: WebGLConstants.UNSIGNED_SHORT,
+                    count: overlappedIndices.length,
+                    type: "SCALAR"
                 }
-            },
-            bufferViews : {
-                attributesBufferView : {
-                    buffer : 'buffer',
+            ],
+            bufferViews : [
+                {
+                    buffer : 0,
                     byteLength : attributesBuffer.length,
                     byteOffset : 0,
                     target : WebGLConstants.ARRAY_BUFFER
                 },
-                indicesBufferView : {
-                    buffer : 'buffer',
+                {
+                    buffer : 0,
                     byteLength : allIndicesBuffer.length,
                     byteOffset : attributesBuffer.length,
                     target : WebGLConstants.ELEMENT_ARRAY_BUFFER
                 }
-            },
-            buffers : {
-                buffer : {
+            ],
+            buffers : [
+                {
                     type : "arraybuffer",
                     byteLength : buffer.length,
                     extras : {
@@ -384,55 +391,59 @@ describe('combineNodes', function() {
                         }
                     }
                 }
-            },
-            meshes : {
-                meshA : {
+            ],
+            meshes : [
+                {
                     primitives : [
                         {
                             attributes : {
-                                NORMAL : 'normalAccessor',
-                                POSITION : 'positionAccessor'
+                                NORMAL : 1,
+                                POSITION : 0
                             },
-                            indices : 'indicesAccessor'
+                            indices : 2
                         }
                     ]
                 },
-                meshB : {
+                {
                     primitives : [
                         {
                             attributes : {
-                                NORMAL : 'normalAccessor',
-                                POSITION : 'positionAccessor'
+                                NORMAL : 1,
+                                POSITION : 0
                             },
-                            indices : 'overlappedIndicesAccessor'
+                            indices : 3
                         }
                     ]
                 }
-            },
-            nodes : {
-                nodeA : {
-                    children : ['nodeB', 'nodeC']
+            ],
+            nodes : [
+                {
+                    children : [1, 2],
+                    name : 'NodeA'
                 },
-                nodeB : {
-                    meshes : ['meshA'],
+                {
+                    mesh : 0,
                     matrix : [1.0, 0.0, 0.0, 0.0,
                         0.0, 1.0, 0.0, 0.0,
                         0.0, 0.0, 1.0, 0.0,
-                        1.0, 2.0, 3.0, 1.0]
+                        1.0, 2.0, 3.0, 1.0],
+                    name : 'NodeB'
                 },
-                nodeC: {
-                    meshes : ['meshB']
+                {
+                    mesh : 1,
+                    name : 'NodeC'
                 }
-            },
-            scenes : {
-                scene : {
-                    nodes : ['nodeA']
+            ],
+            scenes : [
+                {
+                    nodes : [0]
                 }
-            }
+            ]
         };
         combineNodes(gltf);
         var nodes = gltf.nodes;
-        expect(nodes.nodeB).toBeDefined();
-        expect(nodes.nodeC).toBeDefined();
+        expect(nodes.length).toEqual(2);
+        expect(nodes[0].name).toEqual('NodeB');
+        expect(nodes[1].name).toEqual('NodeC');
     });
 });

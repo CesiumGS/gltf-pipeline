@@ -44,9 +44,9 @@ describe('convertDagToTree', function() {
         convertDagToTree(dag);
         removePipelineExtras(dag);
 
-        expect(dag.nodes).toEqual({
-            "A": {}
-        });
+        expect(dag.nodes).toEqual([{
+            name: "A"
+        }]);
     });
 
     it('does not duplicate any nodes in the tree', function() {
@@ -54,11 +54,18 @@ describe('convertDagToTree', function() {
         convertDagToTree(dag);
         removePipelineExtras(dag);
 
-        expect(dag.nodes).toEqual({
-            "A": { "children": ["B", "C"] },
-            "B": {},
-            "C": {}
-        });
+        expect(dag.nodes).toEqual([
+            {
+                children: [1, 2],
+                name: 'A'
+            },
+            {
+                name: 'B'
+            },
+            {
+                name: 'C'
+            }
+        ]);
     });
 
     it('duplicates one node', function() {
@@ -66,11 +73,29 @@ describe('convertDagToTree', function() {
         convertDagToTree(dag);
         removePipelineExtras(dag);
 
-        expect(dag.nodes.D_1).toBeDefined();
-        expect(dag.nodes.A.children).toEqual(["B", "C"]);
-        expect(dag.nodes.B.children).toEqual(["D"]);
-        expect(dag.nodes.C.children).toEqual(["D_1"]);
-        expect(dag.nodes.D.children).not.toBeDefined();
+        expect(dag.nodes).toEqual([
+            {
+                children: [
+                    1,
+                    2
+                ],
+                name: 'A'
+            }, {
+                children: [
+                    3
+                ],
+                name: 'B'
+            }, {
+                children: [
+                    4
+                ],
+                name: 'C'
+            }, {
+                name: 'D'
+            }, {
+                name: 'D'
+            }
+        ]);
     });
 
     it('duplicates a subgraph', function() {
@@ -78,23 +103,66 @@ describe('convertDagToTree', function() {
 
         convertDagToTree(dag);
         removePipelineExtras(dag);
-
-        expect(dag.nodes.D_1).toBeDefined();
-        expect(dag.nodes.E_1).toBeDefined();
-        expect(dag.nodes.F_1).toBeDefined();
-        expect(dag.nodes.G_1).toBeDefined();
-        expect(dag.nodes.G_2).toBeDefined();
-        expect(dag.nodes.G_3).toBeDefined();
-
-        expect(dag.nodes.A.children).toEqual(["B", "C"]);
-        expect(dag.nodes.B.children).toEqual(["D"]);
-        expect(dag.nodes.C.children).toEqual(["D_1"]);
-        expect(dag.nodes.D.children).toEqual(["E", "F"]);
-        expect(dag.nodes.D_1.children).toEqual(["E_1", "F_1"]);
-        expect(dag.nodes.E.children).toEqual(["G"]);
-        expect(dag.nodes.F.children).toEqual(["G_2"]);
-        expect(dag.nodes.E_1.children).toEqual(["G_1"]);
-        expect(dag.nodes.F_1.children).toEqual(["G_3"]);
+        
+        expect(dag.nodes).toEqual([
+            {
+                children: [
+                    1,
+                    2
+                ],
+                name: 'A'
+            }, {
+                children: [
+                    3
+                ],
+                name: 'B'
+            }, {
+                children: [
+                    7
+                ],
+                name: 'C'
+            }, {
+                children: [
+                    4,
+                    5
+                ],
+                name: 'D'
+            }, {
+                children: [
+                    6
+                ],
+                name: 'E'
+            }, {
+                children: [
+                    12
+                ],
+                name: 'F'
+            }, {
+                name: 'G'
+            }, {
+                children: [
+                    8,
+                    9
+                ],
+                name: 'D'
+            }, {
+                children: [
+                    10
+                ],
+                name: 'E'
+            }, {
+                children: [
+                    11
+                ],
+                name: 'F'
+            }, {
+                name: 'G'
+            }, {
+                name: 'G'
+            }, {
+                name: 'G'
+            }
+        ]);
     });
 
     it('converts a DAG with two roots', function() {
@@ -103,20 +171,58 @@ describe('convertDagToTree', function() {
         convertDagToTree(dag);
         removePipelineExtras(dag);
 
-        expect(dag.nodes.D_1).toBeDefined();
-        expect(dag.nodes.E_1).toBeDefined();
-        expect(dag.nodes.F_1).toBeDefined();
-        expect(dag.nodes.G_1).toBeDefined();
-        expect(dag.nodes.G_2).toBeDefined();
-        expect(dag.nodes.G_3).toBeDefined();
-
-        expect(dag.nodes.B.children).toEqual(["D"]);
-        expect(dag.nodes.C.children).toEqual(["D_1"]);
-        expect(dag.nodes.D.children).toEqual(["E", "F"]);
-        expect(dag.nodes.D_1.children).toEqual(["E_1", "F_1"]);
-        expect(dag.nodes.E.children).toEqual(["G"]);
-        expect(dag.nodes.F.children).toEqual(["G_1"]);
-        expect(dag.nodes.E_1.children).toEqual(["G_2"]);
-        expect(dag.nodes.F_1.children).toEqual(["G_3"]);
+        expect(dag.nodes).toEqual([
+            {
+                children: [
+                    2
+                ],
+                name: 'B'
+            }, {
+                children: [
+                    7
+                ],
+                name: 'C'
+            }, {
+                children: [
+                    3,
+                    4
+                ],
+                name: 'D'
+            }, {
+                children: [
+                    5
+                ],
+                name: 'E'
+            }, {
+                children: [
+                    6
+                ],
+                name: 'F'
+            }, {
+                name: 'G'
+            }, {
+                name: 'G'
+            }, {
+                children: [
+                    8,
+                    9
+                ],
+                name: 'D'
+            }, {
+                children: [
+                    10
+                ],
+                name: 'E'
+            }, {
+                children: [
+                    11
+                ],
+                name: 'F'
+            }, {
+                name: 'G'
+            }, {
+                name: 'G'
+            }
+        ]);
     });
 });

@@ -1,8 +1,6 @@
 'use strict';
-
 var Promise = require('bluebird');
 var fs = require('fs-extra');
-
 var RemoveUnusedProperties = require('../../lib/RemoveUnusedProperties');
 
 var fsReadFile = Promise.promisify(fs.readFile);
@@ -14,142 +12,175 @@ describe('RemoveUnusedProperties', function() {
     describe('removeNodes', function () {
         it('removes an isolated node', function () {
             var gltf = {
-                "nodes": {
-                    "node_3": {
-                        "children": [
-                            "left_node",
-                            "right_node"
-                        ]
+                nodes: [
+                    {
+                        children: [
+                            1,
+                            2
+                        ],
+                        name: 'node_3'
                     },
-                    "left_node": {},
-                    "right_node": {
-                        "children": [
-                            "txtrLocator026Node"
-                        ]
+                    {
+                        name: 'left_node'
                     },
-                    "txtrLocator026Node": {},
-                    "unusedNodeId": {}
-                },
-                "scenes": {
-                    "defaultScene": {
-                        "nodes": [
-                            "node_3"
+                    {
+                        children: [
+                            3
+                        ],
+                        name: 'right_node'
+                    },
+                    {
+                        name: 'txtrLocator026Node'
+                    },
+                    {
+                        name: 'unusedNodeId'
+                    }
+                ],
+                scenes: [
+                    {
+                        nodes: [
+                            0
                         ]
                     }
-                }
+                ]
             };
             removeNodes(gltf);
-            expect(gltf.nodes.unusedNodeId).not.toBeDefined();
-            expect(Object.keys(gltf.nodes).length).toEqual(4);
+            var nodes = gltf.nodes;
+            expect(nodes.length).toEqual(4);
+            expect(nodes[0].name).toEqual('node_3');
+            expect(nodes[1].name).toEqual('left_node');
+            expect(nodes[2].name).toEqual('right_node');
+            expect(nodes[3].name).toEqual('txtrLocator026Node');
         });
 
         it('removes an unused tree', function () {
             var gltf = {
-                "nodes": {
-                    "node_3": {
-                        "children": [
-                            "left_node",
-                            "right_node"
-                        ]
+                nodes: [
+                    {
+                        children: [
+                            1,
+                            2
+                        ],
+                        name: 'node_3'
                     },
-                    "left_node": {},
-                    "right_node": {
-                        "children": [
-                            "txtrLocator026Node"
-                        ]
+                    {
+                        name: 'left_node'
                     },
-                    "txtrLocator026Node": {}
-                },
-                "scenes": {
-                    "defaultScene": {}
-                }
+                    {
+                        children: [
+                            3
+                        ],
+                        name: 'right_node'
+                    },
+                    {
+                        name: 'txtrLocator026Node'
+                    }
+                ],
+                scenes: [
+                    {}
+                ]
             };
+
             removeNodes(gltf);
-            expect(gltf.nodes.node_3).not.toBeDefined();
-            expect(gltf.nodes.left_node).not.toBeDefined();
-            expect(gltf.nodes.right_node).not.toBeDefined();
-            expect(gltf.nodes.txtrLocator026Node).not.toBeDefined();
-            expect(Object.keys(gltf.nodes).length).toEqual(0);
+            expect(gltf.nodes.length).toEqual(0);
         });
 
         it('removes an extra tree', function () {
             var gltf = {
-                "nodes": {
-                    "node_3": {
-                        "children": [
-                            "left_node",
-                            "right_node"
-                        ]
+                nodes: [
+                    {
+                        children: [
+                            1,
+                            2
+                        ],
+                        name: 'node_3'
                     },
-                    "left_node": {},
-                    "right_node": {
-                        "children": [
-                            "txtrLocator026Node"
-                        ]
+                    {
+                        name: 'left_node'
                     },
-                    "txtrLocator026Node": {},
-                    "unusedRootId": {
-                        "children": [
-                            "unusedLeftId",
-                            "unusedRightId"
-                        ]
+                    {
+                        children: [
+                            3
+                        ],
+                        name: 'right_node'
                     },
-                    "unusedLeftId": {},
-                    "unusedRightId": {
-                        "children": [
-                            "unusedChildId"
-                        ]
+                    {
+                        name: 'txtrLocator026Node'
                     },
-                    "unusedChildId": {}
-                },
-                "scenes": {
-                    "defaultScene": {
-                        "nodes": [
-                            "node_3"
+                    {
+                        children: [
+                            5, 6
+                        ],
+                        name: 'unusedRootId'
+                    },
+                    {
+                        name: 'unusedLeftId'
+                    },
+                    {
+                        children: [
+                            7
+                        ],
+                        name: 'unusedRightId'
+                    },
+                    {
+                        name: 'unusedChildId'
+                    }
+                ],
+                scenes: [
+                    {
+                        nodes: [
+                            0
                         ]
                     }
-                }
+                ]
             };
             removeNodes(gltf);
-            expect(gltf.nodes.unusedRootId).not.toBeDefined();
-            expect(gltf.nodes.unusedLeftId).not.toBeDefined();
-            expect(gltf.nodes.unusedRightId).not.toBeDefined();
-            expect(gltf.nodes.unusedChildId).not.toBeDefined();
-            expect(Object.keys(gltf.nodes).length).toEqual(4);
+            var nodes = gltf.nodes;
+            expect(nodes.length).toEqual(4);
+            expect(nodes[0].name).toEqual('node_3');
+            expect(nodes[1].name).toEqual('left_node');
+            expect(nodes[2].name).toEqual('right_node');
+            expect(nodes[3].name).toEqual('txtrLocator026Node');
         });
 
         it('does not remove any nodes', function () {
             var gltf = {
-                "nodes": {
-                    "node_3": {
-                        "children": [
-                            "left_node",
-                            "right_node"
-                        ]
+                nodes: [
+                    {
+                        children: [
+                            1,
+                            2
+                        ],
+                        name: 'node_3'
                     },
-                    "left_node": {},
-                    "right_node": {
-                        "children": [
-                            "txtrLocator026Node"
-                        ]
+                    {
+                        name: 'left_node'
                     },
-                    "txtrLocator026Node": {}
-                },
-                "scenes": {
-                    "defaultScene": {
-                        "nodes": [
-                            "node_3"
+                    {
+                        children: [
+                            3
+                        ],
+                        name: 'right_node'
+                    },
+                    {
+                        name: 'txtrLocator026Node'
+                    }
+                ],
+                scenes: [
+                    {
+                        nodes: [
+                            0
                         ]
                     }
-                }
+                ]
             };
-
             removeNodes(gltf);
-            expect(gltf.nodes.node_3).toBeDefined();
-            expect(gltf.nodes.left_node).toBeDefined();
-            expect(gltf.nodes.right_node).toBeDefined();
-            expect(gltf.nodes.txtrLocator026Node).toBeDefined();
-            expect(Object.keys(gltf.nodes).length).toEqual(4);
+            var nodes = gltf.nodes;
+            expect(nodes.length).toEqual(4);
+            expect(nodes[0].name).toEqual('node_3');
+            expect(nodes[1].name).toEqual('left_node');
+            expect(nodes[2].name).toEqual('right_node');
+            expect(nodes[3].name).toEqual('txtrLocator026Node');
         });
     });
 
@@ -268,43 +299,45 @@ describe('RemoveUnusedProperties', function() {
     describe('removeMeshes', function () {
         it('removes a mesh', function () {
             var gltf = {
-                "meshes": {
-                    "Geometry-mesh002": {
-                        primitives: [{}]
+                meshes: [
+                    {
+                        primitives: [{}],
+                        name: 'Geometry-mesh002'
                     },
-                    "unusedMeshId": {}
-                },
-                "nodes": {
-                    "Geometry-mesh002Node": {
-                        "meshes": [
-                            "Geometry-mesh002"
-                        ]
+                    {
+                        name: 'unusedMeshId'
                     }
-                }
+                ],
+                nodes: [
+                    {
+                        mesh: 0,
+                        name: 'Geometry-mesh002Node'
+                    }
+                ]
             };
             removeMeshes(gltf);
-            expect(gltf.meshes.unusedMeshId).not.toBeDefined();
-            expect(Object.keys(gltf.meshes).length).toEqual(1);
+            expect(gltf.meshes.length).toEqual(1);
+            expect(gltf.meshes[0].name).toEqual('Geometry-mesh002');
         });
 
         it('does not remove any meshes', function () {
             var gltf = {
-                "meshes": {
-                    "Geometry-mesh002": {
-                        primitives: [{}]
+                meshes: [
+                    {
+                        primitives: [{}],
+                        name: 'Geometry-mesh002'
                     }
-                },
-                "nodes": {
-                    "Geometry-mesh002Node": {
-                        "meshes": [
-                            "Geometry-mesh002"
-                        ]
+                ],
+                nodes: [
+                    {
+                        mesh: 0,
+                        name: 'Geometry-mesh002Node'
                     }
-                }
+                ]
             };
             removeMeshes(gltf);
-            expect(gltf.meshes["Geometry-mesh002"]).toBeDefined();
-            expect(Object.keys(gltf.meshes).length).toEqual(1);
+            expect(gltf.meshes.length).toEqual(1);
+            expect(gltf.meshes[0].name).toEqual('Geometry-mesh002');
         });
     });
 
