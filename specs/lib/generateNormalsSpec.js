@@ -23,7 +23,7 @@ describe('generateNormals', function(){
             });
     });
 
-    it('generates normals if they do not exist', function() {
+    it('generates smooth normals if they do not exist', function() {
         var gltf = gltfNoNormals;
         var byteLengthBefore = 168;
         generateNormals(gltf);
