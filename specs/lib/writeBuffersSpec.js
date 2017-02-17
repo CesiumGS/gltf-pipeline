@@ -22,17 +22,18 @@ describe('writeBuffers', function() {
             .then(function(data) {
                 bufferData = data;
                 testGltf = {
-                    "buffers": {
-                        "CesiumTexturedBoxTest": {
-                            "uri": "CesiumTexturedBoxTest.bin",
-                            "extras": {
-                                "_pipeline": {
-                                    "source": bufferData,
-                                    "extension": '.bin'
+                    buffers: [
+                        {
+                            uri: 'CesiumTexturedBoxTest.bin',
+                            extras: {
+                                _pipeline: {
+                                    source: bufferData,
+                                    extension: '.bin'
                                 }
-                            }
+                            },
+                            name: 'CesiumTexturedBoxTest'
                         }
-                    }
+                    ]
                 };
             }), done).toResolve();
     });
@@ -48,8 +49,8 @@ describe('writeBuffers', function() {
 
         expect(writeGltf(gltf, options)
             .then(function() {
-                expect(gltf.buffers.CesiumTexturedBoxTest.extras).not.toBeDefined();
-                expect(gltf.buffers.CesiumTexturedBoxTest.uri).toEqual('CesiumTexturedBoxTest.bin');
+                expect(gltf.buffers[0].extras).not.toBeDefined();
+                expect(gltf.buffers[0].uri).toEqual('CesiumTexturedBoxTest.bin');
                 return fsReadFile(outputBufferPath);
             })
             .then(function(outputData) {
@@ -68,8 +69,8 @@ describe('writeBuffers', function() {
 
         expect(writeGltf(gltf, options)
             .then(function() {
-                expect(gltf.buffers.CesiumTexturedBoxTest.extras).not.toBeDefined();
-                expect(gltf.buffers.CesiumTexturedBoxTest.uri).toEqual(bufferUri);
+                expect(gltf.buffers[0].extras).not.toBeDefined();
+                expect(gltf.buffers[0].uri).toEqual(bufferUri);
             }), done).toResolve();
     });
 });

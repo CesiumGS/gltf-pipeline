@@ -22,18 +22,18 @@ describe('writeShaders', function() {
             .then(function(data) {
                 fragmentShaderData = data;
                 testGltf = {
-                    "shaders": {
-                        "CesiumTexturedBoxTest0FS": {
-                            "type": 35632,
-                            "uri": fragmentShaderUri,
-                            "extras": {
-                                "_pipeline": {
-                                    "source": fragmentShaderData,
-                                    "extension": '.glsl'
+                    shaders: [
+                        {
+                            type: 35632,
+                            uri: fragmentShaderUri,
+                            extras: {
+                                _pipeline: {
+                                    source: fragmentShaderData,
+                                    extension: '.glsl'
                                 }
                             }
                         }
-                    }
+                    ]
                 };
                 fragmentShaderUri = 'data:text/plain;base64,' + new Buffer(fragmentShaderData).toString('base64');
             }), done).toResolve();
@@ -50,8 +50,8 @@ describe('writeShaders', function() {
 
         expect(writeGltf(gltf, options)
             .then(function() {
-                expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras).not.toBeDefined();
-                expect(gltf.shaders.CesiumTexturedBoxTest0FS.uri).toEqual('CesiumTexturedBoxTest0FS.glsl');
+                expect(gltf.shaders[0].extras).not.toBeDefined();
+                expect(gltf.shaders[0].uri).toEqual('CesiumTexturedBoxTest0FS.glsl');
                 return fsReadFile(outputFragmentShaderPath);
             })
             .then(function(outputData) {
@@ -70,8 +70,8 @@ describe('writeShaders', function() {
 
         expect(writeGltf(gltf, options)
             .then(function() {
-                expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras).not.toBeDefined();
-                expect(gltf.shaders.CesiumTexturedBoxTest0FS.uri).toEqual(fragmentShaderUri);
+                expect(gltf.shaders[0].extras).not.toBeDefined();
+                expect(gltf.shaders[0].uri).toEqual(fragmentShaderUri);
             }), done).toResolve();
     });
 });

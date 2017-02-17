@@ -13,6 +13,7 @@ var compressTextures = require('../../lib/compressTextures');
 var directoryExists = require('../../lib/directoryExists');
 var loadGltfUris = require('../../lib/loadGltfUris');
 var readGltf = require('../../lib/readGltf');
+var writeSource = require('../../lib/writeSource');
 
 var fsExtraReadJson = Promise.promisify(fsExtra.readJson);
 
@@ -47,10 +48,13 @@ function compressGltfTexture(gltfPath, imagePath, options) {
             addPipelineExtras(gltf);
             addDefaults(gltf);
             return loadGltfUris(gltf, pipelineOptions)
-                .then(function(gltf) {
+                .then(function() {
                     return compressTextures(gltf, options);
                 })
-                .then(function(gltf) {
+                .then(function() {
+                    return writeSource(gltf.images, 'images', undefined, true, true);
+                })
+                .then(function() {
                     // Return the first compressed image
                     var compressedImages = image.extras.compressedImage3DTiles;
                     return compressedImages[Object.keys(compressedImages)[0]].uri;
@@ -116,7 +120,7 @@ describe('compressTextures', function() {
         spyOn(console, 'log');
     });
 
-    fit('compresses external jpg', function(done) {
+    it('compresses external jpg', function(done) {
         expect(verifyKTX(gltfPath, jpgPath, etc1Compression, etc1Format), done).toResolve();
     });
 
