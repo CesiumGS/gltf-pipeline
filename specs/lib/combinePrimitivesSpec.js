@@ -551,7 +551,8 @@ describe('combinePrimitives', function() {
                 dataB : quarterOverflowAccessor,
                 dataC : quarterOverflowAccessor,
                 dataD : quarterOverflowAccessor,
-                dataE : {
+                dataE : quarterOverflowAccessor,
+                dataF : {
                     bufferView : 'bufferView',
                     byteOffset : 0,
                     byteStride : 0,
@@ -619,6 +620,14 @@ describe('combinePrimitives', function() {
                         extras : {
                             _pipeline : {}
                         }
+                    }, {
+                        attributes : {
+                            A : 'dataF'
+                        },
+                        indices : 'dataF',
+                        extras : {
+                            _pipeline : {}
+                        }
                     }]
                 }
             }
@@ -632,16 +641,17 @@ describe('combinePrimitives', function() {
         var primitive1 = newPrimitives[1];
         var newAccessors = gltf.accessors;
 
-        var expectedNewAccessorLength = smallerValueCount + valueCount * 3;
-        expect(newAccessors[primitive0.indices].count).toEqual(expectedNewAccessorLength);
-        expect(newAccessors[primitive1.indices].count).toEqual(valueCount);
+        var expectedNewAccessorLength1 = smallerValueCount + valueCount * 3;
+        var expectedNewAccessorLength2 = valueCount * 2;
+        expect(newAccessors[primitive0.indices].count).toEqual(expectedNewAccessorLength1);
+        expect(newAccessors[primitive1.indices].count).toEqual(expectedNewAccessorLength2);
 
         // Check indices. Since indices for each primitive were monotonically increasing,
         // expect indices to match loop iteration indices.
         var indices = [];
         var indicesMatch = true;
         readAccessor(gltf, newAccessors[primitive0.indices], indices);
-        for (i = 0; i < expectedNewAccessorLength; i++) {
+        for (i = 0; i < expectedNewAccessorLength1; i++) {
             indicesMatch = indicesMatch && indices[i] === i;
         }
         expect(indicesMatch).toBe(true);
@@ -649,7 +659,7 @@ describe('combinePrimitives', function() {
         indices = [];
         indicesMatch = true;
         readAccessor(gltf, newAccessors[primitive1.indices], indices);
-        for (i = 0; i < valueCount; i++) {
+        for (i = 0; i < expectedNewAccessorLength2; i++) {
             indicesMatch = indicesMatch && indices[i] === i;
         }
         expect(indicesMatch).toBe(true);
@@ -678,6 +688,9 @@ describe('combinePrimitives', function() {
         readAccessor(gltf, newAccessors[primitive1.attributes.A], attributes);
         for (i = 0; i < valueCount; i++) {
             attributesMatch = attributesMatch && attributes[i] === i;
+        }
+        for (i = 0; i < valueCount; i++) {
+            attributesMatch = attributesMatch && attributes[i + valueCount] === i;
         }
         expect(attributesMatch).toBe(true);
     });
