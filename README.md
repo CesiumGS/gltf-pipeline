@@ -45,6 +45,7 @@ node ./bin/gltf-pipeline.js -i ./specs/data/boxTexturedUnoptimized/CesiumTexture
 |`--encodeNormals`, `-n`|Oct-encode the normals of this glTF asset.|No, default `false`|
 |`--compressTextureCoordinates`, `-c`|Compress the testure coordinates of this glTF asset.|No, default `false`|
 |`--removeNormals`, `-r`|Strips off existing normals, allowing them to be regenerated.|No, default `false`|
+|`--smoothNormals`, `-m`|If normals are missing, they should be generated with smooth normals.|No, default `false`|
 |`--faceNormals`, `-f`|If normals are missing, they should be generated using the face normal.|No, default `false`|
 |`--cesium`|Optimize the glTF for Cesium by using the sun as a default light source.|No, default `false`|
 |`--tangentsBitangents`|If normals and texture coordinates are given, generate tangents and bitangents.|No, default `false`|
