@@ -1,12 +1,12 @@
 'use strict';
 var generateModelMaterialsCommon = require('../../lib/generateModelMaterialsCommon');
 
-describe('generateModelMaterialsCommon', function() {
-    it('removes techniques, programs, and shaders', function() {
+describe('generateModelMaterialsCommon', function () {
+    it('removes techniques, programs, and shaders', function () {
         var gltf = {
-            techniques : {},
-            programs : {},
-            shaders : {}
+            techniques: {},
+            programs: {},
+            shaders: {}
         };
         generateModelMaterialsCommon(gltf);
         expect(gltf.extensionsUsed).toEqual(['KHR_materials_common']);
@@ -15,27 +15,27 @@ describe('generateModelMaterialsCommon', function() {
         expect(gltf.shaders).not.toBeDefined();
     });
 
-    it('generates a KHR_materials_common material with values', function() {
+    it('generates a KHR_materials_common material with values', function () {
         var gltf = {
-            materials : {
-                material : {
-                    values : {
-                        ambient : [0, 0, 0, 1],
-                        otherAttribute : true
+            materials: {
+                material: {
+                    values: {
+                        ambient: [0, 0, 0, 1],
+                        otherAttribute: true
                     },
                     technique: 'technique'
                 }
             },
-            techniques : {
-                technique : {
-                    parameters : {}
+            techniques: {
+                technique: {
+                    parameters: {}
                 }
             }
         };
         generateModelMaterialsCommon(gltf, {
-            technique : 'PHONG',
-            doubleSided : true,
-            someAttribute : true
+            technique: 'PHONG',
+            doubleSided: true,
+            someAttribute: true
         });
         expect(gltf.extensionsUsed).toEqual(['KHR_materials_common']);
         var material = gltf.materials.material;
@@ -48,25 +48,79 @@ describe('generateModelMaterialsCommon', function() {
         expect(values.otherAttribute).toBe(true);
     });
 
-    it('generates lights from a technique', function() {
+    it('generates a KHR_materials_common with correct transparent flag set if diffuse alpha is less than 1', function () {
         var gltf = {
-            materials : {
-               material : {
-                   technique : 'technique'
-               }
+            materials: {
+                material: {
+                    values: {
+                        diffuse: [1, 0, 0, 0.5]
+                    },
+                    technique: 'technique'
+                }
             },
-            nodes : {
-                lightNode : {}
+            techniques: {
+                technique: {
+                    parameters: {}
+                }
+            }
+        };
+        generateModelMaterialsCommon(gltf);
+        expect(gltf.extensionsUsed).toEqual(['KHR_materials_common']);
+        var material = gltf.materials.material;
+        var materialsCommon = material.extensions.KHR_materials_common;
+        expect(materialsCommon.technique).toBe('PHONG');
+        var values = materialsCommon.values;
+        expect(values.diffuse).toEqual([1, 0, 0, 0.5]);
+        expect(values.transparent).toBe(true);
+    });
+
+    it('generates a KHR_materials_common with correct transparent flag set if transparency less than 1', function () {
+        var gltf = {
+            materials: {
+                material: {
+                    values: {
+                        diffuse: [1, 0, 0, 1],
+                        transparency: 0.5
+                    },
+                    technique: 'technique'
+                }
             },
-            techniques : {
-                technique : {
-                    parameters : {
-                        ambient : {},
-                        light0Color : {
-                            value : [1, 1, 0.5]
+            techniques: {
+                technique: {
+                    parameters: {}
+                }
+            }
+        };
+        generateModelMaterialsCommon(gltf);
+        expect(gltf.extensionsUsed).toEqual(['KHR_materials_common']);
+        var material = gltf.materials.material;
+        var materialsCommon = material.extensions.KHR_materials_common;
+        expect(materialsCommon.technique).toBe('PHONG');
+        var values = materialsCommon.values;
+        expect(values.diffuse).toEqual([1, 0, 0, 1]);
+        expect(values.transparency).toEqual(0.5);
+        expect(values.transparent).toBe(true);
+    });
+
+    it('generates lights from a technique', function () {
+        var gltf = {
+            materials: {
+                material: {
+                    technique: 'technique'
+                }
+            },
+            nodes: {
+                lightNode: {}
+            },
+            techniques: {
+                technique: {
+                    parameters: {
+                        ambient: {},
+                        light0Color: {
+                            value: [1, 1, 0.5]
                         },
-                        light0Transform : {
-                            node : 'lightNode'
+                        light0Transform: {
+                            node: 'lightNode'
                         }
                     }
                 }
@@ -80,43 +134,43 @@ describe('generateModelMaterialsCommon', function() {
         expect(gltf.techniques).not.toBeDefined();
     });
 
-    it('declares jointCount for skinned nodes', function() {
+    it('declares jointCount for skinned nodes', function () {
         var gltf = {
-            accessors : {
-                accessor : {
-                    count : 4
+            accessors: {
+                accessor: {
+                    count: 4
                 }
             },
-            materials : {
-                material : {
-                    technique : 'technique'
+            materials: {
+                material: {
+                    technique: 'technique'
                 }
             },
-            meshes : {
-                mesh : {
-                    primitives : [
+            meshes: {
+                mesh: {
+                    primitives: [
                         {
-                            material : 'material'
+                            material: 'material'
                         }
                     ]
                 }
             },
-            nodes : {
-                skinnedNode : {
-                    meshes : [
+            nodes: {
+                skinnedNode: {
+                    meshes: [
                         'mesh'
                     ],
-                    skin : 'skin'
+                    skin: 'skin'
                 }
             },
-            skins : {
-                skin : {
-                    inverseBindMatrices : 'accessor'
+            skins: {
+                skin: {
+                    inverseBindMatrices: 'accessor'
                 }
             },
-            techniques : {
-                technique : {
-                    parameters : {}
+            techniques: {
+                technique: {
+                    parameters: {}
                 }
             }
         };
