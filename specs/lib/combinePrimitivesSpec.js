@@ -527,4 +527,171 @@ describe('combinePrimitives', function() {
         delete gltf.meshes.mesh.primitives[1].extras._pipeline.conflicts;
         expect(gltf).toEqual(originalGltf);
     });
+
+    it('doesn\'t combine primitives in a way that overflows uint16', function() {
+        var valueCount = 16385;
+        var smallerValueCount = 100;
+        var quarterOverflow = new Uint16Array(valueCount);
+        for (var i = 0; i < valueCount; i++) {
+            quarterOverflow[i] = i;
+        }
+        var quarterOverflowBuffer = new Buffer(quarterOverflow.buffer);
+        var quarterOverflowAccessor = {
+            bufferView : 'bufferView',
+            byteOffset : 0,
+            byteStride : 0,
+            componentType : WebGLConstants.UNSIGNED_SHORT,
+            count : valueCount,
+            type : 'SCALAR'
+        };
+
+        var gltf = {
+            accessors : {
+                dataA : quarterOverflowAccessor,
+                dataB : quarterOverflowAccessor,
+                dataC : quarterOverflowAccessor,
+                dataD : quarterOverflowAccessor,
+                dataE : quarterOverflowAccessor,
+                dataF : {
+                    bufferView : 'bufferView',
+                    byteOffset : 0,
+                    byteStride : 0,
+                    componentType : WebGLConstants.UNSIGNED_SHORT,
+                    count : smallerValueCount,
+                    type : 'SCALAR'
+                }
+            },
+            bufferViews : {
+                bufferView : {
+                    buffer : 'buffer',
+                    byteLength : quarterOverflowBuffer.length,
+                    byteOffset : 0
+                }
+            },
+            buffers : {
+                buffer : {
+                    byteLength : quarterOverflowBuffer.length,
+                    extras : {
+                        _pipeline : {
+                            source : quarterOverflowBuffer
+                        }
+                    }
+                }
+            },
+            meshes : {
+                mesh : {
+                    primitives : [{
+                        attributes : {
+                            A : 'dataA'
+                        },
+                        indices : 'dataA',
+                        extras : {
+                            _pipeline : {}
+                        }
+                    }, {
+                        attributes : {
+                            A : 'dataB'
+                        },
+                        indices : 'dataB',
+                        extras : {
+                            _pipeline : {}
+                        }
+                    }, {
+                        attributes : {
+                            A : 'dataC'
+                        },
+                        indices : 'dataC',
+                        extras : {
+                            _pipeline : {}
+                        }
+                    }, {
+                        attributes : {
+                            A : 'dataD'
+                        },
+                        indices : 'dataD',
+                        extras : {
+                            _pipeline : {}
+                        }
+                    }, {
+                        attributes : {
+                            A : 'dataE'
+                        },
+                        indices : 'dataE',
+                        extras : {
+                            _pipeline : {}
+                        }
+                    }, {
+                        attributes : {
+                            A : 'dataF'
+                        },
+                        indices : 'dataF',
+                        extras : {
+                            _pipeline : {}
+                        }
+                    }]
+                }
+            }
+        };
+        combinePrimitives(gltf);
+
+        var newPrimitives = gltf.meshes.mesh.primitives;
+        expect(newPrimitives.length).toEqual(2);
+
+        var primitive0 = newPrimitives[0];
+        var primitive1 = newPrimitives[1];
+        var newAccessors = gltf.accessors;
+
+        var expectedNewAccessorLength1 = smallerValueCount + valueCount * 3;
+        var expectedNewAccessorLength2 = valueCount * 2;
+        expect(newAccessors[primitive0.indices].count).toEqual(expectedNewAccessorLength1);
+        expect(newAccessors[primitive1.indices].count).toEqual(expectedNewAccessorLength2);
+
+        // Check indices. Since indices for each primitive were monotonically increasing,
+        // expect indices to match loop iteration indices.
+        var indices = [];
+        var indicesMatch = true;
+        readAccessor(gltf, newAccessors[primitive0.indices], indices);
+        for (i = 0; i < expectedNewAccessorLength1; i++) {
+            indicesMatch = indicesMatch && indices[i] === i;
+        }
+        expect(indicesMatch).toBe(true);
+
+        indices = [];
+        indicesMatch = true;
+        readAccessor(gltf, newAccessors[primitive1.indices], indices);
+        for (i = 0; i < expectedNewAccessorLength2; i++) {
+            indicesMatch = indicesMatch && indices[i] === i;
+        }
+        expect(indicesMatch).toBe(true);
+
+        // Check attributes. Since attributes for each primitive were monotonically increasing,
+        // this must be done in pieces.
+        var attributes = [];
+        var attributesMatch = true;
+        readAccessor(gltf, newAccessors[primitive0.attributes.A], attributes);
+        for (i = 0; i < smallerValueCount; i++) {
+            attributesMatch = attributesMatch && attributes[i] === i;
+        }
+        for (i = 0; i < valueCount; i++) {
+            attributesMatch = attributesMatch && attributes[i + smallerValueCount] === i;
+        }
+        for (i = 0; i < valueCount; i++) {
+            attributesMatch = attributesMatch && attributes[i + smallerValueCount + valueCount] === i;
+        }
+        for (i = 0; i < valueCount; i++) {
+            attributesMatch = attributesMatch && attributes[i + smallerValueCount + valueCount * 2] === i;
+        }
+        expect(attributesMatch).toBe(true);
+
+        attributes = [];
+        attributesMatch = true;
+        readAccessor(gltf, newAccessors[primitive1.attributes.A], attributes);
+        for (i = 0; i < valueCount; i++) {
+            attributesMatch = attributesMatch && attributes[i] === i;
+        }
+        for (i = 0; i < valueCount; i++) {
+            attributesMatch = attributesMatch && attributes[i + valueCount] === i;
+        }
+        expect(attributesMatch).toBe(true);
+    });
 });
