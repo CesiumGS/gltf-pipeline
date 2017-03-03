@@ -26,7 +26,7 @@ describe('generateNormals', function(){
             });
     });
 
-    it('generates normals if they do not exist', function() {
+    it('generates smooth normals if they do not exist', function() {
         var gltf = gltfNoNormals;
         var byteLengthBefore = 168;
         generateNormals(gltf);
@@ -45,11 +45,11 @@ describe('generateNormals', function(){
         expect(gltf.meshes).toEqual(gltfCopy.meshes);
     });
 
-    it('generates hard normals if they do not exist', function() {
+    it('generates face normals if they do not exist', function() {
         var gltf = gltfNoNormals;
         var byteLengthBefore = 168;
         generateNormals(gltf, {
-            hardNormals : true
+            faceNormals : true
         });
 
         var attributes = gltf.meshes.mesh_box.primitives[0].attributes;
