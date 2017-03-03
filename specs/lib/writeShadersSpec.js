@@ -21,11 +21,13 @@ describe('writeShaders', function() {
         expect(fsReadFile(fragmentShaderPath)
             .then(function(data) {
                 fragmentShaderData = data;
+                fragmentShaderUri = 'data:text/plain;base64,' + new Buffer(fragmentShaderData).toString('base64');
                 testGltf = {
                     shaders: [
                         {
                             type: 35632,
                             uri: fragmentShaderUri,
+                            name: 'CesiumTexturedBoxTest0FS',
                             extras: {
                                 _pipeline: {
                                     source: fragmentShaderData,
@@ -35,7 +37,6 @@ describe('writeShaders', function() {
                         }
                     ]
                 };
-                fragmentShaderUri = 'data:text/plain;base64,' + new Buffer(fragmentShaderData).toString('base64');
             }), done).toResolve();
     });
 
