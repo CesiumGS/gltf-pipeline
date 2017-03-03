@@ -10,6 +10,7 @@ Change Log
 * Added `updateVersion` stage for patching glTF `0.8` -> `1.0` changes; `addDefaults` no longer calls `processModelMaterialsCommon`. [#223](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/223)
 * Added `build-cesium-combined` command to gulp file for generating simple files for other projects. [#231](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/231).
 * Change Cesium `Geometry`'s and `VertexFormat`'s `binormal` attribute to bitangent.
+* Fixed a bug in `combinePrimitives` where combining primitives can overflow uint16 for the resulting indices. [#230](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/issues/230)
 * Made `generateNormals` stage optional and added `smoothNormals` option for generating smooth normals if the model does not have normals. [#240](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/240)
 
 ### 0.1.0-alpha10 - 2017-01-10
