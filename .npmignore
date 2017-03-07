@@ -9,6 +9,7 @@
 .jshintrc
 .npmignore
 .travis.yml
+.appveyor.yml
 gulpfile.js
 typings.json
 *.tgz
