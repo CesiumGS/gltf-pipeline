@@ -1,6 +1,6 @@
 {
   "name": "gltf-pipeline",
-  "version": "0.1.0-alpha10",
+  "version": "0.1.0-alpha11",
   "description": "Content pipeline tools for optimizing glTF assets.",
   "license": "Apache-2.0",
   "contributors": [
