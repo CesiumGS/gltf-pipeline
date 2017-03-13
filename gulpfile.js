@@ -97,15 +97,15 @@ gulp.task('coverage', function () {
     // Travis runs Ubuntu 12.04.5 which has glibc 2.15, while crunch requires glibc 2.22 or higher
     var additionalExcludes = '';
     if (defined(argv.excludeCompressedTextures)) {
-        additionalExcludes += 'specs/lib/compressTexturesSpec.js';
-        additionalExcludes += 'specs/lib/compressTexturesMultipleFormatsSpec.js';
+        additionalExcludes += '-x "specs/lib/compressTexturesSpec.js"';
+        additionalExcludes += '-x "specs/lib/compressTexturesMultipleFormatsSpec.js"';
     }
 
     child_process.execSync('istanbul' +
         ' cover' +
         ' --include-all-sources' +
         ' --dir coverage' +
-        ' -x "specs/** coverage/** dist/** index.js gulpfile.js"' + additionalExcludes +
+        ' -x "specs/**" -x "bin/**" -x "coverage/**" -x "dist/**" -x "index.js" -x "gulpfile.js"' + additionalExcludes +
         ' node_modules/jasmine/bin/jasmine.js' +
         ' JASMINE_CONFIG_PATH=specs/jasmine.json', {
         stdio: [process.stdin, process.stdout, process.stderr]
