@@ -160,7 +160,6 @@ node -e "var test = require('gltf-pipeline');" # No output on success
   * `git push origin <version>`
 * Publish
 ```
-npm run prepublish
 npm publish
 ```
 
