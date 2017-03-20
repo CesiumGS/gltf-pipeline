@@ -1032,41 +1032,20 @@ describe('RemoveUnusedProperties', function() {
                     var gltf = JSON.parse(data);
                     removeAll(gltf);
 
-                    expect(gltf.accessors.accessor_23).not.toBeDefined();
-                    expect(gltf.accessors.animAccessor_0).not.toBeDefined();
-                    expect(gltf.accessors['IBM_Armature_Cylinder-skin']).not.toBeDefined();
-                    expect(gltf.bufferViews.bufferView_30).not.toBeDefined();
-                    expect(gltf.buffers.CesiumTexturedBoxTest).not.toBeDefined();
-                    expect(gltf.cameras.camera_0).not.toBeDefined();
-                    expect(gltf.images.Image0001).not.toBeDefined();
-                    expect(gltf.materials['Effect-Texture']).not.toBeDefined();
-                    expect(gltf.meshes['Geometry-mesh002']).not.toBeDefined();
-                    expect(gltf.nodes['Geometry-mesh002Node']).not.toBeDefined();
-                    expect(gltf.nodes.groupLocator030Node).not.toBeDefined();
-                    expect(gltf.nodes.node_3).not.toBeDefined();
-                    expect(gltf.nodes.txtrLocator026Node).not.toBeDefined();
-                    expect(gltf.programs.program_0).not.toBeDefined();
-                    expect(gltf.samplers.sampler_0).not.toBeDefined();
-                    expect(gltf.shaders.CesiumTexturedBoxTest0FS).not.toBeDefined();
-                    expect(gltf.shaders.CesiumTexturedBoxTest0VS).not.toBeDefined();
-                    expect(gltf.skins['Armature_Cylinder-skin']).not.toBeDefined();
-                    expect(gltf.techniques.technique0).not.toBeDefined();
-                    expect(gltf.textures.texture_Image0001).not.toBeDefined();
-
-                    expect(Object.keys(gltf.nodes).length).toEqual(0);
-                    expect(Object.keys(gltf.skins).length).toEqual(0);
-                    expect(Object.keys(gltf.cameras).length).toEqual(0);
-                    expect(Object.keys(gltf.meshes).length).toEqual(0);
-                    expect(Object.keys(gltf.accessors).length).toEqual(0);
-                    expect(Object.keys(gltf.materials).length).toEqual(0);
-                    expect(Object.keys(gltf.bufferViews).length).toEqual(0);
-                    expect(Object.keys(gltf.techniques).length).toEqual(0);
-                    expect(Object.keys(gltf.textures).length).toEqual(0);
-                    expect(Object.keys(gltf.buffers).length).toEqual(0);
-                    expect(Object.keys(gltf.programs).length).toEqual(0);
-                    expect(Object.keys(gltf.images).length).toEqual(0);
-                    expect(Object.keys(gltf.samplers).length).toEqual(0);
-                    expect(Object.keys(gltf.shaders).length).toEqual(0);
+                    expect(gltf.nodes.length).toEqual(0);
+                    expect(gltf.skins.length).toEqual(0);
+                    expect(gltf.cameras.length).toEqual(0);
+                    expect(gltf.meshes.length).toEqual(0);
+                    expect(gltf.accessors.length).toEqual(0);
+                    expect(gltf.materials.length).toEqual(0);
+                    expect(gltf.bufferViews.length).toEqual(0);
+                    expect(gltf.techniques.length).toEqual(0);
+                    expect(gltf.textures.length).toEqual(0);
+                    expect(gltf.buffers.length).toEqual(0);
+                    expect(gltf.programs.length).toEqual(0);
+                    expect(gltf.images.length).toEqual(0);
+                    expect(gltf.samplers.length).toEqual(0);
+                    expect(gltf.shaders.length).toEqual(0);
                 }), done).toResolve();
         });
 
@@ -1074,49 +1053,28 @@ describe('RemoveUnusedProperties', function() {
             expect(fsReadFile(gltfPath)
                 .then(function (data) {
                     var gltf = JSON.parse(data);
-                    gltf.scenes.defaultScene.nodes[0] = 'node_3';
-                    gltf.animations.animation_0.samplers = {
-                        sampler : {
-                            input : 'animAccessor_0'
+                    gltf.scenes[0].nodes.push(2);
+                    gltf.animations[0].samplers = [
+                        {
+                            input : 1
                         }
-                    };
+                    ];
                     removeAll(gltf);
 
-                    expect(gltf.accessors.accessor_23).toBeDefined();
-                    expect(gltf.accessors.animAccessor_0).toBeDefined();
-                    expect(gltf.accessors['IBM_Armature_Cylinder-skin']).toBeDefined();
-                    expect(gltf.bufferViews.bufferView_30).toBeDefined();
-                    expect(gltf.buffers.CesiumTexturedBoxTest).toBeDefined();
-                    expect(gltf.cameras.camera_0).toBeDefined();
-                    expect(gltf.images.Image0001).toBeDefined();
-                    expect(gltf.materials['Effect-Texture']).toBeDefined();
-                    expect(gltf.meshes['Geometry-mesh002']).toBeDefined();
-                    expect(gltf.nodes['Geometry-mesh002Node']).toBeDefined();
-                    expect(gltf.nodes.groupLocator030Node).toBeDefined();
-                    expect(gltf.nodes.node_3).toBeDefined();
-                    expect(gltf.nodes.txtrLocator026Node).toBeDefined();
-                    expect(gltf.programs.program_0).toBeDefined();
-                    expect(gltf.samplers.sampler_0).toBeDefined();
-                    expect(gltf.shaders.CesiumTexturedBoxTest0FS).toBeDefined();
-                    expect(gltf.shaders.CesiumTexturedBoxTest0VS).toBeDefined();
-                    expect(gltf.skins['Armature_Cylinder-skin']).toBeDefined();
-                    expect(gltf.techniques.technique0).toBeDefined();
-                    expect(gltf.textures.texture_Image0001).toBeDefined();
-
-                    expect(Object.keys(gltf.nodes).length).toEqual(4);
-                    expect(Object.keys(gltf.skins).length).toEqual(1);
-                    expect(Object.keys(gltf.cameras).length).toEqual(1);
-                    expect(Object.keys(gltf.meshes).length).toEqual(1);
-                    expect(Object.keys(gltf.accessors).length).toEqual(3);
-                    expect(Object.keys(gltf.materials).length).toEqual(1);
-                    expect(Object.keys(gltf.bufferViews).length).toEqual(1);
-                    expect(Object.keys(gltf.techniques).length).toEqual(1);
-                    expect(Object.keys(gltf.textures).length).toEqual(1);
-                    expect(Object.keys(gltf.buffers).length).toEqual(1);
-                    expect(Object.keys(gltf.programs).length).toEqual(1);
-                    expect(Object.keys(gltf.images).length).toEqual(1);
-                    expect(Object.keys(gltf.samplers).length).toEqual(1);
-                    expect(Object.keys(gltf.shaders).length).toEqual(2);
+                    expect(gltf.nodes.length).toEqual(4);
+                    expect(gltf.skins.length).toEqual(1);
+                    expect(gltf.cameras.length).toEqual(1);
+                    expect(gltf.meshes.length).toEqual(1);
+                    expect(gltf.accessors.length).toEqual(3);
+                    expect(gltf.materials.length).toEqual(1);
+                    expect(gltf.bufferViews.length).toEqual(1);
+                    expect(gltf.techniques.length).toEqual(1);
+                    expect(gltf.textures.length).toEqual(1);
+                    expect(gltf.buffers.length).toEqual(1);
+                    expect(gltf.programs.length).toEqual(1);
+                    expect(gltf.images.length).toEqual(1);
+                    expect(gltf.samplers.length).toEqual(1);
+                    expect(gltf.shaders.length).toEqual(2);
                 }), done).toResolve();
         });
     });

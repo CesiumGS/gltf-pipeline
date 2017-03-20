@@ -1,120 +1,128 @@
 'use strict';
-var bufferEqual = require('buffer-equal');
-var clone = require('clone');
-var fs = require('fs');
-var Promise = require('bluebird');
-
+var addPipelineExtras = require('../../lib/addPipelineExtras');
 var getBinaryGltf = require('../../lib/getBinaryGltf');
-var readGltf = require('../../lib/readGltf');
-
-var fsReadFile = Promise.promisify(fs.readFile);
-
-var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest_BinaryInput.gltf';
-var scenePath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest_BinaryCheck.gltf';
-var bufferPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.bin';
-var imagePath = './specs/data/boxTexturedUnoptimized/Cesium_Logo_Flat_Binary.png';
-var fragmentShaderPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest0FS_Binary.glsl';
-var vertexShaderPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest0VS_Binary.glsl';
+var parseBinaryGltf = require('../../lib/parseBinaryGltf');
 
 describe('getBinaryGltf', function() {
-    var testData = {
-        gltf: gltfPath,
-        scene: scenePath,
-        image: imagePath,
-        buffer: bufferPath,
-        fragmentShader: fragmentShaderPath,
-        vertexShader: vertexShaderPath
-    };
-
-    beforeAll(function(done) {
-        expect(readGltf(gltfPath)
-            .then(function(gltf) {
-                testData.gltf = gltf;
-                return fsReadFile(scenePath);
-            })
-            .then(function(data) {
-                testData.scene = JSON.parse(data);
-
-                var readFiles = [
-                    fsReadFile(testData.image),
-                    fsReadFile(testData.buffer),
-                    fsReadFile(testData.fragmentShader),
-                    fsReadFile(testData.vertexShader)
-                ];
-                return Promise.all(readFiles);
-            })
-            .then(function(results) {
-                testData.image = results[0];
-                testData.buffer = results[1];
-                testData.fragmentShader = results[2];
-                testData.vertexShader = results[3];
-            }), done).toResolve();
+    it('writes a binary glTF with embedded resources', function () {
+        var shaderText = "testing shader";
+        var imageText = "testing image";
+        var gltf = {
+            images: [{
+                extras: {
+                    _pipeline: {
+                        source: Buffer.from(imageText),
+                        extension: '.png'
+                    }
+                }
+            }],
+            shaders: [{
+                extras: {
+                    _pipeline: {
+                        source: Buffer.from(shaderText)
+                    }
+                }
+            }]
+        };
+        var glb = getBinaryGltf(gltf);
+        var parsedGltf = parseBinaryGltf(glb);
+        var buffer = parsedGltf.buffers[0];
+        var source = buffer.extras._pipeline.source;
+        var shader = parsedGltf.shaders[0];
+        var image = parsedGltf.images[0];
+        var shaderBufferView = parsedGltf.bufferViews[shader.bufferView];
+        var imageBufferView = parsedGltf.bufferViews[image.bufferView];
+        var testShaderText = source.slice(shaderBufferView.byteOffset, shaderBufferView.byteOffset + shaderBufferView.byteLength).toString();
+        var testImageText = source.slice(imageBufferView.byteOffset, imageBufferView.byteOffset + imageBufferView.byteLength).toString();
+        expect(testShaderText).toEqual(shaderText);
+        expect(testImageText).toEqual(imageText);
+        expect(image.mimeType).toEqual('image/png');
     });
 
-    it('writes a valid binary gltf header with embedded resources', function () {
-        var gltf = clone(testData.gltf);
-        var glbData = getBinaryGltf(gltf, true, true);
-        var header = glbData.header;
-
-        expect(header.toString('utf8', 0, 4)).toEqual('glTF');
-        expect(header.readUInt32LE(4)).toEqual(1);
-        expect(header.readUInt32LE(8)).toEqual(17782);
-        expect(header.readUInt32LE(12)).toEqual(3972);
-        expect(header.readUInt32LE(16)).toEqual(0);
+    it('writes a binary glTF with embedded shaders and separate images', function() {
+        var shaderText = "testing shader";
+        var imageText = "testing image";
+        var gltf = {
+            images: [{
+                uri: shaderText
+            }],
+            shaders: [{
+                extras: {
+                    _pipeline: {
+                        source: Buffer.from(shaderText)
+                    }
+                }
+            }]
+        };
+        var glb = getBinaryGltf(gltf, {
+            embedImage: false
+        });
+        var parsedGltf = parseBinaryGltf(glb);
+        var buffer = parsedGltf.buffers[0];
+        var source = buffer.extras._pipeline.source;
+        var shader = parsedGltf.shaders[0];
+        var shaderBufferView = parsedGltf.bufferViews[shader.bufferView];
+        var image = parsedGltf.images[0];
+        expect(image.bufferView).not.toBeDefined();
+        var testShaderText = source.slice(shaderBufferView.byteOffset, shaderBufferView.byteOffset + shaderBufferView.byteLength).toString();
+        expect(testShaderText).toEqual(shaderText);
+        expect(image.uri).toEqual(shaderText);
     });
 
-    it('writes a valid binary gltf header with separate resources', function () {
-        var gltf = clone(testData.gltf);
-        var glbData = getBinaryGltf(gltf, false, false);
-        var header = glbData.header;
-
-        expect(header.toString('utf8', 0, 4)).toEqual('glTF');
-        expect(header.readUInt32LE(4)).toEqual(1);
-        expect(header.readUInt32LE(8)).toEqual(4412);
-        expect(header.readUInt32LE(12)).toEqual(3552);
-        expect(header.readUInt32LE(16)).toEqual(0);
+    it('writes a binary glTF with separate shaders and embedded images', function() {
+        var shaderText = "testing shader";
+        var imageText = "testing image";
+        var gltf = {
+            images: [{
+                extras: {
+                    _pipeline: {
+                        source: Buffer.from(imageText),
+                        extension: '.png'
+                    }
+                }
+            }],
+            shaders: [{
+                uri: shaderText
+            }]
+        };
+        var glb = getBinaryGltf(gltf, {
+            embed: false
+        });
+        var parsedGltf = parseBinaryGltf(glb);
+        var buffer = parsedGltf.buffers[0];
+        var source = buffer.extras._pipeline.source;
+        var shader = parsedGltf.shaders[0];
+        expect(shader.bufferView).not.toBeDefined();
+        var image = parsedGltf.images[0];
+        var imageBufferView = parsedGltf.bufferViews[image.bufferView];
+        var testImageText = source.slice(imageBufferView.byteOffset, imageBufferView.byteOffset + imageBufferView.byteLength).toString();
+        expect(testImageText).toEqual(imageText);
+        expect(image.mimeType).toEqual('image/png');
+        expect(shader.uri).toEqual(shaderText);
     });
 
-    it('writes the correct binary scene', function () {
-        var gltf = clone(testData.gltf);
-        var glbData = getBinaryGltf(gltf, true, true);
-        var scene = glbData.scene;
-        expect(JSON.parse(scene.toString())).toEqual(testData.scene);
-    });
-
-    it('writes the correct binary body with embedded resources', function () {
-        var gltf = clone(testData.gltf);
-        var glbData = getBinaryGltf(gltf, true, true);
-        var body = glbData.body;
-
-        var binaryBody = Buffer.concat([testData.buffer, testData.fragmentShader, testData.vertexShader, testData.image]);
-        expect(bufferEqual(binaryBody, body)).toBe(true);
-    });
-
-    it('writes the correct binary body with separate images', function () {
-        var gltf = clone(testData.gltf);
-        var glbData = getBinaryGltf(gltf, true, false);
-        var body = glbData.body;
-
-        var binaryBody = Buffer.concat([testData.buffer, testData.fragmentShader, testData.vertexShader]);
-        expect(bufferEqual(binaryBody, body)).toBe(true);
-    });
-
-    it('writes the correct binary body with separate resources except images', function () {
-        var gltf = clone(testData.gltf);
-        var glbData = getBinaryGltf(gltf, false, true);
-        var body = glbData.body;
-
-        var binaryBody = Buffer.concat([testData.buffer, testData.image]);
-        expect(bufferEqual(binaryBody, body)).toBe(true);
-    });
-
-    it('writes the correct binary body with separate resources', function () {
-        var gltf = clone(testData.gltf);
-        var glbData = getBinaryGltf(gltf, false, false);
-        var body = glbData.body;
-
-        var binaryBody = testData.buffer;
-        expect(bufferEqual(binaryBody, body)).toBe(true);
+    it('writes a binary glTF with separate shaders and images', function() {
+        var shaderText = "testing shader";
+        var imageText = "testing image";
+        var gltf = {
+            images: [{
+                uri: imageText
+            }],
+            shaders: [{
+                uri: shaderText
+            }]
+        };
+        var glb = getBinaryGltf(gltf, {
+            embed: false,
+            embedImage: false
+        });
+        var parsedGltf = parseBinaryGltf(glb);
+        expect(parsedGltf.buffers).not.toBeDefined();
+        var shader = parsedGltf.shaders[0];
+        expect(shader.bufferView).not.toBeDefined();
+        expect(shader.uri).toEqual(shaderText);
+        var image = parsedGltf.images[0];
+        expect(image.bufferView).not.toBeDefined();
+        expect(image.uri).toEqual(imageText);
     });
 });

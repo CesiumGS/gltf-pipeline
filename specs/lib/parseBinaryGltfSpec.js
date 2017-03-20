@@ -1,155 +1,144 @@
 'use strict';
-var fs = require('fs');
-var async = require('async');
-var bufferEqual = require('buffer-equal');
+var getBinaryGltf = require('../../lib/getBinaryGltf');
 var parseBinaryGltf = require('../../lib/parseBinaryGltf');
 var removePipelineExtras = require('../../lib/removePipelineExtras');
-var binaryGltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.glb';
-var overlapGltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestOverlap.glb';
-var gltfScenePath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestBinary.txt';
-var bufferPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxBuffer_Binary.bin';
-var fragmentShaderPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest0FS_Binary.glsl';
-var imagePath = './specs/data/boxTexturedUnoptimized/Cesium_Logo_Flat_Binary.png';
 
 describe('parseBinaryGltf', function() {
-    var testData = {
-        binary: binaryGltfPath,
-        gltf: gltfScenePath,
-        buffer: bufferPath,
-        shader: fragmentShaderPath,
-        image: imagePath,
-        overlap: overlapGltfPath
-    };
+    it('throws an error with invalid magic', function() {
+       var glb = new Buffer(20);
+       glb.write('NOPE', 0);
+       expect(function() {
+           parseBinaryGltf(glb);
+       }).toThrowDeveloperError();
+    });
 
-    beforeAll(function(done) {
-        var names = Object.keys(testData);
-        async.each(names, function(name, callback) {
-            fs.readFile(testData[name], function(err, data) {
-                if (err) {
-                    callback(err);
-                }
-                else {
-                    testData[name] = data;
-                    callback();
-                }
-            });
-        }, function(err) {
-            if (err) {
-                throw err;
+    it('throws an error if version is not 1 or 2', function() {
+       var glb = new Buffer(20);
+       glb.write('glTF', 0);
+       glb.writeUInt32LE(3, 4);
+       expect(function() {
+           parseBinaryGltf(glb);
+       }).toThrowDeveloperError();
+    });
+
+    describe('1.0', function() {
+        it('throws an error if content format is not JSON', function() {
+            var glb = new Buffer(20);
+            glb.write('glTF', 0);
+            glb.writeUInt32LE(1, 4);
+            glb.writeUInt32LE(20, 8);
+            glb.writeUInt32LE(0, 12);
+            glb.writeUInt32LE(1, 16);
+            expect(function() {
+               parseBinaryGltf(glb);
+            }).toThrowDeveloperError();
+        });
+
+        it('loads binary glTF', function() {
+            var binaryData = new Buffer([0, 1, 2, 3, 4, 5]);
+            var gltf = {
+              buffers: {
+                  binary_glTF: {
+                      byteLength: binaryData.length
+                  }
+              },
+              images: {
+                  image: {
+                      extensions: {
+                          KHR_binary_glTF: {
+                              bufferView: 'imageBufferView',
+                              mimeType: 'image/jpg'
+                          }
+                      }
+                  }
+              },
+              shaders: {
+                  shader: {
+                      extensions: {
+                          KHR_binary_glTF: {
+                              bufferView: 'shaderBufferView'
+                          }
+                      }
+                  }
+              },
+              extensionsUsed: ['KHR_binary_glTF']
+            };
+            var gltfString = JSON.stringify(gltf);
+            while (gltfString.length % 4 !== 0) {
+                gltfString += ' ';
             }
+            var glb = new Buffer(20 + gltfString.length + binaryData.length);
+            glb.write('glTF', 0);
+            glb.writeUInt32LE(1, 4);
+            glb.writeUInt32LE(20 + gltfString.length + binaryData.length, 8);
+            glb.writeUInt32LE(gltfString.length, 12);
+            glb.writeUInt32LE(0, 16);
+            glb.write(gltfString, 20);
+            binaryData.copy(glb, 20 + gltfString.length);
 
-            done();
+            var parsedGltf = parseBinaryGltf(glb);
+            expect(parsedGltf.extensionsUsed).not.toBeDefined();
+            var buffer = parsedGltf.buffers[0];
+            for (var i = 0; i < binaryData.length; i++) {
+                expect(buffer.extras._pipeline.source[i]).toEqual(binaryData[i]);
+            }
+            var image = parsedGltf.images[0];
+            expect(image.extensions).not.toBeDefined();
+            expect(image.bufferView).toEqual('imageBufferView');
+            expect(image.mimeType).toEqual('image/jpg');
+            var shader = parsedGltf.shaders[0];
+            expect(shader.extensions).not.toBeDefined();
+            expect(shader.bufferView).toEqual('shaderBufferView');
         });
     });
 
-    it('loads a glTF scene', function() {
-        var gltf = parseBinaryGltf(testData.binary);
-
-        expect(gltf).toBeDefined();
-        expect(gltf.buffers.bufferView_29_buffer).toBeDefined();
-        expect(gltf.buffers.bufferView_30_buffer).toBeDefined();
-        expect(gltf.images.Image0001).toBeDefined();
-        expect(gltf.shaders.CesiumTexturedBoxTest0FS).toBeDefined();
-        expect(gltf.shaders.CesiumTexturedBoxTest0VS).toBeDefined();
-
-        removePipelineExtras(gltf);
-        expect(gltf).toEqual(JSON.parse(testData.gltf));
-    });
-
-    it('loads a glTF scene with overlapping buffer views', function() {
-        var gltf = parseBinaryGltf(testData.overlap);
-        var noOverlapGltf = parseBinaryGltf(testData.binary);
-
-        expect(gltf).toBeDefined();
-        expect(gltf.bufferViews.bufferView_29).toBeDefined();
-        expect(gltf.bufferViews.bufferView_29_a).toBeDefined();
-        expect(gltf.bufferViews.bufferView_30).toBeDefined();
-        expect(gltf.bufferViews.bufferView_30_a).toBeDefined();
-
-        expect (gltf.bufferViews.bufferView_29.buffer).toEqual('bufferView_29_buffer');
-        expect (gltf.bufferViews.bufferView_29_a.buffer).toEqual('bufferView_29_buffer');
-        expect (gltf.bufferViews.bufferView_30.buffer).toEqual('bufferView_30_buffer');
-        expect (gltf.bufferViews.bufferView_30.buffer).toEqual('bufferView_30_buffer');
-
-        expect (gltf.bufferViews.bufferView_29.byteOffset).toEqual(0);
-        expect (gltf.bufferViews.bufferView_29.byteLength).toEqual(72);
-        expect (gltf.bufferViews.bufferView_29_a.byteOffset).toEqual(12);
-        expect (gltf.bufferViews.bufferView_29_a.byteLength).toEqual(12);
-        expect (gltf.bufferViews.bufferView_30.byteOffset).toEqual(0);
-        expect (gltf.bufferViews.bufferView_30.byteLength).toEqual(528);
-        expect (gltf.bufferViews.bufferView_30_a.byteOffset).toEqual(468);
-        expect (gltf.bufferViews.bufferView_30_a.byteLength).toEqual(300);
-
-        expect(gltf.buffers.bufferView_29_buffer).toBeDefined();
-        expect(gltf.buffers.bufferView_30_buffer).toBeDefined();
-
-        expect(bufferEqual(gltf.buffers.bufferView_29_buffer.extras._pipeline.source, noOverlapGltf.buffers.bufferView_29_buffer.extras._pipeline.source)).toBe(true);
-        expect(bufferEqual(gltf.buffers.bufferView_30_buffer.extras._pipeline.source, noOverlapGltf.buffers.bufferView_30_buffer.extras._pipeline.source)).toBe(true);
-    });
-
-    it('loads an embedded buffer', function() {
-        var gltf = parseBinaryGltf(testData.binary);
-
-        expect(gltf.buffers.bufferView_30_buffer.extras._pipeline.source).toBeDefined();
-        expect(bufferEqual(gltf.buffers.bufferView_30_buffer.extras._pipeline.source, testData.buffer)).toBe(true);
-    });
-
-    it('loads an embedded image', function() {
-        var gltf = parseBinaryGltf(testData.binary);
-
-        expect(gltf.images.Image0001.extras._pipeline.source).toBeDefined();
-        expect(bufferEqual(gltf.images.Image0001.extras._pipeline.source, testData.image)).toBe(true);
-    });
-
-    it('loads an embedded shader', function() {
-        var gltf = parseBinaryGltf(testData.binary);
-
-        expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras._pipeline.source).toBeDefined();
-        expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras._pipeline.source).toEqual(testData.shader.toString());
-    });
-
-    it('throws an error', function() {
-        var magicError = new Buffer(testData.binary);
-        magicError.fill(0, 0, 4);
-        expect(function() {
-            try {
-                parseBinaryGltf(magicError);
+    describe('2.0', function() {
+        it('loads binary glTF', function() {
+            var i;
+            var binaryData = new Buffer([0, 1, 2, 3, 4, 5]);
+            var gltf = {
+                asset: {
+                    version: '2.0'
+                },
+                buffers: [
+                    {
+                        byteLength: binaryData.length
+                    }
+                ],
+                images: [
+                    {
+                        bufferView: 0,
+                        mimeType: 'image/jpg'
+                    }
+                ],
+                shaders: [
+                    {
+                        bufferView: 1
+                    }
+                ]
+            };
+            var gltfString = JSON.stringify(gltf);
+            while (gltfString.length % 4 !== 0) {
+                gltfString += ' ';
             }
-            catch (err) {
-                expect(err).toBeDefined();
-                expect(err.message).toEqual('File is not valid binary glTF');
-                throw err;
-            }
-        }).toThrowDeveloperError();
-    });
+            var glb = new Buffer(28 + gltfString.length + binaryData.length);
+            glb.write('glTF', 0);
+            glb.writeUInt32LE(2, 4);
+            glb.writeUInt32LE(12 + 8 + gltfString.length + 8 + binaryData.length, 8);
+            glb.writeUInt32LE(gltfString.length, 12);
+            glb.writeUInt32LE(0x4E4F534A, 16);
+            glb.write(gltfString, 20);
+            glb.writeUInt32LE(binaryData.length, 20 + gltfString.length);
+            glb.writeUInt32LE(0x004E4942, 24 + gltfString.length);
+            binaryData.copy(glb, 28 + gltfString.length);
 
-    it('throws a version error', function() {
-        var versionError = new Buffer(testData.binary);
-        versionError.fill(0, 4, 8);
-        expect(function() {
-            try {
-                parseBinaryGltf(versionError);
+            var parsedGltf = parseBinaryGltf(glb);
+            var buffer = parsedGltf.buffers[0];
+            for (i = 0; i < binaryData.length; i++) {
+                expect(buffer.extras._pipeline.source[i]).toEqual(binaryData[i]);
             }
-            catch (err) {
-                expect(err).toBeDefined();
-                expect(err.message).toEqual('Binary glTF version is not 1');
-                throw err;
-            }
-        }).toThrowDeveloperError();
-    });
-
-    it('throws a format error', function() {
-        var formatError = new Buffer(testData.binary);
-        formatError.fill(1, 16, 20);
-        expect(function() {
-            try {
-                parseBinaryGltf(formatError);
-            }
-            catch (err) {
-                expect(err).toBeDefined();
-                expect(err.message).toEqual('Binary glTF scene format is not JSON');
-                throw err;
-            }
-        }).toThrowDeveloperError();
+            removePipelineExtras(parsedGltf);
+            expect(parsedGltf).toEqual(gltf);
+        });
     });
 });

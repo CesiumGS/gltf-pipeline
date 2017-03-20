@@ -242,7 +242,12 @@ describe('updateVersion', function() {
                 },
                 accessor_indices: {
                     componentType: WebGLConstants.UNSIGNED_INT
-                }
+                },
+                accessor_input: {},
+                accessor_output: {},
+                accessor_texcoord: {},
+                accessor_color: {},
+                accessor_temperature: {}
             },
             bufferViews: {
                 bufferView: {
@@ -296,12 +301,14 @@ describe('updateVersion', function() {
                         'rootTransform'
                     ]
                 }
+            },
+            skins: {
+                someSkin: {}
             }
         };
-        updateVersion(gltf, {
-            targetVersion: '1.1'
-        });
-        expect(gltf.asset.profile.version).toEqual('1.0');
+        updateVersion(gltf);
+        expect(gltf.asset.version).toEqual('2.0');
+        expect(gltf.asset.profile).not.toBeDefined();
         var extensionsUsed = gltf.extensionsUsed;
         expect(extensionsUsed).toEqual([
             'KHR_materials_common',
@@ -313,16 +320,14 @@ describe('updateVersion', function() {
             'KHR_materials_common',
             'WEB3D_quantized_attributes'
         ]);
-        var glExtensionsUsed = gltf.glExtensionsUsed;
-        expect(glExtensionsUsed).toEqual(['OES_element_index_uint']);
-        var animation = gltf.animations.animation;
-        var sampler = animation.samplers.sampler;
-        expect(sampler.input).toEqual('accessor_input');
-        expect(sampler.output).toEqual('accessor_output');
+        var animation = gltf.animations[0];
+        var sampler = animation.samplers[0];
+        expect(sampler.input).toEqual(2);
+        expect(sampler.output).toEqual(3);
         expect(animation.parameters).not.toBeDefined();
-        var material = gltf.materials.material;
+        var material = gltf.materials[0];
         expect(material.values.shininess).toEqual([1.0]);
-        var technique = gltf.techniques.technique;
+        var technique = gltf.techniques[0];
         expect(technique.parameters.lightAttenuation.value).toEqual([1.0]);
         expect(technique.parameters.application.value).not.toBeDefined();
         expect(technique.parameters.texcoord.semantic).toEqual('TEXCOORD_0');
@@ -333,59 +338,28 @@ describe('updateVersion', function() {
         expect(states.functions.scissor).not.toBeDefined();
         expect(states.functions.blendColor).toEqual([0.0, 0.0, 0.0, 1.0]);
         expect(states.functions.depthRange).toEqual([0.0, 0.0]);
-        var accessor = gltf.accessors.accessor;
+        var accessor = gltf.accessors[0];
         expect(accessor.min).toEqual([-2.0]);
         expect(accessor.max).toEqual([3.0]);
-        var primitive = gltf.meshes.mesh.primitives[0];
+        var primitive = gltf.meshes[0].primitives[0];
         expect(primitive.attributes.TEXCOORD).not.toBeDefined();
-        expect(primitive.attributes.TEXCOORD_0).toEqual('accessor_texcoord');
+        expect(primitive.attributes.TEXCOORD_0).toEqual(4);
         expect(primitive.attributes.COLOR).not.toBeDefined();
-        expect(primitive.attributes.COLOR_0).toEqual('accessor_color');
+        expect(primitive.attributes.COLOR_0).toEqual(5);
         expect(primitive.attributes.APPLICATIONSPECIFIC).not.toBeDefined();
-        expect(primitive.attributes._APPLICATIONSPECIFIC).toEqual('accessor');
-        expect(primitive.attributes._TEMPERATURE).toEqual('accessor_temperature');
-        var rootTransform = gltf.nodes.rootTransform;
-        var rootSkeletonNode = gltf.nodes['root-skeletonNode'];
-        var scene = gltf.scenes.defaultScene;
-        expect(scene.nodes).toEqual(['rootTransform', 'root-skeletonNode']);
-        expect(rootTransform.children).toEqual(['meshNode']);
-        expect(rootSkeletonNode.matrix).toEqual(rootTransform.matrix);
-        var camera = gltf.cameras.camera;
+        expect(primitive.attributes._APPLICATIONSPECIFIC).toEqual(0);
+        expect(primitive.attributes._TEMPERATURE).toEqual(6);
+        var camera = gltf.cameras[0];
         expect(camera.perspective.aspectRatio).not.toBeDefined();
         expect(camera.perspective.yfov).toEqual(1.0);
-        var buffer = gltf.buffers.buffer;
+        var buffer = gltf.buffers[0];
         expect(buffer.type).not.toBeDefined();
         expect(buffer.byteLength).toEqual(arrayBuffer.length);
-        var bufferView = gltf.bufferViews.bufferView;
+        var bufferView = gltf.bufferViews[0];
         expect(bufferView.byteLength).toEqual(arrayBuffer.length);
         expect(technique.parameters.application.count).toEqual(1);
         expect(technique.parameters.jointMatrix.count).toEqual(2);
         expect(technique.parameters.notJointMatrix.count).not.toBeDefined();
         expect(technique.parameters.notJointMatrixWithSemantic.count).not.toBeDefined();
-    });
-
-    it('does not add glExtensionsUsed if primitive indices are not UNSIGNED_INT', function() {
-       var gltf = {
-           asset: {
-               version: '1.0'
-           },
-           accessors: {
-               indices_accessor: {
-                   componentType: WebGLConstants.UNSIGNED_SHORT
-               }
-           },
-           meshes : {
-               mesh : {
-                   primitives : [
-                       {
-                           indices: 'indices_accessor'
-                       }
-                   ]
-               }
-           }
-       };
-       updateVersion(gltf);
-       expect(gltf.asset.version).toEqual('2.0');
-       expect(gltf.glExtensionsUsed).not.toBeDefined();
     });
 });
