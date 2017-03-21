@@ -108,7 +108,7 @@ describe('processModelMaterialsCommon', function() {
         addDefaults(gltf);
         addPipelineExtras(gltf);
         processModelMaterialsCommon(gltf);
-        expect(gltf.materials.length).toBeGreaterThan(0)
+        expect(gltf.materials.length).toBeGreaterThan(0);
         expect(gltf.techniques.length).toBeGreaterThan(0);
         var materialsLength = gltf.materials.length;
         for (var materialId = 0; materialId < materialsLength; materialId++) {
@@ -229,29 +229,26 @@ describe('processModelMaterialsCommon', function() {
 
     it('splits two materials with different types for JOINT and WEIGHT', function() {
         var gltf = {
-            accessors: {
-                jointAccessor_0: {
+            accessors: [
+                {
                     componentType: WebGLConstants.FLOAT,
                     type: 'VEC4'
-                },
-                weightAccessor_0: {
+                }, {
                     componentType: WebGLConstants.FLOAT,
                     type: 'VEC4'
-                },
-                jointAccessor_1: {
+                }, {
                     componentType: WebGLConstants.FLOAT,
                     type: 'MAT3'
-                },
-                weightAccessor_1: {
+                }, {
                     componentType: WebGLConstants.FLOAT,
                     type: 'MAT3'
                 }
-            },
+            ],
             extensionsUsed: [
                 'KHR_materials_common'
             ],
-            materials: {
-                material: {
+            materials: [
+                {
                     extensions: {
                         KHR_materials_common: {
                             jointCount: 14,
@@ -259,35 +256,34 @@ describe('processModelMaterialsCommon', function() {
                         }
                     }
                 }
-            },
-            meshes: {
-                meshVec4: {
+            ],
+            meshes: [
+                {
                     primitives: [{
                         attributes: {
-                            JOINT: 'jointAccessor_0',
-                            WEIGHT: 'weightAccessor_0'
+                            JOINT: 0,
+                            WEIGHT: 1
                         },
-                        material: 'material'
+                        material: 0
                     }]
-                },
-                meshMat3: {
+                }, {
                     primitives: [{
                         attributes: {
-                            JOINT: 'jointAccessor_1',
-                            WEIGHT: 'weightAccessor_1'
+                            JOINT: 2,
+                            WEIGHT: 3
                         },
-                        material: 'material'
+                        material: 0
                     }]
                 }
-            }
+            ]
         };
         addDefaults(gltf);
         addPipelineExtras(gltf);
         processModelMaterialsCommon(gltf);
 
         var meshes = gltf.meshes;
-        var primitiveVec4 = meshes.meshVec4.primitives[0];
-        var primitiveMat3 = meshes.meshMat3.primitives[0];
+        var primitiveVec4 = meshes[0].primitives[0];
+        var primitiveMat3 = meshes[1].primitives[0];
         var materialVec4Id = primitiveVec4.material;
         var materialMat3Id = primitiveMat3.material;
         expect(materialVec4Id).not.toEqual(materialMat3Id);
