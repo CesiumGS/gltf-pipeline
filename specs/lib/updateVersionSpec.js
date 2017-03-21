@@ -234,7 +234,6 @@ describe('updateVersion', function() {
             accessors: {
                 accessor: {
                     byteOffset: 0,
-                    byteStride: 0,
                     bufferView: 'bufferView',
                     componentType: WebGLConstants.SHORT,
                     count: 6,

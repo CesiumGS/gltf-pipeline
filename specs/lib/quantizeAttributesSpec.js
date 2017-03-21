@@ -13,7 +13,6 @@ describe('quantizeAttributes', function() {
                 // Interleaved accessors in bufferView_0
                 bufferView : 0,
                 byteOffset : 0,
-                byteStride : 18,
                 componentType : 5126,
                 count : 3,
                 min : [-1.0, -1.0, -1.0],
@@ -22,7 +21,6 @@ describe('quantizeAttributes', function() {
             }, {
                 bufferView : 0,
                 byteOffset : 12,
-                byteStride : 18,
                 componentType : 5123,
                 count : 3,
                 min : [-1.0, -1.0, -1.0],
@@ -32,7 +30,6 @@ describe('quantizeAttributes', function() {
                 // Block accessors in bufferView_1
                 bufferView : 1,
                 byteOffset : 0,
-                byteStride : 12,
                 componentType : 5126,
                 count : 3,
                 min : [-1.0, -1.0, -1.0],
@@ -83,6 +80,7 @@ describe('quantizeAttributes', function() {
                 buffer : 0,
                 byteLength : 48,
                 byteOffset : 0,
+                byteStride : 18,
                 target : 34962
             },
             {

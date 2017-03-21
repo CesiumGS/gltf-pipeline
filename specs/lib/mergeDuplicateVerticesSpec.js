@@ -14,21 +14,18 @@ describe('mergeDuplicateVertices', function() {
                 {
                     bufferView : 0,
                     byteOffset : 0,
-                    byteStride : 0,
                     componentType : 5126,
                     count : 5,
                     type : 'VEC3'
                 }, {
                     bufferView : 1,
                     byteOffset : 0,
-                    byteStride : 0,
                     componentType : 5123,
                     count : 5,
                     type : 'VEC2'
                 }, {
-                   bufferView : 2,
+                    bufferView : 2,
                     byteOffset : 0,
-                    byteStride : 0,
                     componentType : 5123,
                     count : 9,
                     type : 'SCALAR'
@@ -114,35 +111,30 @@ describe('mergeDuplicateVertices', function() {
                 {
                     bufferView : 0,
                     byteOffset : 0,
-                    byteStride : 0,
                     componentType : 5126,
                     count : 5,
                     type : 'VEC3'
                 }, {
                     bufferView : 1,
                     byteOffset : 0,
-                    byteStride : 0,
                     componentType : 5126,
                     count : 5,
                     type : 'VEC3'
                 }, {
                     bufferView : 2,
                     byteOffset : 0,
-                    byteStride : 0,
                     componentType : 5123,
                     count : 5,
                     type : 'VEC2'
                 }, {
                     bufferView : 3,
                     byteOffset : 0,
-                    byteStride : 0,
                     componentType : 5123,
                     count : 5,
                     type : 'VEC2'
                 }, {
                     bufferView : 4,
                     byteOffset : 0,
-                    byteStride : 0,
                     componentType : 5123,
                     count : 9,
                     type : 'SCALAR'

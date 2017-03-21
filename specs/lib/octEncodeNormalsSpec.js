@@ -18,7 +18,6 @@ describe('octEncodeNormals', function() {
            accessors : [
                {
                    byteOffset : 0,
-                   byteStride : 0,
                    bufferView : 0,
                    componentType : WebGLConstants.FLOAT,
                    count : 3,
@@ -133,7 +132,6 @@ describe('octEncodeNormals', function() {
         var gltf = {
             accessors : [{
                     byteOffset : 0,
-                    byteStride : 0,
                     bufferView : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : 3,
@@ -146,7 +144,6 @@ describe('octEncodeNormals', function() {
                     type : 'VEC3'
                 }, {
                     byteOffset : 0,
-                    byteStride : 0,
                     bufferView : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : 3,
@@ -159,7 +156,6 @@ describe('octEncodeNormals', function() {
                     type : 'VEC3'
                 },{
                     byteOffset : 0,
-                    byteStride : 0,
                     bufferView : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : 3,

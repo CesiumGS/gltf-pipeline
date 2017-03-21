@@ -28,7 +28,6 @@ describe('uninterleaveAndPackBuffers', function() {
             {
                 bufferView : 1,
                 byteOffset : 0,
-                byteStride : 12,
                 componentType : 5126,
                 count : 3,
                 type : 'VEC3'

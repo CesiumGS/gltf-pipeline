@@ -215,7 +215,6 @@ describe('combineNodes', function() {
                 {
                     bufferView : 0,
                     byteOffset : 0,
-                    byteStride : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : positions.length / 3,
                     type : "VEC3"
@@ -223,7 +222,6 @@ describe('combineNodes', function() {
                 {
                     bufferView : 0,
                     byteOffset : normalsBuffer.length,
-                    byteStride : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : normals.length / 3,
                     type : "VEC3"
@@ -231,7 +229,6 @@ describe('combineNodes', function() {
                 {
                     bufferView : 1,
                     byteOffset : 0,
-                    byteStride : 0,
                     componentType : WebGLConstants.UNSIGNED_SHORT,
                     count : indices.length,
                     type : "SCALAR"
@@ -337,7 +334,6 @@ describe('combineNodes', function() {
                 {
                     bufferView : 0,
                     byteOffset : 0,
-                    byteStride : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : positions.length / 3,
                     type : "VEC3"
@@ -345,7 +341,6 @@ describe('combineNodes', function() {
                 {
                     bufferView : 0,
                     byteOffset : normalsBuffer.length,
-                    byteStride : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : normals.length / 3,
                     type : "VEC3"
@@ -353,7 +348,6 @@ describe('combineNodes', function() {
                 {
                     bufferView : 1,
                     byteOffset : 0,
-                    byteStride : 0,
                     componentType : WebGLConstants.UNSIGNED_SHORT,
                     count : indices.length,
                     type : "SCALAR"
@@ -361,7 +355,6 @@ describe('combineNodes', function() {
                 {
                     bufferView: 1,
                     byteOffset: indicesBuffer.length,
-                    byteStride: 0,
                     componentType: WebGLConstants.UNSIGNED_SHORT,
                     count: overlappedIndices.length,
                     type: "SCALAR"
