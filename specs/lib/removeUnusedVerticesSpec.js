@@ -19,13 +19,11 @@ describe('removeUnusedVertices', function() {
         accessors : [
             {
                 byteOffset : 0,
-                byteStride : 0,
                 bufferView : 0,
                 componentType : 5123,
                 type : 'SCALAR'
             },
             {
-                byteStride : 0,
                 bufferView : 1,
                 componentType : 5126,
                 count : 3,
@@ -33,7 +31,6 @@ describe('removeUnusedVertices', function() {
                 type : 'VEC3'
             },
             {
-                byteStride : 0,
                 bufferView : 1,
                 componentType : 5123,
                 count : 3,
@@ -41,7 +38,6 @@ describe('removeUnusedVertices', function() {
                 type : 'VEC2'
             },
             {
-                byteStride : 0,
                 bufferView : 1,
                 componentType : 5123,
                 count : 3,
@@ -302,28 +298,24 @@ describe('removeUnusedVertices', function() {
             accessors : [
                 {
                     bufferView : 0,
-                    byteStride : 0,
                     byteOffset : 0,
                     componentType : 5126,
                     count : 5,
                     type : 'VEC3'
                 }, {
                     bufferView : 1,
-                    byteStride : 0,
                     byteOffset : 0,
                     componentType : 5126,
                     count : 5,
                     type : 'VEC3'
                 }, {
                     bufferView : 2,
-                    byteStride : 0,
                     byteOffset : 0,
                     componentType : 5123,
                     count : 9,
                     type : 'SCALAR'
                 }, {
                     bufferView : 3,
-                    byteStride : 0,
                     byteOffset : 0,
                     componentType : 5123,
                     count : 7,

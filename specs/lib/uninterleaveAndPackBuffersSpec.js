@@ -13,7 +13,6 @@ describe('uninterleaveAndPackBuffers', function() {
             {
                 bufferView : 0,
                 byteOffset : 0,
-                byteStride : 18,
                 componentType : 5126,
                 count : 3,
                 type : 'VEC3'
@@ -21,7 +20,6 @@ describe('uninterleaveAndPackBuffers', function() {
             {
                 bufferView : 0,
                 byteOffset : 12,
-                byteStride : 18,
                 componentType : 5123,
                 count : 3,
                 type : 'VEC2'
@@ -48,6 +46,7 @@ describe('uninterleaveAndPackBuffers', function() {
                 buffer : 0,
                 byteLength : 48,
                 byteOffset : 0,
+                byteStride: 18,
                 target : 34962
             },
             {
