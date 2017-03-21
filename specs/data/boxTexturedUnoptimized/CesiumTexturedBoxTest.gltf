@@ -63,11 +63,6 @@
     ],
     "animations": [],
     "asset": {
-        "premultipliedAlpha": true,
-        "profile": {
-            "api": "WebGL",
-            "version": "1.0"
-        },
         "version": "2.0"
     },
     "bufferViews": [
@@ -87,7 +82,6 @@
     "buffers": [
         {
             "byteLength": 840,
-            "type": "arraybuffer",
             "uri": "CesiumTexturedBoxTest.bin"
         }
     ],
@@ -156,7 +150,7 @@
         },
         {
             "children": [
-                "txtrLocator026Node"
+                3
             ],
             "matrix": [
                 1,
@@ -180,8 +174,8 @@
         },
         {
             "children": [
-                "Geometry-mesh002Node",
-                "groupLocator030Node"
+                0,
+                1
             ],
             "matrix": [
                 1,

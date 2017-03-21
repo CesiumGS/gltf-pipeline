@@ -481,15 +481,24 @@ describe('compressTextures', function() {
         };
         expect(fsExtraReadJson(gltfPath)
             .then(function(gltf) {
-                var sampler = gltf.samplers.sampler_0;
+                var sampler = gltf.samplers[0];
                 expect(sampler.minFilter).toBe(WebGLConstants.LINEAR_MIPMAP_LINEAR);
                 var pipelineOptions = {
                     textureCompressionOptions : options,
                     basePath : basePath
                 };
-                return Pipeline.processJSON(gltf, pipelineOptions)
+                addPipelineExtras(gltf);
+                addDefaults(gltf);
+                return loadGltfUris(gltf, pipelineOptions)
+                    .then(function() {
+                        return compressTextures(gltf, options);
+                    })
+                    .then(function() {
+                        return writeSource(gltf.images, 'images', undefined, true, true);
+                    })
                     .then(function() {
                         expect(sampler.minFilter).toBe(WebGLConstants.LINEAR);
+
                     });
             }), done).toResolve();
     });
@@ -509,15 +518,15 @@ describe('compressTextures', function() {
         expect(readGltf(gltfEmbeddedPath)
             .then(function(gltf) {
                 var images = gltf.images;
-                expect(Object.keys(images).length).toBe(1);
+                expect(images.length).toEqual(1);
                 return compressTextures(gltf, optionsArray)
                     .then(function() {
-                        var image = gltf.images.Image0001;
+                        var image = gltf.images[0];
                         var compressedImages = image.extras.compressedImage3DTiles;
-                        var s3tcImagePipelineExtras = compressedImages.s3tc.extras._pipeline;
-                        var astcImagePipelineExtras = compressedImages.astc.extras._pipeline;
-                        var crunchImagePipelineExtras = compressedImages.crunch.extras._pipeline;
-                        expect(image.uri).toBe(defaultImageUri);
+                        var s3tcImagePipelineExtras = compressedImages[0].extras._pipeline;
+                        var astcImagePipelineExtras = compressedImages[1].extras._pipeline;
+                        var crunchImagePipelineExtras = compressedImages[2].extras._pipeline;
+                        expect(image.uri).toEqual(defaultImageUri);
                         expect(s3tcImagePipelineExtras.source).toBeDefined();
                         expect(s3tcImagePipelineExtras.extension).toEqual('.ktx');
                         expect(astcImagePipelineExtras.source).toBeDefined();

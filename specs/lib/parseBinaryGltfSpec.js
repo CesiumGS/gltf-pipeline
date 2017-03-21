@@ -37,31 +37,39 @@ describe('parseBinaryGltf', function() {
         it('loads binary glTF', function() {
             var binaryData = new Buffer([0, 1, 2, 3, 4, 5]);
             var gltf = {
-              buffers: {
-                  binary_glTF: {
-                      byteLength: binaryData.length
-                  }
-              },
-              images: {
-                  image: {
-                      extensions: {
-                          KHR_binary_glTF: {
-                              bufferView: 'imageBufferView',
-                              mimeType: 'image/jpg'
-                          }
-                      }
-                  }
-              },
-              shaders: {
-                  shader: {
-                      extensions: {
-                          KHR_binary_glTF: {
-                              bufferView: 'shaderBufferView'
-                          }
-                      }
-                  }
-              },
-              extensionsUsed: ['KHR_binary_glTF']
+                bufferViews: {
+                    imageBufferView: {
+                        byteLength: 0
+                    },
+                    shaderBufferView: {
+                        byteLength: 0
+                    }
+                },
+                buffers: {
+                    binary_glTF: {
+                        byteLength: binaryData.length
+                    }
+                },
+                images: {
+                    image: {
+                        extensions: {
+                            KHR_binary_glTF: {
+                                bufferView: 'imageBufferView',
+                                mimeType: 'image/jpg'
+                            }
+                        }
+                    }
+                },
+                shaders: {
+                    shader: {
+                        extensions: {
+                            KHR_binary_glTF: {
+                                bufferView: 'shaderBufferView'
+                            }
+                        }
+                    }
+                },
+                extensionsUsed: ['KHR_binary_glTF']
             };
             var gltfString = JSON.stringify(gltf);
             while (gltfString.length % 4 !== 0) {
@@ -84,11 +92,11 @@ describe('parseBinaryGltf', function() {
             }
             var image = parsedGltf.images[0];
             expect(image.extensions).not.toBeDefined();
-            expect(image.bufferView).toEqual('imageBufferView');
+            expect(image.bufferView).toEqual(0);
             expect(image.mimeType).toEqual('image/jpg');
             var shader = parsedGltf.shaders[0];
             expect(shader.extensions).not.toBeDefined();
-            expect(shader.bufferView).toEqual('shaderBufferView');
+            expect(shader.bufferView).toEqual(1);
         });
     });
 

@@ -1,10 +1,9 @@
 'use strict';
 var Cesium = require('cesium');
 var clone = require('clone');
+var compressIntegerAccessors = require('../../lib/compressIntegerAccessors');
 
 var WebGLConstants = Cesium.WebGLConstants;
-
-var compressIntegerAccessors = require('../../lib/compressIntegerAccessors');
 
 var cantCompressByte = new Buffer([-1, 0, 1]);
 var cantCompressUByte = new Buffer([0, 1, 2]);
@@ -14,185 +13,167 @@ var floatToShort = new Buffer(new Float32Array([32767.0, -1.0, 0.0]).buffer);
 var floatToByte = new Buffer(new Float32Array([255.0, -1.0, 0.0]).buffer);
 var shortToByte = new Buffer(new Uint16Array([-2, 0, 2]).buffer);
 var testGltf = {
-    accessors : {
-        cantCompressByte : {
-            bufferView : 'cantCompressByteBufferView',
+    accessors : [
+        {
+            bufferView : 0,
             byteOffset : 0,
             byteStride : 0,
             componentType : WebGLConstants.BYTE,
             count : 3,
-            type : "SCALAR"
-        },
-        cantCompressUByte : {
-            bufferView : 'cantCompressUByteBufferView',
+            type : 'SCALAR',
+            name: 'cantCompressByte'
+        }, {
+            bufferView : 1,
             byteOffset : 0,
             byteStride : 0,
             componentType : WebGLConstants.UNSIGNED_BYTE,
             count : 3,
-            type : "SCALAR"
-        },
-        cantCompressIndices : {
-            bufferView : 'cantCompressIndicesBufferView',
+            type : 'SCALAR',
+            name: 'cantCompressUByte'
+        }, {
+            bufferView : 2,
             byteOffset : 0,
             byteStride : 0,
             componentType : WebGLConstants.UNSIGNED_SHORT,
             count : 3,
-            type : "SCALAR"
-        },
-        cantCompressBigShort : {
-            bufferView : 'cantCompressBigShortBufferView',
+            type : 'SCALAR',
+            name: 'cantCompressIndices'
+        }, {
+            bufferView : 3,
             byteOffset : 0,
             byteStride : 0,
             componentType : WebGLConstants.UNSIGNED_SHORT,
             count : 3,
-            type : "SCALAR"
-        },
-        floatToShort : {
-            bufferView : 'floatToShortBufferView',
+            type : 'SCALAR',
+            name: 'cantCompressBigShort'
+        }, {
+            bufferView : 4,
             byteOffset : 0,
             byteStride : 0,
             componentType : WebGLConstants.FLOAT,
             count : 3,
-            type : "SCALAR"
-        },
-        floatToByte : {
-            bufferView : 'floatToByteBufferView',
+            type : 'SCALAR',
+            name: 'floatToShort'
+        }, {
+            bufferView : 5,
             byteOffset : 0,
             byteStride : 0,
             componentType : WebGLConstants.FLOAT,
             count : 3,
-            type : "SCALAR"
-        },
-        shortToByte : {
-            bufferView : 'shortToByteBufferView',
+            type : 'SCALAR',
+            name: 'floatToByte'
+        }, {
+            bufferView : 6,
             byteOffset : 0,
             byteStride : 0,
             componentType : WebGLConstants.SHORT,
             count : 3,
-            type : "SCALAR"
+            type : 'SCALAR',
+            name: 'shortToByte'
         }
-    },
-    bufferViews : {
-        cantCompressByteBufferView : {
-            buffer : 'cantCompressByteBuffer',
+    ],
+    bufferViews : [
+        {
+            buffer : 0,
             byteOffset : 0,
             byteLength : cantCompressByte.length,
             target : WebGLConstants.ARRAY_BUFFER
-        },
-        cantCompressUByteBufferView : {
-            buffer : 'cantCompressUByteBuffer',
+        }, {
+            buffer : 1,
             byteOffset : 0,
             byteLength : cantCompressUByte.length,
             target : WebGLConstants.ARRAY_BUFFER
-        },
-        cantCompressIndicesBufferView : {
-            buffer : 'cantCompressIndicesBuffer',
+        }, {
+            buffer : 2,
             byteOffset : 0,
             byteLength : cantCompressIndices.length,
             target : WebGLConstants.ELEMENT_ARRAY_BUFFER
-        },
-        cantCompressBigShortBufferView : {
-            buffer : 'cantCompressBigShortBuffer',
+        }, {
+            buffer : 3,
             byteOffset : 0,
             byteLength : cantCompressBigShort.length,
             target : WebGLConstants.ARRAY_BUFFER
-        },
-        floatToShortBufferView : {
-            buffer : 'floatToShortBuffer',
+        }, {
+            buffer : 4,
             byteOffset : 0,
             byteLength : floatToShort.length,
             target : WebGLConstants.ARRAY_BUFFER
-        },
-        floatToByteBufferView : {
-            buffer : 'floatToByteBuffer',
+        }, {
+            buffer : 5,
             byteOffset : 0,
             byteLength : floatToByte.length,
             target : WebGLConstants.ARRAY_BUFFER
-        },
-        shortToByteBufferView : {
-            buffer : 'shortToByteBuffer',
+        }, {
+            buffer : 6,
             byteOffset : 0,
             byteLength : shortToByte.length,
             target : WebGLConstants.ARRAY_BUFFER
         }
-    },
-    buffers : {
-        cantCompressByteBuffer : {
+    ],
+    buffers : [
+        {
             byteLength : cantCompressByte.length,
             extras : {
                 _pipeline : {
                     source : cantCompressByte
                 }
-            },
-            type : "arraybuffer"
-        },
-        cantCompressUByteBuffer : {
+            }
+        }, {
             byteLength : cantCompressUByte.length,
             extras : {
                 _pipeline : {
                     source : cantCompressUByte
                 }
-            },
-            type : "arraybuffer"
-        },
-        cantCompressIndicesBuffer : {
+            }
+        }, {
             byteLength : cantCompressIndices.length,
             extras : {
                 _pipeline : {
                     source : cantCompressIndices
                 }
-            },
-            type : "arraybuffer"
-        },
-        cantCompressBigShortBuffer : {
+            }
+        }, {
             byteLength : cantCompressBigShort.length,
             extras : {
                 _pipeline : {
                     source : cantCompressBigShort
                 }
-            },
-            type : "arraybuffer"
-        },
-        floatToShortBuffer : {
+            }
+        }, {
             byteLength : floatToShort.length,
             extras : {
                 _pipeline : {
                     source : floatToShort
                 }
-            },
-            type : "arraybuffer"
-        },
-        floatToByteBuffer : {
+            }
+        }, {
             byteLength : floatToByte.length,
             extras : {
                 _pipeline : {
                     source : floatToByte
                 }
-            },
-            type : "arraybuffer"
-        },
-        shortToByteBuffer : {
+            }
+        }, {
             byteLength : shortToByte.length,
             extras : {
                 _pipeline : {
                     source : shortToByte
                 }
-            },
-            type : "arraybuffer"
+            }
         }
-    },
+    ],
     meshes : {
         mesh : {
             primitives : [
                 {
                     attributes : {
-                        A : 'cantCompressByte',
-                        B : 'cantCompressUByte',
-                        C : 'cantCompressIndices',
-                        D : 'cantCompressBigShort',
-                        E : 'floatToShort',
-                        F : 'floatToByte',
-                        G : 'shortToByte'
+                        A : 0,
+                        B : 1,
+                        C : 2,
+                        D : 3,
+                        E : 4,
+                        F : 5,
+                        G : 6
                     }
                 }
             ]
@@ -206,18 +187,18 @@ describe('compressIntegerAccessors', function() {
         compressIntegerAccessors(gltf, {
             semantics : ['A', 'B', 'C', 'D', 'E', 'F', 'G']
         });
-        expect(gltf.accessors.cantCompressByte.componentType === WebGLConstants.BYTE);
-        expect(gltf.accessors.cantCompressUByte.componentType === WebGLConstants.UNSIGNED_BYTE);
-        expect(gltf.accessors.cantCompressIndices.componentType === WebGLConstants.UNSIGNED_SHORT);
-        expect(gltf.accessors.cantCompressBigShort.componentType === WebGLConstants.UNSIGNED_SHORT);
+        expect(gltf.accessors[0].componentType === WebGLConstants.BYTE);
+        expect(gltf.accessors[1].componentType === WebGLConstants.UNSIGNED_BYTE);
+        expect(gltf.accessors[2].componentType === WebGLConstants.UNSIGNED_SHORT);
+        expect(gltf.accessors[3].componentType === WebGLConstants.UNSIGNED_SHORT);
 
-        expect(gltf.accessors.floatToShort.componentType === WebGLConstants.UNSIGNED_SHORT);
-        expect(gltf.buffers.floatToShortBuffer.extras._pipeline.source.length === 3 * 2);
+        expect(gltf.accessors[4].componentType === WebGLConstants.UNSIGNED_SHORT);
+        expect(gltf.buffers[4].extras._pipeline.source.length === 3 * 2);
 
-        expect(gltf.accessors.floatToByte.componentType === WebGLConstants.BYTE);
-        expect(gltf.buffers.floatToByteBuffer.extras._pipeline.source.length === 3);
+        expect(gltf.accessors[5].componentType === WebGLConstants.BYTE);
+        expect(gltf.buffers[5].extras._pipeline.source.length === 3);
 
-        expect(gltf.accessors.shortToByte.componentType === WebGLConstants.BYTE);
-        expect(gltf.buffers.floatToByteBuffer.extras._pipeline.source.length === 3);
+        expect(gltf.accessors[6].componentType === WebGLConstants.BYTE);
+        expect(gltf.buffers[6].extras._pipeline.source.length === 3);
     });
 });

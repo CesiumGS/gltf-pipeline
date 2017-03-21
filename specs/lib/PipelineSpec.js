@@ -32,7 +32,7 @@ describe('Pipeline', function() {
             .then(function(gltf) {
                 expect(gltf).toBeDefined();
                 expect(clone(gltf)).not.toEqual(gltfCopy);
-                expect(gltf.scenes.defaultScene.extras).toBeUndefined();
+                expect(gltf.scenes[0].extras).toBeUndefined();
             }), done).toResolve();
     });
 
@@ -50,7 +50,7 @@ describe('Pipeline', function() {
             .then(function(gltf) {
                 expect(gltf).toBeDefined();
                 expect(clone(gltf)).not.toEqual(gltfCopy);
-                expect(gltf.scenes.defaultScene.extras).toBeUndefined();
+                expect(gltf.scenes[0].extras).toBeUndefined();
             }), done).toResolve();
     });
 
@@ -64,11 +64,11 @@ describe('Pipeline', function() {
             .then(function(gltf) {
                 expect(gltf).toBeDefined();
                 expect(clone(gltf)).not.toEqual(gltfCopy);
-                expect(gltf.scenes.defaultScene.extras).toBeUndefined();
+                expect(gltf.scenes[0].extras).toBeUndefined();
             }), done).toResolve();
     });
 
-    it('optimizes a glb file', function(done) {
+    fit('optimizes a glb file', function(done) {
         var gltfCopy;
         expect(readGltf(glbPath)
             .then(function(gltf) {
@@ -78,7 +78,7 @@ describe('Pipeline', function() {
             .then(function(gltf) {
                 expect(gltf).toBeDefined();
                 expect(clone(gltf)).not.toEqual(gltfCopy);
-                expect(gltf.scenes.defaultScene.extras).toBeUndefined();
+                expect(gltf.scenes[0].extras).toBeUndefined();
             }), done).toResolve();
     });
 
@@ -134,12 +134,11 @@ describe('Pipeline', function() {
         var initialUri;
         expect(readGltf(gltfEmbeddedPath)
             .then(function(gltf) {
-                initialUri = gltf.buffers.CesiumTexturedBoxTest.uri;
+                initialUri = gltf.buffers[0].uri;
                 return processJSON(gltf);
             })
             .then(function(gltf) {
-                var firstBufferId = Object.keys(gltf.buffers)[0];
-                var testBuffer = gltf.buffers[firstBufferId];
+                var testBuffer = gltf.buffers[0];
                 var finalUri = testBuffer.uri;
                 expect(initialUri).not.toEqual(finalUri);
             }), done).toResolve();
@@ -149,12 +148,11 @@ describe('Pipeline', function() {
         var initialUri;
         expect(readGltf(gltfEmbeddedPath)
             .then(function(gltf) {
-                initialUri = gltf.buffers.CesiumTexturedBoxTest.uri;
+                initialUri = gltf.buffers[0].uri;
                 return processFile(gltfEmbeddedPath);
             })
             .then(function(gltfFinal) {
-                var firstBufferId = Object.keys(gltfFinal.buffers)[0];
-                var testBuffer = gltfFinal.buffers[firstBufferId];
+                var testBuffer = gltfFinal.buffers[0];
                 var finalUri = testBuffer.uri;
                 expect(initialUri).not.toEqual(finalUri);
             }), done).toResolve();

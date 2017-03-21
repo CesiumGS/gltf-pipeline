@@ -24,7 +24,6 @@ describe('addPipelineExtras', function() {
         expect(gltf.animations[0].channels[0].target.extras._pipeline).toBeDefined();
         expect(gltf.animations[0].samplers[0].extras._pipeline).toBeDefined();
         expect(gltf.asset.extras._pipeline).toBeDefined();
-        expect(gltf.asset.profile.extras._pipeline).toBeDefined();
         expect(gltf.extras._pipeline).toBeDefined();
         expect(gltf.buffers[0].extras._pipeline).toBeDefined();
         expect(gltf.bufferViews[0].extras._pipeline).toBeDefined();
@@ -62,17 +61,17 @@ describe('addPipelineExtras', function() {
 
     it('does not attempt to add extras to null objects', function() {
         gltf.accessors.push({
-            "bufferView": "bufferView_29",
-            "byteOffset": 0,
-            "componentType": 5123,
-            "count": 36,
-            "type": "SCALAR",
-            "min": [
+            bufferView: 0,
+            byteOffset: 0,
+            componentType: 5123,
+            count: 36,
+            type: 'SCALAR',
+            min: [
                 null,
                 null,
                 null
             ],
-            "max": [
+            max: [
                 null,
                 null,
                 null
