@@ -68,7 +68,7 @@ describe('Pipeline', function() {
             }), done).toResolve();
     });
 
-    fit('optimizes a glb file', function(done) {
+    it('optimizes a glb file', function(done) {
         var gltfCopy;
         expect(readGltf(glbPath)
             .then(function(gltf) {
