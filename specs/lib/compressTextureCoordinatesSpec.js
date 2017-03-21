@@ -17,7 +17,6 @@ describe('compressTextureCoordinates', function() {
             accessors : [
                 {
                     byteOffset : 0,
-                    byteStride : 0,
                     bufferView : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : 3,
@@ -140,7 +139,6 @@ describe('compressTextureCoordinates', function() {
             accessors : [
                 {
                     byteOffset : 0,
-                    byteStride : 0,
                     bufferView : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : 3,
@@ -153,7 +151,6 @@ describe('compressTextureCoordinates', function() {
                     type : 'VEC2'
                 }, {
                     byteOffset : 0,
-                    byteStride : 0,
                     bufferView : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : 3,
@@ -166,7 +163,6 @@ describe('compressTextureCoordinates', function() {
                     type : 'VEC2'
                 }, {
                     byteOffset : 0,
-                    byteStride : 0,
                     bufferView : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : 3,

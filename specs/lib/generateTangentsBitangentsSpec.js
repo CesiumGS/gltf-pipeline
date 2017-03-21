@@ -2,6 +2,7 @@
 var Cesium = require('cesium');
 var clone = require('clone');
 var generateTangentsBitangents = require('../../lib/generateTangentsBitangents');
+var uninterleaveAndPackBuffers = require('../../lib/uninterleaveAndPackBuffers');
 
 var WebGLConstants = Cesium.WebGLConstants;
 
@@ -90,6 +91,7 @@ describe('generateTangentsBitangents', function(){
 
         var byteLengthBefore = gltf.buffers[0].byteLength;
         generateTangentsBitangents(gltf);
+        uninterleaveAndPackBuffers(gltf);
 
         var attributes = gltf.meshes[0].primitives[0].attributes;
         var byteLengthAfter = gltf.buffers[0].byteLength;
@@ -118,6 +120,7 @@ describe('generateTangentsBitangents', function(){
         };
         var gltfCopy = clone(gltf);
         generateTangentsBitangents(gltf);
+        uninterleaveAndPackBuffers(gltf);
         expect(gltf.meshes).toEqual(gltfCopy.meshes);
     });
 

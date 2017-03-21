@@ -18,22 +18,6 @@ var transparentImageUri = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAA
 var gltfTransparentPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestTransparent.gltf';
 
 describe('addDefaults', function() {
-    it('Adds accessor properties', function() {
-        var gltf = {
-            "accessors": [{
-                "bufferView": 0,
-                "byteOffset": 0,
-                "componentType": 5123,
-                "count": 36,
-                "type": "SCALAR"
-            }]
-        };
-
-        addDefaults(gltf);
-        var accessor = gltf.accessors[0];
-        expect(accessor.byteStride).toEqual(0);
-    });
-
     it('Adds animation properties', function() {
         var gltf = {
             "animations": [{

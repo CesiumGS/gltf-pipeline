@@ -17,7 +17,6 @@ var testGltf = {
         {
             bufferView : 0,
             byteOffset : 0,
-            byteStride : 0,
             componentType : WebGLConstants.BYTE,
             count : 3,
             type : 'SCALAR',
@@ -25,7 +24,6 @@ var testGltf = {
         }, {
             bufferView : 1,
             byteOffset : 0,
-            byteStride : 0,
             componentType : WebGLConstants.UNSIGNED_BYTE,
             count : 3,
             type : 'SCALAR',
@@ -33,7 +31,6 @@ var testGltf = {
         }, {
             bufferView : 2,
             byteOffset : 0,
-            byteStride : 0,
             componentType : WebGLConstants.UNSIGNED_SHORT,
             count : 3,
             type : 'SCALAR',
@@ -41,7 +38,6 @@ var testGltf = {
         }, {
             bufferView : 3,
             byteOffset : 0,
-            byteStride : 0,
             componentType : WebGLConstants.UNSIGNED_SHORT,
             count : 3,
             type : 'SCALAR',
@@ -49,7 +45,6 @@ var testGltf = {
         }, {
             bufferView : 4,
             byteOffset : 0,
-            byteStride : 0,
             componentType : WebGLConstants.FLOAT,
             count : 3,
             type : 'SCALAR',
@@ -57,7 +52,6 @@ var testGltf = {
         }, {
             bufferView : 5,
             byteOffset : 0,
-            byteStride : 0,
             componentType : WebGLConstants.FLOAT,
             count : 3,
             type : 'SCALAR',
@@ -65,7 +59,6 @@ var testGltf = {
         }, {
             bufferView : 6,
             byteOffset : 0,
-            byteStride : 0,
             componentType : WebGLConstants.SHORT,
             count : 3,
             type : 'SCALAR',
