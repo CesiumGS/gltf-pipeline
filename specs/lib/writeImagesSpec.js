@@ -22,17 +22,18 @@ describe('writeImages', function() {
             .then(function(data) {
                 imageData = data;
                 testGltf = {
-                    "images": {
-                        "Cesium_Logo_Flat_Low": {
-                            "uri": imageUri,
-                            "extras": {
-                                "_pipeline": {
-                                    "source": imageData,
-                                    "extension": '.png'
+                    images: [
+                        {
+                            uri: imageUri,
+                            extras: {
+                                _pipeline: {
+                                    source: imageData,
+                                    extension: '.png'
                                 }
-                            }
+                            },
+                            name: 'Cesium_Logo_Flat_Low'
                         }
-                    }
+                    ]
                 };
             }), done).toResolve();
     });
@@ -48,8 +49,8 @@ describe('writeImages', function() {
 
         expect(writeGltf(gltf, options)
             .then(function() {
-                expect(gltf.images.Cesium_Logo_Flat_Low.extras).not.toBeDefined();
-                expect(gltf.images.Cesium_Logo_Flat_Low.uri).toEqual('Cesium_Logo_Flat_Low.png');
+                expect(gltf.images[0].extras).not.toBeDefined();
+                expect(gltf.images[0].uri).toEqual('Cesium_Logo_Flat_Low.png');
                 return fsReadFile(outputImagePath);
             })
             .then(function (outputData) {
@@ -68,8 +69,8 @@ describe('writeImages', function() {
 
         expect(writeGltf(gltf, options)
             .then(function() {
-                expect(gltf.images.Cesium_Logo_Flat_Low.extras).not.toBeDefined();
-                expect(gltf.images.Cesium_Logo_Flat_Low.uri).toEqual(imageUri);
+                expect(gltf.images[0].extras).not.toBeDefined();
+                expect(gltf.images[0].uri).toEqual(imageUri);
             }), done).toResolve();
     });
 
@@ -84,8 +85,8 @@ describe('writeImages', function() {
 
         expect(writeGltf(gltf, options)
             .then(function() {
-                expect(gltf.images.Cesium_Logo_Flat_Low.extras).not.toBeDefined();
-                expect(gltf.images.Cesium_Logo_Flat_Low.uri).toEqual('Cesium_Logo_Flat_Low.png');
+                expect(gltf.images[0].extras).not.toBeDefined();
+                expect(gltf.images[0].uri).toEqual('Cesium_Logo_Flat_Low.png');
             }), done).toResolve();
     });
 });

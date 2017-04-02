@@ -32,74 +32,74 @@ describe('loadImageUris', function() {
 
     it('loads an external image', function(done) {
         var gltf = {
-            "images": {
-                "Image0001": {
-                    "uri": "Cesium_Logo_Flat_Low.png"
+            images: [
+                {
+                    uri: 'Cesium_Logo_Flat_Low.png'
                 }
-            }
+            ]
         };
 
         addPipelineExtras(gltf);
         loadGltfUris(gltf, options)
             .then(function() {
-                expect(gltf.images.Image0001.extras._pipeline.source).toBeDefined();
-                expect(bufferEqual(gltf.images.Image0001.extras._pipeline.source, imageData)).toBe(true);
-                expect(gltf.images.Image0001.extras._pipeline.extension).toEqual('.png');
+                expect(gltf.images[0].extras._pipeline.source).toBeDefined();
+                expect(bufferEqual(gltf.images[0].extras._pipeline.source, imageData)).toBe(true);
+                expect(gltf.images[0].extras._pipeline.extension).toEqual('.png');
                 done();
             });
     });
 
     it('loads an embedded image', function(done) {
         var gltf = {
-            "images": {
-                "Image0001": {
-                    "uri": imageUri
+            images: [
+                {
+                    uri: imageUri
                 }
-            }
+            ]
         };
 
         addPipelineExtras(gltf);
         loadGltfUris(gltf, options)
             .then(function() {
-                expect(gltf.images.Image0001.extras._pipeline.source).toBeDefined();
-                expect(bufferEqual(gltf.images.Image0001.extras._pipeline.source, imageData)).toBe(true);
-                expect(gltf.images.Image0001.extras._pipeline.extension).toEqual('.png');
+                expect(gltf.images[0].extras._pipeline.source).toBeDefined();
+                expect(bufferEqual(gltf.images[0].extras._pipeline.source, imageData)).toBe(true);
+                expect(gltf.images[0].extras._pipeline.extension).toEqual('.png');
                 done();
             });
     });
 
     it('loads an external and an embedded image', function(done) {
         var gltf = {
-            "images": {
-                "embeddedImage0001": {
-                    "uri": imageUri
+            images: [
+                {
+                    uri: imageUri
                 },
-                "externalImage0001": {
-                    "uri": "Cesium_Logo_Flat_Low.png"
+                {
+                    uri: "Cesium_Logo_Flat_Low.png"
                 }
-            }
+            ]
         };
 
         addPipelineExtras(gltf);
         loadGltfUris(gltf, options)
             .then(function() {
-                expect(gltf.images.embeddedImage0001.extras._pipeline.source).toBeDefined();
-                expect(bufferEqual(gltf.images.embeddedImage0001.extras._pipeline.source, imageData)).toBe(true);
-                expect(gltf.images.embeddedImage0001.extras._pipeline.extension).toEqual('.png');
-                expect(gltf.images.externalImage0001.extras._pipeline.source).toBeDefined();
-                expect(bufferEqual(gltf.images.externalImage0001.extras._pipeline.source, imageData)).toBe(true);
-                expect(gltf.images.externalImage0001.extras._pipeline.extension).toEqual('.png');
+                expect(gltf.images[0].extras._pipeline.source).toBeDefined();
+                expect(bufferEqual(gltf.images[0].extras._pipeline.source, imageData)).toBe(true);
+                expect(gltf.images[0].extras._pipeline.extension).toEqual('.png');
+                expect(gltf.images[0].extras._pipeline.source).toBeDefined();
+                expect(bufferEqual(gltf.images[0].extras._pipeline.source, imageData)).toBe(true);
+                expect(gltf.images[0].extras._pipeline.extension).toEqual('.png');
                 done();
             });
     });
 
     it('throws an error', function(done) {
         var gltf = {
-            "images": {
-                "Image0001": {
-                    "uri": "Cesium_Logo_Error.png"
+            images: [
+                {
+                    uri: "Cesium_Logo_Error.png"
                 }
-            }
+            ]
         };
 
         addPipelineExtras(gltf);
@@ -112,17 +112,17 @@ describe('loadImageUris', function() {
 
     it('adds jimpScratch and loads a jimp of the image', function(done) {
         var gltf = {
-            "images": {
-                "Image0001": {
-                    "uri": imageUri
+            images: [
+                {
+                    uri: imageUri
                 }
-            }
+            ]
         };
 
         addPipelineExtras(gltf);
         loadGltfUris(gltf, options)
             .then(function() {
-                var pipelineExtras = gltf.images.Image0001.extras._pipeline;
+                var pipelineExtras = gltf.images[0].extras._pipeline;
                 expect(pipelineExtras.imageChanged).toEqual(false);
                 expect(pipelineExtras.transparent).toEqual(false);
                 var jimpImage = pipelineExtras.jimpImage;
@@ -140,17 +140,17 @@ describe('loadImageUris', function() {
 
     it('detects that the loaded image is transparent', function(done) {
         var gltf = {
-            "images": {
-                "Image0001": {
-                    "uri": transparentImageUri
+            images: [
+                {
+                    uri: transparentImageUri
                 }
-            }
+            ]
         };
 
         addPipelineExtras(gltf);
         loadGltfUris(gltf, options)
             .then(function() {
-                var pipelineExtras = gltf.images.Image0001.extras._pipeline;
+                var pipelineExtras = gltf.images[0].extras._pipeline;
                 expect(pipelineExtras.transparent).toEqual(true);
                 done();
             });

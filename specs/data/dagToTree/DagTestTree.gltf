@@ -1,19 +1,24 @@
 {
-    "nodes": {
-        "A": {
+    "nodes": [
+        {
             "children": [
-                "B",
-                "C"
-            ]
+                1,
+                2
+            ],
+            "name": "A"
         },
-        "B": {},
-        "C": {}
-    },
-    "scenes": {
-        "defaultScene": {
+        {
+            "name": "B"
+        },
+        {
+            "name": "C"
+        }
+    ],
+    "scenes": [
+        {
             "nodes": [
-                "A"
+                0
             ]
         }
-    }
+    ]
 }

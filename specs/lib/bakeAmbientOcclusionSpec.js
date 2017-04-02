@@ -28,12 +28,11 @@ function cloneGltfWithJimps(gltf) {
     var originalJimp = gltf.extras._pipeline.jimpScratch;
     gltfClone.extras._pipeline.jimpScratch = originalJimp.clone();
     var images = gltfClone.images;
-    for (var imageID in images) {
-        if (images.hasOwnProperty(imageID)) {
-            var image = images[imageID];
-            originalJimp = gltf.images[imageID].extras._pipeline.jimpImage;
-            image.extras._pipeline.jimpImage = originalJimp.clone();
-        }
+    var imagesLength = images.length;
+    for (var imageId = 0; imageId < imagesLength; imageId++) {
+        var image = images[imageId];
+        originalJimp = gltf.images[imageId].extras._pipeline.jimpImage;
+        image.extras._pipeline.jimpImage = originalJimp.clone();
     }
     return gltfClone;
 }
@@ -84,117 +83,114 @@ describe('AmbientOcclusion', function() {
     var dataBuffer = Buffer.concat([indicesBuffer, positionsBuffer, normalsBuffer, uvsBuffer]);
 
     var testGltf = {
-        "accessors": {
-            "accessor_index": {
-                "bufferView": "index_view",
-                "byteOffset": 0,
-                "componentType": 5123,
-                "count": 6,
-                "type": "SCALAR"
+        accessors: [
+            {
+                bufferView: 0,
+                byteOffset: 0,
+                componentType: 5123,
+                count: 6,
+                type: 'SCALAR'
             },
-            "accessor_position": {
-                "bufferView": "position_view",
-                "byteOffset": 0,
-                "componentType": 5126,
-                "count": 4,
-                "type": "VEC3"
+            {
+                bufferView: 1,
+                byteOffset: 0,
+                componentType: 5126,
+                count: 4,
+                type: 'VEC3'
             },
-            "accessor_normal": {
-                "bufferView": "normal_view",
-                "byteOffset": 0,
-                "componentType": 5126,
-                "count": 4,
-                "type": "VEC3"
+            {
+                bufferView: 2,
+                byteOffset: 0,
+                componentType: 5126,
+                count: 4,
+                type: 'VEC3'
             },
-            "accessor_uv": {
-                "bufferView": "uv_view",
-                "byteOffset": 0,
-                "componentType": 5126,
-                "count": 4,
-                "type": "VEC2"
+            {
+                bufferView: 3,
+                byteOffset: 0,
+                componentType: 5126,
+                count: 4,
+                type: 'VEC2'
             }
-        },
-        "bufferViews": {
-            "index_view": {
-                "buffer": "buffer_0",
-                "byteOffset": 0,
-                "byteLength": 6 * 2,
-                "target": 34963
+        ],
+        bufferViews: [
+            {
+                buffer: 0,
+                byteOffset: 0,
+                byteLength: 6 * 2,
+                target: 34963
             },
-            "position_view": {
-                "buffer": "buffer_0",
-                "byteOffset": 6 * 2,
-                "byteLength": 4 * 3 * 4,
-                "target": 34962
+            {
+                buffer: 0,
+                byteOffset: 6 * 2,
+                byteLength: 4 * 3 * 4,
+                target: 34962
             },
-            "normal_view": {
-                "buffer": "buffer_0",
-                "byteOffset": 6 * 2 + (4 * 3 * 4),
-                "byteLength": 4 * 3 * 4,
-                "target": 34962
+            {
+                buffer: 0,
+                byteOffset: 6 * 2 + (4 * 3 * 4),
+                byteLength: 4 * 3 * 4,
+                target: 34962
             },
-            "uv_view": {
-                "buffer": "buffer_0",
-                "byteOffset": 6 * 2 + (4 * 3 * 4) * 2,
-                "byteLength": 4 * 2 * 4,
-                "target": 34962
+            {
+                buffer: 0,
+                byteOffset: 6 * 2 + (4 * 3 * 4) * 2,
+                byteLength: 4 * 2 * 4,
+                target: 34962
             }
-        },
-        "buffers": {
-            "buffer_0": {
-                "uri": "data:",
-                "byteLength": indicesLength * 2 + (positionsLength + normalsLength + uvsLength) * 4,
-                "extras": {
-                    "_pipeline": {
-                        "source": dataBuffer
+        ],
+        buffers: [
+            {
+                byteLength: indicesLength * 2 + (positionsLength + normalsLength + uvsLength) * 4,
+                extras: {
+                    _pipeline: {
+                        source: dataBuffer
                     }
                 }
             }
-        },
-        "scene": "defaultScene",
-        "scenes": {
-            "defaultScene": {
-                "nodes": [
-                    "squareNode"
+        ],
+        scene: 0,
+        scenes: [
+            {
+                nodes: [
+                    0
                 ]
             }
-        },
-        "nodes": {
-            "squareNode": {
-                "children": [],
-                "matrix": [
+        ],
+        nodes: [
+            {
+                children: [],
+                matrix: [
                     2, 0, 0, 0,
                     0, 2, 0, 0,
                     0, 0, 2, 0,
                     0, 0, 0, 1
                 ],
-                "meshes": [
-                    "mesh_square"
-                ],
-                "name": "square",
-                "extras": {
-                    "_pipeline": {}
+                mesh: 0,
+                name: 'square',
+                extras: {
+                    _pipeline: {}
                 }
             }
-        },
-        "meshes": {
-            "mesh_square": {
-                "name": "square",
-                "primitives": [
+        ],
+        meshes: [
+            {
+                name: 'square',
+                primitives: [
                     {
-                        "attributes": {
-                            "POSITION": "accessor_position",
-                            "NORMAL": "accessor_normal",
-                            "TEXCOORD_0": "accessor_uv"
+                        attributes: {
+                            POSITION: 1,
+                            NORMAL: 2,
+                            TEXCOORD_0: 3,
                         },
-                        "indices": "accessor_index",
-                        "extras": {
-                            "_pipeline": {}
+                        indices: 0,
+                        extras: {
+                            _pipeline: {}
                         }
                     }
                 ]
             }
-        }
+        ]
     };
 
     beforeAll(function(done) {
@@ -267,7 +263,7 @@ describe('AmbientOcclusion', function() {
 
         // check ao buffers
         var aoBuffersByPrimitive = raytracerScene.aoBufferByPrimitive;
-        var aoBuffer = aoBuffersByPrimitive.mesh_square_0;
+        var aoBuffer = aoBuffersByPrimitive['0_0'];
         expect(aoBuffer).toBeDefined();
         expect(aoBuffer.resolution).toEqual(10);
 
@@ -402,15 +398,13 @@ describe('AmbientOcclusion', function() {
         var boxOverGroundGltfClone = cloneGltfWithJimps(boxOverGroundGltf);
 
         // remove some images
-        var imageID = 'Untitled';
-        var image = boxOverGroundGltfClone.images[imageID];
-        boxOverGroundGltfClone.images = {};
-        boxOverGroundGltfClone.images[imageID] = image;
+        var image = boxOverGroundGltfClone.images[0];
+        boxOverGroundGltfClone.images = [image];
         var textures = boxOverGroundGltfClone.textures;
         for (var textureID in textures) {
             if (textures.hasOwnProperty(textureID)) {
                 var texture = textures[textureID];
-                texture.source = imageID;
+                texture.source = 0;
             }
         }
 
@@ -421,24 +415,22 @@ describe('AmbientOcclusion', function() {
         };
         bakeAmbientOcclusion(boxOverGroundGltfClone, options);
 
-        expect(Object.keys(boxOverGroundGltfClone.images).length).toEqual(2);
-        expect(Object.keys(boxOverGroundGltfClone.textures).length).toEqual(2);
-        expect(Object.keys(boxOverGroundGltfClone.materials).length).toEqual(3);
+        expect(boxOverGroundGltfClone.images.length).toEqual(2);
+        expect(boxOverGroundGltfClone.textures.length).toEqual(2);
+        expect(boxOverGroundGltfClone.materials.length).toEqual(3);
     });
 
     it('adds additional textures as needed', function() {
         var boxOverGroundGltfClone = cloneGltfWithJimps(boxOverGroundGltf);
 
         // remove some textures
-        var textureID = 'texture_Untitled';
-        var texture = boxOverGroundGltfClone.textures[textureID];
-        boxOverGroundGltfClone.textures = {};
-        boxOverGroundGltfClone.textures[textureID] = texture;
+        var texture = boxOverGroundGltfClone.textures[1];
+        boxOverGroundGltfClone.textures = [texture];
 
         var materials = boxOverGroundGltfClone.materials;
         for (var materialID in materials) {
             if (materials.hasOwnProperty(materialID)) {
-                materials[materialID].values.diffuse = textureID;
+                materials[materialID].values.diffuse = [0];
             }
         }
 
@@ -449,23 +441,21 @@ describe('AmbientOcclusion', function() {
         };
         bakeAmbientOcclusion(boxOverGroundGltfClone, options);
 
-        expect(Object.keys(boxOverGroundGltfClone.images).length).toEqual(3); // 1 unused image and 2 images with AO
-        expect(Object.keys(boxOverGroundGltfClone.textures).length).toEqual(2);
-        expect(Object.keys(boxOverGroundGltfClone.materials).length).toEqual(3);
+        expect(boxOverGroundGltfClone.images.length).toEqual(3); // 1 unused image and 2 images with AO
+        expect(boxOverGroundGltfClone.textures.length).toEqual(2);
+        expect(boxOverGroundGltfClone.materials.length).toEqual(3);
     });
 
     it('adds additional materials as needed', function() {
         var boxOverGroundGltfClone = cloneGltfWithJimps(boxOverGroundGltf);
 
         // remove some materials
-        var materialID = 'Material-effect';
-        var material = boxOverGroundGltfClone.materials[materialID];
-        boxOverGroundGltfClone.materials = {};
-        boxOverGroundGltfClone.materials[materialID] = material;
+        var material = boxOverGroundGltfClone.materials[0];
+        boxOverGroundGltfClone.materials = [material];
 
         var scene = boxOverGroundGltfClone.scenes[boxOverGroundGltfClone.scene];
         var primitiveFunction = function(primitive) {
-            primitive.material = materialID;
+            primitive.material = 0;
         };
 
         NodeHelpers.forEachPrimitiveInScene(boxOverGroundGltfClone, scene, primitiveFunction, {});
@@ -486,11 +476,10 @@ describe('AmbientOcclusion', function() {
         var boxOverGroundGltfClone = cloneGltfWithJimps(boxOverGroundGltf);
 
         // remove some textures
-        var textureID = 'texture_Untitled';
         var materials = boxOverGroundGltfClone.materials;
         for (var materialID in materials) {
             if (materials.hasOwnProperty(materialID)) {
-                if (materials[materialID].values.diffuse === textureID) {
+                if (materials[materialID].values.diffuse[0] === 1) {
                     materials[materialID].values.diffuse = [1.0, 1.0, 1.0, 1.0];
                 }
             }
@@ -503,9 +492,9 @@ describe('AmbientOcclusion', function() {
         };
         bakeAmbientOcclusion(boxOverGroundGltfClone, options);
 
-        expect(Object.keys(boxOverGroundGltfClone.images).length).toEqual(3); // 1 unused image and 2 images with AO
-        expect(Object.keys(boxOverGroundGltfClone.textures).length).toEqual(3); // 1 unused texture, 2 with AO
-        expect(Object.keys(boxOverGroundGltfClone.materials).length).toEqual(4); // 1 unused material, 2 with AO
+        expect(boxOverGroundGltfClone.images.length).toEqual(3); // 1 unused image and 2 images with AO
+        expect(boxOverGroundGltfClone.textures.length).toEqual(3); // 1 unused texture, 2 with AO
+        expect(boxOverGroundGltfClone.materials.length).toEqual(4); // 1 unused material, 2 with AO
     });
 
     it('adds a buffer, bufferView, and an accessor for each primitive when baking AO to vertices', function() {
@@ -517,13 +506,13 @@ describe('AmbientOcclusion', function() {
         };
         bakeAmbientOcclusion(boxOverGroundGltfClone, options);
 
-        expect(Object.keys(boxOverGroundGltfClone.accessors).length).toEqual(10);
-        var cubeMeshPrimitives = boxOverGroundGltfClone.meshes.Cube_mesh.primitives;
-        expect(cubeMeshPrimitives[0].attributes._OCCLUSION).toEqual('accessor_Cube_mesh_0_AO');
+        expect(boxOverGroundGltfClone.accessors.length).toEqual(10);
+        var cubeMeshPrimitives = boxOverGroundGltfClone.meshes[0].primitives;
+        expect(cubeMeshPrimitives[0].attributes._OCCLUSION).toEqual(8);
 
-        expect(boxOverGroundGltfClone.buffers.aoBuffer).toBeDefined();
-        expect(boxOverGroundGltfClone.bufferViews.aoBufferView).toBeDefined();
-        expect(boxOverGroundGltfClone.bufferViews.aoBufferView.byteLength).toEqual(72 * 4);
+        expect(boxOverGroundGltfClone.buffers.length).toEqual(2);
+        expect(boxOverGroundGltfClone.bufferViews.length).toEqual(3);
+        expect(boxOverGroundGltfClone.bufferViews[2].byteLength).toEqual(72 * 4);
     });
 
     it('clones the shading chain as needed for primitives that should not have AO', function() {
@@ -535,19 +524,19 @@ describe('AmbientOcclusion', function() {
         };
         bakeAmbientOcclusion(boxOverGroundGltfClone, options);
 
-        expect(Object.keys(boxOverGroundGltfClone.materials).length).toEqual(4);
-        expect(Object.keys(boxOverGroundGltfClone.techniques).length).toEqual(2);
-        expect(Object.keys(boxOverGroundGltfClone.programs).length).toEqual(2);
-        expect(Object.keys(boxOverGroundGltfClone.shaders).length).toEqual(4);
+        expect(boxOverGroundGltfClone.materials.length).toEqual(4);
+        expect(boxOverGroundGltfClone.techniques.length).toEqual(2);
+        expect(boxOverGroundGltfClone.programs.length).toEqual(2);
+        expect(boxOverGroundGltfClone.shaders.length).toEqual(4);
 
-        var usedPrimitives = boxOverGroundGltfClone.meshes.Cube_mesh.primitives;
-        expect(usedPrimitives[0].material).toEqual('Material-effect');
+        var usedPrimitives = boxOverGroundGltfClone.meshes[0].primitives;
+        expect(usedPrimitives[0].material).toEqual(0);
 
-        var unusedPrimitives = boxOverGroundGltfClone.meshes.useless_mesh.primitives;
-        expect(unusedPrimitives[0].material).toEqual('Material_001-effect_noAO');
-        expect(unusedPrimitives[1].material).toEqual('Material_001-effect_noAO');
-        expect(unusedPrimitives[2].material).toEqual('useless-material');
-        expect(unusedPrimitives[3].material).toEqual('useless-material');
+        var unusedPrimitives = boxOverGroundGltfClone.meshes[2].primitives;
+        expect(unusedPrimitives[0].material).toEqual(3);
+        expect(unusedPrimitives[1].material).toEqual(3);
+        expect(unusedPrimitives[2].material).toEqual(2);
+        expect(unusedPrimitives[3].material).toEqual(2);
     });
 
     it('it can sample occlusion just at a triangle center', function() {
@@ -662,7 +651,7 @@ describe('AmbientOcclusion', function() {
         expect(options.rayDistance).toEqual(-1);
         expect(options.nearCull).toEqual(0.0001);
         expect(options.shaderMode).toEqual('blend');
-        expect(options.sceneID).toEqual('defaultScene');
+        expect(options.sceneID).toEqual(0);
 
         aoOptions = {
             quality: 'medium'
@@ -678,7 +667,7 @@ describe('AmbientOcclusion', function() {
         expect(options.rayDistance).toEqual(-1);
         expect(options.nearCull).toEqual(0.0001);
         expect(options.shaderMode).toEqual('blend');
-        expect(options.sceneID).toEqual('defaultScene');
+        expect(options.sceneID).toEqual(0);
 
         aoOptions = {
             quality: 'high'
@@ -694,7 +683,7 @@ describe('AmbientOcclusion', function() {
         expect(options.rayDistance).toEqual(-1);
         expect(options.nearCull).toEqual(0.0001);
         expect(options.shaderMode).toEqual('blend');
-        expect(options.sceneID).toEqual('defaultScene');
+        expect(options.sceneID).toEqual(0);
     });
 
     it('overwrites parameters in base options when advanced settings are specified', function() {
@@ -715,7 +704,7 @@ describe('AmbientOcclusion', function() {
         expect(options.rayDistance).toEqual(10.0);
         expect(options.nearCull).toEqual(0.0001);
         expect(options.shaderMode).toEqual('blend');
-        expect(options.sceneID).toEqual('defaultScene');
+        expect(options.sceneID).toEqual(0);
     });
 
     it('has a helper that can extract a function call from a shader', function() {

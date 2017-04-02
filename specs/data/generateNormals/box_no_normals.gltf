@@ -1,15 +1,16 @@
 {
-  "accessors": {
-    "accessor_index_0": {
-      "bufferView": "bufferView_index",
+  "accessors": [
+    {
+      "bufferView": 1,
       "byteOffset": 0,
       "byteStride": 0,
       "componentType": 5123,
       "count": 36,
-      "type": "SCALAR"
+      "type": "SCALAR",
+      "name": "accessor_index_0"
     },
-    "accessor_position": {
-      "bufferView": "bufferView_vertex",
+    {
+      "bufferView": 0,
       "byteOffset": 0,
       "byteStride": 12,
       "componentType": 5126,
@@ -24,9 +25,10 @@
         1,
         1
       ],
-      "type": "VEC3"
+      "type": "VEC3",
+      "name": "accessor_position"
     }
-  },
+  ],
   "asset": {
     "generator": "OBJ2GLTF",
     "premultipliedAlpha": true,
@@ -36,30 +38,30 @@
     },
     "version": 1
   },
-  "buffers": {
-    "buffer_box": {
+  "buffers": [
+    {
       "byteLength": 168,
       "type": "arraybuffer",
       "uri": "data:application/octet-stream;base64,AACAvwAAgD8AAIA/AACAvwAAgD8AAIC/AACAvwAAgL8AAIC/AACAvwAAgL8AAIA/AACAPwAAgD8AAIC/AACAPwAAgL8AAIC/AACAPwAAgD8AAIA/AACAPwAAgL8AAIA/AAABAAIAAAACAAMAAQAEAAUAAQAFAAIABAAGAAcABAAHAAUABgAAAAMABgADAAcAAwACAAUAAwAFAAcABgAEAAEABgABAAAA"
     }
-  },
-  "bufferViews": {
-    "bufferView_vertex": {
-      "buffer": "buffer_box",
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
       "byteLength": 96,
       "byteOffset": 0,
       "target": 34962
     },
-    "bufferView_index": {
-      "buffer": "buffer_box",
+    {
+      "buffer": 0,
       "byteLength": 72,
       "byteOffset": 96,
       "target": 34963
     }
-  },
-  "images": {},
-  "materials": {
-    "material_czmDefaultMat": {
+  ],
+  "images": [],
+  "materials": [
+    {
       "name": "czmDefaultMat",
       "values": {
         "ambient": [
@@ -86,27 +88,27 @@
           0,
           1
         ],
-        "shininess": 0
+        "shininess": [0]
       }
     }
-  },
-  "meshes": {
-    "mesh_box": {
+  ],
+  "meshes": [
+    {
       "name": "box",
       "primitives": [
         {
           "attributes": {
-            "POSITION": "accessor_position"
+            "POSITION": 1
           },
-          "indices": "accessor_index_0",
-          "material": "material_czmDefaultMat",
+          "indices": 0,
+          "material": 0,
           "mode": 4
         }
       ]
     }
-  },
-  "nodes": {
-    "node_box": {
+  ],
+  "nodes": [
+    {
       "children": [],
       "matrix": [
         1,
@@ -126,22 +128,20 @@
         0,
         1
       ],
-      "meshes": [
-        "mesh_box"
-      ],
+      "mesh": 0,
       "name": "box"
     }
-  },
-  "samplers": {
-    "sampler_0": {}
-  },
-  "scene": "scene_box",
-  "scenes": {
-    "scene_box": {
+  ],
+  "samplers": [
+    {}
+  ],
+  "scene": 0,
+  "scenes": [
+    {
       "nodes": [
-        "node_box"
+        0
       ]
     }
-  },
-  "textures": {}
+  ],
+  "textures": []
 }

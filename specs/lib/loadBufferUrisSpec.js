@@ -31,72 +31,72 @@ describe('loadBufferUris', function() {
 
     it('loads an external buffer', function(done) {
         var gltf = {
-            "buffers": {
-                "CesiumTexturedBoxTest": {
-                    "uri": "CesiumTexturedBoxTest.bin"
+            buffers: [
+                {
+                    uri: "CesiumTexturedBoxTest.bin"
                 }
-            }
+            ]
         };
 
         addPipelineExtras(gltf);
         loadGltfUris(gltf, options)
             .then(function() {
-                expect(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline.source).toBeDefined();
-                expect(bufferEqual(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline.source, bufferData)).toBe(true);
-                expect(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline.extension).toEqual('.bin');
+                expect(gltf.buffers[0].extras._pipeline.source).toBeDefined();
+                expect(bufferEqual(gltf.buffers[0].extras._pipeline.source, bufferData)).toBe(true);
+                expect(gltf.buffers[0].extras._pipeline.extension).toEqual('.bin');
                 done();
             });
     });
 
     it('loads an embedded buffer', function(done) {
         var gltf = {
-            "buffers": {
-                "CesiumTexturedBoxTest": {
-                    "uri": bufferUri
+            buffers: [
+                {
+                    uri: bufferUri
                 }
-            }
+            ]
         };
 
         addPipelineExtras(gltf);
         loadGltfUris(gltf, options)
             .then(function() {
-                expect(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline.source).toBeDefined();
-                expect(bufferEqual(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline.source, bufferData)).toBe(true);
-                expect(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline.extension).toEqual('.bin');
+                expect(gltf.buffers[0].extras._pipeline.source).toBeDefined();
+                expect(bufferEqual(gltf.buffers[0].extras._pipeline.source, bufferData)).toBe(true);
+                expect(gltf.buffers[0].extras._pipeline.extension).toEqual('.bin');
                 done();
             });
     });
 
     it('loads an external and an embedded buffer', function(done) {
         var gltf = {
-            "buffers": {
-                "embeddedBox": {
-                    "uri": bufferUri
+            buffers: [
+                {
+                    uri: bufferUri
                 },
-                "externalBox": {
-                    "uri": "CesiumTexturedBoxTest.bin"
+                {
+                    uri: 'CesiumTexturedBoxTest.bin'
                 }
-            }
+            ]
         };
 
         addPipelineExtras(gltf);
         loadGltfUris(gltf, options)
             .then(function() {
-                expect(gltf.buffers.embeddedBox.extras._pipeline.source).toBeDefined();
-                expect(bufferEqual(gltf.buffers.embeddedBox.extras._pipeline.source, bufferData)).toBe(true);
-                expect(gltf.buffers.externalBox.extras._pipeline.source).toBeDefined();
-                expect(gltf.buffers.externalBox.extras._pipeline.extension).toEqual('.bin');
+                expect(gltf.buffers[0].extras._pipeline.source).toBeDefined();
+                expect(bufferEqual(gltf.buffers[0].extras._pipeline.source, bufferData)).toBe(true);
+                expect(gltf.buffers[1].extras._pipeline.source).toBeDefined();
+                expect(gltf.buffers[1].extras._pipeline.extension).toEqual('.bin');
                 done();
             });
     });
 
     it('throws an error', function(done) {
         var gltf = {
-            "buffers": {
-                "CesiumTexturedBoxTest": {
-                    "uri": "CesiumTexturedBoxTestError.bin"
+            buffers: [
+                {
+                    uri: 'CesiumTexturedBoxTestError.bin'
                 }
-            }
+            ]
         };
 
         addPipelineExtras(gltf);
