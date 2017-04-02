@@ -312,12 +312,14 @@ describe('updateVersion', function() {
         expect(extensionsUsed).toEqual([
             'KHR_materials_common',
             'WEB3D_quantized_attributes',
-            'UNKOWN_EXTENSION'
+            'UNKOWN_EXTENSION',
+            'KHR_technique_webgl'
         ]);
         var extensionsRequired = gltf.extensionsRequired;
         expect(extensionsRequired).toEqual([
             'KHR_materials_common',
-            'WEB3D_quantized_attributes'
+            'WEB3D_quantized_attributes',
+            'KHR_technique_webgl'
         ]);
         var animation = gltf.animations[0];
         var sampler = animation.samplers[0];
