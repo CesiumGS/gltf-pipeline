@@ -51,7 +51,7 @@ describe('getBinaryGltf', function() {
             }), done).toResolve();
     });
 
-    fit('writes a valid binary gltf header with embedded resources', function () {
+    it('writes a valid binary gltf header with embedded resources', function () {
         var gltf = clone(testData.gltf);
         var glbData = getBinaryGltf(gltf, true, true);
         var header = glbData.header;
@@ -63,7 +63,7 @@ describe('getBinaryGltf', function() {
         expect(header.readUInt32LE(16)).toEqual(0);
     });
 
-    fit('writes a valid binary gltf header with separate resources', function () {
+    it('writes a valid binary gltf header with separate resources', function () {
         var gltf = clone(testData.gltf);
         var glbData = getBinaryGltf(gltf, false, false);
         var header = glbData.header;
@@ -75,14 +75,14 @@ describe('getBinaryGltf', function() {
         expect(header.readUInt32LE(16)).toEqual(0);
     });
 
-    fit('writes the correct binary scene', function () {
+    it('writes the correct binary scene', function () {
         var gltf = clone(testData.gltf);
         var glbData = getBinaryGltf(gltf, true, true);
         var scene = glbData.scene;
         expect(JSON.parse(scene.toString())).toEqual(testData.scene);
     });
 
-    fit('writes the correct binary body with embedded resources', function () {
+    it('writes the correct binary body with embedded resources', function () {
         var gltf = clone(testData.gltf);
         var glbData = getBinaryGltf(gltf, true, true);
         var body = glbData.body;
@@ -91,7 +91,7 @@ describe('getBinaryGltf', function() {
         expect(bufferEqual(binaryBody, body)).toBe(true);
     });
 
-    fit('writes the correct binary body with separate images', function () {
+    it('writes the correct binary body with separate images', function () {
         var gltf = clone(testData.gltf);
         var glbData = getBinaryGltf(gltf, true, false);
         var body = glbData.body;
@@ -100,7 +100,7 @@ describe('getBinaryGltf', function() {
         expect(bufferEqual(binaryBody, body)).toBe(true);
     });
 
-    fit('writes the correct binary body with separate resources except images', function () {
+    it('writes the correct binary body with separate resources except images', function () {
         var gltf = clone(testData.gltf);
         var glbData = getBinaryGltf(gltf, false, true);
         var body = glbData.body;
@@ -109,7 +109,7 @@ describe('getBinaryGltf', function() {
         expect(bufferEqual(binaryBody, body)).toBe(true);
     });
 
-    fit('writes the correct binary body with separate resources', function () {
+    it('writes the correct binary body with separate resources', function () {
         var gltf = clone(testData.gltf);
         var glbData = getBinaryGltf(gltf, false, false);
         var body = glbData.body;
