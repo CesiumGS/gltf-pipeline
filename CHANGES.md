@@ -1,6 +1,9 @@
 Change Log
 ==========
 
+### 0.1.0-alpha12 - 2017-04-13
+* Fixed issue with ambient occlusion not working correctly with other stages.
+
 ### 0.1.0-alpha11 - 2017-03-07
 * Added `compressTextures` stage to compress input textures to a variety of compressed texture formats.
 * Optimized `mergeBuffers` to avoid repeated copies, drastically improving performance when there are lots of buffers to merge.

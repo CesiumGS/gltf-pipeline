@@ -763,7 +763,7 @@ describe('AmbientOcclusion', function() {
         };
 
         injectGlslAfterInstructionContaining(options);
-        var newSource = shader.extras._pipeline.source.toString();
+        var newSource = shader.extras._pipeline.source;
         expect(newSource).toEqual('function(arg0, arg1, arg2, arg3, innerArg0) {' +
             'command(arg3);' +
             'otherCommand(arg0);' +
