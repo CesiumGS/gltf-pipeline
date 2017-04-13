@@ -223,7 +223,7 @@ describe('processModelMaterialsCommon', function() {
         var program = gltfClone.programs[technique.program];
         expect(program.attributes.indexOf('a_batchid') > -1).toBe(true);
 
-        var vertexShaderSource = gltfClone.shaders[program.vertexShader].extras._pipeline.source.toString();
+        var vertexShaderSource = gltfClone.shaders[program.vertexShader].extras._pipeline.source;
         expect(vertexShaderSource.indexOf('a_batchid') > -1).toBe(true);
     });
 
