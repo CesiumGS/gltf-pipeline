@@ -2,7 +2,8 @@ Change Log
 ==========
 
 ### 0.1.0-alpha12 - 2017-04-13
-* Fixed issue with ambient occlusion not working correctly with other stages.
+* Fixed issue with ambient occlusion not working correctly with other stages. [#267](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/267)
+* Fixed handling of binary glTF with special characters. [#253](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/253)
 
 ### 0.1.0-alpha11 - 2017-03-07
 * Added `compressTextures` stage to compress input textures to a variety of compressed texture formats.
