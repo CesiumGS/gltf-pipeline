@@ -1,0 +1,8 @@
+{
+  "before": [
+    "addDefaults",
+    "addPipelineExtras",
+    "loadGltfUris"
+  ],
+  "after": ["uninterleaveAndPackBuffers"]
+}

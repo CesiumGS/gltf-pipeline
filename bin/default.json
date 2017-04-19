@@ -1,0 +1,7 @@
+{
+  "stages": [
+    "addDefaults",
+    "addPipelineExtras",
+    "removeUnused"
+  ]
+}
