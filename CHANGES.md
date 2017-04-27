@@ -1,8 +1,8 @@
 Change Log
 ==========
 
-### 0.1.0-alpha13 - ??
-* Fixed a bug in `processModelMaterialsCommon` that produced out-of-spec technique states.
+### 0.1.0-alpha13 - 2017-04-27
+* Fixed a bug in `processModelMaterialsCommon` that produced out-of-spec technique states. [#269](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/269)
 
 ### 0.1.0-alpha12 - 2017-04-13
 * Fixed issue with ambient occlusion not working correctly with other stages. [#267](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/267)
