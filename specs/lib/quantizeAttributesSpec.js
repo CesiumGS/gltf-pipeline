@@ -1,49 +1,43 @@
 'use strict';
 var clone = require('clone');
-
 var byteLengthForComponentType = require('../../lib/byteLengthForComponentType');
 var numberOfComponentsForType = require('../../lib/numberOfComponentsForType');
 var quantizeAttributes = require('../../lib/quantizeAttributes');
+var uninterleaveAndPackBuffers = require('../../lib/uninterleaveAndPackBuffers');
 
 describe('quantizeAttributes', function() {
     var buffer = new Buffer(new Uint8Array(120));
     var testGltf = {
-        accessors : {
-            // Interleaved accessors in bufferView_0
-            accessor_0 : {
-                bufferView : 'bufferView_0',
+        accessors : [
+            {
+                // Interleaved accessors in bufferView_0
+                bufferView : 0,
                 byteOffset : 0,
-                byteStride : 18,
                 componentType : 5126,
                 count : 3,
                 min : [-1.0, -1.0, -1.0],
                 max : [1.0, 1.0, 1.0],
                 type : 'VEC3'
-            },
-            accessor_1 : {
-                bufferView : 'bufferView_0',
+            }, {
+                bufferView : 0,
                 byteOffset : 12,
-                byteStride : 18,
                 componentType : 5123,
                 count : 3,
                 min : [-1.0, -1.0, -1.0],
                 max : [1.0, 1.0, 1.0],
                 type : 'VEC2'
-            },
-            // Block accessors in bufferView_1
-            accessor_2 : {
-                bufferView : 'bufferView_1',
+            }, {
+                // Block accessors in bufferView_1
+                bufferView : 1,
                 byteOffset : 0,
-                byteStride : 12,
                 componentType : 5126,
                 count : 3,
                 min : [-1.0, -1.0, -1.0],
                 max : [1.0, 1.0, 1.0],
                 type : 'VEC3'
-            },
-            // Already quantized
-            accessor_3 : {
-                bufferView : 'bufferView_1',
+            }, {
+                // Already quantized
+                bufferView : 1,
                 byteOffset : 36,
                 componentType : 5126,
                 count : 3,
@@ -61,20 +55,18 @@ describe('quantizeAttributes', function() {
                         decodeMax : [1.0, 1.0]
                     }
                 }
-            },
-            // SCALAR attribute
-            accessor_4 : {
-                bufferView : 'bufferView_1',
+            }, {
+                // SCALAR attribute
+                bufferView : 1,
                 byteOffset : 60,
                 componentType : 5126,
                 count : 3,
                 min : [0],
                 max : [1],
                 type : 'SCALAR'
-            },
+            }, {
             // floating-point rounding test
-            accessor_5 : {
-                bufferView : 'bufferView_2',
+                bufferView : 2,
                 byteOffset : 0,
                 componentType : 5126,
                 count : 1,
@@ -82,112 +74,115 @@ describe('quantizeAttributes', function() {
                 max : [0.0026710000820457935],
                 type : 'SCALAR'
             }
-        },
-        bufferViews : {
-            bufferView_0 : {
-                buffer : 'buffer',
+        ],
+        bufferViews : [
+            {
+                buffer : 0,
                 byteLength : 48,
                 byteOffset : 0,
+                byteStride : 18,
                 target : 34962
             },
-            bufferView_1 : {
-                buffer : 'buffer',
+            {
+                buffer : 0,
                 byteLength : 72,
                 byteOffset : 48,
                 target : 34962
             },
-            bufferView_2 : {
-                buffer : 'buffer_float',
+            {
+                buffer : 1,
                 byteLength : 4,
                 byteOffset : 0,
                 target: 34962
             }
-        },
-        buffers : {
-            buffer : {
+        ],
+        buffers : [
+            {
                 byteLength : buffer.length,
-                type : 'arraybuffer',
                 extras : {
                     _pipeline : {}
                 }
             },
-            buffer_float : {
+            {
                 byteLength : 4,
-                type : 'array_buffer',
                 extras : {
                     _pipeline : {
                         source : new Buffer(new Float32Array([0.0026710000820457935]).buffer)
                     }
                 }
             }
-        },
-        meshes : {
-            mesh : {
+        ],
+        meshes : [
+            {
                 primitives : [
                     {
                         attributes : {
-                            POSITION : 'accessor_0',
-                            NORMAL : 'accessor_1'
+                            POSITION : 0,
+                            NORMAL : 1
                         }
                     },
                     {
                         attributes : {
-                            POSITION : 'accessor_2',
-                            TEXCOORD : 'accessor_3',
-                            SCALAR_TEST : 'accessor_4'
+                            POSITION : 2,
+                            TEXCOORD : 3,
+                            SCALAR_TEST : 4
                         }
                     },
                     {
                         attributes : {
-                            FLOAT_TEST : 'accessor_5'
+                            FLOAT_TEST : 5
                         }
                     }
                 ]
             }
-        }
+        ]
     };
 
     it('Doesn\'t quantize if options.semantics is empty', function() {
         var gltf = clone(testGltf);
-        gltf.buffers.buffer.extras._pipeline.source = buffer;
+        gltf.buffers[0].extras._pipeline.source = buffer;
         quantizeAttributes(gltf, {semantics: []});
-        expect(gltf.buffers.buffer.byteLength).toEqual(buffer.length);
+        uninterleaveAndPackBuffers(gltf);
+        expect(gltf.buffers[0].byteLength).toEqual(buffer.length + 4);
     });
 
     it('Doesn\'t quantize excluded semantics', function() {
         var gltf = clone(testGltf);
-        gltf.buffers.buffer.extras._pipeline.source = buffer;
+        gltf.buffers[0].extras._pipeline.source = buffer;
         quantizeAttributes(gltf, {exclude: ['POSITION', 'NORMAL', 'TEXCOORD', 'SCALAR_TEST', 'FLOAT_TEST']});
-        expect(gltf.buffers.buffer.byteLength).toEqual(buffer.length);
+        uninterleaveAndPackBuffers(gltf);
+        expect(gltf.buffers[0].byteLength).toEqual(buffer.length + 4);
     });
 
     it('Quantizes attributes for semantic', function() {
         var gltf = clone(testGltf);
-        var accessor_0 = gltf.accessors.accessor_0;
-        var accessor_2 = gltf.accessors.accessor_2;
+        var accessor_0 = gltf.accessors[0];
+        var accessor_2 = gltf.accessors[2];
         var size = byteLengthForComponentType(accessor_0.componentType) * numberOfComponentsForType(accessor_0.type) * accessor_0.count;
         size += byteLengthForComponentType(accessor_2.componentType) * numberOfComponentsForType(accessor_2.type) * accessor_2.count;
         size = size/2.0;
-        gltf.buffers.buffer.extras._pipeline.source = buffer;
+        gltf.buffers[0].extras._pipeline.source = buffer;
         quantizeAttributes(gltf, {semantics: ['POSITION']});
-        expect(gltf.buffers.buffer.byteLength + size).toEqual(buffer.length);
+        uninterleaveAndPackBuffers(gltf);
+        expect(gltf.buffers[0].byteLength + size).toEqual(buffer.length + 4);
         var decodeMatrix = accessor_0.extensions.WEB3D_quantized_attributes.decodeMatrix;
         expect(decodeMatrix[0]).toBe(2.0 / 65535.0);
     });
 
     it('Quantizes attributes using options.normalized for higher precision decode', function() {
         var gltf = clone(testGltf);
-        var accessor_0 = gltf.accessors.accessor_0;
-        var accessor_2 = gltf.accessors.accessor_2;
+        var accessor_0 = gltf.accessors[0];
+        var accessor_2 = gltf.accessors[2];
         var size = byteLengthForComponentType(accessor_0.componentType) * numberOfComponentsForType(accessor_0.type) * accessor_0.count;
         size += byteLengthForComponentType(accessor_2.componentType) * numberOfComponentsForType(accessor_2.type) * accessor_2.count;
         size = size/2.0;
-        gltf.buffers.buffer.extras._pipeline.source = buffer;
+        gltf.buffers[0].extras._pipeline.source = buffer;
         quantizeAttributes(gltf, {
             semantics : ['POSITION'],
             normalized : true
         });
-        expect(gltf.buffers.buffer.byteLength + size).toEqual(buffer.length);
+        uninterleaveAndPackBuffers(gltf);
+        expect(gltf.buffers[0].byteLength + size).toEqual(buffer.length + 4);
         expect(accessor_0.normalized).toBeTruthy();
         expect(accessor_2.normalized).toBeTruthy();
         var decodeMatrix = accessor_0.extensions.WEB3D_quantized_attributes.decodeMatrix;
@@ -196,35 +191,38 @@ describe('quantizeAttributes', function() {
 
     it('Reduces the decimal places in decode matrix using options.precision', function() {
         var gltf = clone(testGltf);
-        gltf.buffers.buffer.extras._pipeline.source = buffer;
+        gltf.buffers[0].extras._pipeline.source = buffer;
         var precision = 6;
         quantizeAttributes(gltf, {precision: precision});
-        var matrixEntry = '' + gltf.accessors.accessor_0.extensions.WEB3D_quantized_attributes.decodeMatrix[0];
+        var matrixEntry = '' + gltf.accessors[0].extensions.WEB3D_quantized_attributes.decodeMatrix[0];
         var calculatedPrecision = matrixEntry.substring(matrixEntry.indexOf('.')).length;
         expect(precision).toEqual(calculatedPrecision);
     });
 
     it('Doesn\'t quantize non-float attribute', function() {
         var gltf = clone(testGltf);
-        gltf.buffers.buffer.extras._pipeline.source = buffer;
+        gltf.buffers[0].extras._pipeline.source = buffer;
         quantizeAttributes(gltf, {semantics: ['NORMAL']});
-        expect(gltf.buffers.buffer.byteLength).toEqual(buffer.length);
+        uninterleaveAndPackBuffers(gltf);
+        expect(gltf.buffers[0].byteLength).toEqual(buffer.length + 4);
     });
 
     it('Doesn\'t quantize already quantized attribute', function() {
         var gltf = clone(testGltf);
-        gltf.buffers.buffer.extras._pipeline.source = buffer;
+        gltf.buffers[0].extras._pipeline.source = buffer;
         quantizeAttributes(gltf, {semantics: ['TEXCOORD']});
-        expect(gltf.buffers.buffer.byteLength).toEqual(buffer.length);
+        uninterleaveAndPackBuffers(gltf);
+        expect(gltf.buffers[0].byteLength).toEqual(buffer.length + 4);
     });
 
     it('Quantizes scalar attribute', function() {
         var gltf = clone(testGltf);
-        var accessor_4 = gltf.accessors.accessor_4;
+        var accessor_4 = gltf.accessors[4];
         var size = byteLengthForComponentType(accessor_4.componentType) * numberOfComponentsForType(accessor_4.type) * accessor_4.count;
         size = size/2.0;
-        gltf.buffers.buffer.extras._pipeline.source = buffer;
+        gltf.buffers[0].extras._pipeline.source = buffer;
         quantizeAttributes(gltf, {semantics: ['SCALAR_TEST']});
-        expect(gltf.buffers.buffer.byteLength + size).toEqual(buffer.length);
+        uninterleaveAndPackBuffers(gltf);
+        expect(gltf.buffers[0].byteLength + size).toEqual(buffer.length + 4);
     });
 });

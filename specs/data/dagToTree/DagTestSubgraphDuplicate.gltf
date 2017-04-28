@@ -1,44 +1,52 @@
 {
-    "nodes": {
-        "A": {
+    "nodes": [
+        {
             "children": [
-                "B",
-                "C"
-            ]
+                1,
+                2
+            ],
+            "name": "A"
         },
-        "B": {
+        {
             "children": [
-                "D"
-            ]
+                3
+            ],
+            "name": "B"
         },
-        "C": {
+        {
             "children": [
-                "D"
-            ]
+                3
+            ],
+            "name": "C"
         },
-        "D": {
+        {
             "children": [
-                "E",
-                "F"
-            ]
+                4,
+                5
+            ],
+            "name": "D"
         },
-        "E": {
+        {
             "children": [
-                "G"
-            ]
+                6
+            ],
+            "name": "E"
         },
-        "F": {
+        {
             "children": [
-                "G"
-            ]
+                6
+            ],
+            "name": "F"
         },
-        "G": {}
-    },
-    "scenes": {
-        "defaultScene": {
+        {
+            "name": "G"
+        }
+    ],
+    "scenes": [
+        {
             "nodes": [
-                "A"
+                0
             ]
         }
-    }
+    ]
 }

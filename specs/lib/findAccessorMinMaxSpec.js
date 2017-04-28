@@ -45,7 +45,6 @@ describe('findAccessorMinMax', function() {
         var gltfBufferView = gltf.bufferViews.bufferView;
         gltfBufferView.byteLength = source.length;
         var gltfAccessor = gltf.accessors.accessor;
-        gltfAccessor.byteStride = 0;
 
         var minMax = findAccessorMinMax(gltf, gltfAccessor);
         expect(minMax.min).toEqual(expectMin);
@@ -74,7 +73,7 @@ describe('findAccessorMinMax', function() {
         var gltfBufferView = gltf.bufferViews.bufferView;
         gltfBufferView.byteLength = source.length;
         var gltfAccessor = gltf.accessors.accessor;
-        gltfAccessor.byteStride = 24;
+        gltfBufferView.byteStride = 24;
 
         var minMax = findAccessorMinMax(gltf, gltfAccessor);
         expect(minMax.min).toEqual(expectMin);

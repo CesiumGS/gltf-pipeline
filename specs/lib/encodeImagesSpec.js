@@ -19,16 +19,16 @@ describe('encodeImages', function() {
     };
 
     var gltf = {
-        "images": {
-            "Image0001": {
-                "uri": imageUri
+        images: [
+            {
+                uri: imageUri
             },
-            "Image0002": {
-                "uri": imageUri
+            {
+                uri: imageUri
             }
-        },
-        "extras": {
-            "_pipeline": {}
+        ],
+        extras: {
+            _pipeline: {}
         }
     };
 
@@ -38,8 +38,8 @@ describe('encodeImages', function() {
         addPipelineExtras(gltf);
         loadGltfUris(gltfClone, options)
             .then(function() {
-                var pipelineExtras0001 = gltfClone.images.Image0001.extras._pipeline;
-                var pipelineExtras0002 = gltfClone.images.Image0002.extras._pipeline;
+                var pipelineExtras0001 = gltfClone.images[0].extras._pipeline;
+                var pipelineExtras0002 = gltfClone.images[1].extras._pipeline;
 
                 encodeImages(gltfClone)
                     .then(function() {
@@ -56,12 +56,12 @@ describe('encodeImages', function() {
         addPipelineExtras(gltf);
         loadGltfUris(gltfClone, options)
             .then(function() {
-                var pipelineExtras0001 = gltfClone.images.Image0001.extras._pipeline;
+                var pipelineExtras0001 = gltfClone.images[0].extras._pipeline;
                 var jimpImage001 = pipelineExtras0001.jimpImage;
                 jimpImage001.resize(10, 10, Jimp.RESIZE_BEZIER);
                 pipelineExtras0001.imageChanged = true;
 
-                var pipelineExtras0002 = gltfClone.images.Image0002.extras._pipeline;
+                var pipelineExtras0002 = gltfClone.images[1].extras._pipeline;
                 var jimpImage002 = pipelineExtras0002.jimpImage;
                 pipelineExtras0002.imageChanged = true;
 

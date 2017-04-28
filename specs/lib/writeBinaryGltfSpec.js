@@ -8,7 +8,6 @@ var loadGltfUris = require('../../lib/loadGltfUris');
 var readGltf = require('../../lib/readGltf');
 var writeBinaryGltf = require('../../lib/writeBinaryGltf');
 
-var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf';
 var outputGltfPath = './output/CesiumTexturedBoxTest.glb';
 var invalidPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.exe';
 
@@ -22,11 +21,9 @@ describe('writeBinaryGltf', function() {
             createDirectory : false
         };
 
-        expect(readGltf(gltfPath)
+        var gltf = {};
+        expect(writeBinaryGltf(gltf, writeOptions)
             .then(function(gltf) {
-                return writeBinaryGltf(gltf, writeOptions);
-            })
-            .then(function() {
                 expect(path.normalize(spy.calls.first().args[0])).toEqual(path.normalize(outputGltfPath));
             })
             .catch(function (err) {
@@ -34,7 +31,7 @@ describe('writeBinaryGltf', function() {
             }), done).toResolve();
     });
 
-    it('throws an invalid output path error', function(done) {
+    it('throws an invalid output path error', function() {
         var writeOptions = {
             outputPath : undefined,
             embed : true,
@@ -42,15 +39,13 @@ describe('writeBinaryGltf', function() {
             createDirectory : true
         };
 
-        expect(readGltf(gltfPath)
-            .then(function(gltf) {
-                expect(function() {
-                    writeBinaryGltf(gltf, writeOptions);
-                }).toThrowError('Output path is undefined.');
-            }), done).toResolve();
+        var gltf = {};
+        expect(function() {
+            writeBinaryGltf(gltf, writeOptions);
+        }).toThrowError('Output path is undefined.');
     });
 
-    it('throws an invalid output extension error', function(done) {
+    it('throws an invalid output extension error', function() {
         var writeOptions = {
             outputPath : invalidPath,
             embed : true,
@@ -58,11 +53,9 @@ describe('writeBinaryGltf', function() {
             createDirectory : true
         };
 
-        expect(readGltf(gltfPath)
-            .then(function(gltf) {
-                expect(function() {
-                    writeBinaryGltf(gltf, writeOptions);
-                }).toThrowError('Invalid output path extension.');
-            }), done).toResolve();
+        var gltf = {};
+        expect(function() {
+            writeBinaryGltf(gltf, writeOptions);
+        }).toThrowError('Invalid output path extension.');
     });
 });

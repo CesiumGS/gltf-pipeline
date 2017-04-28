@@ -45,7 +45,7 @@ describe('optimizeForVertexCache', function() {
         expect(readGltf(gltfPath)
             .then(function(gltf) {
                 addDefaults(gltf);
-                var positionAccessor = gltf.accessors.accessor_23;
+                var positionAccessor = gltf.accessors[1];
                 // Use write/read accessor to unpack the optimizedVertices for us
                 writeAccessor(gltf, positionAccessor, optimizedVertices);
                 var unpackedOptimizedVertices = [];
