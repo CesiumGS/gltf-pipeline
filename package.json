@@ -1,6 +1,6 @@
 {
   "name": "gltf-pipeline",
-  "version": "0.1.0-alpha10",
+  "version": "0.1.0-alpha13",
   "description": "Content pipeline tools for optimizing glTF assets.",
   "license": "Apache-2.0",
   "contributors": [
@@ -52,13 +52,11 @@
     "jshint": "^2.9.4",
     "jshint-stylish": "^2.2.1",
     "open": "^0.0.5",
-    "requirejs": "^2.3.2",
-    "typings": "^2.0.0"
+    "requirejs": "^2.3.2"
   },
   "scripts": {
     "build-cesium": "gulp build-cesium",
     "build-cesium-combine": "gulp build-cesium-combine",
-    "prepublish": "typings install",
     "jsdoc": "jsdoc ./lib -R ./README.md -d doc",
     "jsHint": "gulp jsHint",
     "jsHint-watch": "gulp jsHint-watch",
