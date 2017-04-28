@@ -557,7 +557,6 @@ describe('RemoveUnusedProperties', function() {
                     {
                         bufferView: 1,
                         byteOffset: 0,
-                        byteStride: 0,
                         componentType: 5123,
                         count: 36,
                         type: 'SCALAR'
@@ -589,7 +588,6 @@ describe('RemoveUnusedProperties', function() {
                     {
                         bufferView: 0,
                         byteOffset: 0,
-                        byteStride: 0,
                         componentType: 5123,
                         count: 36,
                         type: 'SCALAR'

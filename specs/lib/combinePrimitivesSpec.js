@@ -23,7 +23,6 @@ describe('combinePrimitives', function() {
                 {
                     bufferView : 0,
                     byteOffset : 0,
-                    byteStride : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : arrayOneA.length,
                     type : 'SCALAR',
@@ -32,7 +31,6 @@ describe('combinePrimitives', function() {
                 {
                     bufferView : 0,
                     byteOffset : bufferOneA.length,
-                    byteStride : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : arrayTwoA.length,
                     type : 'SCALAR',
@@ -101,7 +99,6 @@ describe('combinePrimitives', function() {
                 {
                     bufferView : 0,
                     byteOffset : 0,
-                    byteStride : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : arrayOneA.length,
                     type : 'SCALAR',
@@ -110,7 +107,6 @@ describe('combinePrimitives', function() {
                 {
                     bufferView : 0,
                     byteOffset : bufferOneA.length,
-                    byteStride : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : arrayTwoA.length,
                     type : 'SCALAR',
@@ -119,7 +115,6 @@ describe('combinePrimitives', function() {
                 {
                     bufferView : 0,
                     byteOffset : bufferOneA.length + bufferTwoA.length,
-                    byteStride : 0,
                     componentType : WebGLConstants.UNSIGNED_SHORT,
                     count : indicesOne.length,
                     type : 'SCALAR',
@@ -128,7 +123,6 @@ describe('combinePrimitives', function() {
                 {
                     bufferView : 0,
                     byteOffset : bufferOneA.length + bufferTwoA.length + bufferIndicesOne.length,
-                    byteStride : 0,
                     componentType : WebGLConstants.UNSIGNED_SHORT,
                     count : indicesOne.length,
                     type : 'SCALAR'
@@ -197,7 +191,6 @@ describe('combinePrimitives', function() {
                 {
                     bufferView : 0,
                     byteOffset : 0,
-                    byteStride : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : arrayOneA.length,
                     type : 'SCALAR',
@@ -206,7 +199,6 @@ describe('combinePrimitives', function() {
                 {
                     bufferView : 0,
                     byteOffset : bufferOneA.length,
-                    byteStride : 0,
                     componentType : WebGLConstants.UNSIGNED_SHORT,
                     count : indicesOne.length,
                     type : 'SCALAR',
@@ -215,7 +207,6 @@ describe('combinePrimitives', function() {
                 {
                     bufferView: 0,
                     byteOffset: bufferOneA.length + bufferIndicesOne.length,
-                    byteStride: 0,
                     componentType: WebGLConstants.UNSIGNED_SHORT,
                     count: indicesOne.length,
                     type: 'SCALAR',
@@ -287,7 +278,6 @@ describe('combinePrimitives', function() {
                 {
                     bufferView : 0,
                     byteOffset : 0,
-                    byteStride : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : arrayOneA.length,
                     type : 'SCALAR',
@@ -296,7 +286,6 @@ describe('combinePrimitives', function() {
                 {
                     bufferView : 0,
                     byteOffset : bufferOneA.length,
-                    byteStride : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : arrayTwoB.length,
                     type : 'SCALAR',
@@ -305,7 +294,6 @@ describe('combinePrimitives', function() {
                 {
                     bufferView : 0,
                     byteOffset : bufferOneA.length + bufferTwoB.length,
-                    byteStride : 0,
                     componentType : WebGLConstants.UNSIGNED_SHORT,
                     count : indicesOne.length,
                     type : 'SCALAR',
@@ -314,7 +302,6 @@ describe('combinePrimitives', function() {
                 {
                     bufferView : 0,
                     byteOffset : bufferOneA.length + bufferTwoB.length + bufferIndicesOne.length,
-                    byteStride : 0,
                     componentType : WebGLConstants.UNSIGNED_SHORT,
                     count : indicesTwo.length,
                     type : 'SCALAR',
@@ -323,7 +310,6 @@ describe('combinePrimitives', function() {
                 {
                     bufferView : 0,
                     byteOffset : bufferOneA.length + bufferTwoB.length + bufferIndicesOne.length + bufferIndicesTwo.length,
-                    byteStride : 0,
                     componentType : WebGLConstants.UNSIGNED_SHORT,
                     count : indicesThree.length,
                     type : 'SCALAR',
@@ -559,7 +545,6 @@ describe('combinePrimitives', function() {
         var quarterOverflowAccessor = {
             bufferView : 0,
             byteOffset : 0,
-            byteStride : 0,
             componentType : WebGLConstants.UNSIGNED_SHORT,
             count : valueCount,
             type : 'SCALAR'
@@ -575,7 +560,6 @@ describe('combinePrimitives', function() {
                 {
                     bufferView : 0,
                     byteOffset : 0,
-                    byteStride : 0,
                     componentType : WebGLConstants.UNSIGNED_SHORT,
                     count : smallerValueCount,
                     type : 'SCALAR'

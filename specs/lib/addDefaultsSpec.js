@@ -18,22 +18,6 @@ var transparentImageUri = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAA
 var gltfTransparentPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestTransparent.gltf';
 
 describe('addDefaults', function() {
-    it('Adds accessor properties', function() {
-        var gltf = {
-            "accessors": [{
-                "bufferView": 0,
-                "byteOffset": 0,
-                "componentType": 5123,
-                "count": 36,
-                "type": "SCALAR"
-            }]
-        };
-
-        addDefaults(gltf);
-        var accessor = gltf.accessors[0];
-        expect(accessor.byteStride).toEqual(0);
-    });
-
     it('Adds animation properties', function() {
         var gltf = {
             "animations": [{
@@ -74,10 +58,6 @@ describe('addDefaults', function() {
 
         addDefaults(gltf);
         expect(gltf.asset).toBeDefined();
-        expect(gltf.asset.premultipliedAlpha).toEqual(false);
-        expect(gltf.asset.profile).toBeDefined();
-        expect(gltf.asset.profile.api).toEqual('WebGL');
-        expect(gltf.asset.profile.version).toEqual('1.0');
     });
 
     it('Adds buffer properties', function() {
@@ -141,23 +121,23 @@ describe('addDefaults', function() {
 
     it('generates a material with alpha blending if the diffuse texture is transparent and no technique or extension values are given', function(done) {
         var gltf = {
-            "textures": [{
-                "format": 6408,
-                "internalFormat": 6408,
-                "sampler": 0,
-                "source": 0,
-                "target": 3553,
-                "type": 5121
+            textures: [{
+                format: 6408,
+                internalFormat: 6408,
+                sampler: 0,
+                source: 0,
+                target: 3553,
+                type: 5121
             }],
-            "images": [{
-                "name": "Image0001",
-                "uri": transparentImageUri
+            images: [{
+                name: 'Image0001',
+                uri: transparentImageUri
             }],
-            "materials": [{
-                "values": {
-                    "ambient": [0, 0, 0, 1],
-                    "diffuse": [0],
-                    "emission": [1, 0, 0, 1]
+            materials: [{
+                values: {
+                    ambient: [0, 0, 0, 1],
+                    diffuse: [0],
+                    emission: [1, 0, 0, 1]
                 }
             }]
         };

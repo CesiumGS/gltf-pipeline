@@ -1,23 +1,23 @@
 'use strict';
 var Cesium = require('cesium');
 var compressTextureCoordinates = require('../../lib/compressTextureCoordinates');
+var uninterleaveAndPackBuffers = require('../../lib/uninterleaveAndPackBuffers');
 
 var AttributeCompression = Cesium.AttributeCompression;
 var Cartesian2 = Cesium.Cartesian2;
 var WebGLConstants = Cesium.WebGLConstants;
 
 describe('compressTextureCoordinates', function() {
-    it('compresses texture coordinates', function(done) {
+    it('compresses texture coordinates', function() {
         var texCoords = new Float32Array([1.0, 0.0,
                                          0.0, 1.0,
                                          0.5, 0.5]);
         var texCoordBuffer = new Buffer(texCoords.buffer.slice(0));
         var gltf = {
-            accessors : {
-                texCoordAccessor : {
+            accessors : [
+                {
                     byteOffset : 0,
-                    byteStride : 0,
-                    bufferView : 'bufferView',
+                    bufferView : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : 3,
                     max : [
@@ -28,9 +28,9 @@ describe('compressTextureCoordinates', function() {
                     ],
                     type : 'VEC2'
                 }
-            },
-            buffers : {
-                buffer : {
+            ],
+            buffers : [
+                {
                     byteLength : texCoordBuffer.length,
                     extras : {
                         _pipeline : {
@@ -38,33 +38,33 @@ describe('compressTextureCoordinates', function() {
                         }
                     }
                 }
-            },
-            bufferViews : {
-                bufferView : {
-                    buffer : 'buffer',
+            ],
+            bufferViews : [
+                {
+                    buffer : 0,
                     byteLength : texCoordBuffer.length,
                     byteOffset : 0
                 }
-            },
-            meshes : {
-                mesh : {
+            ],
+            meshes : [
+                {
                     primitives : [
                         {
                             attributes : {
-                                TEXCOORD_0 : 'texCoordAccessor'
+                                TEXCOORD_0 : 0
                             },
-                            material : 'material'
+                            material : 0
                         }
                     ]
                 }
-            },
-            materials : {
-                material : {
-                    technique : 'technique'
+            ],
+            materials : [
+                {
+                    technique : 0
                 }
-            },
-            techniques : {
-                technique : {
+            ],
+            techniques : [
+                {
                     attributes : {
                         a_texcoord : 'texcoord'
                     },
@@ -74,19 +74,19 @@ describe('compressTextureCoordinates', function() {
                             type : WebGLConstants.FLOAT_VEC2
                         }
                     },
-                    program : 'program'
+                    program : 0
                 }
-            },
-            programs : {
-                program : {
+            ],
+            programs : [
+                {
                     attributes : [
                         'a_texcoord'
                     ],
-                    vertexShader : 'VS'
+                    vertexShader : 0
                 }
-            },
-            shaders : {
-                VS : {
+            ],
+            shaders : [
+                {
                     type : WebGLConstants.VERTEX_SHADER,
                     extras : {
                         _pipeline : {
@@ -94,36 +94,35 @@ describe('compressTextureCoordinates', function() {
                         }
                     }
                 }
-            }
+            ]
         };
-        compressTextureCoordinates(gltf).then(function() {
-            var texCoordAccessor = gltf.accessors.texCoordAccessor;
-            expect(texCoordAccessor.componentType).toEqual(WebGLConstants.FLOAT);
-            expect(texCoordAccessor.type).toEqual('SCALAR');
+        compressTextureCoordinates(gltf);
+        uninterleaveAndPackBuffers(gltf);
+        var texCoordAccessor = gltf.accessors[0];
+        expect(texCoordAccessor.componentType).toEqual(WebGLConstants.FLOAT);
+        expect(texCoordAccessor.type).toEqual('SCALAR');
 
-            var technique = gltf.techniques.technique;
-            expect(technique.parameters.texcoord.type).toEqual(WebGLConstants.FLOAT);
+        var technique = gltf.techniques[0];
+        expect(technique.parameters.texcoord.type).toEqual(WebGLConstants.FLOAT);
 
-            var buffer = gltf.buffers.buffer;
-            var encodedBuffer = buffer.extras._pipeline.source;
-            expect(encodedBuffer.length).toEqual(12);
-            expect(encodedBuffer.length).toEqual(buffer.byteLength);
+        var buffer = gltf.buffers[0];
+        var encodedBuffer = buffer.extras._pipeline.source;
+        expect(encodedBuffer.length).toEqual(12);
+        expect(encodedBuffer.length).toEqual(buffer.byteLength);
 
-            var vs = gltf.shaders.VS.extras._pipeline.source;
-            expect(typeof vs).toEqual('string');
+        var vs = gltf.shaders[0].extras._pipeline.source;
+        expect(typeof vs).toEqual('string');
 
-            var texCoord = new Cartesian2();
-            for (var i = 0; i < texCoordAccessor.count; i++) {
-                var encoded = encodedBuffer.readFloatLE(i * 4);
-                AttributeCompression.decompressTextureCoordinates(encoded, texCoord);
-                expect(texCoord.x).toBeCloseTo(texCoords[i * 2]);
-                expect(texCoord.y).toBeCloseTo(texCoords[i * 2 + 1]);
-            }
-            done();
-        });
+        var texCoord = new Cartesian2();
+        for (var i = 0; i < texCoordAccessor.count; i++) {
+            var encoded = encodedBuffer.readFloatLE(i * 4);
+            AttributeCompression.decompressTextureCoordinates(encoded, texCoord);
+            expect(texCoord.x).toBeCloseTo(texCoords[i * 2]);
+            expect(texCoord.y).toBeCloseTo(texCoords[i * 2 + 1]);
+        }
     });
 
-    it('should only patch a program whos shader has not been patched yet', function(done) {
+    it('should only patch a program whos shader has not been patched yet', function() {
         var texCoords = new Float32Array([
             1.0, 0.0,
             0.0, 1.0,
@@ -137,11 +136,10 @@ describe('compressTextureCoordinates', function() {
         ]);
         var texCoordBuffer = new Buffer(texCoords.buffer.slice(0));
         var gltf = {
-            accessors : {
-                texCoordAccessor_1 : {
+            accessors : [
+                {
                     byteOffset : 0,
-                    byteStride : 0,
-                    bufferView : 'bufferView',
+                    bufferView : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : 3,
                     max : [
@@ -151,11 +149,9 @@ describe('compressTextureCoordinates', function() {
                         0.0, 0.0
                     ],
                     type : 'VEC2'
-                },
-                texCoordAccessor_2 : {
+                }, {
                     byteOffset : 0,
-                    byteStride : 0,
-                    bufferView : 'bufferView',
+                    bufferView : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : 3,
                     max : [
@@ -165,11 +161,9 @@ describe('compressTextureCoordinates', function() {
                         0.0, 0.0
                     ],
                     type : 'VEC2'
-                },
-                texCoordAccessor_3 : {
+                }, {
                     byteOffset : 0,
-                    byteStride : 0,
-                    bufferView : 'bufferView',
+                    bufferView : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : 3,
                     max : [
@@ -180,9 +174,9 @@ describe('compressTextureCoordinates', function() {
                     ],
                     type : 'VEC2'
                 }
-            },
-            buffers : {
-                buffer : {
+            ],
+            buffers : [
+                {
                     byteLength : texCoordBuffer.length,
                     extras : {
                         _pipeline : {
@@ -190,51 +184,47 @@ describe('compressTextureCoordinates', function() {
                         }
                     }
                 }
-            },
-            bufferViews : {
-                bufferView : {
-                    buffer : 'buffer',
+            ],
+            bufferViews : [
+                {
+                    buffer : 0,
                     byteLength : texCoordBuffer.length,
                     byteOffset : 0
                 }
-            },
-            meshes : {
-                mesh : {
+            ],
+            meshes : [
+                {
                     primitives : [
                         {
                             attributes : {
-                                TEXCOORD_0 : 'texCoordAccessor_1'
+                                TEXCOORD_0 : 0
                             },
-                            material : 'material_1'
-                        },
-                        {
+                            material : 0
+                        }, {
                             attributes : {
-                                TEXCOORD_0 : 'texCoordAccessor_2'
+                                TEXCOORD_0 : 1
                             },
-                            material : 'material_2'
-                        },
-                        {
+                            material : 1
+                        }, {
                             attributes : {
-                                TEXCOORD_0 : 'texCoordAccessor_3'
+                                TEXCOORD_0 : 2
                             },
-                            material : 'material_3'
+                            material : 2
                         }
                     ]
                 }
-            },
-            materials : {
-                material_1 : {
-                    technique : 'technique_1'
-                },
-                material_2 : {
-                    technique : 'technique_2'
-                },
-                material_3 : {
-                    technique : 'technique_3'
+            ],
+            materials : [
+                {
+                    technique : 0
+                }, {
+                    technique : 1
+                }, {
+                    technique : 2
                 }
-            },
-            techniques : {
-                technique_1 : {
+            ],
+            techniques : [
+                {
                     attributes : {
                         a_texcoord : 'texcoord'
                     },
@@ -244,9 +234,8 @@ describe('compressTextureCoordinates', function() {
                             type : WebGLConstants.FLOAT_VEC2
                         }
                     },
-                    program : 'program_1'
-                },
-                technique_2 : {
+                    program : 0
+                }, {
                     attributes : {
                         a_texcoord : 'texcoord'
                     },
@@ -256,9 +245,8 @@ describe('compressTextureCoordinates', function() {
                             type : WebGLConstants.FLOAT_VEC2
                         }
                     },
-                    program : 'program_2'
-                },
-                technique_3 : {
+                    program : 1
+                }, {
                     attributes : {
                         a_texcoord : 'texcoord'
                     },
@@ -268,39 +256,36 @@ describe('compressTextureCoordinates', function() {
                             type : WebGLConstants.FLOAT_VEC2
                         }
                     },
-                    program : 'program_3'
+                    program : 2
                 }
-            },
-            programs : {
-                program_1 : {
+            ],
+            programs : [
+                {
                     attributes : [
                         'a_texcoord'
                     ],
-                    vertexShader : 'VS_1'
-                },
-                program_2 : {
+                    vertexShader : 0
+                }, {
                     attributes : [
                         'a_texcoord'
                     ],
-                    vertexShader : 'VS_2'
-                },
-                program_3 : {
+                    vertexShader : 1
+                }, {
                     attributes : [
                         'a_texcoord'
                     ],
-                    vertexShader : 'VS_1'
+                    vertexShader : 0
                 }
-            },
-            shaders : {
-                VS_1 : {
+            ],
+            shaders : [
+                {
                     type: WebGLConstants.VERTEX_SHADER,
                     extras : {
                         _pipeline : {
                             source : ''
                         }
                     }
-                },
-                VS_2 : {
+                }, {
                     type: WebGLConstants.VERTEX_SHADER,
                     extras : {
                         _pipeline : {
@@ -308,13 +293,10 @@ describe('compressTextureCoordinates', function() {
                         }
                     }
                 }
-            }
+            ]
         };
-
         spyOn(Cesium.ShaderSource, 'replaceMain');
-        compressTextureCoordinates(gltf).then(function() {
-            expect(Cesium.ShaderSource.replaceMain).toHaveBeenCalledTimes(2);
-            done();
-        });
+        compressTextureCoordinates(gltf);
+        expect(Cesium.ShaderSource.replaceMain).toHaveBeenCalledTimes(2);
     });
 });

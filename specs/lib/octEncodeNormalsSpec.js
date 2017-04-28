@@ -1,23 +1,24 @@
 'use strict';
 var Cesium = require('cesium');
+var octEncodeNormals = require('../../lib/octEncodeNormals');
+var uninterleaveAndPackBuffers = require('../../lib/uninterleaveAndPackBuffers');
+
 var AttributeCompression = Cesium.AttributeCompression;
 var Cartesian2 = Cesium.Cartesian2;
 var Cartesian3 = Cesium.Cartesian3;
 var WebGLConstants = Cesium.WebGLConstants;
-var octEncodeNormals = require('../../lib/octEncodeNormals');
 
 describe('octEncodeNormals', function() {
-   it('oct-encodes normals', function(done) {
+   it('oct-encodes normals', function() {
        var normals = new Float32Array([1.0, 0.0, 0.0,
                                        0.0, 1.0, 0.0,
                                        0.0, 0.0, 1.0]);
        var normalBuffer = new Buffer(normals.buffer.slice(0));
        var gltf = {
-           accessors : {
-               normalAccessor : {
+           accessors : [
+               {
                    byteOffset : 0,
-                   byteStride : 0,
-                   bufferView : 'bufferView',
+                   bufferView : 0,
                    componentType : WebGLConstants.FLOAT,
                    count : 3,
                    max : [
@@ -28,9 +29,9 @@ describe('octEncodeNormals', function() {
                    ],
                    type : 'VEC3'
                }
-           },
-           buffers : {
-               buffer : {
+           ],
+           buffers : [
+               {
                    byteLength : normalBuffer.length,
                    extras : {
                        _pipeline : {
@@ -38,33 +39,33 @@ describe('octEncodeNormals', function() {
                        }
                    }
                }
-           },
-           bufferViews : {
-                bufferView : {
-                    buffer : 'buffer',
+           ],
+           bufferViews : [
+                {
+                    buffer : 0,
                     byteLength : normalBuffer.length,
                     byteOffset : 0
                 }
-           },
-           meshes : {
-               mesh : {
+           ],
+           meshes : [
+               {
                    primitives : [
                        {
                            attributes : {
-                               NORMAL : 'normalAccessor'
+                               NORMAL : 0
                            },
-                           material : 'material'
+                           material : 0
                        }
                    ]
                }
-           },
-           materials : {
-               material : {
-                   technique : 'technique'
+           ],
+           materials : [
+               {
+                   technique : 0
                }
-           },
-           techniques : {
-               technique : {
+           ],
+           techniques : [
+               {
                    attributes : {
                        a_normal : 'normal'
                    },
@@ -74,19 +75,19 @@ describe('octEncodeNormals', function() {
                            type : WebGLConstants.FLOAT_VEC3
                        }
                    },
-                   program : 'program'
+                   program : 0
                }
-           },
-           programs : {
-               program : {
+           ],
+           programs : [
+               {
                    attributes : [
                        'a_normal'
                    ],
-                   vertexShader : 'VS'
+                   vertexShader : 0
                }
-           },
-           shaders : {
-               VS : {
+           ],
+           shaders : [
+               {
                    type: WebGLConstants.VERTEX_SHADER,
                    extras : {
                        _pipeline : {
@@ -94,47 +95,44 @@ describe('octEncodeNormals', function() {
                        }
                    }
                }
-           }
+           ]
        };
-       octEncodeNormals(gltf).then(function() {
-           var normalAccessor = gltf.accessors.normalAccessor;
-           expect(normalAccessor.componentType).toEqual(WebGLConstants.UNSIGNED_BYTE);
-           expect(normalAccessor.type).toEqual('VEC2');
+       octEncodeNormals(gltf);
+       uninterleaveAndPackBuffers(gltf);
+       var normalAccessor = gltf.accessors[0];
+       expect(normalAccessor.componentType).toEqual(WebGLConstants.UNSIGNED_BYTE);
+       expect(normalAccessor.type).toEqual('VEC2');
 
-           var technique = gltf.techniques.technique;
-           expect(technique.parameters.normal.type).toEqual(WebGLConstants.INT_VEC2);
+       var technique = gltf.techniques[0];
+       expect(technique.parameters.normal.type).toEqual(WebGLConstants.INT_VEC2);
 
-           var buffer = gltf.buffers.buffer;
-           var encodedBuffer = buffer.extras._pipeline.source;
-           expect(encodedBuffer.length).toEqual(6);
-           expect(encodedBuffer.length).toEqual(buffer.byteLength);
+       var buffer = gltf.buffers[0];
+       var encodedBuffer = buffer.extras._pipeline.source;
+       expect(encodedBuffer.length).toEqual(6);
+       expect(encodedBuffer.length).toEqual(buffer.byteLength);
 
-           var vs = gltf.shaders.VS.extras._pipeline.source;
-           expect(typeof vs).toEqual('string');
+       var vs = gltf.shaders[0].extras._pipeline.source;
+       expect(typeof vs).toEqual('string');
 
-           var normal = new Cartesian3();
-           for (var i = 0; i < normalAccessor.count; i++) {
-               var compressed = Cartesian2.unpack(encodedBuffer, i*2);
-               AttributeCompression.octDecode(compressed.x, compressed.y, normal);
-               expect(normal.x).toBeCloseTo(normals[i*3]);
-               expect(normal.y).toBeCloseTo(normals[i*3 + 1]);
-               expect(normal.z).toBeCloseTo(normals[i*3 + 2]);
-           }
-           done();
-       });
+       var normal = new Cartesian3();
+       for (var i = 0; i < normalAccessor.count; i++) {
+           var compressed = Cartesian2.unpack(encodedBuffer, i*2);
+           AttributeCompression.octDecode(compressed.x, compressed.y, normal);
+           expect(normal.x).toBeCloseTo(normals[i*3]);
+           expect(normal.y).toBeCloseTo(normals[i*3 + 1]);
+           expect(normal.z).toBeCloseTo(normals[i*3 + 2]);
+       }
    });
 
-    it('should only patch a program whos shader has not been patched yet', function(done) {
+    it('should only patch a program whos shader has not been patched yet', function() {
         var normals = new Float32Array([1.0, 0.0, 0.0,
             0.0, 1.0, 0.0,
             0.0, 0.0, 1.0]);
         var normalBuffer = new Buffer(normals.buffer.slice(0));
         var gltf = {
-            accessors : {
-                normalAccessor_1 : {
+            accessors : [{
                     byteOffset : 0,
-                    byteStride : 0,
-                    bufferView : 'bufferView',
+                    bufferView : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : 3,
                     max : [
@@ -144,11 +142,9 @@ describe('octEncodeNormals', function() {
                         0.0, 0.0, 0.0
                     ],
                     type : 'VEC3'
-                },
-                normalAccessor_2 : {
+                }, {
                     byteOffset : 0,
-                    byteStride : 0,
-                    bufferView : 'bufferView',
+                    bufferView : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : 3,
                     max : [
@@ -158,11 +154,9 @@ describe('octEncodeNormals', function() {
                         0.0, 0.0, 0.0
                     ],
                     type : 'VEC3'
-                },
-                normalAccessor_3 : {
+                },{
                     byteOffset : 0,
-                    byteStride : 0,
-                    bufferView : 'bufferView',
+                    bufferView : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : 3,
                     max : [
@@ -173,9 +167,9 @@ describe('octEncodeNormals', function() {
                     ],
                     type : 'VEC3'
                 }
-            },
-            buffers : {
-                buffer : {
+            ],
+            buffers : [
+                {
                     byteLength : normalBuffer.length,
                     extras : {
                         _pipeline : {
@@ -183,51 +177,47 @@ describe('octEncodeNormals', function() {
                         }
                     }
                 }
-            },
-            bufferViews : {
-                bufferView : {
-                    buffer : 'buffer',
+            ],
+            bufferViews : [
+                {
+                    buffer : 0,
                     byteLength : normalBuffer.length,
                     byteOffset : 0
                 }
-            },
-            meshes : {
-                mesh : {
+            ],
+            meshes : [
+                {
                     primitives : [
                         {
                             attributes : {
-                                NORMAL : 'normalAccessor_1'
+                                NORMAL : 0
                             },
-                            material : 'material_1'
-                        },
-                        {
+                            material : 0
+                        }, {
                             attributes : {
-                                NORMAL : 'normalAccessor_2'
+                                NORMAL : 1
                             },
-                            material : 'material_2'
-                        },
-                        {
+                            material : 1
+                        }, {
                             attributes : {
-                                NORMAL : 'normalAccessor_3'
+                                NORMAL : 2
                             },
-                            material : 'material_3'
+                            material : 2
                         }
                     ]
                 }
-            },
-            materials : {
-                material_1 : {
-                    technique : 'technique_1'
-                },
-                material_2 : {
-                    technique : 'technique_2'
-                },
-                material_3 : {
-                    technique : 'technique_3'
+            ],
+            materials : [
+                {
+                    technique : 0
+                }, {
+                    technique : 1
+                }, {
+                    technique : 2
                 }
-            },
-            techniques : {
-                technique_1 : {
+            ],
+            techniques : [
+                {
                     attributes : {
                         a_normal : 'normal'
                     },
@@ -237,9 +227,8 @@ describe('octEncodeNormals', function() {
                             type : WebGLConstants.FLOAT_VEC3
                         }
                     },
-                    program : 'program_1'
-                },
-                technique_2 : {
+                    program : 0
+                }, {
                     attributes : {
                         a_normal : 'normal'
                     },
@@ -249,9 +238,8 @@ describe('octEncodeNormals', function() {
                             type : WebGLConstants.FLOAT_VEC3
                         }
                     },
-                    program : 'program_2'
-                },
-                technique_3 : {
+                    program : 1
+                }, {
                     attributes : {
                         a_normal : 'normal'
                     },
@@ -261,39 +249,36 @@ describe('octEncodeNormals', function() {
                             type : WebGLConstants.FLOAT_VEC3
                         }
                     },
-                    program : 'program_3'
+                    program : 2
                 }
-            },
-            programs : {
-                program_1 : {
+            ],
+            programs : [
+                {
                     attributes : [
                         'a_normal'
                     ],
-                    vertexShader : 'VS_1'
-                },
-                program_2 : {
+                    vertexShader : 0
+                }, {
                     attributes : [
                         'a_normal'
                     ],
-                    vertexShader : 'VS_1'
-                },
-                program_3 : {
+                    vertexShader : 0
+                }, {
                     attributes : [
                         'a_normal'
                     ],
-                    vertexShader : 'VS_2'
+                    vertexShader : 1
                 }
-            },
-            shaders : {
-                VS_1 : {
+            ],
+            shaders : [
+                {
                     type: WebGLConstants.VERTEX_SHADER,
                     extras : {
                         _pipeline : {
                             source : ''
                         }
                     }
-                },
-                VS_2 : {
+                }, {
                     type: WebGLConstants.VERTEX_SHADER,
                     extras : {
                         _pipeline : {
@@ -301,13 +286,11 @@ describe('octEncodeNormals', function() {
                         }
                     }
                 }
-            }
+            ]
         };
 
         spyOn(Cesium.ShaderSource, 'replaceMain');
-        octEncodeNormals(gltf).then(function() {
-            expect(Cesium.ShaderSource.replaceMain).toHaveBeenCalledTimes(2);
-            done();
-        });
+        octEncodeNormals(gltf);
+        expect(Cesium.ShaderSource.replaceMain).toHaveBeenCalledTimes(2);
     });
 });

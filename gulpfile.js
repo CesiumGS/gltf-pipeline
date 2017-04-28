@@ -277,17 +277,21 @@ gulp.task('build-cesium', function () {
     var outputDir = 'dist/cesium';
     var files = [
         'addDefaults.js',
+        'addExtensionsRequired.js',
         'addExtensionsUsed.js',
         'addPipelineExtras.js',
+        'addToArray.js',
         'byteLengthForComponentType.js',
         'findAccessorMinMax.js',
+        'ForEach.js',
         'getAccessorByteStride.js',
         'getStatistics.js',
-        'getUniqueId.js',
         'numberOfComponentsForType.js',
         'parseBinaryGltf.js',
         'processModelMaterialsCommon.js',
         'removePipelineExtras.js',
+        'removeExtensionsRequired.js',
+        'removeExtensionsUsed.js',
         'techniqueParameterForSemantic.js',
         'updateVersion.js'
     ];
