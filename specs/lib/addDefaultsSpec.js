@@ -447,9 +447,12 @@ describe('addDefaults', function() {
                     bufferView: 1
                 }, {
                     bufferView: 2
+                }, {
+                    bufferView: 3
                 }
             ],
             bufferViews: [
+                {},
                 {},
                 {},
                 {}
@@ -464,6 +467,15 @@ describe('addDefaults', function() {
                             indices: 1
                         }
                     ]
+                }, {
+                    primitives: [
+                        {
+                            attributes: {
+                                POSITION: 3
+                            },
+                            indices: 1
+                        }
+                    ]
                 }
             ]
         };
@@ -471,5 +483,6 @@ describe('addDefaults', function() {
         expect(gltf.bufferViews[0].target).toEqual(WebGLConstants.ARRAY_BUFFER);
         expect(gltf.bufferViews[1].target).toEqual(WebGLConstants.ELEMENT_ARRAY_BUFFER);
         expect(gltf.bufferViews[2].target).not.toBeDefined();
+        expect(gltf.bufferViews[3].target).toEqual(WebGLConstants.ARRAY_BUFFER);
     });
 });
