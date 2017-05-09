@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-### 0.1.0-alpha14 - ???
+### 0.1.0-alpha14 - 2017-05-09
 * Fixed byte offset alignment issue when loading converting models in Cesium. [#279](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/279)
 * Added case-insensitive regex checking for image extensions. [#278](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/278)
 * Added `mergeVertices` option to merge duplicate vertices. This operation is now disabled by default. [#276](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/276)
