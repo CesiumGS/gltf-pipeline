@@ -4,6 +4,7 @@ var fsExtra = require('fs-extra');
 var path = require('path');
 var Promise = require('bluebird');
 
+var mergeDuplicateVertices = require('../../lib/mergeDuplicateVertices');
 var Pipeline = require('../../lib/Pipeline');
 var readGltf = require('../../lib/readGltf');
 
@@ -11,6 +12,7 @@ var processFile = Pipeline.processFile;
 var processFileToDisk = Pipeline.processFileToDisk;
 var processJSON = Pipeline.processJSON;
 var processJSONToDisk = Pipeline.processJSONToDisk;
+var processJSONWithExtras = Pipeline.processJSONWithExtras;
 
 var fsExtraReadFile = Promise.promisify(fsExtra.readFile);
 
@@ -158,5 +160,29 @@ describe('Pipeline', function() {
                 var finalUri = testBuffer.uri;
                 expect(initialUri).not.toEqual(finalUri);
             }), done).toResolve();
+    });
+
+    it('processJSONWithExtras does not merge duplicate vertices by default', function (done) {
+        spyOn(mergeDuplicateVertices, '_implementation').and.callThrough();
+        var promise = readGltf(gltfPath)
+            .then(function (gltf) {
+                return processJSONWithExtras(gltf);
+            })
+            .then(function () {
+                expect(mergeDuplicateVertices._implementation).not.toHaveBeenCalled();
+            });
+        expect(promise, done).toResolve();
+    });
+
+    it('processJSONWithExtras can merge duplicate vertices.', function (done) {
+        spyOn(mergeDuplicateVertices, '_implementation').and.callThrough();
+        var promise = readGltf(gltfPath)
+            .then(function (gltf) {
+                return processJSONWithExtras(gltf, {mergeVertices: true});
+            })
+            .then(function (gltf) {
+                expect(mergeDuplicateVertices._implementation).toHaveBeenCalledWith(gltf);
+            });
+        expect(promise, done).toResolve();
     });
 });
