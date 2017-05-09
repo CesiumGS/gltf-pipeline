@@ -1,12 +1,14 @@
 {
-    "nodes": {
-        "A": {}
-    },
-    "scenes": {
-        "defaultScene": {
+    "nodes": [
+        {
+            "name": "A"
+        }
+    ],
+    "scenes": [
+        {
             "nodes": [
-                "A"
+                0
             ]
         }
-    }
+    ]
 }

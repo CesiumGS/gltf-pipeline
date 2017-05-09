@@ -1,7 +1,6 @@
 'use strict';
 var Promise = require('bluebird');
 var fs = require('fs');
-var bufferEqual = require('buffer-equal');
 
 var fsReadFile = Promise.promisify(fs.readFile);
 
@@ -32,76 +31,76 @@ describe('loadShaderUris', function() {
 
     it('loads an external shader', function(done) {
         var gltf = {
-            "shaders": {
-                "CesiumTexturedBoxTest0FS": {
-                    "type": 35632,
-                    "uri": "CesiumTexturedBoxTest0FS.glsl"
+            shaders: [
+                {
+                    type: 35632,
+                    uri: 'CesiumTexturedBoxTest0FS.glsl'
                 }
-            }
+            ]
         };
 
         addPipelineExtras(gltf);
         loadGltfUris(gltf, options)
             .then(function() {
-                expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras._pipeline.source).toBeDefined();
-                expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras._pipeline.source).toEqual(fragmentShaderData);
-                expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras._pipeline.extension).toEqual('.glsl');
+                expect(gltf.shaders[0].extras._pipeline.source).toBeDefined();
+                expect(gltf.shaders[0].extras._pipeline.source).toEqual(fragmentShaderData);
+                expect(gltf.shaders[0].extras._pipeline.extension).toEqual('.glsl');
                 done();
             });
     });
 
     it('loads an embedded shader', function(done) {
         var gltf = {
-            "shaders": {
-                "box0FS": {
-                    "type": 35632,
-                    "uri": fragmentShaderUri
+            shaders: [
+                {
+                    'type': 35632,
+                    'uri': fragmentShaderUri
                 }
-            }
+            ]
         };
 
         addPipelineExtras(gltf);
         loadGltfUris(gltf, options)
             .then(function() {
-                expect(gltf.shaders.box0FS.extras._pipeline.source).toBeDefined();
-                expect(gltf.shaders.box0FS.extras._pipeline.source).toEqual(fragmentShaderData);
-                expect(gltf.shaders.box0FS.extras._pipeline.extension).toEqual('.glsl');
+                expect(gltf.shaders[0].extras._pipeline.source).toBeDefined();
+                expect(gltf.shaders[0].extras._pipeline.source).toEqual(fragmentShaderData);
+                expect(gltf.shaders[0].extras._pipeline.extension).toEqual('.glsl');
                 done();
             });
     });
 
     it('loads an external and an embedded shader', function(done) {
         var gltf = {
-            "shaders": {
-                "embeddedBox0FS": {
-                    "type": 35632,
-                    "uri": fragmentShaderUri
+            shaders: [
+                {
+                    type: 35632,
+                    uri: fragmentShaderUri
                 },
-                "externalBox0FS": {
-                    "type": 35632,
-                    "uri": "CesiumTexturedBoxTest0FS.glsl"
+                {
+                    type: 35632,
+                    uri: 'CesiumTexturedBoxTest0FS.glsl'
                 }
-            }
+            ]
         };
 
         addPipelineExtras(gltf);
         loadGltfUris(gltf, options)
             .then(function() {
-                expect(gltf.shaders.externalBox0FS.extras._pipeline.source).toBeDefined();
-                expect(gltf.shaders.embeddedBox0FS.extras._pipeline.source).toEqual(fragmentShaderData);
-                expect(gltf.shaders.externalBox0FS.extras._pipeline.extension).toEqual('.glsl');
+                expect(gltf.shaders[0].extras._pipeline.source).toBeDefined();
+                expect(gltf.shaders[0].extras._pipeline.source).toEqual(fragmentShaderData);
+                expect(gltf.shaders[0].extras._pipeline.extension).toEqual('.glsl');
                 done();
             });
     });
 
     it('throws an error', function(done) {
         var gltf = {
-            "shaders": {
-                "CesiumTexturedBoxTest0FS": {
-                    "type": 35632,
-                    "uri": "CesiumTexturedBoxTestError.glsl"
+            shaders: [
+                {
+                    type: 35632,
+                    uri: 'CesiumTexturedBoxTestError.glsl'
                 }
-            }
+            ]
         };
 
         addPipelineExtras(gltf);

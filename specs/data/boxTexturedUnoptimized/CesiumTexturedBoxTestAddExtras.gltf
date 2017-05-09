@@ -1,59 +1,58 @@
 {
-    "accessors": {
-        "accessor_21": {
-            "bufferView": "bufferView_29",
+    "accessors": [
+        {
+            "bufferView": 0,
             "byteOffset": 0,
             "componentType": 5123,
             "count": 36,
             "type": "SCALAR"
         }
-    },
-    "animations": {
-        "animation_0": {
+    ],
+    "animations": [
+        {
             "channels": [
                 {
-                    "sampler": "animation_0_scale_sampler",
+                    "sampler": 0,
                     "target": {
-                        "id": "Bone",
+                        "id": 0,
                         "path": "scale"
                     }
                 }
             ],
-            "samplers": {
-                "sampler": {
+            "samplers": [
+                {
                     "input": "TIME",
                     "interpolation": "LINEAR",
                     "output": "rotation"
                 }
-            }
+            ]
         }
-    },
+    ],
     "asset": {
-        "generator": "collada2gltf@ceec062e3d5793f2f249f53cbd843aee382ad40b",
         "premultipliedAlpha": true,
         "profile": {
             "api": "WebGL",
-            "version": "1.0.2"
+            "version": "1.0"
         },
-        "version": 1
+        "version": "2.0"
     },
-    "bufferViews": {
-        "bufferView_29": {
-            "buffer": "CesiumTexturedBoxTest",
+    "bufferViews": [
+        {
+            "buffer": 0,
             "byteLength": 72,
             "byteOffset": 0,
             "target": 34963
         }
-    },
-    "buffers": {
-        "CesiumTexturedBoxTest": {
+    ],
+    "buffers": [
+        {
             "byteLength": 840,
             "type": "arraybuffer",
             "uri": "CesiumTexturedBoxTest.bin"
         }
-    },
-    "cameras": {
-        "camera_0": {
+    ],
+    "cameras": [
+        {
             "orthographic": {
                 "xmag": 1.0,
                 "ymag": 1.0,
@@ -68,35 +67,35 @@
             },
             "type": "perspective"
         }
-    },
-    "images": {
-        "Image0001": {
+    ],
+    "images": [
+        {
             "uri": "Cesium_Logo_Flat.png"
         }
-    },
-    "materials": {
-        "EffectTexture": {
+    ],
+    "materials": [
+        {
             "name": "Texture",
-            "technique": "technique0",
+            "technique": 0,
             "values": {
-                "diffuse": "texture_Image0001",
-                "shininess": 256
+                "diffuse": [0],
+                "shininess": [256]
             },
             "extras": {}
         }
-    },
-    "meshes": {
-        "mesh002": {
+    ],
+    "meshes": [
+        {
             "name": "Mesh",
             "primitives": [
                 {
                     "attributes": {
-                        "NORMAL": "accessor_25",
-                        "POSITION": "accessor_23",
-                        "TEXCOORD_0": "accessor_27"
+                        "NORMAL": 2,
+                        "POSITION": 1,
+                        "TEXCOORD_0": 3
                     },
-                    "indices": "accessor_21",
-                    "material": "Effect-Texture",
+                    "indices": 0,
+                    "material": 0,
                     "mode": 4,
                     "extras": {}
                 }
@@ -105,59 +104,59 @@
                 "_pipeline": {}
             }
         }
-    },
-    "nodes": {
-        "mesh002Node": {
+    ],
+    "nodes": [
+        {
             "children": [],
             "meshes": [
-                "Geometry-mesh002"
+                0
             ],
             "name": "Mesh",
             "extras": {}
         }
-    },
-    "programs": {
-        "program_0": {
+    ],
+    "programs": [
+        {
             "attributes": [
                 "a_normal",
                 "a_position",
                 "a_texcoord0"
             ],
-            "fragmentShader": "CesiumTexturedBoxTest0FS",
-            "vertexShader": "CesiumTexturedBoxTest0VS",
+            "fragmentShader": 0,
+            "vertexShader": 1,
             "extras": {}
         }
-    },
-    "samplers": {
-        "sampler_0": {
+    ],
+    "samplers": [
+        {
             "magFilter": 9729,
             "minFilter": 9987,
             "wrapS": 10497,
             "wrapT": 10497,
             "extras": {}
         }
-    },
-    "scene": "defaultScene",
-    "scenes": {
-        "defaultScene": {
+    ],
+    "scene": 0,
+    "scenes": [
+        {
             "nodes": [
-                "node_3"
+                0
             ],
             "extras": {}
         }
-    },
-    "shaders": {
-        "CesiumTexturedBoxTest0FS": {
+    ],
+    "shaders": [
+        {
             "type": 35632,
             "uri": "CesiumTexturedBoxTest0FS.glsl",
             "extras": {
                 "misc": {}
             }
         }
-    },
-    "skins": {
-        "Armature_Cylinder_skin": {
-            "inverseBindMatrices": "IBM_Armature_Cylinder-skin",
+    ],
+    "skins": [
+        {
+            "inverseBindMatrices": 0,
             "jointNames": [
                 "Bone",
                 "Bone_001"
@@ -167,9 +166,9 @@
                 "misc": {}
             }
         }
-    },
-    "techniques": {
-        "technique0": {
+    ],
+    "techniques": [
+        {
             "parameters": {
                 "diffuse": {
                     "type": 35678,
@@ -198,18 +197,18 @@
                 "misc": {}
             }
         }
-    },
-    "textures": {
-        "texture_Image0001": {
+    ],
+    "textures": [
+        {
             "format": 6408,
             "internalFormat": 6408,
-            "sampler": "sampler_0",
-            "source": "Image0001",
+            "sampler": 0,
+            "source": 1,
             "target": 3553,
             "type": 5121,
             "extras": {
                 "misc": {}
             }
         }
-    }
+    ]
 }

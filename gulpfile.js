@@ -194,13 +194,17 @@ function amdify(source, subDependencyMapping) {
             paths.push(requireMapping[variable]);
         }
     }
-    var definePathsHeader = '\'' + paths.join('\',\n        \'') + '\'';
-    var defineVariablesHeader = variables.join(',\n        ');
     var defineHeader = '/*global define*/\n' +
-        'define([\n' +
-        '        ' + definePathsHeader + '\n' +
-        '    ], function(\n' +
-        '        ' + defineVariablesHeader + ') {\n    ';
+            'define([], function() {\n    ';
+    if (paths.length > 0) {
+        var definePathsHeader = '\'' + paths.join('\',\n        \'') + '\'';
+        var defineVariablesHeader = variables.join(',\n        ');
+        defineHeader = '/*global define*/\n' +
+            'define([\n' +
+            '        ' + definePathsHeader + '\n' +
+            '    ], function(\n' +
+            '        ' + defineVariablesHeader + ') {\n    ';
+    }
     var defineFooter = '\n});\n';
     if (defined(returnValue)) {
         defineFooter = '\n    return ' + returnValue + ';' + defineFooter;
@@ -273,17 +277,23 @@ gulp.task('build-cesium', function () {
     var outputDir = 'dist/cesium';
     var files = [
         'addDefaults.js',
+        'addExtensionsRequired.js',
         'addExtensionsUsed.js',
         'addPipelineExtras.js',
+        'addToArray.js',
         'byteLengthForComponentType.js',
         'findAccessorMinMax.js',
+        'ForEach.js',
         'getAccessorByteStride.js',
         'getStatistics.js',
-        'getUniqueId.js',
         'numberOfComponentsForType.js',
         'parseBinaryGltf.js',
         'processModelMaterialsCommon.js',
-        'techniqueParameterForSemantic.js'
+        'removePipelineExtras.js',
+        'removeExtensionsRequired.js',
+        'removeExtensionsUsed.js',
+        'techniqueParameterForSemantic.js',
+        'updateVersion.js'
     ];
     var subDependencyMapping = {
         cesium : {

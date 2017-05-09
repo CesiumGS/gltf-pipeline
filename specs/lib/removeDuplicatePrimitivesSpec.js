@@ -5,8 +5,8 @@ var removeDuplicatePrimitives = require('../../lib/removeDuplicatePrimitives');
 describe('removeDuplicatePrimitives', function() {
     it('removes duplicate primitives', function() {
         var gltf = {
-            meshes : {
-                mesh : {
+            meshes : [
+                {
                     primitives : [
                         {
                             attributes : {
@@ -34,18 +34,18 @@ describe('removeDuplicatePrimitives', function() {
                         }
                     ]
                 }
-            }
+            ]
         };
         removeDuplicatePrimitives(gltf);
-        var primitives = gltf.meshes.mesh.primitives;
+        var primitives = gltf.meshes[0].primitives;
         expect(primitives.length).toEqual(2);
         expect(primitives[1].indices).toEqual(8);
     });
 
     it('combines duplicate primitives across meshes', function() {
         var gltf = {
-            meshes : {
-                meshA : {
+            meshes : [
+                {
                     primitives : [
                         {
                             attributes : {
@@ -57,7 +57,7 @@ describe('removeDuplicatePrimitives', function() {
                         }
                     ]
                 },
-                meshB : {
+                {
                     primitives : [
                         {
                             attributes : {
@@ -69,13 +69,13 @@ describe('removeDuplicatePrimitives', function() {
                         }
                     ]
                 }
-            }
+            ]
         };
         removeDuplicatePrimitives(gltf);
         var meshes = gltf.meshes;
-        expect(meshes['mesh-split']).toBeDefined();
-        expect(meshes['mesh-split'].primitives.length).toEqual(1);
-        expect(meshes.meshA.primitives.length).toEqual(0);
-        expect(meshes.meshB.primitives.length).toEqual(0);
+        expect(meshes.length).toEqual(3);
+        expect(meshes[2].primitives.length).toEqual(1);
+        expect(meshes[0].primitives.length).toEqual(0);
+        expect(meshes[1].primitives.length).toEqual(0);
     });
 });

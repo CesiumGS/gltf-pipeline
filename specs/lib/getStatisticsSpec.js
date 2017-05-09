@@ -1,46 +1,81 @@
 'use strict';
-var fs = require('fs');
-var addDefaults = require('../../lib/addDefaults');
-var addPipelineExtras = require('../../lib/addPipelineExtras');
 var getStatistics = require('../../lib/getStatistics');
-var readGltf = require('../../lib/readGltf');
 
 describe('getStatistics', function() {
-    it('should return stats for simple box test', function(done){
-        expect(readGltf('specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf')
-            .then(function(gltf) {
-                var stats = getStatistics(gltf);
-
-                expect(stats.buffersSizeInBytes).toEqual(840);
-                expect(stats.numberOfImages).toEqual(1);
-                expect(stats.numberOfExternalRequests).toEqual(4);
-
-                expect(stats.numberOfDrawCalls).toEqual(1);
-                expect(stats.numberOfRenderedPrimitives).toEqual(12);
-
-                expect(stats.numberOfNodes).toEqual(4);
-                expect(stats.numberOfMeshes).toEqual(1);
-                expect(stats.numberOfMaterials).toEqual(1);
-                expect(stats.numberOfAnimations).toEqual(0);
-            }), done).toResolve();
-    });
-
-    it('works with rigged test', function(done) {
-        expect(readGltf('specs/data/riggedSimpleUnoptimized/riggedSimple.gltf')
-            .then(function(gltf) {
-                var stats = getStatistics(addDefaults(gltf));
-
-                expect(stats.buffersSizeInBytes).toEqual(10468);
-                expect(stats.numberOfImages).toEqual(0);
-                expect(stats.numberOfExternalRequests).toEqual(3);
-
-                expect(stats.numberOfDrawCalls).toEqual(1);
-                expect(stats.numberOfRenderedPrimitives).toEqual(188);
-
-                expect(stats.numberOfNodes).toEqual(5);
-                expect(stats.numberOfMeshes).toEqual(1);
-                expect(stats.numberOfMaterials).toEqual(1);
-                expect(stats.numberOfAnimations).toEqual(2);
-            }), done).toResolve();
+    it('returns statistics for a gltf', function() {
+        var gltf = {
+            accessors: [
+                {
+                    count: 1
+                }, {
+                    count: 2
+                }, {
+                    count: 6
+                }
+            ],
+            buffers: [
+                {
+                    byteLength: 140
+                }, {
+                    byteLength: 120,
+                    uri: 'external_buffer'
+                }
+            ],
+            images: [
+                {
+                    uri: 'external_image'
+                }, {
+                    uri: 'data:image/png;'
+                }, {
+                    uri: 'another_external_image'
+                }
+            ],
+            meshes: [
+                {
+                    primitives: [
+                        {
+                            indices: 0,
+                            mode: 0 // POINTS
+                        }, {
+                            indices: 1,
+                            mode: 1 // LINES
+                        }
+                    ]
+                }, {
+                    primitives: [
+                        {
+                            indices: 2,
+                            mode: 4 // TRIANGLES
+                        }
+                    ]
+                }
+            ],
+            materials: [
+                {}, {}
+            ],
+            animations: [
+                {}, {} ,{}
+            ],
+            shaders: [
+                {
+                    uri: 'external_shader'
+                }, {
+                    uri: 'data:text/plain;'
+                }
+            ],
+            nodes: [
+                {}
+            ]
+        };
+        var statistics = getStatistics(gltf);
+        expect(statistics.buffersSizeInBytes).toEqual(260);
+        expect(statistics.numberOfImages).toEqual(3);
+        expect(statistics.numberOfExternalRequests).toEqual(4);
+        expect(statistics.numberOfDrawCalls).toEqual(3);
+        expect(statistics.numberOfRenderedPrimitives).toEqual(4);
+        expect(statistics.numberOfNodes).toEqual(1);
+        expect(statistics.numberOfMeshes).toEqual(2);
+        expect(statistics.numberOfMaterials).toEqual(2);
+        expect(statistics.numberOfAnimations).toEqual(3);
     });
 });

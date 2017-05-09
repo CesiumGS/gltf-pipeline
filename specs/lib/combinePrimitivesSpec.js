@@ -19,33 +19,33 @@ describe('combinePrimitives', function() {
     it('combines two primitives without indices by concatenating them', function() {
         var buffer = Buffer.concat([bufferOneA, bufferTwoA]);
         var gltf = {
-            accessors : {
-                accessorOneA : {
-                    bufferView : 'bufferView',
+            accessors : [
+                {
+                    bufferView : 0,
                     byteOffset : 0,
-                    byteStride : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : arrayOneA.length,
-                    type : 'SCALAR'
+                    type : 'SCALAR',
+                    name: 'oneA'
                 },
-                accessorTwoA : {
-                    bufferView : 'bufferView',
+                {
+                    bufferView : 0,
                     byteOffset : bufferOneA.length,
-                    byteStride : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : arrayTwoA.length,
-                    type : 'SCALAR'
+                    type : 'SCALAR',
+                    name: 'oneB'
                 }
-            },
-            bufferViews : {
-                bufferView : {
-                    buffer : 'buffer',
+            ],
+            bufferViews : [
+                {
+                    buffer : 0,
                     byteLength : buffer.length,
                     byteOffset : 0
                 }
-            },
-            buffers : {
-                buffer : {
+            ],
+            buffers : [
+                {
                     byteLength : buffer.length,
                     extras : {
                         _pipeline : {
@@ -53,30 +53,30 @@ describe('combinePrimitives', function() {
                         }
                     }
                 }
-            },
-            meshes : {
-                mesh : {
-                    primitives : [{
-                            attributes : {
-                                A : 'accessorOneA'
-                            },
-                            extras : {
-                                _pipeline : {}
-                            }
-                        }, {
-                            attributes : {
-                                A : 'accessorTwoA'
-                            },
-                            extras : {
-                                _pipeline : {}
-                            }
-                        }]
+            ],
+            meshes : [
+                {
+                    primitives: [{
+                        attributes: {
+                            A: 0
+                        },
+                        extras: {
+                            _pipeline: {}
+                        }
+                    }, {
+                        attributes: {
+                            A: 1
+                        },
+                        extras: {
+                            _pipeline: {}
+                        }
+                    }]
                 }
-            }
+            ]
         };
         combinePrimitives(gltf);
         var accessors = gltf.accessors;
-        var primitives = gltf.meshes.mesh.primitives;
+        var primitives = gltf.meshes[0].primitives;
         expect(primitives.length).toEqual(1);
         var primitive = primitives[0];
         expect(primitive.indices).toBeDefined();
@@ -95,49 +95,48 @@ describe('combinePrimitives', function() {
         var bufferIndicesTwo = new Buffer(indicesTwo.buffer);
         var buffer = Buffer.concat([bufferOneA, bufferTwoA, bufferIndicesOne, bufferIndicesTwo]);
         var gltf = {
-            accessors : {
-                accessorOneA : {
-                    bufferView : 'bufferView',
+            accessors : [
+                {
+                    bufferView : 0,
                     byteOffset : 0,
-                    byteStride : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : arrayOneA.length,
-                    type : 'SCALAR'
+                    type : 'SCALAR',
+                    name : 'oneA'
                 },
-                accessorTwoA : {
-                    bufferView : 'bufferView',
+                {
+                    bufferView : 0,
                     byteOffset : bufferOneA.length,
-                    byteStride : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : arrayTwoA.length,
-                    type : 'SCALAR'
+                    type : 'SCALAR',
+                    name : 'twoA'
                 },
-                indicesOne : {
-                    bufferView : 'bufferView',
+                {
+                    bufferView : 0,
                     byteOffset : bufferOneA.length + bufferTwoA.length,
-                    byteStride : 0,
                     componentType : WebGLConstants.UNSIGNED_SHORT,
                     count : indicesOne.length,
-                    type : 'SCALAR'
+                    type : 'SCALAR',
+                    name : 'indicesOne'
                 },
-                indicesTwo : {
-                    bufferView : 'bufferView',
+                {
+                    bufferView : 0,
                     byteOffset : bufferOneA.length + bufferTwoA.length + bufferIndicesOne.length,
-                    byteStride : 0,
                     componentType : WebGLConstants.UNSIGNED_SHORT,
                     count : indicesOne.length,
                     type : 'SCALAR'
                 }
-            },
-            bufferViews : {
-                bufferView : {
-                    buffer : 'buffer',
+            ],
+            bufferViews : [
+                {
+                    buffer : 0,
                     byteLength : buffer.length,
                     byteOffset : 0
                 }
-            },
-            buffers : {
-                buffer : {
+            ],
+            buffers : [
+                {
                     byteLength : buffer.length,
                     extras : {
                         _pipeline : {
@@ -145,32 +144,32 @@ describe('combinePrimitives', function() {
                         }
                     }
                 }
-            },
-            meshes : {
-                mesh : {
+            ],
+            meshes : [
+                {
                     primitives : [{
                         attributes : {
-                            A : 'accessorOneA'
+                            A : 0
                         },
-                        indices : 'indicesOne',
+                        indices : 2,
                         extras : {
                             _pipeline : {}
                         }
                     }, {
                         attributes : {
-                            A : 'accessorTwoA'
+                            A : 1
                         },
-                        indices : 'indicesTwo',
+                        indices : 3,
                         extras : {
                             _pipeline : {}
                         }
                     }]
                 }
-            }
+            ]
         };
         combinePrimitives(gltf);
         var accessors = gltf.accessors;
-        var primitives = gltf.meshes.mesh.primitives;
+        var primitives = gltf.meshes[0].primitives;
         expect(primitives.length).toEqual(1);
         var primitive = primitives[0];
         var indices = [];
@@ -188,41 +187,41 @@ describe('combinePrimitives', function() {
         var bufferIndicesTwo = new Buffer(indicesTwo.buffer);
         var buffer = Buffer.concat([bufferOneA, bufferIndicesOne, bufferIndicesTwo]);
         var gltf = {
-            accessors : {
-                accessorOneA : {
-                    bufferView : 'bufferView',
+            accessors : [
+                {
+                    bufferView : 0,
                     byteOffset : 0,
-                    byteStride : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : arrayOneA.length,
-                    type : 'SCALAR'
+                    type : 'SCALAR',
+                    name : 'oneA'
                 },
-                indicesOne : {
-                    bufferView : 'bufferView',
+                {
+                    bufferView : 0,
                     byteOffset : bufferOneA.length,
-                    byteStride : 0,
                     componentType : WebGLConstants.UNSIGNED_SHORT,
                     count : indicesOne.length,
-                    type : 'SCALAR'
+                    type : 'SCALAR',
+                    name : 'indicesOne'
                 },
-                indicesTwo : {
-                    bufferView : 'bufferView',
-                    byteOffset : bufferOneA.length + bufferIndicesOne.length,
-                    byteStride : 0,
-                    componentType : WebGLConstants.UNSIGNED_SHORT,
-                    count : indicesOne.length,
-                    type : 'SCALAR'
+                {
+                    bufferView: 0,
+                    byteOffset: bufferOneA.length + bufferIndicesOne.length,
+                    componentType: WebGLConstants.UNSIGNED_SHORT,
+                    count: indicesOne.length,
+                    type: 'SCALAR',
+                    name: 'indicesTwo'
                 }
-            },
-            bufferViews : {
-                bufferView : {
-                    buffer : 'buffer',
+            ],
+            bufferViews : [
+                {
+                    buffer : 0,
                     byteLength : buffer.length,
                     byteOffset : 0
                 }
-            },
-            buffers : {
-                buffer : {
+            ],
+            buffers : [
+                {
                     byteLength : buffer.length,
                     extras : {
                         _pipeline : {
@@ -230,32 +229,32 @@ describe('combinePrimitives', function() {
                         }
                     }
                 }
-            },
-            meshes : {
-                mesh : {
+            ],
+            meshes : [
+                {
                     primitives : [{
                         attributes : {
-                            A : 'accessorOneA'
+                            A : 0
                         },
-                        indices : 'indicesOne',
+                        indices : 1,
                         extras : {
                             _pipeline : {}
                         }
                     }, {
                         attributes : {
-                            A : 'accessorOneA'
+                            A : 0
                         },
-                        indices : 'indicesTwo',
+                        indices : 2,
                         extras : {
                             _pipeline : {}
                         }
                     }]
                 }
-            }
+            ]
         };
         combinePrimitives(gltf);
         var accessors = gltf.accessors;
-        var primitives = gltf.meshes.mesh.primitives;
+        var primitives = gltf.meshes[0].primitives;
         expect(primitives.length).toEqual(1);
         var primitive = primitives[0];
         var indices = [];
@@ -275,57 +274,57 @@ describe('combinePrimitives', function() {
         var bufferIndicesThree = new Buffer(indicesThree.buffer);
         var buffer = Buffer.concat([bufferOneA, bufferTwoB, bufferIndicesOne, bufferIndicesTwo, bufferIndicesThree]);
         var gltf = {
-            accessors : {
-                accessorOneA : {
-                    bufferView : 'bufferView',
+            accessors : [
+                {
+                    bufferView : 0,
                     byteOffset : 0,
-                    byteStride : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : arrayOneA.length,
-                    type : 'SCALAR'
+                    type : 'SCALAR',
+                    name : 'oneA'
                 },
-                accessorTwoB : {
-                    bufferView : 'bufferView',
+                {
+                    bufferView : 0,
                     byteOffset : bufferOneA.length,
-                    byteStride : 0,
                     componentType : WebGLConstants.FLOAT,
                     count : arrayTwoB.length,
-                    type : 'SCALAR'
+                    type : 'SCALAR',
+                    name : 'twoB'
                 },
-                indicesOne : {
-                    bufferView : 'bufferView',
+                {
+                    bufferView : 0,
                     byteOffset : bufferOneA.length + bufferTwoB.length,
-                    byteStride : 0,
                     componentType : WebGLConstants.UNSIGNED_SHORT,
                     count : indicesOne.length,
-                    type : 'SCALAR'
+                    type : 'SCALAR',
+                    name : 'indicesOne'
                 },
-                indicesTwo : {
-                    bufferView : 'bufferView',
+                {
+                    bufferView : 0,
                     byteOffset : bufferOneA.length + bufferTwoB.length + bufferIndicesOne.length,
-                    byteStride : 0,
                     componentType : WebGLConstants.UNSIGNED_SHORT,
                     count : indicesTwo.length,
-                    type : 'SCALAR'
+                    type : 'SCALAR',
+                    name : 'indicesTwo'
                 },
-                indicesThree : {
-                    bufferView : 'bufferView',
+                {
+                    bufferView : 0,
                     byteOffset : bufferOneA.length + bufferTwoB.length + bufferIndicesOne.length + bufferIndicesTwo.length,
-                    byteStride : 0,
                     componentType : WebGLConstants.UNSIGNED_SHORT,
                     count : indicesThree.length,
-                    type : 'SCALAR'
+                    type : 'SCALAR',
+                    name : 'indicesThree'
                 }
-            },
-            bufferViews : {
-                bufferView : {
-                    buffer : 'buffer',
+            ],
+            bufferViews : [
+                {
+                    buffer : 0,
                     byteLength : buffer.length,
                     byteOffset : 0
                 }
-            },
-            buffers : {
-                buffer : {
+            ],
+            buffers : [
+                {
                     byteLength : buffer.length,
                     extras : {
                         _pipeline : {
@@ -333,40 +332,40 @@ describe('combinePrimitives', function() {
                         }
                     }
                 }
-            },
-            meshes : {
-                mesh : {
+            ],
+            meshes : [
+                {
                     primitives : [{
                         attributes : {
-                            A : 'accessorOneA'
+                            A : 0
                         },
-                        indices : 'indicesOne',
+                        indices : 2,
                         extras : {
                             _pipeline : {}
                         }
                     }, {
                         attributes : {
-                            A : 'accessorOneA'
+                            A : 0
                         },
-                        indices : 'indicesTwo',
+                        indices : 3,
                         extras : {
                             _pipeline : {}
                         }
                     }, {
                         attributes : {
-                            A : 'accessorTwoB'
+                            A : 1
                         },
-                        indices : 'indicesThree',
+                        indices : 4,
                         extras : {
                             _pipeline : {}
                         }
                     }]
                 }
-            }
+            ]
         };
         combinePrimitives(gltf);
         var accessors = gltf.accessors;
-        var primitives = gltf.meshes.mesh.primitives;
+        var primitives = gltf.meshes[0].primitives;
         expect(primitives.length).toEqual(1);
         var primitive = primitives[0];
         var indices = [];
@@ -379,134 +378,141 @@ describe('combinePrimitives', function() {
 
     it('doesn\'t combine primitive that has attribute accessors that are different sizes', function() {
         var gltf = {
-            accessors: {
-                accessorOneA: {
+            accessors: [
+                {
                     componentType: WebGLConstants.FLOAT,
                     count: arrayOneA.length,
-                    type: 'SCALAR'
+                    type: 'SCALAR',
+                    name: 'oneA'
                 },
-                accessorOneB: {
+                {
                     componentType: WebGLConstants.FLOAT,
                     count: arrayOneB.length,
-                    type: 'SCALAR'
+                    type: 'SCALAR',
+                    name: 'oneB'
                 },
-                accessorTwoA: {
+                {
                     componentType: WebGLConstants.UNSIGNED_SHORT,
                     count: arrayTwoA.length,
-                    type: 'SCALAR'
+                    type: 'SCALAR',
+                    name: 'twoA'
                 },
-                accessorTwoB: {
+                {
                     componentType: WebGLConstants.UNSIGNED_SHORT,
                     count: arrayTwoB.length,
-                    type: 'SCALAR'
+                    type: 'SCALAR',
+                    name: 'twoB'
                 }
-            },
-            meshes: {
-                mesh: {
+            ],
+            meshes: [
+                {
                     primitives: [{
                         attributes: {
-                            A: 'accessorOneA',
-                            B: 'accessorOneB'
+                            A: 0,
+                            B: 1
                         },
                         extras: {
                             _pipeline: {}
                         }
                     }, {
                         attributes: {
-                            A: 'accessorTwoA',
-                            B: 'accessorTwoB'
+                            A: 2,
+                            B: 3
                         },
                         extras: {
                             _pipeline: {}
                         }
                     }]
                 }
-            }
+            ]
         };
         var originalGltf = clone(gltf);
         combinePrimitives(gltf);
-        delete gltf.meshes.mesh.primitives[0].extras._pipeline.conflicts;
-        delete gltf.meshes.mesh.primitives[1].extras._pipeline.conflicts;
+        delete gltf.meshes[0].primitives[0].extras._pipeline.conflicts;
+        delete gltf.meshes[0].primitives[1].extras._pipeline.conflicts;
         expect(gltf).toEqual(originalGltf);
     });
 
     it('doesn\'t combine primitives that share only a single attribute accessor', function() {
         var gltf = {
-            accessors: {
-                accessorOneA: {
+            accessors: [
+                {
                     componentType: WebGLConstants.FLOAT,
                     count: arrayOneA.length,
-                    type: 'SCALAR'
+                    type: 'SCALAR',
+                    name: 'oneA'
                 },
-                accessorOneB: {
+                {
                     componentType: WebGLConstants.FLOAT,
                     count: arrayOneB.length,
-                    type: 'SCALAR'
+                    type: 'SCALAR',
+                    name: 'oneB'
                 },
-                accessorTwoB: {
+                {
                     componentType: WebGLConstants.UNSIGNED_SHORT,
                     count: arrayTwoB.length,
-                    type: 'SCALAR'
+                    type: 'SCALAR',
+                    name: 'twoB'
                 }
-            },
-            meshes: {
-                mesh: {
+            ],
+            meshes: [
+                {
                     primitives: [{
                         attributes: {
-                            A: 'accessorOneA',
-                            B: 'accessorTwoB'
+                            A: 0,
+                            B: 2
                         },
                         extras: {
                             _pipeline: {}
                         }
                     }, {
                         attributes: {
-                            A: 'accessorOneA',
-                            B: 'accessorOneB'
+                            A: 0,
+                            B: 1
                         },
                         extras: {
                             _pipeline: {}
                         }
                     }]
                 }
-            }
+            ]
         };
         var originalGltf = clone(gltf);
         combinePrimitives(gltf);
-        delete gltf.meshes.mesh.primitives[0].extras._pipeline.conflicts;
-        delete gltf.meshes.mesh.primitives[1].extras._pipeline.conflicts;
+        delete gltf.meshes[0].primitives[0].extras._pipeline.conflicts;
+        delete gltf.meshes[0].primitives[1].extras._pipeline.conflicts;
         expect(gltf).toEqual(originalGltf);
     });
 
     it('doesn\'t combine primitives with different materials', function() {
         var gltf = {
-            meshes : {
-                mesh: {
+            meshes : [
+                {
                     primitives: [{
-                        material: 'materialOne',
+                        material: 0,
                         extras: {
                             _pipeline: {}
                         }
                     }, {
-                        material: 'materialTwo',
+                        material: 1,
                         extras: {
                             _pipeline: {}
                         }
                     }]
                 }
-            }
+            ]
         };
         var originalGltf = clone(gltf);
         combinePrimitives(gltf);
-        delete gltf.meshes.mesh.primitives[0].extras._pipeline.conflicts;
-        delete gltf.meshes.mesh.primitives[1].extras._pipeline.conflicts;
+        delete gltf.meshes[0].primitives[0].extras._pipeline.conflicts;
+        delete gltf.meshes[0].primitives[1].extras._pipeline.conflicts;
         expect(gltf).toEqual(originalGltf);
     });
 
     it('doesn\'t combine primitives with different modes', function() {
         var gltf = {
-            meshes : {
-                mesh: {
+            meshes : [
+                {
                     primitives: [{
                         mode: 0,
                         extras: {
@@ -519,12 +525,12 @@ describe('combinePrimitives', function() {
                         }
                     }]
                 }
-            }
+            ]
         };
         var originalGltf = clone(gltf);
         combinePrimitives(gltf);
-        delete gltf.meshes.mesh.primitives[0].extras._pipeline.conflicts;
-        delete gltf.meshes.mesh.primitives[1].extras._pipeline.conflicts;
+        delete gltf.meshes[0].primitives[0].extras._pipeline.conflicts;
+        delete gltf.meshes[0].primitives[1].extras._pipeline.conflicts;
         expect(gltf).toEqual(originalGltf);
     });
 
@@ -537,39 +543,37 @@ describe('combinePrimitives', function() {
         }
         var quarterOverflowBuffer = new Buffer(quarterOverflow.buffer);
         var quarterOverflowAccessor = {
-            bufferView : 'bufferView',
+            bufferView : 0,
             byteOffset : 0,
-            byteStride : 0,
             componentType : WebGLConstants.UNSIGNED_SHORT,
             count : valueCount,
             type : 'SCALAR'
         };
 
         var gltf = {
-            accessors : {
-                dataA : quarterOverflowAccessor,
-                dataB : quarterOverflowAccessor,
-                dataC : quarterOverflowAccessor,
-                dataD : quarterOverflowAccessor,
-                dataE : quarterOverflowAccessor,
-                dataF : {
-                    bufferView : 'bufferView',
+            accessors : [
+                quarterOverflowAccessor,
+                quarterOverflowAccessor,
+                quarterOverflowAccessor,
+                quarterOverflowAccessor,
+                quarterOverflowAccessor,
+                {
+                    bufferView : 0,
                     byteOffset : 0,
-                    byteStride : 0,
                     componentType : WebGLConstants.UNSIGNED_SHORT,
                     count : smallerValueCount,
                     type : 'SCALAR'
                 }
-            },
-            bufferViews : {
-                bufferView : {
-                    buffer : 'buffer',
+            ],
+            bufferViews : [
+                {
+                    buffer : 0,
                     byteLength : quarterOverflowBuffer.length,
                     byteOffset : 0
                 }
-            },
-            buffers : {
-                buffer : {
+            ],
+            buffers : [
+                {
                     byteLength : quarterOverflowBuffer.length,
                     extras : {
                         _pipeline : {
@@ -577,64 +581,64 @@ describe('combinePrimitives', function() {
                         }
                     }
                 }
-            },
-            meshes : {
-                mesh : {
+            ],
+            meshes : [
+                {
                     primitives : [{
                         attributes : {
-                            A : 'dataA'
+                            A : 0
                         },
-                        indices : 'dataA',
+                        indices : 0,
                         extras : {
                             _pipeline : {}
                         }
                     }, {
                         attributes : {
-                            A : 'dataB'
+                            A : 1
                         },
-                        indices : 'dataB',
+                        indices : 1,
                         extras : {
                             _pipeline : {}
                         }
                     }, {
                         attributes : {
-                            A : 'dataC'
+                            A : 2
                         },
-                        indices : 'dataC',
+                        indices : 2,
                         extras : {
                             _pipeline : {}
                         }
                     }, {
                         attributes : {
-                            A : 'dataD'
+                            A : 3
                         },
-                        indices : 'dataD',
+                        indices : 3,
                         extras : {
                             _pipeline : {}
                         }
                     }, {
                         attributes : {
-                            A : 'dataE'
+                            A : 4
                         },
-                        indices : 'dataE',
+                        indices : 4,
                         extras : {
                             _pipeline : {}
                         }
                     }, {
                         attributes : {
-                            A : 'dataF'
+                            A : 5
                         },
-                        indices : 'dataF',
+                        indices : 5,
                         extras : {
                             _pipeline : {}
                         }
                     }]
                 }
-            }
+            ]
         };
         combinePrimitives(gltf);
 
-        var newPrimitives = gltf.meshes.mesh.primitives;
+        var newPrimitives = gltf.meshes[0].primitives;
         expect(newPrimitives.length).toEqual(2);
 
         var primitive0 = newPrimitives[0];

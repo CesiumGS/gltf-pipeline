@@ -10,130 +10,123 @@ describe('MergeDuplicateProperties', function() {
     var mergeAccessors = MergeDuplicateProperties.mergeAccessors;
     describe('mergeAccessors', function() {
         var testGltf = {
-            accessors: {
-                accessorA: {
-                    bufferView: 'bufferView',
+            accessors: [
+                {
+                    bufferView: 0,
                     byteOffset: 0,
-                    byteStride: 0,
                     componentType: WebGLConstants.BYTE,
                     count: 3,
                     type: 'SCALAR'
-                },
-                accessorB: {
-                    bufferView: 'bufferView',
+                }, {
+                    bufferView: 0,
                     byteOffset: 3,
-                    byteStride: 0,
                     componentType: WebGLConstants.BYTE,
                     count: 3,
                     type: 'SCALAR'
                 }
-            },
-            bufferViews: {
-                bufferView: {
-                    buffer: 'buffer',
+            ],
+            bufferViews: [
+                {
+                    buffer: 0,
                     byteOffset: 0
                 }
-            },
-            buffers: {
-                buffer: {
-                    type: 'arraybuffer',
+            ],
+            buffers: [
+                {
                     extras : {
                         _pipeline : {}
                     }
                 }
-            },
-            meshes: {
-                meshA: {
+            ],
+            meshes: [
+                {
                     primitives : [
                         {
                             attributes: {
-                                TEST: 'accessorA'
+                                TEST: 0
                             }
                         }
                     ]
-                },
-                meshB: {
+                }, {
                     primitives : [
                         {
                             attributes: {
-                                TEST: 'accessorB'
+                                TEST: 1
                             }
                         }
                     ]
                 }
-            }
+            ]
         };
         it('merges a single duplicate accessor', function () {
             var buffer = new Buffer([1, 2, 3, 1, 2, 3]);
             var gltf = clone(testGltf);
-            var gltfBuffer = gltf.buffers.buffer;
+            var gltfBuffer = gltf.buffers[0];
             gltfBuffer.extras._pipeline.source = buffer;
             gltfBuffer.byteLength = buffer.length;
-            gltf.bufferViews.bufferView.byteLength = buffer.length;
+            gltf.bufferViews[0].byteLength = buffer.length;
             mergeAccessors(gltf);
-            expect(Object.keys(gltf.accessors).length).toEqual(1);
-            expect(gltf.meshes.meshA.primitives[0].attributes.TEST).toEqual(gltf.meshes.meshB.primitives[0].attributes.TEST);
+            expect(gltf.accessors.length).toEqual(1);
+            expect(gltf.meshes[0].primitives[0].attributes.TEST).toEqual(gltf.meshes[1].primitives[0].attributes.TEST);
         });
 
         it ('merges multiple duplicate accessors', function () {
             var buffer = new Buffer([1, 2, 3, 1, 2, 3, 1, 2, 3]);
             var gltf = clone(testGltf);
-            var gltfBuffer = gltf.buffers.buffer;
+            var gltfBuffer = gltf.buffers[0];
             gltfBuffer.extras._pipeline.source = buffer;
             gltfBuffer.byteLength = buffer.length;
-            gltf.bufferViews.bufferView.byteLength = buffer.length;
-            gltf.accessors.accessorC = {
-                bufferView: 'bufferView',
+            gltf.bufferViews[0].byteLength = buffer.length;
+            gltf.accessors.push({
+                bufferView: 0,
                 byteOffset: 6,
-                byteStride: 0,
                 componentType: WebGLConstants.BYTE,
                 count: 3,
                 type: 'SCALAR'
-            };
-            gltf.meshes.meshC = {
+            });
+            gltf.meshes.push({
                 primitives : [
                     {
                         attributes : {
-                            TEST: 'accessorC'
+                            TEST: 2
                         }
                     }
                 ]
-            };
+            });
             mergeAccessors(gltf);
-            expect(Object.keys(gltf.accessors).length).toEqual(1);
-            expect(gltf.meshes.meshA.primitives[0].attributes.TEST).toEqual(gltf.meshes.meshB.primitives[0].attributes.TEST);
-            expect(gltf.meshes.meshA.primitives[0].attributes.TEST).toEqual(gltf.meshes.meshC.primitives[0].attributes.TEST);
+            expect(gltf.accessors.length).toEqual(1);
+            expect(gltf.meshes[0].primitives[0].attributes.TEST).toEqual(gltf.meshes[1].primitives[0].attributes.TEST);
+            expect(gltf.meshes[0].primitives[0].attributes.TEST).toEqual(gltf.meshes[2].primitives[0].attributes.TEST);
         });
 
         it ('leaves a non-duplicate accessor alone', function () {
             var buffer = new Buffer([1, 2, 3, 1, 2, 3, 3, 2, 1]);
             var gltf = clone(testGltf);
-            var gltfBuffer = gltf.buffers.buffer;
+            var gltfBuffer = gltf.buffers[0];
             gltfBuffer.extras._pipeline.source = buffer;
             gltfBuffer.byteLength = buffer.length;
-            gltf.bufferViews.bufferView.byteLength = buffer.length;
-            gltf.accessors.accessorC = {
-                bufferView: 'bufferView',
+            gltf.bufferViews[0].byteLength = buffer.length;
+            gltf.accessors.push({
+                bufferView: 0,
                 byteOffset: 6,
-                byteStride: 0,
                 componentType: WebGLConstants.BYTE,
                 count: 3,
                 type: 'SCALAR'
-            };
-            gltf.meshes.meshC = {
+            });
+            gltf.meshes.push({
                 primitives : [
                     {
                         attributes : {
-                            TEST: 'accessorC'
+                            TEST: 2
                         }
                     }
                 ]
 
-            };
+            });
             mergeAccessors(gltf);
-            expect(Object.keys(gltf.accessors).length).toEqual(2);
-            expect(gltf.meshes.meshA.primitives[0].attributes.TEST).toEqual(gltf.meshes.meshB.primitives[0].attributes.TEST);
-            expect(gltf.meshes.meshA.primitives[0].attributes.TEST).not.toEqual(gltf.meshes.meshC.primitives[0].attributes.TEST);
+            expect(gltf.accessors.length).toEqual(2);
+            expect(gltf.meshes[0].primitives[0].attributes.TEST).toEqual(gltf.meshes[1].primitives[0].attributes.TEST);
+            expect(gltf.meshes[0].primitives[0].attributes.TEST).not.toEqual(gltf.meshes[2].primitives[0].attributes.TEST);
         });
     });
 
@@ -143,42 +136,38 @@ describe('MergeDuplicateProperties', function() {
         var testShaderBufferTwo = new Buffer('test shader two', 'utf8');
         it('merges duplicate shaders', function() {
             var gltf = {
-                programs : {
-                    programOne : {
-                        fragmentShader : 'FSOne',
-                        vertexShader : 'VSOne'
-                    },
-                    programTwo : {
-                        fragmentShader : 'FSTwo',
-                        vertexShader : 'VSTwo'
+                programs : [
+                    {
+                        fragmentShader : 1,
+                        vertexShader : 0
+                    }, {
+                        fragmentShader : 3,
+                        vertexShader : 2
                     }
-                },
-                shaders : {
-                    VSOne : {
+                ],
+                shaders : [
+                    {
                         type : WebGLConstants.VERTEX_SHADER,
                         extras : {
                             _pipeline : {
                                 source : testShaderBufferOne
                             }
                         }
-                    },
-                    FSOne : {
+                    }, {
                         type : WebGLConstants.FRAGMENT_SHADER,
                         extras : {
                             _pipeline : {
                                 source : testShaderBufferOne
                             }
                         }
-                    },
-                    VSTwo : {
+                    }, {
                         type : WebGLConstants.VERTEX_SHADER,
                         extras : {
                             _pipeline : {
                                 source : testShaderBufferTwo
                             }
                         }
-                    },
-                    FSTwo : {
+                    }, {
                         type : WebGLConstants.FRAGMENT_SHADER,
                         extras : {
                             _pipeline : {
@@ -186,14 +175,14 @@ describe('MergeDuplicateProperties', function() {
                             }
                         }
                     }
-                }
+                ]
             };
             mergeShaders(gltf);
             var programs = gltf.programs;
-            expect(programs.programOne.fragmentShader).toBe('FSOne');
-            expect(programs.programOne.vertexShader).toBe('VSOne');
-            expect(programs.programTwo.fragmentShader).toBe('FSOne');
-            expect(programs.programTwo.vertexShader).toBe('VSTwo');
+            expect(programs[0].fragmentShader).toBe(1);
+            expect(programs[0].vertexShader).toBe(0);
+            expect(programs[1].fragmentShader).toBe(1);
+            expect(programs[1].vertexShader).toBe(2);
         });
     });
 
@@ -201,37 +190,35 @@ describe('MergeDuplicateProperties', function() {
     describe('mergePrograms', function() {
         it('merges duplicate programs', function() {
             var gltf = {
-                programs: {
-                    programOne: {
-                        fragmentShader: 'FSOne',
-                        vertexShader: 'VSOne'
-                    },
-                    programTwo: {
-                        fragmentShader: 'FSOne',
-                        vertexShader: 'VSOne'
-                    },
-                    programThree: {
-                        fragmentShader: 'FSOne',
-                        vertexShader: 'VSTwo'
+                programs: [
+                    {
+                        fragmentShader: 0,
+                        vertexShader: 1
+                    }, {
+                        fragmentShader: 0,
+                        vertexShader: 1
+                    }, {
+                        fragmentShader: 0,
+                        vertexShader: 2
                     }
-                },
-                techniques: {
-                    techniqueOne: {
-                        program: 'programOne'
+                ],
+                techniques: [
+                    {
+                        program: 0
                     },
-                    techniqueTwo: {
-                        program: 'programTwo'
+                    {
+                        program: 1
                     },
-                    techniqueThree: {
-                        program: 'programThree'
+                    {
+                        program: 2
                     }
-                }
+                ]
             };
             mergePrograms(gltf);
             var techniques = gltf.techniques;
-            expect(techniques.techniqueOne.program).toBe('programOne');
-            expect(techniques.techniqueTwo.program).toBe('programOne');
-            expect(techniques.techniqueThree.program).toBe('programThree');
+            expect(techniques[0].program).toBe(0);
+            expect(techniques[1].program).toBe(0);
+            expect(techniques[2].program).toBe(2);
         });
     });
 
@@ -239,46 +226,44 @@ describe('MergeDuplicateProperties', function() {
     describe('mergeTechniques', function() {
         it('merges duplicate techniques', function() {
             var gltf = {
-                techniques : {
-                    techniqueOne : {
+                techniques : [
+                    {
                         key : 'value',
                         arrayOf : ['values'],
                         nested : {
                             key : 'value'
                         }
                     },
-                    techniqueTwo : {
+                    {
                         key : 'value',
                         arrayOf : ['different', 'values'],
                         nested : {
                             key : 'value'
                         }
                     },
-                    techniqueThree : {
+                    {
                         key : 'value',
                         arrayOf : ['values'],
                         nested : {
                             key : 'value'
                         }
                     }
-                },
-                materials : {
-                    materialOne : {
-                        technique : 'techniqueOne'
-                    },
-                    materialTwo : {
-                        technique : 'techniqueTwo'
-                    },
-                    materialThree : {
-                        technique : 'techniqueThree'
+                ],
+                materials : [
+                    {
+                        technique : 0
+                    }, {
+                        technique : 1
+                    }, {
+                        technique : 2
                     }
-                }
+                ]
             };
             mergeTechniques(gltf);
             var materials = gltf.materials;
-            expect(materials.materialOne.technique).toBe('techniqueOne');
-            expect(materials.materialTwo.technique).toBe('techniqueTwo');
-            expect(materials.materialThree.technique).toBe('techniqueOne');
+            expect(materials[0].technique).toBe(0);
+            expect(materials[1].technique).toBe(1);
+            expect(materials[2].technique).toBe(0);
         });
     });
 
@@ -286,62 +271,59 @@ describe('MergeDuplicateProperties', function() {
     describe('mergeMaterials', function() {
         it('merges duplicate materials', function() {
             var gltf = {
-                meshes : {
-                    meshOne : {
+                meshes : [
+                    {
                         primitives : [
                             {
-                                material : 'materialOne'
+                                material : 0
                             },
                             {
-                                material : 'materialThree'
+                                material : 2
                             }
                         ]
-                    },
-                    meshTwo : {
+                    }, {
                         primitives : [
                             {
-                                material : 'materialTwo'
+                                material : 1
                             },
                             {
-                                material : 'materialThree'
+                                material : 2
                             }
                         ]
                     }
-                },
-                materials : {
-                    materialOne : {
+                ],
+                materials : [
+                    {
                         key : 'value',
                         arrayOf : ['values'],
                         nested : {
                             key : 'value'
                         }
-                    },
-                    materialTwo : {
+                    }, {
                         key : 'value',
                         arrayOf : ['different', 'values'],
                         nested : {
                             key : 'value'
                         }
-                    },
-                    materialThree : {
+                    }, {
                         key : 'value',
                         arrayOf : ['values'],
                         nested : {
                             key : 'value'
                         }
                     }
-                }
+                ]
             };
             mergeMaterials(gltf);
             var meshes = gltf.meshes;
-            var meshOne = meshes.meshOne;
+            var meshOne = meshes[0];
             var meshOnePrimitives = meshOne.primitives;
-            expect(meshOnePrimitives[0].material).toBe('materialOne');
-            expect(meshOnePrimitives[1].material).toBe('materialOne');
-            var meshTwo = meshes.meshTwo;
+            expect(meshOnePrimitives[0].material).toBe(0);
+            expect(meshOnePrimitives[1].material).toBe(0);
+            var meshTwo = meshes[1];
             var meshTwoPrimitives = meshTwo.primitives;
-            expect(meshTwoPrimitives[0].material).toBe('materialTwo');
-            expect(meshTwoPrimitives[1].material).toBe('materialOne');
+            expect(meshTwoPrimitives[0].material).toBe(1);
+            expect(meshTwoPrimitives[1].material).toBe(0);
         });
     });
 });
