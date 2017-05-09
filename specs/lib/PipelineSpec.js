@@ -178,7 +178,7 @@ describe('Pipeline', function() {
         spyOn(mergeDuplicateVertices, '_implementation').and.callThrough();
         var promise = readGltf(gltfPath)
             .then(function (gltf) {
-                return processJSONWithExtras(gltf, {mergeVertices: true}).thenReturn(gltf);
+                return processJSONWithExtras(gltf, {mergeVertices: true});
             })
             .then(function (gltf) {
                 expect(mergeDuplicateVertices._implementation).toHaveBeenCalledWith(gltf);
