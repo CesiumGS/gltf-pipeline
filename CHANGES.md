@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+### 0.1.0-alpha14 - ???
+* Fixed byte offset alignment issue when loading converting models in Cesium. [#279](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/279)
+* Added case-insensitive regex checking for image extensions. [#278](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/278)
+* Added `mergeVertices` option to merge duplicate vertices. This operation is now disabled by default. [#276](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/276)
+
 ### 0.1.0-alpha13 - 2017-04-27
 * Fixed a bug in `processModelMaterialsCommon` that produced out-of-spec technique states. [#269](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/269)
 
