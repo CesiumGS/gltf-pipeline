@@ -437,4 +437,52 @@ describe('addDefaults', function() {
 
        expect(gltf.scene).toEqual(0);
     });
+
+    it('infers missing bufferView targets', function() {
+        var gltf = {
+            accessors: [
+                {
+                    bufferView: 0
+                }, {
+                    bufferView: 1
+                }, {
+                    bufferView: 2
+                }, {
+                    bufferView: 3
+                }
+            ],
+            bufferViews: [
+                {},
+                {},
+                {},
+                {}
+            ],
+            meshes: [
+                {
+                    primitives: [
+                        {
+                            attributes: {
+                                POSITION: 0
+                            },
+                            indices: 1
+                        }
+                    ]
+                }, {
+                    primitives: [
+                        {
+                            attributes: {
+                                POSITION: 3
+                            },
+                            indices: 1
+                        }
+                    ]
+                }
+            ]
+        };
+        addDefaults(gltf);
+        expect(gltf.bufferViews[0].target).toEqual(WebGLConstants.ARRAY_BUFFER);
+        expect(gltf.bufferViews[1].target).toEqual(WebGLConstants.ELEMENT_ARRAY_BUFFER);
+        expect(gltf.bufferViews[2].target).not.toBeDefined();
+        expect(gltf.bufferViews[3].target).toEqual(WebGLConstants.ARRAY_BUFFER);
+    });
 });
