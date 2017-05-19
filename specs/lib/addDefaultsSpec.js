@@ -14,7 +14,8 @@ var removePipelineExtras = require('../../lib/removePipelineExtras');
 
 var fsReadFile = Promise.promisify(fs.readFile);
 
-var transparentImageUri = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAB3RJTUUH4AcGERIfpcOGjwAAAQZJREFUGNMFwcErQ3EAwPHv7+3JEw2FFe+lZ9vpTTnYiR2MsyKuE8VB/ojdlZuDg4sVyUU7TVK7KG05jFgWPdt6oqWI5/E87/l8RNO8zyoylF4EtTeB6wWMhH2mNMG3B3KHDMemxOFdQEj4qN3tPDoS9Q+HxaiPdNkS5G5+SUV1xoYG6VNcRvvh9ClMS+hIZ6aLocZY0M+Zj1X59CMcXXmsJUO4dh7Z0HTiEZvN3DQDvcNk5mrYyU5q5SUK1QuktGpxkE/x8OpSaVqUSxt81bfYKewxkVhF9h1BjxJHyBW84I/dk23ebVieWWF2fB1hNZ6zSlsXxdt9rhtFgsDH0CZJJzK43g//gYBjzrZ4jf0AAAAASUVORK5CYII=';
+var opaqueImageUri = './specs/data/boxTexturedUnoptimized/Cesium_Logo_Flat.jpg';
+var transparentImageUri = './specs/data/boxTexturedUnoptimized/Cesium_Logo_Flat_Transparent.png';
 var gltfTransparentPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestTransparent.gltf';
 
 describe('addDefaults', function() {
@@ -157,6 +158,13 @@ describe('addDefaults', function() {
         }
     };
 
+    var opaqueBlendState = {
+        enable : [
+            WebGLConstants.CULL_FACE,
+            WebGLConstants.DEPTH_TEST
+        ]
+    };
+
     it('generates a material with alpha blending if the diffuse texture is transparent and no technique or extension values are given', function(done) {
         var gltf = {
             "textures": {
@@ -167,12 +175,24 @@ describe('addDefaults', function() {
                     "source": "Image0001",
                     "target": 3553,
                     "type": 5121
+                },
+                "texture0002": {
+                    "format": 6408,
+                    "internalFormat": 6408,
+                    "sampler": "sampler_0",
+                    "source": "Image0002",
+                    "target": 3553,
+                    "type": 5121
                 }
             },
             "images": {
                 "Image0001": {
                     "name": "Image0001",
                     "uri": transparentImageUri
+                },
+                "Image0002": {
+                    "name": "Image0002",
+                    "uri": opaqueImageUri
                 }
             },
             "materials": {
@@ -182,16 +202,28 @@ describe('addDefaults', function() {
                         "diffuse": "texture0001",
                         "emission": [1, 0, 0, 1]
                     }
+                },
+                "material2": {
+                    "values": {
+                        "ambient": [0, 0, 0, 1],
+                        "diffuse": "texture0002",
+                        "emission": [1, 0, 0, 1]
+                    }
                 }
             }
         };
 
+        var options = {
+            basePath : './'
+        };
         addPipelineExtras(gltf);
-        expect(loadGltfUris(gltf)
+        expect(loadGltfUris(gltf, options)
             .then(function() {
                 addDefaults(gltf);
-                var technique = gltf.techniques[Object.keys(gltf.techniques)[0]];
-                expect(technique.states).toEqual(alphaBlendState);
+                var techniqueOpaque = gltf.techniques[Object.keys(gltf.techniques)[0]];
+                var techniqueAlpha = gltf.techniques[Object.keys(gltf.techniques)[1]];
+                expect(techniqueAlpha.states).toEqual(alphaBlendState);
+                expect(techniqueOpaque.states).toEqual(opaqueBlendState);
             }), done).toResolve();
     });
 
