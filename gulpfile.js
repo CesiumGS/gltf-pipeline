@@ -6,7 +6,7 @@ var fsExtra = require('fs-extra');
 var gulp = require('gulp');
 var gulpJshint = require('gulp-jshint');
 var Jasmine = require('jasmine');
-var JasmineSpecReporter = require('jasmine-spec-reporter');
+var jasmineSpecReporter = require('jasmine-spec-reporter');
 var open = require('open');
 var path = require('path');
 var Promise = require('bluebird');
@@ -15,9 +15,6 @@ var yargs = require('yargs');
 var defined = Cesium.defined;
 var DeveloperError = Cesium.DeveloperError;
 var argv = yargs.argv;
-
-var fsExtraReadFile = Promise.promisify(fsExtra.readFile);
-var fsExtraOutputFile = Promise.promisify(fsExtra.outputFile);
 
 // Add third-party node module binaries to the system path
 // since some tasks need to call them directly.
@@ -67,7 +64,7 @@ gulp.task('test', function (done) {
         // Travis runs Ubuntu 12.04.5 which has glibc 2.15, while crunch requires glibc 2.22 or higher
         excludeCompressedTextures(jasmine);
     }
-    jasmine.addReporter(new JasmineSpecReporter({
+    jasmine.addReporter(new jasmineSpecReporter.SpecReporter({
         displaySuccessfulSpec: !defined(argv.suppressPassed) || !argv.suppressPassed
     }));
     jasmine.execute();
@@ -292,12 +289,12 @@ gulp.task('build-cesium', function () {
     };
     Promise.map(files, function(fileName) {
         var filePath = path.join(basePath, fileName);
-        return fsExtraReadFile(filePath)
+        return fsExtra.readFile(filePath)
             .then(function(buffer) {
                 var source = buffer.toString();
                 source = amdify(source, subDependencyMapping);
                 var outputPath = path.join(outputDir, fileName);
-                return fsExtraOutputFile(outputPath, source);
+                return fsExtra.outputFile(outputPath, source);
             });
     });
 });
@@ -310,12 +307,12 @@ gulp.task('build-cesium-combine', function () {
     ];
     Promise.map(files, function(fileName) {
         var filePath = path.join(basePath, fileName);
-        return fsExtraReadFile(filePath)
+        return fsExtra.readFile(filePath)
             .then(function(buffer) {
                 var source = buffer.toString();
                 source = combine(source);
                 var outputPath = path.join(outputDir, fileName);
-                return fsExtraOutputFile(outputPath, source);
+                return fsExtra.outputFile(outputPath, source);
             });
     });
 });
