@@ -1,9 +1,6 @@
 'use strict';
-var Promise = require('bluebird');
-var fs = require('fs');
+var fsExtra = require('fs-extra');
 var bufferEqual = require('buffer-equal');
-
-var fsReadFile = Promise.promisify(fs.readFile);
 
 var addPipelineExtras = require('../../lib/addPipelineExtras');
 var loadGltfUris = require('../../lib/loadGltfUris');
@@ -20,7 +17,7 @@ describe('loadImageUris', function() {
     };
 
     beforeAll(function(done) {
-        fsReadFile(imagePath)
+        fsExtra.readFile(imagePath)
             .then(function(data) {
                 imageData = data;
                 done();

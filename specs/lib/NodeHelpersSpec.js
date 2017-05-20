@@ -1,13 +1,10 @@
 'use strict';
 var Cesium = require('cesium');
-var Promise = require('bluebird');
 var clone = require('clone');
-var fs = require('fs');
+var fsExtra = require('fs-extra');
 
 var Matrix4 = Cesium.Matrix4;
 var CesiumMath = Cesium.Math;
-
-var fsReadFile = Promise.promisify(fs.readFile);
 
 var NodeHelpers = require('../../lib/NodeHelpers');
 var fiveBoxPath = './specs/data/combineObjects/fiveBox.gltf';
@@ -177,7 +174,7 @@ describe('NodeHelpers', function() {
     });
 
     it('performs operations per primitive in a scene', function(done) {
-        fsReadFile(fiveBoxPath)
+        fsExtra.readFile(fiveBoxPath)
             .then(function(data) {
                 var gltf = JSON.parse(data);
                 var scene = gltf.scenes[gltf.scene];
@@ -204,9 +201,7 @@ describe('NodeHelpers', function() {
 
                 done();
             })
-            .catch(function(err) {
-                throw err;
-            });
+            .catch(done.fail);
     });
 
     it('maps meshes to nodes', function() {

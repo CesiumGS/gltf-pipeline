@@ -1,7 +1,7 @@
 'use strict';
 var Cesium = require('cesium');
 var clone = require('clone');
-var fs = require('fs');
+var fsExtra = require('fs-extra');
 var Promise = require('bluebird');
 
 var WebGLConstants = Cesium.WebGLConstants;
@@ -11,8 +11,6 @@ var addPipelineExtras = require('../../lib/addPipelineExtras');
 var loadGltfUris = require('../../lib/loadGltfUris');
 var readGltf = require('../../lib/readGltf');
 var removePipelineExtras = require('../../lib/removePipelineExtras');
-
-var fsReadFile = Promise.promisify(fs.readFile);
 
 var transparentImageUri = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAB3RJTUUH4AcGERIfpcOGjwAAAQZJREFUGNMFwcErQ3EAwPHv7+3JEw2FFe+lZ9vpTTnYiR2MsyKuE8VB/ojdlZuDg4sVyUU7TVK7KG05jFgWPdt6oqWI5/E87/l8RNO8zyoylF4EtTeB6wWMhH2mNMG3B3KHDMemxOFdQEj4qN3tPDoS9Q+HxaiPdNkS5G5+SUV1xoYG6VNcRvvh9ClMS+hIZ6aLocZY0M+Zj1X59CMcXXmsJUO4dh7Z0HTiEZvN3DQDvcNk5mrYyU5q5SUK1QuktGpxkE/x8OpSaVqUSxt81bfYKewxkVhF9h1BjxJHyBW84I/dk23ebVieWWF2fB1hNZ6zSlsXxdt9rhtFgsDH0CZJJzK43g//gYBjzrZ4jf0AAAAASUVORK5CYII=';
 var gltfTransparentPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestTransparent.gltf';
@@ -214,7 +212,7 @@ describe('addDefaults', function() {
     });
 
     it('modifies the material\'s technique to support alpha blending if the diffuse texture is transparent', function(done) {
-        expect(fsReadFile(gltfTransparentPath)
+        expect(fsExtra.readFile(gltfTransparentPath)
             .then(function(data) {
                 var gltf = JSON.parse(data);
                 var originalState = gltf.techniques[Object.keys(gltf.techniques)[0]].states;
@@ -229,7 +227,7 @@ describe('addDefaults', function() {
     });
 
     it('modifies the material\'s technique to support alpha blending if the diffuse color is transparent', function(done) {
-        expect(fsReadFile(gltfTransparentPath)
+        expect(fsExtra.readFile(gltfTransparentPath)
             .then(function(data) {
                 var gltf = JSON.parse(data);
                 var originalState = gltf.techniques[Object.keys(gltf.techniques)[0]].states;

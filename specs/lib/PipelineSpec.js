@@ -14,8 +14,6 @@ var processJSON = Pipeline.processJSON;
 var processJSONToDisk = Pipeline.processJSONToDisk;
 var processJSONWithExtras = Pipeline.processJSONWithExtras;
 
-var fsExtraReadFile = Promise.promisify(fsExtra.readFile);
-
 var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf';
 var gltfEmbeddedPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestEmbedded.gltf';
 var glbPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.glb';
@@ -25,7 +23,7 @@ var outputGlbPath = './output/CesiumTexturedBoxTest.glb';
 describe('Pipeline', function() {
     it('optimizes a gltf JSON with embedded resources', function(done) {
         var gltfCopy;
-        expect(fsExtraReadFile(gltfEmbeddedPath)
+        expect(fsExtra.readFile(gltfEmbeddedPath)
             .then(function(data) {
                 var gltf = JSON.parse(data);
                 gltfCopy = clone(gltfCopy);
@@ -43,7 +41,7 @@ describe('Pipeline', function() {
             basePath : path.dirname(gltfPath)
         };
         var gltfCopy;
-        expect(fsExtraReadFile(gltfPath, options)
+        expect(fsExtra.readFile(gltfPath, options)
             .then(function(data) {
                 var gltf = JSON.parse(data);
                 gltfCopy = clone(gltfCopy);
@@ -85,7 +83,7 @@ describe('Pipeline', function() {
     });
 
     it('will write a file to the correct directory', function(done) {
-        var spy = spyOn(fsExtra, 'outputJsonAsync').and.callFake(function() {});
+        var spy = spyOn(fsExtra, 'outputJson').and.callFake(function() {});
         var options = {
             createDirectory : false
         };
@@ -99,7 +97,7 @@ describe('Pipeline', function() {
     });
 
     it('will write a binary file', function(done) {
-        var spy = spyOn(fsExtra, 'outputFileAsync').and.callFake(function() {});
+        var spy = spyOn(fsExtra, 'outputFile').and.callFake(function() {});
         var options = {
             binary : true,
             createDirectory : false
@@ -115,7 +113,7 @@ describe('Pipeline', function() {
     });
 
     it('will write a file from JSON', function(done) {
-        var spy = spyOn(fsExtra, 'outputJsonAsync').and.callFake(function() {});
+        var spy = spyOn(fsExtra, 'outputJson').and.callFake(function() {});
         var processOptions = {
             createDirectory : false,
             basePath : path.dirname(gltfPath)
