@@ -1,13 +1,11 @@
 'use strict';
 var bufferEqual = require('buffer-equal');
 var clone = require('clone');
-var fs = require('fs');
+var fsExtra = require('fs-extra');
 var Promise = require('bluebird');
 
 var getBinaryGltf = require('../../lib/getBinaryGltf');
 var readGltf = require('../../lib/readGltf');
-
-var fsReadFile = Promise.promisify(fs.readFile);
 
 var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest_BinaryInput.gltf';
 var scenePath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest_BinaryCheck.gltf';
@@ -30,16 +28,16 @@ describe('getBinaryGltf', function() {
         expect(readGltf(gltfPath)
             .then(function(gltf) {
                 testData.gltf = gltf;
-                return fsReadFile(scenePath);
+                return fsExtra.readFile(scenePath);
             })
             .then(function(data) {
                 testData.scene = JSON.parse(data);
 
                 var readFiles = [
-                    fsReadFile(testData.image),
-                    fsReadFile(testData.buffer),
-                    fsReadFile(testData.fragmentShader),
-                    fsReadFile(testData.vertexShader)
+                    fsExtra.readFile(testData.image),
+                    fsExtra.readFile(testData.buffer),
+                    fsExtra.readFile(testData.fragmentShader),
+                    fsExtra.readFile(testData.vertexShader)
                 ];
                 return Promise.all(readFiles);
             })

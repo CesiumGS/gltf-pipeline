@@ -14,7 +14,7 @@ var invalidPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.exe
 
 describe('writeBinaryGltf', function() {
     it('will write a file to the correct directory', function(done) {
-        var spy = spyOn(fsExtra, 'outputFileAsync').and.callFake(function() {});
+        var spy = spyOn(fsExtra, 'outputFile').and.callFake(function() {});
         var writeOptions = {
             outputPath : outputGltfPath,
             embed : true,

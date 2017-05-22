@@ -1,8 +1,7 @@
 'use strict';
 var Cesium = require('cesium');
 var clone = require('clone');
-var fs = require('fs');
-var Promise = require('bluebird');
+var fsExtra = require('fs-extra');
 
 var WebGLConstants = Cesium.WebGLConstants;
 
@@ -11,8 +10,6 @@ var addPipelineExtras = require('../../lib/addPipelineExtras');
 var loadGltfUris = require('../../lib/loadGltfUris');
 var readGltf = require('../../lib/readGltf');
 var removePipelineExtras = require('../../lib/removePipelineExtras');
-
-var fsReadFile = Promise.promisify(fs.readFile);
 
 var opaqueImageUri = './specs/data/boxTexturedUnoptimized/Cesium_Logo_Flat.jpg';
 var transparentImageUri = './specs/data/boxTexturedUnoptimized/Cesium_Logo_Flat_Transparent.png';
@@ -246,7 +243,7 @@ describe('addDefaults', function() {
     });
 
     it('modifies the material\'s technique to support alpha blending if the diffuse texture is transparent', function(done) {
-        expect(fsReadFile(gltfTransparentPath)
+        expect(fsExtra.readFile(gltfTransparentPath)
             .then(function(data) {
                 var gltf = JSON.parse(data);
                 var originalState = gltf.techniques[Object.keys(gltf.techniques)[0]].states;
@@ -261,7 +258,7 @@ describe('addDefaults', function() {
     });
 
     it('modifies the material\'s technique to support alpha blending if the diffuse color is transparent', function(done) {
-        expect(fsReadFile(gltfTransparentPath)
+        expect(fsExtra.readFile(gltfTransparentPath)
             .then(function(data) {
                 var gltf = JSON.parse(data);
                 var originalState = gltf.techniques[Object.keys(gltf.techniques)[0]].states;

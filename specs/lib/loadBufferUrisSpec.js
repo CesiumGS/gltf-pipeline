@@ -1,9 +1,6 @@
 'use strict';
-var Promise = require('bluebird');
-var fs = require('fs');
+var fsExtra = require('fs-extra');
 var bufferEqual = require('buffer-equal');
-
-var fsReadFile = Promise.promisify(fs.readFile);
 
 var addPipelineExtras = require('../../lib/addPipelineExtras');
 var loadGltfUris = require('../../lib/loadGltfUris');
@@ -19,14 +16,12 @@ describe('loadBufferUris', function() {
     };
 
     beforeAll(function(done) {
-        fsReadFile(bufferPath)
+        fsExtra.readFile(bufferPath)
             .then(function(data) {
                 bufferData = data;
                 done();
             })
-            .catch(function(err) {
-                throw err;
-            });
+            .catch(done.fail);
     });
 
     it('loads an external buffer', function(done) {
