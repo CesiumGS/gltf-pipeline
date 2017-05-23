@@ -92,7 +92,7 @@ This will output a portion of the gltf-pipeline code into the `dist/cesium` fold
 
 This project bundles several native binaries for texture compression.
 
-* [PVRTexTool] (https://community.imgtec.com/developers/powervr/tools/pvrtextool/) - Windows, macOS, and Linux binaries are provided by the PowerVR SDK.
+* [PVRTexTool](https://community.imgtec.com/developers/powervr/tools/pvrtextool/) - Windows, macOS, and Linux binaries are provided by the PowerVR SDK.
 * [etc2comp](https://github.com/google/etc2comp) - Windows, macOS, and Linux binaries built from source.
 * [crunch](https://github.com/BinomialLLC/crunch) - Windows binary built from [crunch](https://github.com/BinomialLLC/crunch), macOS binary built from [BKcore/crunch-osx](https://github.com/BKcore/crunch-osx), Linux binary built from [tomerb/linux_fixes](https://github.com/tomerb/crunch/tree/linux_fixes).
 * [astc-encoder](https://github.com/ARM-software/astc-encoder) - Windows, macOS, and Linux binaries built from source.
