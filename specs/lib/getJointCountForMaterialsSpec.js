@@ -2,7 +2,7 @@
 var getJointCountForMaterials = require('../../lib/getJointCountForMaterials');
 
 describe('getJointCountForMaterials', function() {
-    fit('gets joint counts for materials on skinned meshes', function() {
+    it('gets joint counts for materials on skinned meshes', function() {
         var gltf = {
             materials : [{}, {}],
             meshes : [{
