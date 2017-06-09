@@ -163,7 +163,8 @@ describe('generateModelMaterialsCommon', function () {
             ],
             skins: [
                 {
-                    inverseBindMatrices: 0
+                    inverseBindMatrices: 0,
+                    joints: [1, 2, 3, 4]
                 }
             ],
             techniques: [
