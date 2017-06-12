@@ -5,7 +5,6 @@
 /output
 /specs
 /test
-.jshintrc
 .npmignore
 .travis.yml
 .appveyor.yml

@@ -9,7 +9,7 @@ node_js:
   - "6"
 
 script:
-  - npm run jsHint -- --failTaskOnError
+  - npm run eslint -- --failTaskOnError
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]];
     then npm run test -- --failTaskOnError --suppressPassed --excludeCompressedTextures;
     else npm run test -- --failTaskOnError --suppressPassed;

@@ -1,3 +1,4 @@
+/*eslint strict: ["error", "function"]*/
 module.exports = {
     AccessorReader : require('./lib/AccessorReader'),
     addCesiumRTC : require('./lib/addCesiumRTC'),

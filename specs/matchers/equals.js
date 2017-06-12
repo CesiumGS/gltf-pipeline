@@ -1,5 +1,6 @@
 //This file is a copy of https://github.com/AnalyticalGraphicsInc/cesium/blob/master/Specs/equals.js
-/*global define*/
+/*eslint strict: ["error", "function"]*/
+/*eslint-env amd*/
 define([
         'Cesium/Core/FeatureDetection'
     ], function(
