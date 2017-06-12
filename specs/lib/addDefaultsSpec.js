@@ -9,7 +9,6 @@ var addDefaults = require('../../lib/addDefaults');
 var addPipelineExtras = require('../../lib/addPipelineExtras');
 var loadGltfUris = require('../../lib/loadGltfUris');
 var readGltf = require('../../lib/readGltf');
-var removePipelineExtras = require('../../lib/removePipelineExtras');
 
 var opaqueImageUri = './specs/data/boxTexturedUnoptimized/Cesium_Logo_Flat.jpg';
 var transparentImageUri = './specs/data/boxTexturedUnoptimized/Cesium_Logo_Flat_Transparent.png';

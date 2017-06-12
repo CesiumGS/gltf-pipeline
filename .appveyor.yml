@@ -17,7 +17,7 @@ install:
 test_script:
   - node --version
   - npm --version
-  - npm run jsHint -- --failTaskOnError
+  - npm run eslint -- --failTaskOnError
   - npm run test -- --failTaskOnError --suppressPassed
 
 # Don't actually build.

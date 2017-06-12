@@ -1,10 +1,7 @@
 'use strict';
-var clone = require('clone');
 var fsExtra = require('fs-extra');
 var path = require('path');
 
-var addPipelineExtras = require('../../lib/addPipelineExtras');
-var loadGltfUris = require('../../lib/loadGltfUris');
 var readGltf = require('../../lib/readGltf');
 var writeBinaryGltf = require('../../lib/writeBinaryGltf');
 

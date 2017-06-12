@@ -70,13 +70,13 @@ Run the tests:
 ```
 npm run test
 ```
-To run JSHint on the entire codebase, run:
+To run ESLint on the entire codebase, run:
 ```
-npm run jsHint
+npm run eslint
 ```
-To run JSHint automatically when a file is saved, run the following and leave it open in a console window:
+To run ESLint automatically when a file is saved, run the following and leave it open in a console window:
 ```
-npm run jsHint-watch
+npm run eslint-watch
 ```
 
 ### Building for Cesium integration

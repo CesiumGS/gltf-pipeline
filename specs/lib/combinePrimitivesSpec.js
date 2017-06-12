@@ -3,7 +3,6 @@ var Cesium = require('cesium');
 var clone = require('clone');
 var combinePrimitives = require('../../lib/combinePrimitives');
 var readAccessor = require('../../lib/readAccessor');
-var removePipelineExtras = require('../../lib/removePipelineExtras');
 
 var WebGLConstants = Cesium.WebGLConstants;
 
