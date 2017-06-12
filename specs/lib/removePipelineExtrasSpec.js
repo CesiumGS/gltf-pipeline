@@ -1,8 +1,10 @@
 'use strict';
 var fs = require('fs');
-var defined = require('cesium').defined;
 var removePipelineExtras = require('../../lib/removePipelineExtras');
 var gltfExtrasPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestRemoveExtras.gltf';
+var Cesium = require('cesium');
+
+var defined = Cesium.defined;
 
 describe('removePipelineExtras', function() {
     var gltf;
