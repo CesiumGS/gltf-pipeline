@@ -1,6 +1,5 @@
 'use strict';
 var Cesium = require('cesium');
-var clone = require('clone');
 
 var WebGLConstants = Cesium.WebGLConstants;
 

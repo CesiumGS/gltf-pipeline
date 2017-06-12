@@ -7,7 +7,7 @@ describe('removePipelineExtras', function() {
     var gltf;
 
     beforeAll(function(done) {
-        fs.readFile(gltfExtrasPath, function(err, data) {
+        fs.readFile(gltfExtrasPath, function(err, data) { //eslint-disable-line no-unused-vars
             gltf = JSON.parse(data);
             removePipelineExtras(gltf);
             done();

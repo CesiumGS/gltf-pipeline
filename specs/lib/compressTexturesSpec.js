@@ -41,7 +41,7 @@ function compressGltfTexture(gltfPath, imagePath, options) {
                 basePath : basePath
             };
             return Pipeline.processJSON(gltf, pipelineOptions)
-                .then(function(gltf) {
+                .then(function(gltf) { //eslint-disable-line no-unused-vars
                     // Return the first compressed image
                     var compressedImages = image.extras.compressedImage3DTiles;
                     return compressedImages[Object.keys(compressedImages)[0]].uri;
