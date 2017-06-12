@@ -1,5 +1,6 @@
 'use strict';
 var fs = require('fs');
+var defined = require('cesium').defined;
 var removePipelineExtras = require('../../lib/removePipelineExtras');
 var gltfExtrasPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestRemoveExtras.gltf';
 
@@ -7,7 +8,11 @@ describe('removePipelineExtras', function() {
     var gltf;
 
     beforeAll(function(done) {
-        fs.readFile(gltfExtrasPath, function(err, data) { //eslint-disable-line no-unused-vars
+        fs.readFile(gltfExtrasPath, function(err, data) {
+            if(defined(err)) {
+                done.fail(err);
+                return;
+            }
             gltf = JSON.parse(data);
             removePipelineExtras(gltf);
             done();
