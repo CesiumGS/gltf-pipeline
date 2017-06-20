@@ -46,10 +46,10 @@
     "eslint-config-cesium": "^1.0.0",
     "gulp": "^3.9.1",
     "gulp-eslint": "^4.0.0",
-    "istanbul": "^0.4.5",
     "jasmine": "^2.5.2",
     "jasmine-spec-reporter": "^4.1.0",
     "jsdoc": "^3.4.3",
+    "nyc": "^11.0.2",
     "open": "^0.0.5",
     "requirejs": "^2.3.2"
   },

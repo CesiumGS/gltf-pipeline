@@ -101,9 +101,9 @@ gulp.task('coverage', function () {
         additionalExcludes += '-x "specs/lib/compressTexturesMultipleFormatsSpec.js"';
     }
 
-    child_process.execSync('istanbul' +
-        ' cover' +
-        ' --include-all-sources' +
+    child_process.execSync('nyc' +
+        ' --all' +
+        ' --reporter=lcov' +
         ' --dir coverage' +
         ' -x "specs/**" -x "bin/**" -x "coverage/**" -x "dist/**" -x "index.js" -x "gulpfile.js"' + additionalExcludes +
         ' node_modules/jasmine/bin/jasmine.js' +
