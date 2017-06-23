@@ -44,7 +44,8 @@ describe('AmbientOcclusion', function() {
     var indices = [0,1,2,0,2,3];
     var indicesBuffer = new Buffer(indices.length * 2);
     var indicesLength = indices.length;
-    for (var i = 0; i < indicesLength; i++) {
+    var i;
+    for (i = 0; i < indicesLength; i++) {
         indicesBuffer.writeUInt16LE(indices[i], i * 2);
     }
     var positions = [
@@ -309,7 +310,8 @@ describe('AmbientOcclusion', function() {
 
     it('generates all occluded (1.0) for samples inside a closed tetrahedron', function() {
         var normals = [];
-        for (var i = 0; i < 6; i++) {
+        var i;
+        for (i = 0; i < 6; i++) {
             var values = [0.0, 0.0, 0.0];
             values[i % 3] = (i % 2) ? 1.0 : -1.0;
             var newNormal = new Cartesian3(values[0], values[1], values[2]);

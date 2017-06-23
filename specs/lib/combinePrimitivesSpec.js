@@ -531,7 +531,8 @@ describe('combinePrimitives', function() {
         var valueCount = 16385;
         var smallerValueCount = 100;
         var quarterOverflow = new Uint16Array(valueCount);
-        for (var i = 0; i < valueCount; i++) {
+        var i;
+        for (i = 0; i < valueCount; i++) {
             quarterOverflow[i] = i;
         }
         var quarterOverflowBuffer = new Buffer(quarterOverflow.buffer);

@@ -1,3 +1,7 @@
 {
-  "extends": "cesium/node"
+  "extends": "cesium/node",
+  "rules": {
+    "no-buffer-constructor": "off",
+    "quotes": "off"
+  }
 }
