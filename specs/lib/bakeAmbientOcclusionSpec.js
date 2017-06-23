@@ -42,7 +42,7 @@ describe('AmbientOcclusion', function() {
     var boxOverGroundGltf;
 
     var indices = [0,1,2,0,2,3];
-    var indicesBuffer = new Buffer(indices.length * 2);
+    var indicesBuffer = Buffer.allocUnsafe(indices.length * 2);
     var indicesLength = indices.length;
     var i;
     for (i = 0; i < indicesLength; i++) {
@@ -67,17 +67,17 @@ describe('AmbientOcclusion', function() {
         0.25,0.75
     ];
     var positionsLength = positions.length;
-    var positionsBuffer = new Buffer(positionsLength * 4);
+    var positionsBuffer = Buffer.allocUnsafe(positionsLength * 4);
     for (i = 0; i < positionsLength; i++) {
         positionsBuffer.writeFloatLE(positions[i], i * 4);
     }
     var normalsLength = normals.length;
-    var normalsBuffer = new Buffer(normalsLength * 4);
+    var normalsBuffer = Buffer.allocUnsafe(normalsLength * 4);
     for (i = 0; i < normalsLength; i++) {
         normalsBuffer.writeFloatLE(normals[i], i * 4);
     }
     var uvsLength = uvs.length;
-    var uvsBuffer = new Buffer(uvsLength * 4);
+    var uvsBuffer = Buffer.allocUnsafe(uvsLength * 4);
     for (i = 0; i < uvsLength; i++) {
         uvsBuffer.writeFloatLE(uvs[i], i * 4);
     }

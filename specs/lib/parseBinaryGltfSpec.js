@@ -109,7 +109,7 @@ describe('parseBinaryGltf', function() {
     });
 
     it('throws an error', function() {
-        var magicError = new Buffer(testData.binary);
+        var magicError = Buffer.from(testData.binary);
         magicError.fill(0, 0, 4);
         expect(function() {
             try {
@@ -124,7 +124,7 @@ describe('parseBinaryGltf', function() {
     });
 
     it('throws a version error', function() {
-        var versionError = new Buffer(testData.binary);
+        var versionError = Buffer.from(testData.binary);
         versionError.fill(0, 4, 8);
         expect(function() {
             try {
@@ -139,7 +139,7 @@ describe('parseBinaryGltf', function() {
     });
 
     it('throws a format error', function() {
-        var formatError = new Buffer(testData.binary);
+        var formatError = Buffer.from(testData.binary);
         formatError.fill(1, 16, 20);
         expect(function() {
             try {

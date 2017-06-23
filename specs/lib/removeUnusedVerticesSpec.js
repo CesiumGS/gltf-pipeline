@@ -9,9 +9,9 @@ describe('removeUnusedVertices', function() {
     var indices = new Uint16Array([0, 1, 2]);
     var indicesOneUnused = new Uint16Array([0, 2]);
     var indicesTwoUnused = new Uint16Array([1]);
-    var attributeOne = new Buffer(new Float32Array([0, 1, 2, 3, 4, 5, 6, 7, 8]).buffer);
-    var attributeTwo = new Buffer(new Uint16Array([0, 1, 2, 3, 4, 5]).buffer);
-    var attributeThree = new Buffer(new Uint16Array([9, 10, 11, 12, 13, 14, 15, 16, 17]).buffer);
+    var attributeOne = Buffer.from(new Float32Array([0, 1, 2, 3, 4, 5, 6, 7, 8]).buffer);
+    var attributeTwo = Buffer.from(new Uint16Array([0, 1, 2, 3, 4, 5]).buffer);
+    var attributeThree = Buffer.from(new Uint16Array([9, 10, 11, 12, 13, 14, 15, 16, 17]).buffer);
     var attributesBuffer = Buffer.concat([attributeOne, attributeTwo, attributeThree]);
 
     var testGltf = {
@@ -96,7 +96,7 @@ describe('removeUnusedVertices', function() {
     it('does not remove any data if all attribute values are accessed', function() {
         var gltf = clone(testGltf);
         var gltfIndexBuffer = gltf.buffers.indexBuffer;
-        var indexBuffer = new Buffer(indices.buffer);
+        var indexBuffer = Buffer.from(indices.buffer);
         gltfIndexBuffer.extras._pipeline.source = indexBuffer;
         gltfIndexBuffer.byteLength = indexBuffer.length;
         gltf.bufferViews.indexBufferView.byteLength = indexBuffer.length;
@@ -111,7 +111,7 @@ describe('removeUnusedVertices', function() {
     it('removes one unused attribute', function() {
         var gltf = clone(testGltf);
         var gltfIndexBuffer = gltf.buffers.indexBuffer;
-        var indexBuffer = new Buffer(indicesOneUnused.slice(0).buffer);
+        var indexBuffer = Buffer.from(indicesOneUnused.slice(0).buffer);
         gltfIndexBuffer.extras._pipeline.source = indexBuffer;
         gltfIndexBuffer.byteLength = indexBuffer.length;
         gltf.bufferViews.indexBufferView.byteLength = indexBuffer.length;
@@ -144,7 +144,7 @@ describe('removeUnusedVertices', function() {
     it('removes two unused attributes', function() {
         var gltf = clone(testGltf);
         var gltfIndexBuffer = gltf.buffers.indexBuffer;
-        var indexBuffer = new Buffer(indicesTwoUnused.slice(0).buffer);
+        var indexBuffer = Buffer.from(indicesTwoUnused.slice(0).buffer);
         gltfIndexBuffer.extras._pipeline.source = indexBuffer;
         gltfIndexBuffer.byteLength = indexBuffer.length;
         gltf.bufferViews.indexBufferView.byteLength = indexBuffer.length;
@@ -184,14 +184,14 @@ describe('removeUnusedVertices', function() {
     it('handles when primitives use the same accessors with different indices', function() {
         var gltf = clone(testGltf);
         var gltfIndexBuffer = gltf.buffers.indexBuffer;
-        var indexBuffer = new Buffer(indicesTwoUnused.slice(0).buffer);
+        var indexBuffer = Buffer.from(indicesTwoUnused.slice(0).buffer);
         gltfIndexBuffer.extras._pipeline.source = indexBuffer;
         gltfIndexBuffer.byteLength = indexBuffer.length;
         var indexBufferView = gltf.bufferViews.indexBufferView;
         indexBufferView.byteLength = indexBuffer.length;
 
         var gltfIndexBuffer2 = clone(gltfIndexBuffer);
-        var indexBuffer2 = new Buffer(indicesOneUnused.slice(0).buffer);
+        var indexBuffer2 = Buffer.from(indicesOneUnused.slice(0).buffer);
         gltfIndexBuffer2.extras._pipeline.source = indexBuffer2;
         gltfIndexBuffer2.byteLength = indexBuffer2.length;
         gltf.buffers.indexBuffer2 = gltfIndexBuffer2;
@@ -222,14 +222,14 @@ describe('removeUnusedVertices', function() {
     it('handles when primitives use the same accessors along with different accessors with different indices', function() {
         var gltf = clone(testGltf);
         var gltfIndexBuffer = gltf.buffers.indexBuffer;
-        var indexBuffer = new Buffer(indicesTwoUnused.slice(0).buffer);
+        var indexBuffer = Buffer.from(indicesTwoUnused.slice(0).buffer);
         gltfIndexBuffer.extras._pipeline.source = indexBuffer;
         gltfIndexBuffer.byteLength = indexBuffer.length;
         var indexBufferView = gltf.bufferViews.indexBufferView;
         indexBufferView.byteLength = indexBuffer.length;
 
         var gltfIndexBuffer2 = clone(gltfIndexBuffer);
-        var indexBuffer2 = new Buffer(indicesOneUnused.slice(0).buffer);
+        var indexBuffer2 = Buffer.from(indicesOneUnused.slice(0).buffer);
         gltfIndexBuffer2.extras._pipeline.source = indexBuffer2;
         gltfIndexBuffer2.byteLength = indexBuffer2.length;
         gltf.buffers.indexBuffer2 = gltfIndexBuffer2;
@@ -261,13 +261,13 @@ describe('removeUnusedVertices', function() {
 
     it('handles when there is a cross-dependency between two groups of primitives', function() {
         var attributeData1 = new Float32Array([0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0]);
-        var attributeDataBuffer1 = new Buffer(attributeData1.buffer);
+        var attributeDataBuffer1 = Buffer.from(attributeData1.buffer);
         var attributeData2 = new Float32Array([15.0, 16.0, 17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0]);
-        var attributeDataBuffer2 = new Buffer(attributeData2.buffer);
+        var attributeDataBuffer2 = Buffer.from(attributeData2.buffer);
         var indexData1 = new Uint16Array([0, 1, 2, 4, 2, 1, 0, 1, 2]);
-        var indexDataBuffer1 = new Buffer(indexData1.buffer);
+        var indexDataBuffer1 = Buffer.from(indexData1.buffer);
         var indexData2 = new Uint16Array([0, 1, 3, 4, 3, 1, 0]);
-        var indexDataBuffer2 = new Buffer(indexData2.buffer);
+        var indexDataBuffer2 = Buffer.from(indexData2.buffer);
         var gltf = {
             accessors : {
                 attributeAccessor1 : {
@@ -399,7 +399,7 @@ describe('removeUnusedVertices', function() {
     it('removes parts of the buffer based on the attribute type if the stride is 0', function() {
         var i;
         var indices = [0,1,2,0,2,3];
-        var indicesBuffer = new Buffer(indices.length * 2);
+        var indicesBuffer = Buffer.allocUnsafe(indices.length * 2);
         for (i = 0; i < indices.length; i++) {
             indicesBuffer.writeUInt16LE(indices[i], i * 2);
         }
@@ -413,7 +413,7 @@ describe('removeUnusedVertices', function() {
             2,2,2,
             2,2,2
         ];
-        var positionsBuffer = new Buffer(positions.length * 4);
+        var positionsBuffer = Buffer.allocUnsafe(positions.length * 4);
         for (i = 0; i < positions.length; i++) {
             positionsBuffer.writeFloatLE(positions[i], i * 4);
         }
@@ -496,7 +496,7 @@ describe('removeUnusedVertices', function() {
     it('handles 8 bit indices', function(){
         var i;
         var indices = [0,1,2,0,2,3];
-        var indicesBuffer = new Buffer(indices.length);
+        var indicesBuffer = Buffer.allocUnsafe(indices.length);
         for (i = 0; i < indices.length; i++) {
             indicesBuffer.writeUInt8(indices[i], i);
         }
@@ -510,7 +510,7 @@ describe('removeUnusedVertices', function() {
             2,2,2,
             2,2,2
         ];
-        var positionsBuffer = new Buffer(positions.length * 4);
+        var positionsBuffer = Buffer.allocUnsafe(positions.length * 4);
         for (i = 0; i < positions.length; i++) {
             positionsBuffer.writeFloatLE(positions[i], i * 4);
         }
