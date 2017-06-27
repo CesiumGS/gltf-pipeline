@@ -198,10 +198,10 @@ describe('combineNodes', function() {
         var positions = new Float32Array([1.0, 0.0, 0.0,  0.0, 1.0, 0.0,  0.0, 0.0, 1.0]);
         var normals = new Float32Array([1.0, 0.0, 0.0,  0.0, 1.0, 0.0,  0.0, 0.0, 1.0]);
         var indices = new Uint16Array([0, 1, 2, 2, 1, 0]);
-        var positionsBuffer = new Buffer(positions.buffer);
-        var normalsBuffer = new Buffer(normals.buffer);
+        var positionsBuffer = Buffer.from(positions.buffer);
+        var normalsBuffer = Buffer.from(normals.buffer);
         var attributesBuffer = Buffer.concat([positionsBuffer, normalsBuffer]);
-        var indicesBuffer = new Buffer(indices.buffer);
+        var indicesBuffer = Buffer.from(indices.buffer);
         var buffer = Buffer.concat([attributesBuffer, indicesBuffer]);
         var gltf = {
             accessors : {
@@ -318,11 +318,11 @@ describe('combineNodes', function() {
         var normals = new Float32Array([1.0, 0.0, 0.0,  0.0, 1.0, 0.0,  0.0, 0.0, 1.0]);
         var indices = new Uint16Array([0, 1]);
         var overlappedIndices = new Uint16Array([1, 2]);
-        var positionsBuffer = new Buffer(positions.buffer);
-        var normalsBuffer = new Buffer(normals.buffer);
+        var positionsBuffer = Buffer.from(positions.buffer);
+        var normalsBuffer = Buffer.from(normals.buffer);
         var attributesBuffer = Buffer.concat([positionsBuffer, normalsBuffer]);
-        var indicesBuffer = new Buffer(indices.buffer);
-        var overlappedIndicesBuffer = new Buffer(overlappedIndices.buffer);
+        var indicesBuffer = Buffer.from(indices.buffer);
+        var overlappedIndicesBuffer = Buffer.from(overlappedIndices.buffer);
         var allIndicesBuffer = Buffer.concat([indicesBuffer, overlappedIndicesBuffer]);
         var buffer = Buffer.concat([attributesBuffer, allIndicesBuffer]);
         var gltf = {

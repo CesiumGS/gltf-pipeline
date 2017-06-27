@@ -18,7 +18,7 @@ describe('loadShaderUris', function() {
         fsExtra.readFile(fragmentShaderPath)
             .then(function(data){
                 fragmentShaderData = data.toString();
-                fragmentShaderUri = 'data:text/plain;base64,' + new Buffer(fragmentShaderData).toString('base64');
+                fragmentShaderUri = 'data:text/plain;base64,' + Buffer.from(fragmentShaderData).toString('base64');
                 done();
             })
             .catch(done.fail);

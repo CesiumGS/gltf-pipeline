@@ -4,9 +4,9 @@ var mergeBuffers = require('../../lib/mergeBuffers');
 
 describe('mergeBuffers', function() {
     it('merges buffers', function() {
-        var buffer0 = new Buffer([1, 2]);
-        var buffer1 = new Buffer([3, 4, 5]);
-        var bufferMerged = new Buffer([1, 2, 3, 4, 5]);
+        var buffer0 = Buffer.from([1, 2]);
+        var buffer1 = Buffer.from([3, 4, 5]);
+        var bufferMerged = Buffer.from([1, 2, 3, 4, 5]);
         var gltf = {
             "bufferViews": {
                 "bufferView_0": {
