@@ -2,7 +2,6 @@
 var Jimp = require('jimp');
 var Promise = require('bluebird');
 var clone = require('clone');
-var bufferEqual = require('buffer-equal');
 var dataUriToBuffer = require('data-uri-to-buffer');
 
 var addPipelineExtras = require('../../lib/addPipelineExtras');
@@ -43,8 +42,8 @@ describe('encodeImages', function() {
 
                 encodeImages(gltfClone)
                     .then(function() {
-                        expect(bufferEqual(pipelineExtras0001.source, imageBuffer)).toBe(true);
-                        expect(bufferEqual(pipelineExtras0002.source, imageBuffer)).toBe(true);
+                        expect(pipelineExtras0001.source.equals(imageBuffer)).toBe(true);
+                        expect(pipelineExtras0002.source.equals(imageBuffer)).toBe(true);
                         done();
                     });
             });
@@ -73,8 +72,8 @@ describe('encodeImages', function() {
                         expect(jimpImage002.bitmap.width).toEqual(8);
                         expect(jimpImage002.bitmap.height).toEqual(8);
 
-                        expect(bufferEqual(pipelineExtras0001.source, imageBuffer)).not.toBe(true);
-                        expect(bufferEqual(pipelineExtras0002.source, imageBuffer)).not.toBe(true);
+                        expect(pipelineExtras0001.source.equals(imageBuffer)).not.toBe(true);
+                        expect(pipelineExtras0002.source.equals(imageBuffer)).not.toBe(true);
 
                         // expect the buffers to still be readable by jimp (valid image buffer)
                         var promises = [];

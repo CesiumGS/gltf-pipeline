@@ -2,7 +2,6 @@
 var clone = require('clone');
 var fsExtra = require('fs-extra');
 
-var bufferEqual = require('buffer-equal');
 var writeGltf = require('../../lib/writeGltf');
 
 var fragmentShaderPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest0FS.glsl';
@@ -52,7 +51,7 @@ describe('writeShaders', function() {
                 return fsExtra.readFile(outputFragmentShaderPath);
             })
             .then(function(outputData) {
-                expect(bufferEqual(outputData, fragmentShaderData)).toBe(true);
+                expect(outputData.equals(fragmentShaderData)).toBe(true);
             }), done).toResolve();
     });
 
