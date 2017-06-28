@@ -112,7 +112,7 @@ This will output a portion of the gltf-pipeline code into the `dist/cesium-combi
 
 ### Running Test Coverage
 
-Coverage uses [istanbul](https://github.com/gotwarlost/istanbul).  Run:
+Coverage uses [nyc](https://github.com/istanbuljs/nyc).  Run:
 ```
 npm run coverage
 ```

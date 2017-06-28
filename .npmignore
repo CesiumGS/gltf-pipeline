@@ -11,3 +11,4 @@
 .appveyor.yml
 gulpfile.js
 *.tgz
+.nyc_output
