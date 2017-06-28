@@ -1,3 +1,6 @@
 {
-  "extends": "cesium/node"
+  "extends": "cesium/node",
+  "rules": {
+    "quotes": "off"
+  }
 }

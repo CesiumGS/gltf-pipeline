@@ -56,8 +56,8 @@ describe('readAccessor', function() {
                 };
                 break;
         }
-
-        for (var i = 0; i < data.length; i++) {
+        var i;
+        for (i = 0; i < data.length; i++) {
             var values = attributeToArray(data[i]);
             for (var j = 0; j < min.length; j++) {
                 if (values[j] > max[j] || values[j] < min[j]) {
@@ -85,7 +85,8 @@ describe('readAccessor', function() {
         var accessorIDtoMinMax = {};
 
         var allAccessors = testBoxGltf.accessors;
-        for (var accessorID in allAccessors) {
+        var accessorID;
+        for (accessorID in allAccessors) {
             if (allAccessors.hasOwnProperty(accessorID)) {
                 var accessor = allAccessors[accessorID];
                 var accessorData = [];

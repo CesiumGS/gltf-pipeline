@@ -64,7 +64,7 @@ describe('MergeDuplicateProperties', function() {
             }
         };
         it('merges a single duplicate accessor', function () {
-            var buffer = new Buffer([1, 2, 3, 1, 2, 3]);
+            var buffer = Buffer.from([1, 2, 3, 1, 2, 3]);
             var gltf = clone(testGltf);
             var gltfBuffer = gltf.buffers.buffer;
             gltfBuffer.extras._pipeline.source = buffer;
@@ -76,7 +76,7 @@ describe('MergeDuplicateProperties', function() {
         });
 
         it ('merges multiple duplicate accessors', function () {
-            var buffer = new Buffer([1, 2, 3, 1, 2, 3, 1, 2, 3]);
+            var buffer = Buffer.from([1, 2, 3, 1, 2, 3, 1, 2, 3]);
             var gltf = clone(testGltf);
             var gltfBuffer = gltf.buffers.buffer;
             gltfBuffer.extras._pipeline.source = buffer;
@@ -106,7 +106,7 @@ describe('MergeDuplicateProperties', function() {
         });
 
         it ('leaves a non-duplicate accessor alone', function () {
-            var buffer = new Buffer([1, 2, 3, 1, 2, 3, 3, 2, 1]);
+            var buffer = Buffer.from([1, 2, 3, 1, 2, 3, 3, 2, 1]);
             var gltf = clone(testGltf);
             var gltfBuffer = gltf.buffers.buffer;
             gltfBuffer.extras._pipeline.source = buffer;
@@ -139,8 +139,8 @@ describe('MergeDuplicateProperties', function() {
 
     var mergeShaders = MergeDuplicateProperties.mergeShaders;
     describe('mergeShaders', function() {
-        var testShaderBufferOne = new Buffer('test shader one', 'utf8');
-        var testShaderBufferTwo = new Buffer('test shader two', 'utf8');
+        var testShaderBufferOne = Buffer.from('test shader one', 'utf8');
+        var testShaderBufferTwo = Buffer.from('test shader two', 'utf8');
         it('merges duplicate shaders', function() {
             var gltf = {
                 programs : {

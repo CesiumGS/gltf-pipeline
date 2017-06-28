@@ -32,7 +32,7 @@ describe('writeShaders', function() {
                         }
                     }
                 };
-                fragmentShaderUri = 'data:text/plain;base64,' + new Buffer(fragmentShaderData).toString('base64');
+                fragmentShaderUri = 'data:text/plain;base64,' + Buffer.from(fragmentShaderData).toString('base64');
             }), done).toResolve();
     });
 
