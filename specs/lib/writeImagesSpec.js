@@ -1,5 +1,4 @@
 'use strict';
-var bufferEqual = require('buffer-equal');
 var clone = require('clone');
 var fsExtra = require('fs-extra');
 
@@ -50,7 +49,7 @@ describe('writeImages', function() {
                 return fsExtra.readFile(outputImagePath);
             })
             .then(function (outputData) {
-                expect(bufferEqual(outputData, imageData)).toBe(true);
+                expect(outputData.equals(imageData)).toBe(true);
             }), done).toResolve();
     });
 
