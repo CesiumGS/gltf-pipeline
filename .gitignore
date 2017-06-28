@@ -7,6 +7,7 @@ npm-debug.log
 .idea/tasks.xml
 
 # Generate data
+.eslintcache
 coverage
 dist
 output
