@@ -139,8 +139,6 @@ describe('MergeDuplicateProperties', function() {
 
     var mergeShaders = MergeDuplicateProperties.mergeShaders;
     describe('mergeShaders', function() {
-        var testShaderBufferOne = Buffer.from('test shader one', 'utf8');
-        var testShaderBufferTwo = Buffer.from('test shader two', 'utf8');
         it('merges duplicate shaders', function() {
             var gltf = {
                 programs : {
@@ -158,7 +156,7 @@ describe('MergeDuplicateProperties', function() {
                         type : WebGLConstants.VERTEX_SHADER,
                         extras : {
                             _pipeline : {
-                                source : testShaderBufferOne
+                                source : 'test shader one'
                             }
                         }
                     },
@@ -166,7 +164,7 @@ describe('MergeDuplicateProperties', function() {
                         type : WebGLConstants.FRAGMENT_SHADER,
                         extras : {
                             _pipeline : {
-                                source : testShaderBufferOne
+                                source : 'test shader one'
                             }
                         }
                     },
@@ -174,7 +172,7 @@ describe('MergeDuplicateProperties', function() {
                         type : WebGLConstants.VERTEX_SHADER,
                         extras : {
                             _pipeline : {
-                                source : testShaderBufferTwo
+                                source : 'test shader two'
                             }
                         }
                     },
@@ -182,7 +180,7 @@ describe('MergeDuplicateProperties', function() {
                         type : WebGLConstants.FRAGMENT_SHADER,
                         extras : {
                             _pipeline : {
-                                source : testShaderBufferOne
+                                source : 'test shader one'
                             }
                         }
                     }
