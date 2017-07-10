@@ -6,6 +6,8 @@
 /specs
 /test
 .eslintrc.json
+.eslintcache
+.eslintignore
 .npmignore
 .travis.yml
 .appveyor.yml
