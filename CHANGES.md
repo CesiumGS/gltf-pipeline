@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+### 1.0.0 - 2017-07-07
+* Fixed issue where shader comparison in `MergeDuplicateProperties` would cause a crash. [#297](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/297)
+* Fixed an issue where `mergeBuffers` would not align buffer views to 4-byte boundaries. [#298](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/298)
+* Fixed an issue where face normal generation would crash for degenerate triangles. [#298](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/298)
+
 ### 0.1.0-alpha15 - 2017-06-06
 * Fixed the `removeNormals` stage so that it can operate independently of `generateNormals`. [#287](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/287)
 * Fixed an issue with writing attributes with double underscores, which is reserved in GLSL. [#286](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/286)
