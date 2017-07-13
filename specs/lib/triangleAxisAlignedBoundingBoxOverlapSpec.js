@@ -2,7 +2,6 @@
 var Cesium = require('cesium');
 var AxisAlignedBoundingBox = Cesium.AxisAlignedBoundingBox;
 var Cartesian3 = Cesium.Cartesian3;
-var CesiumMath = Cesium.Math;
 var Matrix4 = Cesium.Matrix4;
 var Quaternion = Cesium.Quaternion;
 var triangleAxisAlignedBoundingBoxOverlap = require('../../lib/triangleAxisAlignedBoundingBoxOverlap');

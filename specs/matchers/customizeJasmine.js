@@ -1,4 +1,5 @@
-/*global define*/
+/*eslint strict: ["error", "function"]*/
+/*eslint-env amd*/
 define([
     './addDefaultMatchers',
     './equalsMethodEqualityTester'

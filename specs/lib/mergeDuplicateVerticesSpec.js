@@ -6,9 +6,9 @@ var uninterleaveAndPackBuffers = require('../../lib/uninterleaveAndPackBuffers')
 
 describe('mergeDuplicateVertices', function() {
     it('merges duplicate vertices', function() {
-        var A = new Buffer(new Float32Array([0.0, 1.0, 2.0, 0.0, 1.0, 2.0, 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 0.0, 1.0, 2.0]).buffer);
-        var B = new Buffer(new Uint16Array([6, 7, 8, 9, 6, 7, 6, 7, 6, 7]).buffer);
-        var C = new Buffer(new Uint16Array([0, 1, 2, 3, 4, 3, 2, 1, 0]).buffer);
+        var A = Buffer.from(new Float32Array([0.0, 1.0, 2.0, 0.0, 1.0, 2.0, 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 0.0, 1.0, 2.0]).buffer);
+        var B = Buffer.from(new Uint16Array([6, 7, 8, 9, 6, 7, 6, 7, 6, 7]).buffer);
+        var C = Buffer.from(new Uint16Array([0, 1, 2, 3, 4, 3, 2, 1, 0]).buffer);
         var gltf = {
             accessors : [
                 {
@@ -101,11 +101,11 @@ describe('mergeDuplicateVertices', function() {
     });
 
     it('merges duplicate vertices with repeated index accessors', function() {
-        var A = new Buffer(new Float32Array([0.0, 1.0, 2.0, 0.0, 1.0, 2.0, 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 0.0, 1.0, 2.0]).buffer);
-        var A2 = new Buffer(new Float32Array([4.0, 5.0, 6.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 4.0, 5.0, 6.0, 4.0, 5.0, 6.0]).buffer);
-        var B = new Buffer(new Uint16Array([6, 7, 8, 9, 6, 7, 6, 7, 6, 7]).buffer);
-        var B2 = new Buffer(new Uint16Array([10, 11, 12, 13, 10, 11, 10, 11, 10, 11]).buffer);
-        var C = new Buffer(new Uint16Array([0, 1, 2, 3, 4, 3, 2, 1, 0]).buffer);
+        var A = Buffer.from(new Float32Array([0.0, 1.0, 2.0, 0.0, 1.0, 2.0, 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 0.0, 1.0, 2.0]).buffer);
+        var A2 = Buffer.from(new Float32Array([4.0, 5.0, 6.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 4.0, 5.0, 6.0, 4.0, 5.0, 6.0]).buffer);
+        var B = Buffer.from(new Uint16Array([6, 7, 8, 9, 6, 7, 6, 7, 6, 7]).buffer);
+        var B2 = Buffer.from(new Uint16Array([10, 11, 12, 13, 10, 11, 10, 11, 10, 11]).buffer);
+        var C = Buffer.from(new Uint16Array([0, 1, 2, 3, 4, 3, 2, 1, 0]).buffer);
         var gltf = {
             accessors : [
                 {

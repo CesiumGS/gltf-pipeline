@@ -3,18 +3,17 @@ var Cesium = require('cesium');
 var clone = require('clone');
 var combinePrimitives = require('../../lib/combinePrimitives');
 var readAccessor = require('../../lib/readAccessor');
-var removePipelineExtras = require('../../lib/removePipelineExtras');
 
 var WebGLConstants = Cesium.WebGLConstants;
 
 describe('combinePrimitives', function() {
     var arrayOneA = new Float32Array([1, 2, 3]);
-    var bufferOneA = new Buffer(arrayOneA.buffer);
+    var bufferOneA = Buffer.from(arrayOneA.buffer);
     var arrayTwoA = new Float32Array([4, 5, 6]);
-    var bufferTwoA = new Buffer(arrayTwoA.buffer);
+    var bufferTwoA = Buffer.from(arrayTwoA.buffer);
     var arrayOneB = new Float32Array([1, 2, 3]);
     var arrayTwoB = new Float32Array([5, 6, 7, 8]);
-    var bufferTwoB = new Buffer(arrayTwoB.buffer);
+    var bufferTwoB = Buffer.from(arrayTwoB.buffer);
 
     it('combines two primitives without indices by concatenating them', function() {
         var buffer = Buffer.concat([bufferOneA, bufferTwoA]);
@@ -90,9 +89,9 @@ describe('combinePrimitives', function() {
 
     it('combines two primitives with indices by concatenating them', function() {
         var indicesOne = new Uint16Array([2, 0, 1]);
-        var bufferIndicesOne = new Buffer(indicesOne.buffer);
+        var bufferIndicesOne = Buffer.from(indicesOne.buffer);
         var indicesTwo = new Uint16Array([1, 2, 0]);
-        var bufferIndicesTwo = new Buffer(indicesTwo.buffer);
+        var bufferIndicesTwo = Buffer.from(indicesTwo.buffer);
         var buffer = Buffer.concat([bufferOneA, bufferTwoA, bufferIndicesOne, bufferIndicesTwo]);
         var gltf = {
             accessors : [
@@ -182,9 +181,9 @@ describe('combinePrimitives', function() {
 
     it('combines two primitives with shared attribute accessors by merging them', function() {
         var indicesOne = new Uint16Array([0, 2]);
-        var bufferIndicesOne = new Buffer(indicesOne.buffer);
+        var bufferIndicesOne = Buffer.from(indicesOne.buffer);
         var indicesTwo = new Uint16Array([2, 1]);
-        var bufferIndicesTwo = new Buffer(indicesTwo.buffer);
+        var bufferIndicesTwo = Buffer.from(indicesTwo.buffer);
         var buffer = Buffer.concat([bufferOneA, bufferIndicesOne, bufferIndicesTwo]);
         var gltf = {
             accessors : [
@@ -267,11 +266,11 @@ describe('combinePrimitives', function() {
 
     it('combines three primitives, merging two and then concatenating the result with the third', function() {
         var indicesOne = new Uint16Array([0, 2]);
-        var bufferIndicesOne = new Buffer(indicesOne.buffer);
+        var bufferIndicesOne = Buffer.from(indicesOne.buffer);
         var indicesTwo = new Uint16Array([2, 1]);
-        var bufferIndicesTwo = new Buffer(indicesTwo.buffer);
+        var bufferIndicesTwo = Buffer.from(indicesTwo.buffer);
         var indicesThree = new Uint16Array([0, 1, 2, 3, 2, 1]);
-        var bufferIndicesThree = new Buffer(indicesThree.buffer);
+        var bufferIndicesThree = Buffer.from(indicesThree.buffer);
         var buffer = Buffer.concat([bufferOneA, bufferTwoB, bufferIndicesOne, bufferIndicesTwo, bufferIndicesThree]);
         var gltf = {
             accessors : [
@@ -538,10 +537,11 @@ describe('combinePrimitives', function() {
         var valueCount = 16385;
         var smallerValueCount = 100;
         var quarterOverflow = new Uint16Array(valueCount);
-        for (var i = 0; i < valueCount; i++) {
+        var i;
+        for (i = 0; i < valueCount; i++) {
             quarterOverflow[i] = i;
         }
-        var quarterOverflowBuffer = new Buffer(quarterOverflow.buffer);
+        var quarterOverflowBuffer = Buffer.from(quarterOverflow.buffer);
         var quarterOverflowAccessor = {
             bufferView : 0,
             byteOffset : 0,

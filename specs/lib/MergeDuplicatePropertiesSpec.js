@@ -59,7 +59,7 @@ describe('MergeDuplicateProperties', function() {
             ]
         };
         it('merges a single duplicate accessor', function () {
-            var buffer = new Buffer([1, 2, 3, 1, 2, 3]);
+            var buffer = Buffer.from([1, 2, 3, 1, 2, 3]);
             var gltf = clone(testGltf);
             var gltfBuffer = gltf.buffers[0];
             gltfBuffer.extras._pipeline.source = buffer;
@@ -71,7 +71,7 @@ describe('MergeDuplicateProperties', function() {
         });
 
         it ('merges multiple duplicate accessors', function () {
-            var buffer = new Buffer([1, 2, 3, 1, 2, 3, 1, 2, 3]);
+            var buffer = Buffer.from([1, 2, 3, 1, 2, 3, 1, 2, 3]);
             var gltf = clone(testGltf);
             var gltfBuffer = gltf.buffers[0];
             gltfBuffer.extras._pipeline.source = buffer;
@@ -100,7 +100,7 @@ describe('MergeDuplicateProperties', function() {
         });
 
         it ('leaves a non-duplicate accessor alone', function () {
-            var buffer = new Buffer([1, 2, 3, 1, 2, 3, 3, 2, 1]);
+            var buffer = Buffer.from([1, 2, 3, 1, 2, 3, 3, 2, 1]);
             var gltf = clone(testGltf);
             var gltfBuffer = gltf.buffers[0];
             gltfBuffer.extras._pipeline.source = buffer;
@@ -132,8 +132,6 @@ describe('MergeDuplicateProperties', function() {
 
     var mergeShaders = MergeDuplicateProperties.mergeShaders;
     describe('mergeShaders', function() {
-        var testShaderBufferOne = new Buffer('test shader one', 'utf8');
-        var testShaderBufferTwo = new Buffer('test shader two', 'utf8');
         it('merges duplicate shaders', function() {
             var gltf = {
                 programs : [
@@ -150,28 +148,28 @@ describe('MergeDuplicateProperties', function() {
                         type : WebGLConstants.VERTEX_SHADER,
                         extras : {
                             _pipeline : {
-                                source : testShaderBufferOne
+                                source : 'test shader one'
                             }
                         }
                     }, {
                         type : WebGLConstants.FRAGMENT_SHADER,
                         extras : {
                             _pipeline : {
-                                source : testShaderBufferOne
+                                source : 'test shader one'
                             }
                         }
                     }, {
                         type : WebGLConstants.VERTEX_SHADER,
                         extras : {
                             _pipeline : {
-                                source : testShaderBufferTwo
+                                source : 'test shader two'
                             }
                         }
                     }, {
                         type : WebGLConstants.FRAGMENT_SHADER,
                         extras : {
                             _pipeline : {
-                                source : testShaderBufferOne
+                                source : 'test shader one'
                             }
                         }
                     }

@@ -1,6 +1,5 @@
 'use strict';
 var clone = require('clone');
-var fs = require('fs');
 var addPipelineExtras = require('../../lib/addPipelineExtras');
 var readGltf = require('../../lib/readGltf');
 var generateNormals = require('../../lib/generateNormals');

@@ -67,6 +67,51 @@ describe('uninterleaveAndPackBuffers', function() {
         ]
     };
 
+    var bufferPacked = new Uint8Array(18);
+    var testGltfPadded = {
+        accessors : {
+            accessor_0 : {
+                bufferView : 'bufferView_0',
+                byteOffset : 0,
+                byteStride : 0,
+                componentType : 5123,
+                count : 3,
+                type : 'SCALAR'
+            },
+            accessor_1 : {
+                bufferView : 'bufferView_1',
+                byteOffset : 0,
+                byteStride : 0,
+                componentType : 5125,
+                count : 3,
+                type : 'SCALAR'
+            }
+        },
+        bufferViews : {
+            bufferView_0 : {
+                buffer : 'buffer',
+                byteLength : 6,
+                byteOffset : 0,
+                target : 34962
+            },
+            bufferView_1 : {
+                buffer : 'buffer',
+                byteLength : 12,
+                byteOffset : 6,
+                target : 34963
+            }
+        },
+        buffers : {
+            buffer : {
+                byteLength : bufferPacked.length,
+                type : 'arraybuffer',
+                extras : {
+                    _pipeline : {}
+                }
+            }
+        }
+    };
+
     it('doesn\'t remove any data if the whole buffer is used', function() {
         var gltf = clone(testGltf);
         gltf.buffers[0].extras._pipeline.source = buffer;
@@ -112,5 +157,17 @@ describe('uninterleaveAndPackBuffers', function() {
         uninterleaveAndPackBuffers(gltf);
         expect(gltf.buffers[0].byteLength + size).toEqual(testGltf.buffers[0].byteLength);
         expect(gltf.bufferViews.length).toEqual(1);
+    });
+
+    it('adds padding between different targets', function() {
+        var gltf = clone(testGltfPadded);
+        gltf.buffers.buffer.extras._pipeline.source = bufferPacked;
+        packBuffers(gltf);
+
+        // Expect the index accessor to begin on a 4-byte boundary
+        expect(gltf.buffers.buffer.byteLength).toEqual(20); // Originally 18
+        expect(gltf.bufferViews.bufferView_1.byteOffset).toBe(8); // Originally 6
+        expect(gltf.accessors.accessor_0.byteOffset).toBe(0);
+        expect(gltf.accessors.accessor_1.byteOffset).toBe(0);
     });
 });

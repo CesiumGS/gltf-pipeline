@@ -1,9 +1,6 @@
 'use strict';
-var Promise = require('bluebird');
-var fs = require('fs-extra');
+var fsExtra = require('fs-extra');
 var RemoveUnusedProperties = require('../../lib/RemoveUnusedProperties');
-
-var fsReadFile = Promise.promisify(fs.readFile);
 
 var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestUnusedTree.gltf';
 
@@ -1025,7 +1022,7 @@ describe('RemoveUnusedProperties', function() {
     var removeAll = RemoveUnusedProperties.removeAll;
     describe('removeAll', function() {
         it('removes a tree of objects', function (done) {
-            expect(fsReadFile(gltfPath)
+            expect(fsExtra.readFile(gltfPath)
                 .then(function (data) {
                     var gltf = JSON.parse(data);
                     removeAll(gltf);
@@ -1048,7 +1045,7 @@ describe('RemoveUnusedProperties', function() {
         });
 
         it('does not remove any objects', function (done) {
-            expect(fsReadFile(gltfPath)
+            expect(fsExtra.readFile(gltfPath)
                 .then(function (data) {
                     var gltf = JSON.parse(data);
                     gltf.scenes[0].nodes.push(2);

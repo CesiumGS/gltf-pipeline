@@ -1,10 +1,7 @@
 'use strict';
-var clone = require('clone');
 var fsExtra = require('fs-extra');
 var path = require('path');
 
-var addPipelineExtras = require('../../lib/addPipelineExtras');
-var loadGltfUris = require('../../lib/loadGltfUris');
 var readGltf = require('../../lib/readGltf');
 var writeBinaryGltf = require('../../lib/writeBinaryGltf');
 
@@ -13,7 +10,7 @@ var invalidPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.exe
 
 describe('writeBinaryGltf', function() {
     it('will write a file to the correct directory', function(done) {
-        var spy = spyOn(fsExtra, 'outputFileAsync').and.callFake(function() {});
+        var spy = spyOn(fsExtra, 'outputFile').and.callFake(function() {});
         var writeOptions = {
             outputPath : outputGltfPath,
             embed : true,

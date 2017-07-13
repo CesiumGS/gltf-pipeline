@@ -12,7 +12,7 @@ describe('compressTextureCoordinates', function() {
         var texCoords = new Float32Array([1.0, 0.0,
                                          0.0, 1.0,
                                          0.5, 0.5]);
-        var texCoordBuffer = new Buffer(texCoords.buffer.slice(0));
+        var texCoordBuffer = Buffer.from(texCoords.buffer.slice(0));
         var gltf = {
             accessors : [
                 {
@@ -134,7 +134,7 @@ describe('compressTextureCoordinates', function() {
             0.0, 1.0,
             0.5, 0.5
         ]);
-        var texCoordBuffer = new Buffer(texCoords.buffer.slice(0));
+        var texCoordBuffer = Buffer.from(texCoords.buffer.slice(0));
         var gltf = {
             accessors : [
                 {

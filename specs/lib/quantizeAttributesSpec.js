@@ -6,7 +6,7 @@ var quantizeAttributes = require('../../lib/quantizeAttributes');
 var uninterleaveAndPackBuffers = require('../../lib/uninterleaveAndPackBuffers');
 
 describe('quantizeAttributes', function() {
-    var buffer = new Buffer(new Uint8Array(120));
+    var buffer = Buffer.from(new Uint8Array(120));
     var testGltf = {
         accessors : [
             {
@@ -107,7 +107,7 @@ describe('quantizeAttributes', function() {
                 byteLength : 4,
                 extras : {
                     _pipeline : {
-                        source : new Buffer(new Float32Array([0.0026710000820457935]).buffer)
+                        source : Buffer.from(new Float32Array([0.0026710000820457935]).buffer)
                     }
                 }
             }

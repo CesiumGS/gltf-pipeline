@@ -4,9 +4,9 @@ var removePipelineExtras = require('../../lib/removePipelineExtras');
 
 describe('mergeBuffers', function() {
     it('merges buffers', function() {
-        var buffer0 = new Buffer([1, 2]);
-        var buffer1 = new Buffer([3, 4, 5]);
-        var bufferMerged = new Buffer([1, 2, 3, 4, 5]);
+        var buffer0 = Buffer.from([1, 2]);
+        var buffer1 = Buffer.from([3, 4, 5]);
+        var bufferMerged = Buffer.from([1, 2, 0, 0, 3, 4, 5, 0]);
         var gltf = {
             bufferViews: [
                 {
@@ -56,12 +56,12 @@ describe('mergeBuffers', function() {
                 {
                     buffer: 0,
                     byteLength: 3,
-                    byteOffset: 2
+                    byteOffset: 4
                 }
             ],
             buffers: [
                 {
-                    byteLength: 5
+                    byteLength: 8
                 }
             ]
         });

@@ -1,6 +1,6 @@
 'use strict';
 var fs = require('fs');
-var async = require('async');
+var Promise = require('bluebird');
 var convertDagToTree = require('../../lib/convertDagToTree');
 var addPipelineExtras = require('../../lib/addPipelineExtras');
 var removePipelineExtras = require('../../lib/removePipelineExtras');
@@ -19,24 +19,12 @@ describe('convertDagToTree', function() {
         twoRoots: twoRootsPath
     };
 
-    beforeAll(function(done) {
-        async.each(Object.keys(testDags), function(name, callback) {
-            fs.readFile(testDags[name], function(err, data) {
-                if (err) {
-                    callback(err);
-                }
-                else {
-                    testDags[name] = addPipelineExtras(JSON.parse(data));
-                    callback();
-                }
-            });
-        }, function(err) {
-            if (err) {
-                throw err;
-            }
-
-            done();
+    beforeAll(function (done) {
+        var names = Object.keys(testDags);
+        var promise = Promise.each(names, function (name) {
+            testDags[name] = addPipelineExtras(JSON.parse(fs.readFileSync(testDags[name])));
         });
+        expect(promise, done).toResolve();
     });
 
     it('does not duplicate any nodes', function() {

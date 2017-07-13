@@ -5,9 +5,12 @@
 /output
 /specs
 /test
-.jshintrc
+.eslintrc.json
+.eslintcache
+.eslintignore
 .npmignore
 .travis.yml
 .appveyor.yml
 gulpfile.js
 *.tgz
+.nyc_output

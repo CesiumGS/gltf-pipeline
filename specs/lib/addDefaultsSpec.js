@@ -1,8 +1,7 @@
 'use strict';
 var Cesium = require('cesium');
 var clone = require('clone');
-var fs = require('fs');
-var Promise = require('bluebird');
+var fsExtra = require('fs-extra');
 
 var WebGLConstants = Cesium.WebGLConstants;
 
@@ -10,11 +9,9 @@ var addDefaults = require('../../lib/addDefaults');
 var addPipelineExtras = require('../../lib/addPipelineExtras');
 var loadGltfUris = require('../../lib/loadGltfUris');
 var readGltf = require('../../lib/readGltf');
-var removePipelineExtras = require('../../lib/removePipelineExtras');
 
-var fsReadFile = Promise.promisify(fs.readFile);
-
-var transparentImageUri = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAB3RJTUUH4AcGERIfpcOGjwAAAQZJREFUGNMFwcErQ3EAwPHv7+3JEw2FFe+lZ9vpTTnYiR2MsyKuE8VB/ojdlZuDg4sVyUU7TVK7KG05jFgWPdt6oqWI5/E87/l8RNO8zyoylF4EtTeB6wWMhH2mNMG3B3KHDMemxOFdQEj4qN3tPDoS9Q+HxaiPdNkS5G5+SUV1xoYG6VNcRvvh9ClMS+hIZ6aLocZY0M+Zj1X59CMcXXmsJUO4dh7Z0HTiEZvN3DQDvcNk5mrYyU5q5SUK1QuktGpxkE/x8OpSaVqUSxt81bfYKewxkVhF9h1BjxJHyBW84I/dk23ebVieWWF2fB1hNZ6zSlsXxdt9rhtFgsDH0CZJJzK43g//gYBjzrZ4jf0AAAAASUVORK5CYII=';
+var opaqueImageUri = './specs/data/boxTexturedUnoptimized/Cesium_Logo_Flat.jpg';
+var transparentImageUri = './specs/data/boxTexturedUnoptimized/Cesium_Logo_Flat_Transparent.png';
 var gltfTransparentPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestTransparent.gltf';
 
 describe('addDefaults', function() {
@@ -119,35 +116,72 @@ describe('addDefaults', function() {
         }
     };
 
+    var opaqueBlendState = {
+        enable : [
+            WebGLConstants.CULL_FACE,
+            WebGLConstants.DEPTH_TEST
+        ]
+    };
+
     it('generates a material with alpha blending if the diffuse texture is transparent and no technique or extension values are given', function(done) {
         var gltf = {
-            textures: [{
-                format: 6408,
-                internalFormat: 6408,
-                sampler: 0,
-                source: 0,
-                target: 3553,
-                type: 5121
-            }],
-            images: [{
-                name: 'Image0001',
-                uri: transparentImageUri
-            }],
-            materials: [{
-                values: {
-                    ambient: [0, 0, 0, 1],
-                    diffuse: [0],
-                    emission: [1, 0, 0, 1]
+            textures: [
+                {
+                    format: 6408,
+                    internalFormat: 6408,
+                    sampler: 0,
+                    source: 0,
+                    target: 3553,
+                    type: 5121
+                },
+                {
+                    format: 6408,
+                    internalFormat: 6408,
+                    sampler: 0,
+                    source: 1,
+                    target: 3553,
+                    type: 5121
                 }
-            }]
+            ],
+            images: [
+                {
+                    name: 'Image0001',
+                    uri: transparentImageUri
+                },
+                {
+                    name: 'Image0002',
+                    uri: opaqueImageUri
+                }
+            ],
+            materials: [
+                {
+                    values: {
+                        ambient: [0, 0, 0, 1],
+                        diffuse: 0,
+                        emission: [1, 0, 0, 1]
+                    }
+                },
+                {
+                    values: {
+                        ambient: [0, 0, 0, 1],
+                        diffuse: 1,
+                        emission: [1, 0, 0, 1]
+                    }
+                }
+            ]
         };
 
+        var options = {
+            basePath : './'
+        };
         addPipelineExtras(gltf);
-        expect(loadGltfUris(gltf)
+        expect(loadGltfUris(gltf, options)
             .then(function() {
                 addDefaults(gltf);
-                var technique = gltf.techniques[0];
-                expect(technique.states).toEqual(alphaBlendState);
+                var techniqueOpaque = gltf.techniques[Object.keys(gltf.techniques)[0]];
+                var techniqueAlpha = gltf.techniques[Object.keys(gltf.techniques)[1]];
+                expect(techniqueAlpha.states).toEqual(alphaBlendState);
+                expect(techniqueOpaque.states).toEqual(opaqueBlendState);
             }), done).toResolve();
     });
 
@@ -170,7 +204,7 @@ describe('addDefaults', function() {
     });
 
     it('modifies the material\'s technique to support alpha blending if the diffuse texture is transparent', function(done) {
-        expect(fsReadFile(gltfTransparentPath)
+        expect(fsExtra.readFile(gltfTransparentPath)
             .then(function(data) {
                 var gltf = JSON.parse(data);
                 var originalState = gltf.techniques[0].states;
@@ -185,7 +219,7 @@ describe('addDefaults', function() {
     });
 
     it('modifies the material\'s technique to support alpha blending if the diffuse color is transparent', function(done) {
-        expect(fsReadFile(gltfTransparentPath)
+        expect(fsExtra.readFile(gltfTransparentPath)
             .then(function(data) {
                 var gltf = JSON.parse(data);
                 var originalState = gltf.techniques[0].states;

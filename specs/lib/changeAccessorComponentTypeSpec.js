@@ -21,7 +21,7 @@ describe('changeAccessorComponentType', function() {
 
     it('overwrites the existing data if the target component type is smaller', function() {
         var data = new Uint16Array([0, 1, 2, 3, 4, 5]);
-        var dataBuffer = new Buffer(data.buffer);
+        var dataBuffer = Buffer.from(data.buffer);
         var gltf = {
             accessors : [
                 {
@@ -65,7 +65,7 @@ describe('changeAccessorComponentType', function() {
 
     it('overwrites the existing data if the target component type is the same size', function() {
         var data = new Float32Array([0, 1, 2, 3, 4, 5]);
-        var dataBuffer = new Buffer(data.buffer);
+        var dataBuffer = Buffer.from(data.buffer);
         var gltf = {
             accessors : [
                 {
@@ -109,7 +109,7 @@ describe('changeAccessorComponentType', function() {
 
     it('creates a new buffer if the target component type is larger', function() {
         var data = new Uint16Array([0, 1, 2, 3, 4, 5]);
-        var dataBuffer = new Buffer(data.buffer);
+        var dataBuffer = Buffer.from(data.buffer);
         var gltf = {
             accessors : [
                 {

@@ -41,7 +41,6 @@ describe('getBinaryGltf', function() {
 
     it('writes a binary glTF with embedded shaders and separate images', function() {
         var shaderText = "testing shader";
-        var imageText = "testing image";
         var gltf = {
             images: [{
                 uri: shaderText

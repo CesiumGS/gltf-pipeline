@@ -1,11 +1,13 @@
 'use strict';
+var fs = require('fs');
+var Promise = require('bluebird');
 var getBinaryGltf = require('../../lib/getBinaryGltf');
 var parseBinaryGltf = require('../../lib/parseBinaryGltf');
 var removePipelineExtras = require('../../lib/removePipelineExtras');
 
 describe('parseBinaryGltf', function() {
     it('throws an error with invalid magic', function() {
-       var glb = new Buffer(20);
+       var glb = Buffer.alloc(20);
        glb.write('NOPE', 0);
        expect(function() {
            parseBinaryGltf(glb);
@@ -13,7 +15,7 @@ describe('parseBinaryGltf', function() {
     });
 
     it('throws an error if version is not 1 or 2', function() {
-       var glb = new Buffer(20);
+       var glb = Buffer.alloc(20);
        glb.write('glTF', 0);
        glb.writeUInt32LE(3, 4);
        expect(function() {
@@ -23,7 +25,7 @@ describe('parseBinaryGltf', function() {
 
     describe('1.0', function() {
         it('throws an error if content format is not JSON', function() {
-            var glb = new Buffer(20);
+            var glb = Buffer.alloc(20);
             glb.write('glTF', 0);
             glb.writeUInt32LE(1, 4);
             glb.writeUInt32LE(20, 8);
@@ -35,7 +37,7 @@ describe('parseBinaryGltf', function() {
         });
 
         it('loads binary glTF', function() {
-            var binaryData = new Buffer([0, 1, 2, 3, 4, 5]);
+            var binaryData = Buffer.from([0, 1, 2, 3, 4, 5]);
             var gltf = {
                 bufferViews: {
                     imageBufferView: {
@@ -75,7 +77,7 @@ describe('parseBinaryGltf', function() {
             while (gltfString.length % 4 !== 0) {
                 gltfString += ' ';
             }
-            var glb = new Buffer(20 + gltfString.length + binaryData.length);
+            var glb = Buffer.alloc(20 + gltfString.length + binaryData.length);
             glb.write('glTF', 0);
             glb.writeUInt32LE(1, 4);
             glb.writeUInt32LE(20 + gltfString.length + binaryData.length, 8);
@@ -103,7 +105,7 @@ describe('parseBinaryGltf', function() {
     describe('2.0', function() {
         it('loads binary glTF', function() {
             var i;
-            var binaryData = new Buffer([0, 1, 2, 3, 4, 5]);
+            var binaryData = Buffer.from([0, 1, 2, 3, 4, 5]);
             var gltf = {
                 asset: {
                     version: '2.0'
@@ -129,7 +131,7 @@ describe('parseBinaryGltf', function() {
             while (gltfString.length % 4 !== 0) {
                 gltfString += ' ';
             }
-            var glb = new Buffer(28 + gltfString.length + binaryData.length);
+            var glb = Buffer.alloc(28 + gltfString.length + binaryData.length);
             glb.write('glTF', 0);
             glb.writeUInt32LE(2, 4);
             glb.writeUInt32LE(12 + 8 + gltfString.length + 8 + binaryData.length, 8);

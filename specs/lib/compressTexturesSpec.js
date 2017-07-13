@@ -11,11 +11,10 @@ var addPipelineExtras = require('../../lib/addPipelineExtras');
 var compressTexture = require('../../lib/compressTexture');
 var compressTextures = require('../../lib/compressTextures');
 var directoryExists = require('../../lib/directoryExists');
+var Pipeline = require('../../lib/Pipeline');
 var loadGltfUris = require('../../lib/loadGltfUris');
 var readGltf = require('../../lib/readGltf');
 var writeSource = require('../../lib/writeSource');
-
-var fsExtraReadJson = Promise.promisify(fsExtra.readJson);
 
 var defined = Cesium.defined;
 var DeveloperError = Cesium.DeveloperError;
@@ -35,7 +34,7 @@ var decalPath = 'Cesium_Logo_Flat_Decal.png'; // Contains alpha channel
 var defaultImageUri = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII='; // 1x1 white png
 
 function compressGltfTexture(gltfPath, imagePath, options) {
-    return fsExtraReadJson(gltfPath)
+    return fsExtra.readJson(gltfPath)
         .then(function(gltf) {
             var image = gltf.images[0];
             if (defined(imagePath)) {
@@ -45,15 +44,8 @@ function compressGltfTexture(gltfPath, imagePath, options) {
                 textureCompressionOptions : options,
                 basePath : basePath
             };
-            addPipelineExtras(gltf);
-            addDefaults(gltf);
-            return loadGltfUris(gltf, pipelineOptions)
-                .then(function() {
-                    return compressTextures(gltf, options);
-                })
-                .then(function() {
-                    return writeSource(gltf.images, 'images', undefined, true, true);
-                })
+
+            return Pipeline.processJSON(gltf, pipelineOptions)
                 .then(function() {
                     // Return the first compressed image
                     var compressedImages = image.extras.compressedImage3DTiles;
@@ -446,10 +438,10 @@ describe('compressTextures', function() {
     });
 
     it('tempDirectory is removed when compression succeeds', function(done) {
-        spyOn(fsExtra, 'writeFileAsync').and.callThrough();
+        spyOn(fsExtra, 'writeFile').and.callThrough();
         expect(verifyKTX(gltfPath, undefined, etc1Compression, etc1Format)
             .then(function() {
-                var tempDirectory = path.dirname(fsExtra.writeFileAsync.calls.argsFor(0)[0]);
+                var tempDirectory = path.dirname(fsExtra.writeFile.calls.argsFor(0)[0]);
                 return directoryExists(tempDirectory)
                     .then(function(exists) {
                         expect(exists).toBe(false);
@@ -459,7 +451,7 @@ describe('compressTextures', function() {
 
     it('tempDirectory is removed when compression fails', function(done) {
         var childProcessSpawn = child_process.spawn;
-        spyOn(fsExtra, 'writeFileAsync').and.callThrough();
+        spyOn(fsExtra, 'writeFile').and.callThrough();
         spyOn(child_process, 'spawn').and.callFake(function(command, args) {
             // Trigger a failure by sending in an invalid argument to the compress tool
             args.push('invalid_arg');
@@ -467,7 +459,7 @@ describe('compressTextures', function() {
         });
         expect(verifyKTX(gltfPath, undefined, etc1Compression, etc1Format)
             .then(function() {
-                var tempDirectory = path.dirname(fsExtra.writeFileAsync.calls.argsFor(0)[0]);
+                var tempDirectory = path.dirname(fsExtra.writeFile.calls.argsFor(0)[0]);
                 return directoryExists(tempDirectory)
                     .then(function(exists) {
                         expect(exists).toBe(false);
@@ -479,7 +471,7 @@ describe('compressTextures', function() {
         var options = {
             format : 'etc1'
         };
-        expect(fsExtraReadJson(gltfPath)
+        expect(fsExtra.readJson(gltfPath)
             .then(function(gltf) {
                 var sampler = gltf.samplers[0];
                 expect(sampler.minFilter).toBe(WebGLConstants.LINEAR_MIPMAP_LINEAR);

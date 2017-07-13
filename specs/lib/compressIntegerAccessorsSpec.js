@@ -1,17 +1,17 @@
 'use strict';
 var Cesium = require('cesium');
-var clone = require('clone');
 var compressIntegerAccessors = require('../../lib/compressIntegerAccessors');
 
 var WebGLConstants = Cesium.WebGLConstants;
 
-var cantCompressByte = new Buffer([-1, 0, 1]);
-var cantCompressUByte = new Buffer([0, 1, 2]);
-var cantCompressIndices = new Buffer(new Uint16Array([1, 2, 3]).buffer);
-var cantCompressBigShort = new Buffer(new Uint16Array([0, 1, 65535]).buffer);
-var floatToShort = new Buffer(new Float32Array([32767.0, -1.0, 0.0]).buffer);
-var floatToByte = new Buffer(new Float32Array([255.0, -1.0, 0.0]).buffer);
-var shortToByte = new Buffer(new Uint16Array([-2, 0, 2]).buffer);
+var cantCompressByte = Buffer.from([-1, 0, 1]);
+var cantCompressUByte = Buffer.from([0, 1, 2]);
+var cantCompressIndices = Buffer.from(new Uint16Array([1, 2, 3]).buffer);
+var cantCompressBigShort = Buffer.from(new Uint16Array([0, 1, 65535]).buffer);
+var floatToShort = Buffer.from(new Float32Array([32767.0, -1.0, 0.0]).buffer);
+var floatToByte = Buffer.from(new Float32Array([255.0, -1.0, 0.0]).buffer);
+var shortToByte = Buffer.from(new Uint16Array([-2, 0, 2]).buffer);
+
 var testGltf = {
     accessors : [
         {
