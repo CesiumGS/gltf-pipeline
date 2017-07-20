@@ -94,7 +94,7 @@ describe('generateTangentsBitangents', function(){
         uninterleaveAndPackBuffers(gltf);
 
         var attributes = gltf.meshes[0].primitives[0].attributes;
-        var byteLengthAfter = gltf.buffers[0].byteLength;
+        var byteLengthAfter = gltf.buffers[0].byteLength + gltf.buffers[1].byteLength + gltf.buffers[2].byteLength;
         expect(attributes.TANGENT).toBeDefined();
         expect(attributes.BITANGENT).toBeDefined();
         expect(gltf.accessors[attributes.TANGENT]).toBeDefined();
