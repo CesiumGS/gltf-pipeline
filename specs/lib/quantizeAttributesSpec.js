@@ -143,7 +143,7 @@ describe('quantizeAttributes', function() {
         gltf.buffers[0].extras._pipeline.source = buffer;
         quantizeAttributes(gltf, {semantics: []});
         uninterleaveAndPackBuffers(gltf);
-        expect(gltf.buffers[0].byteLength).toEqual(buffer.length + 4);
+        expect(gltf.buffers[0].byteLength).toEqual(buffer.length);
     });
 
     it('Doesn\'t quantize excluded semantics', function() {
@@ -151,7 +151,7 @@ describe('quantizeAttributes', function() {
         gltf.buffers[0].extras._pipeline.source = buffer;
         quantizeAttributes(gltf, {exclude: ['POSITION', 'NORMAL', 'TEXCOORD', 'SCALAR_TEST', 'FLOAT_TEST']});
         uninterleaveAndPackBuffers(gltf);
-        expect(gltf.buffers[0].byteLength).toEqual(buffer.length + 4);
+        expect(gltf.buffers[0].byteLength).toEqual(buffer.length);
     });
 
     it('Quantizes attributes for semantic', function() {
@@ -164,7 +164,7 @@ describe('quantizeAttributes', function() {
         gltf.buffers[0].extras._pipeline.source = buffer;
         quantizeAttributes(gltf, {semantics: ['POSITION']});
         uninterleaveAndPackBuffers(gltf);
-        expect(gltf.buffers[0].byteLength + size).toEqual(buffer.length + 4);
+        expect(gltf.buffers[0].byteLength + size).toEqual(buffer.length);
         var decodeMatrix = accessor_0.extensions.WEB3D_quantized_attributes.decodeMatrix;
         expect(decodeMatrix[0]).toBe(2.0 / 65535.0);
     });
@@ -182,7 +182,7 @@ describe('quantizeAttributes', function() {
             normalized : true
         });
         uninterleaveAndPackBuffers(gltf);
-        expect(gltf.buffers[0].byteLength + size).toEqual(buffer.length + 4);
+        expect(gltf.buffers[0].byteLength + size).toEqual(buffer.length);
         expect(accessor_0.normalized).toBeTruthy();
         expect(accessor_2.normalized).toBeTruthy();
         var decodeMatrix = accessor_0.extensions.WEB3D_quantized_attributes.decodeMatrix;
@@ -204,7 +204,7 @@ describe('quantizeAttributes', function() {
         gltf.buffers[0].extras._pipeline.source = buffer;
         quantizeAttributes(gltf, {semantics: ['NORMAL']});
         uninterleaveAndPackBuffers(gltf);
-        expect(gltf.buffers[0].byteLength).toEqual(buffer.length + 4);
+        expect(gltf.buffers[0].byteLength).toEqual(buffer.length);
     });
 
     it('Doesn\'t quantize already quantized attribute', function() {
@@ -212,7 +212,7 @@ describe('quantizeAttributes', function() {
         gltf.buffers[0].extras._pipeline.source = buffer;
         quantizeAttributes(gltf, {semantics: ['TEXCOORD']});
         uninterleaveAndPackBuffers(gltf);
-        expect(gltf.buffers[0].byteLength).toEqual(buffer.length + 4);
+        expect(gltf.buffers[0].byteLength).toEqual(buffer.length);
     });
 
     it('Quantizes scalar attribute', function() {
@@ -223,6 +223,6 @@ describe('quantizeAttributes', function() {
         gltf.buffers[0].extras._pipeline.source = buffer;
         quantizeAttributes(gltf, {semantics: ['SCALAR_TEST']});
         uninterleaveAndPackBuffers(gltf);
-        expect(gltf.buffers[0].byteLength + size).toEqual(buffer.length + 4);
+        expect(gltf.buffers[0].byteLength + size).toEqual(buffer.length);
     });
 });
