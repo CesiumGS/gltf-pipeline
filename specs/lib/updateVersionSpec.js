@@ -327,7 +327,7 @@ describe('updateVersion', function() {
         expect(sampler.output).toEqual(3);
         expect(animation.parameters).not.toBeDefined();
         var material = gltf.materials[0];
-        expect(material.values.shininess).toEqual([1.0]);
+        expect(material.values.shininess).toEqual(1);
         var technique = gltf.techniques[0];
         expect(technique.parameters.lightAttenuation.value).toEqual([1.0]);
         expect(technique.parameters.application.value).not.toBeDefined();
