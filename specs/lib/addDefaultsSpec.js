@@ -136,7 +136,9 @@ describe('addDefaults', function() {
             materials: [{
                 values: {
                     ambient: [0, 0, 0, 1],
-                    diffuse: [0],
+                    diffuse: {
+                        index: 0
+                    },
                     emission: [1, 0, 0, 1]
                 }
             }]
