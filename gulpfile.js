@@ -287,15 +287,18 @@ gulp.task('build-cesium', function () {
         'getAccessorByteStride.js',
         'getJointCountForMaterials.js',
         'getStatistics.js',
+        'glslTypeToWebGLConstant.js',
         'numberOfComponentsForType.js',
         'parseBinaryGltf.js',
         'pbrToMaterialsCommon.js',
         'processModelMaterialsCommon.js',
+        'processPbrMetallicRoughness.js',
         'removePipelineExtras.js',
         'removeExtensionsRequired.js',
         'removeExtensionsUsed.js',
         'techniqueParameterForSemantic.js',
-        'updateVersion.js'
+        'updateVersion.js',
+        'webGLConstantToGlslType.js'
     ];
     var subDependencyMapping = {
         cesium : {
