@@ -1,6 +1,9 @@
 Change Log
 ==========
 
+### 1.0.1 - 2017-07-07
+* Fix `gltf-pipeline` to work with Cesium 1.36 and newer.
+
 ### 1.0.0 - 2017-07-07
 * Fixed issue where shader comparison in `MergeDuplicateProperties` would cause a crash. [#297](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/297)
 * Fixed an issue where `mergeBuffers` would not align buffer views to 4-byte boundaries. [#298](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/298)
