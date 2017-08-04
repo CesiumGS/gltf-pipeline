@@ -124,7 +124,7 @@ describe('octEncodeNormals', function() {
        });
    });
 
-    it('should only patch a program whos shader has not been patched yet', function(done) {
+    it('should only patch a program whose shader has not been patched yet', function(done) {
         var normals = new Float32Array([1.0, 0.0, 0.0,
             0.0, 1.0, 0.0,
             0.0, 0.0, 1.0]);
