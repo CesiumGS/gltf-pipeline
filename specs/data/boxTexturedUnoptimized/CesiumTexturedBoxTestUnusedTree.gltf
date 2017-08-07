@@ -54,7 +54,9 @@
         {
             "technique": 0,
             "values": {
-                "diffuse": [0]
+                "baseColorTexture": {
+                    "index": 0
+                }
             }
         }
     ],

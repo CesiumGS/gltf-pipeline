@@ -654,33 +654,8 @@ describe('RemoveUnusedProperties', function() {
                 materials: [
                     {
                         values: {
-                            diffuse: [1]
-                        }
-                    }
-                ],
-                textures: [
-                    {
-                        name: 'unused'
-                    },
-                    {
-                        source: 0
-                    }
-                ]
-            };
-
-            removeTextures(gltf);
-            expect(gltf.textures.length).toEqual(1);
-            expect(gltf.textures[0].name).not.toEqual('unused');
-            expect(gltf.materials[0].values.diffuse[0]).toEqual(0);
-        });
-
-        it('removes a texture unused by technique', function () {
-            var gltf = {
-                techniques: [
-                    {
-                        parameters: {
-                            diffuse: {
-                                value: [1]
+                            baseColorTexture: {
+                                "index": 1
                             }
                         }
                     }
@@ -698,7 +673,36 @@ describe('RemoveUnusedProperties', function() {
             removeTextures(gltf);
             expect(gltf.textures.length).toEqual(1);
             expect(gltf.textures[0].name).not.toEqual('unused');
-            expect(gltf.techniques[0].parameters.diffuse.value[0]).toEqual(0);
+            expect(gltf.materials[0].values.baseColorTexture.index).toEqual(0);
+        });
+
+        it('removes a texture unused by technique', function () {
+            var gltf = {
+                techniques: [
+                    {
+                        parameters: {
+                            baseColorTexture: {
+                                value: {
+                                    "index": 1
+                                }
+                            }
+                        }
+                    }
+                ],
+                textures: [
+                    {
+                        name: 'unused'
+                    },
+                    {
+                        source: 0
+                    }
+                ]
+            };
+
+            removeTextures(gltf);
+            expect(gltf.textures.length).toEqual(1);
+            expect(gltf.textures[0].name).not.toEqual('unused');
+            expect(gltf.techniques[0].parameters.baseColorTexture.value.index).toEqual(0);
         });
 
         it('does not remove any textures', function () {
@@ -706,15 +710,19 @@ describe('RemoveUnusedProperties', function() {
                 materials: [
                     {
                         values: {
-                            diffuse: [0]
+                            baseColorTexture: {
+                                "index": 0
+                            }
                         }
                     }
                 ],
                 techniques: [
                     {
                         parameters: {
-                            diffuse: {
-                                value: [1]
+                            baseColorTexture: {
+                                value: {
+                                    "index": 1
+                                }
                             }
                         }
                     }

@@ -121,7 +121,7 @@ describe('removeUnusedVertices', function() {
         var expectBytesDropped = expectBytesDropped1 + expectBytesDropped2;
         removeUnusedVertices(gltf);
         uninterleaveAndPackBuffers(gltf);
-        expect(gltf.buffers[0].byteLength - indexBuffer.length + expectBytesDropped).toEqual(byteLength);
+        expect(gltf.buffers[1].byteLength + expectBytesDropped).toEqual(byteLength);
 
         var expectAttribute1 = [[0, 1, 2], [6, 7, 8]];
         var reader = new AccessorReader(gltf, attributeAccessor1);
@@ -173,7 +173,7 @@ describe('removeUnusedVertices', function() {
         var expectBytesDropped = 2 * (expectBytesDropped1 + expectBytesDropped2);
         removeUnusedVertices(gltf);
         uninterleaveAndPackBuffers(gltf);
-        expect(gltf.buffers[0].byteLength - indexBuffer.length + expectBytesDropped).toEqual(byteLength);
+        expect(gltf.buffers[1].byteLength + expectBytesDropped).toEqual(byteLength);
 
         var expectAttribute1 = [[3, 4, 5]];
         var reader = new AccessorReader(gltf, attributeAccessor1);
@@ -239,10 +239,11 @@ describe('removeUnusedVertices', function() {
         gltf.meshes.push(mesh2);
 
         // All indices are used, 0 and 2 by the first primitive and 1 by the other
-        var byteLength = gltf.buffers[0].byteLength + gltf.buffers[1].byteLength + gltf.buffers[2].byteLength;
+        var attributesBuffer = gltf.buffers[1];
+        var byteLength = attributesBuffer.byteLength;
         removeUnusedVertices(gltf);
         uninterleaveAndPackBuffers(gltf);
-        expect(gltf.buffers[0].byteLength).toEqual(byteLength);
+        expect(attributesBuffer.byteLength).toEqual(byteLength);
     });
 
     it('handles when primitives use the same accessors along with different accessors with different indices', function() {
@@ -279,10 +280,11 @@ describe('removeUnusedVertices', function() {
         gltf.meshes.push(mesh2);
 
         // All indices are used, 0 and 2 by the first primitive and 1 by the other
-        var byteLength = gltf.buffers[0].byteLength + gltf.buffers[1].byteLength + gltf.buffers[2].byteLength;
+        var attributesBuffer = gltf.buffers[1];
+        var byteLength = attributesBuffer.byteLength;
         removeUnusedVertices(gltf);
         uninterleaveAndPackBuffers(gltf);
-        expect(gltf.buffers[0].byteLength).toEqual(byteLength);
+        expect(attributesBuffer.byteLength).toEqual(byteLength);
     });
 
     it('handles when there is a cross-dependency between two groups of primitives', function() {
@@ -401,9 +403,11 @@ describe('removeUnusedVertices', function() {
         };
         removeUnusedVertices(gltf);
         uninterleaveAndPackBuffers(gltf);
-        var bufferViews = gltf.bufferViews;
-        expect(bufferViews[0].byteLength).toEqual(attributeDataBuffer1.length + attributeDataBuffer2.length);
-        expect(bufferViews[1].byteLength).toEqual(indexDataBuffer1.length + indexDataBuffer2.length);
+        var buffers = gltf.buffers;
+        expect(buffers[0].extras._pipeline.source).toEqual(attributeDataBuffer1);
+        expect(buffers[1].extras._pipeline.source).toEqual(attributeDataBuffer2);
+        expect(buffers[2].extras._pipeline.source).toEqual(indexDataBuffer1);
+        expect(buffers[3].extras._pipeline.source).toEqual(indexDataBuffer2);
     });
 
     it('removes parts of the buffer based on the attribute type if the stride is 0', function() {

@@ -97,7 +97,8 @@ describe('mergeDuplicateVertices', function() {
             reader.next();
             i++;
         }
-        expect(gltf.buffers[0].byteLength).toEqual(A.length - 24 + B.length - 8 + C.length);
+        expect(gltf.buffers[0].byteLength).toEqual(A.length - 24);
+        expect(gltf.buffers[1].byteLength).toEqual(B.length - 8);
     });
 
     it('merges duplicate vertices with repeated index accessors', function() {
@@ -236,6 +237,7 @@ describe('mergeDuplicateVertices', function() {
             reader.next();
             i++;
         }
-        expect(gltf.buffers[0].byteLength).toEqual(A.length - 24 + B.length - 8 + A2.length + B2.length + C.length);
+        expect(gltf.buffers[0].byteLength).toEqual(A.length - 12);
+        expect(gltf.buffers[2].byteLength).toEqual(B.length - 4);
     });
 });
