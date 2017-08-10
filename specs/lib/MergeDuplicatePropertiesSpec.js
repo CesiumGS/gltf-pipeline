@@ -202,7 +202,8 @@ describe('MergeDuplicateProperties', function() {
                 programs: {
                     programOne: {
                         fragmentShader: 'FSOne',
-                        vertexShader: 'VSOne'
+                        vertexShader: 'VSOne',
+                        extras : {}
                     },
                     programTwo: {
                         fragmentShader: 'FSOne',
@@ -210,15 +211,18 @@ describe('MergeDuplicateProperties', function() {
                     },
                     programThree: {
                         fragmentShader: 'FSOne',
-                        vertexShader: 'VSTwo'
+                        vertexShader: 'VSTwo',
+                        extras : {}
                     }
                 },
                 techniques: {
                     techniqueOne: {
-                        program: 'programOne'
+                        program: 'programOne',
+                        extras: {}
                     },
                     techniqueTwo: {
-                        program: 'programTwo'
+                        program: 'programTwo',
+                        extras: {}
                     },
                     techniqueThree: {
                         program: 'programThree'
@@ -243,7 +247,8 @@ describe('MergeDuplicateProperties', function() {
                         arrayOf : ['values'],
                         nested : {
                             key : 'value'
-                        }
+                        },
+                        extras : {}
                     },
                     techniqueTwo : {
                         key : 'value',
@@ -257,15 +262,18 @@ describe('MergeDuplicateProperties', function() {
                         arrayOf : ['values'],
                         nested : {
                             key : 'value'
-                        }
+                        },
+                        extras : {}
                     }
                 },
                 materials : {
                     materialOne : {
-                        technique : 'techniqueOne'
+                        technique : 'techniqueOne',
+                        extras : {}
                     },
                     materialTwo : {
-                        technique : 'techniqueTwo'
+                        technique : 'techniqueTwo',
+                        extras : {}
                     },
                     materialThree : {
                         technique : 'techniqueThree'
@@ -312,14 +320,16 @@ describe('MergeDuplicateProperties', function() {
                         arrayOf : ['values'],
                         nested : {
                             key : 'value'
-                        }
+                        },
+                        extras : {}
                     },
                     materialTwo : {
                         key : 'value',
                         arrayOf : ['different', 'values'],
                         nested : {
                             key : 'value'
-                        }
+                        },
+                        extras : {}
                     },
                     materialThree : {
                         key : 'value',
