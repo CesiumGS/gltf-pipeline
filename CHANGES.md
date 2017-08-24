@@ -1,6 +1,9 @@
 Change Log
 ==========
 
+### 1.0.2 - Next release
+* Fixed specular computation for certain models using the `KHR_materials_common` extension.
+
 ### 1.0.1 - 2017-07-07
 * Fix `gltf-pipeline` to work with Cesium 1.36 and newer.
 
