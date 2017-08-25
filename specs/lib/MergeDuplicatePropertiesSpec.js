@@ -352,4 +352,36 @@ describe('MergeDuplicateProperties', function() {
             expect(meshTwoPrimitives[1].material).toBe('materialOne');
         });
     });
+
+    it('mergeAccessors is called if optimizeDrawCalls is false', function() {
+        var spyAccessors = spyOn(MergeDuplicateProperties, 'mergeAccessors');
+        var spyShaders = spyOn(MergeDuplicateProperties, 'mergeShaders');
+        var spyPrograms = spyOn(MergeDuplicateProperties, 'mergePrograms');
+        var spyTechniques = spyOn(MergeDuplicateProperties, 'mergeTechniques');
+        var spyMaterials = spyOn(MergeDuplicateProperties, 'mergeMaterials');
+
+        MergeDuplicateProperties.mergeAll({}, false);
+
+        expect(spyAccessors).toHaveBeenCalled();
+        expect(spyShaders).toHaveBeenCalled();
+        expect(spyPrograms).toHaveBeenCalled();
+        expect(spyTechniques).toHaveBeenCalled();
+        expect(spyMaterials).toHaveBeenCalled();
+    });
+
+    it('mergeAccessors isn\'t called if optimizeDrawCalls is true', function() {
+        var spyAccessors = spyOn(MergeDuplicateProperties, 'mergeAccessors');
+        var spyShaders = spyOn(MergeDuplicateProperties, 'mergeShaders');
+        var spyPrograms = spyOn(MergeDuplicateProperties, 'mergePrograms');
+        var spyTechniques = spyOn(MergeDuplicateProperties, 'mergeTechniques');
+        var spyMaterials = spyOn(MergeDuplicateProperties, 'mergeMaterials');
+
+        MergeDuplicateProperties.mergeAll({}, true);
+
+        expect(spyAccessors).not.toHaveBeenCalled();
+        expect(spyShaders).toHaveBeenCalled();
+        expect(spyPrograms).toHaveBeenCalled();
+        expect(spyTechniques).toHaveBeenCalled();
+        expect(spyMaterials).toHaveBeenCalled();
+    });
 });
