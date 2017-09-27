@@ -1,8 +1,12 @@
 Change Log
 ==========
 
-### 1.0.2 - Next release
-* Fixed specular computation for certain models using the `KHR_materials_common` extension.
+### 1.0.2 - 2017-09-27
+* Fixed specular computation for certain models using the `KHR_materials_common` extension. [#309](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/309)
+* Added a `optimizeDrawCalls` flag to merge nodes and meshes more aggressively to minimize draw calls. [#308](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/308)
+* Added minimum lighting to diffuse when the `cesium` flag is enabled. [#313](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/313)
+* Added a check for normals arrtibute for mesh in `modelMaterialsCommon`. [#318](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/318)
+* Fixed generating duplicate accessors in `cesiumGeometryToGltfPrimitive`. [#321](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/321)
 
 ### 1.0.1 - 2017-07-07
 * Fix `gltf-pipeline` to work with Cesium 1.36 and newer.
