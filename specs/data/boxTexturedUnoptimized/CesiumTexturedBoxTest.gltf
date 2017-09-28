@@ -96,8 +96,10 @@
             "name": "Texture",
             "technique": 0,
             "values": {
-                "diffuse": [0],
-                "shininess": [256],
+                "diffuse": {
+                    "index": 0
+                },
+                "shininess": 256,
                 "specular": [
                     0.2,
                     0.2,

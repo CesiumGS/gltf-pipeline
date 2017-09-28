@@ -87,8 +87,8 @@ describe('addDefaults', function() {
                 "values": {
                     "ambient": [0, 0, 0, 1],
                     "diffuse": [1, 0, 0, 1],
-                    "emission": [0],
-                    "shininess": [38.4],
+                    "emission": [1, 1, 1, 1],
+                    "shininess": 38.4,
                     "specular": [0, 0, 0, 1]
                 },
                 "name": "blinn1"
@@ -97,110 +97,6 @@ describe('addDefaults', function() {
         var materialsCopy = clone(gltf.materials);
         addDefaults(gltf);
         expect(gltf.materials).toEqual(materialsCopy);
-    });
-
-    var alphaBlendState = {
-        enable : [
-            WebGLConstants.DEPTH_TEST,
-            WebGLConstants.BLEND
-        ],
-        depthMask : false,
-        functions : {
-            blendEquationSeparate : [
-                WebGLConstants.FUNC_ADD,
-                WebGLConstants.FUNC_ADD
-            ],
-            blendFuncSeparate : [
-                WebGLConstants.ONE,
-                WebGLConstants.ONE_MINUS_SRC_ALPHA,
-                WebGLConstants.ONE,
-                WebGLConstants.ONE_MINUS_SRC_ALPHA
-            ]
-        }
-    };
-
-    it('generates a material with alpha blending if the diffuse texture is transparent and no technique or extension values are given', function(done) {
-        var gltf = {
-            textures: [{
-                format: 6408,
-                internalFormat: 6408,
-                sampler: 0,
-                source: 0,
-                target: 3553,
-                type: 5121
-            }],
-            images: [{
-                name: 'Image0001',
-                uri: transparentImageUri
-            }],
-            materials: [{
-                values: {
-                    ambient: [0, 0, 0, 1],
-                    diffuse: {
-                        index: 0
-                    },
-                    emission: [1, 0, 0, 1]
-                }
-            }]
-        };
-
-        addPipelineExtras(gltf);
-        expect(loadGltfUris(gltf)
-            .then(function() {
-                addDefaults(gltf);
-                var technique = gltf.techniques[0];
-                expect(technique.states).toEqual(alphaBlendState);
-            }), done).toResolve();
-    });
-
-    it('generates a material with alpha blending if the diffuse color is transparent and no technique or extension values are given', function() {
-        var gltf = {
-            "materials": [
-                {
-                    "values": {
-                        "ambient": [0, 0, 0, 1],
-                        "diffuse": [1, 0, 0, 0.5],
-                        "emission": [1, 0, 0, 1]
-                    }
-                }
-            ]
-        };
-
-        addDefaults(gltf);
-        var technique = gltf.techniques[0];
-        expect(technique.states).toEqual(alphaBlendState);
-    });
-
-    it('modifies the material\'s technique to support alpha blending if the diffuse texture is transparent', function(done) {
-        expect(fsReadFile(gltfTransparentPath)
-            .then(function(data) {
-                var gltf = JSON.parse(data);
-                var originalState = gltf.techniques[0].states;
-                expect(originalState).not.toEqual(alphaBlendState);
-                return readGltf(gltfTransparentPath);
-            })
-            .then(function (gltf) {
-                addDefaults(gltf);
-                var technique = gltf.techniques[0];
-                expect(technique.states).toEqual(alphaBlendState);
-            }), done).toResolve();
-    });
-
-    it('modifies the material\'s technique to support alpha blending if the diffuse color is transparent', function(done) {
-        expect(fsReadFile(gltfTransparentPath)
-            .then(function(data) {
-                var gltf = JSON.parse(data);
-                var originalState = gltf.techniques[0].states;
-                expect(originalState).not.toEqual(alphaBlendState);
-                return readGltf(gltfTransparentPath);
-            })
-            .then(function (gltf) {
-                var material = gltf.materials[0];
-                material.values.diffuse = [1, 0, 0, 0.5];
-                addDefaults(gltf);
-                var technique = gltf.techniques[0];
-                expect(technique.states).toEqual(alphaBlendState);
-            }), done).toResolve();
     });
 
     it('Adds _3DTILESDIFFUSE semantic to the technique\'s diffuse parameter when optimizeForCesium is true', function(done) {
