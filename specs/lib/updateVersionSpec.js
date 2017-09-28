@@ -339,10 +339,6 @@ describe('updateVersion', function() {
         expect(states.functions.scissor).not.toBeDefined();
         expect(states.functions.blendColor).toEqual([0.0, 0.0, 0.0, 1.0]);
         expect(states.functions.depthRange).toEqual([0.0, 0.0]);
-        // requireAccessorMinMax is temporarily disabled because findAccessorMinMax requires proper byte alignment which many glTF 1.0 models do not have
-        //var accessor = gltf.accessors[0];
-        //expect(accessor.min).toEqual([-2.0]);
-        //expect(accessor.max).toEqual([3.0]);
         var primitive = gltf.meshes[0].primitives[0];
         expect(primitive.attributes.TEXCOORD).not.toBeDefined();
         expect(primitive.attributes.TEXCOORD_0).toEqual(4);
