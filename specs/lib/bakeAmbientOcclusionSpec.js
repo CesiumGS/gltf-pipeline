@@ -430,7 +430,9 @@ describe('AmbientOcclusion', function() {
         var materials = boxOverGroundGltfClone.materials;
         for (var materialID in materials) {
             if (materials.hasOwnProperty(materialID)) {
-                materials[materialID].values.diffuse = [0];
+                materials[materialID].values.diffuse = {
+                    index : 0
+                };
             }
         }
 
@@ -479,7 +481,7 @@ describe('AmbientOcclusion', function() {
         var materials = boxOverGroundGltfClone.materials;
         for (var materialID in materials) {
             if (materials.hasOwnProperty(materialID)) {
-                if (materials[materialID].values.diffuse[0] === 1) {
+                if (materials[materialID].values.diffuse.index === 1) {
                     materials[materialID].values.diffuse = [1.0, 1.0, 1.0, 1.0];
                 }
             }

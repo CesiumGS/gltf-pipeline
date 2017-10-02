@@ -501,8 +501,10 @@ describe('RemoveUnusedProperties', function() {
                         name: 'Texture',
                         technique: 0,
                         values: {
-                            diffuse: [0],
-                            shininess: [256]
+                            diffuse: {
+                                index : 0
+                            },
+                            shininess: 256
                         }
                     }
                 ],
@@ -529,8 +531,10 @@ describe('RemoveUnusedProperties', function() {
                         name: 'Texture',
                         technique: 0,
                         values: {
-                            diffuse: [0],
-                            shininess: [256]
+                            diffuse: {
+                                index: 0
+                            },
+                            shininess: 256
                         }
                     }
                 ],

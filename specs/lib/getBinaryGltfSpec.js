@@ -1,5 +1,4 @@
 'use strict';
-var addPipelineExtras = require('../../lib/addPipelineExtras');
 var getBinaryGltf = require('../../lib/getBinaryGltf');
 var parseBinaryGltf = require('../../lib/parseBinaryGltf');
 
@@ -32,8 +31,8 @@ describe('getBinaryGltf', function() {
         var image = parsedGltf.images[0];
         var shaderBufferView = parsedGltf.bufferViews[shader.bufferView];
         var imageBufferView = parsedGltf.bufferViews[image.bufferView];
-        var testShaderText = source.slice(shaderBufferView.byteOffset, shaderBufferView.byteOffset + shaderBufferView.byteLength).toString();
-        var testImageText = source.slice(imageBufferView.byteOffset, imageBufferView.byteOffset + imageBufferView.byteLength).toString();
+        var testShaderText = Buffer.from(source.slice(shaderBufferView.byteOffset, shaderBufferView.byteOffset + shaderBufferView.byteLength)).toString();
+        var testImageText = Buffer.from(source.slice(imageBufferView.byteOffset, imageBufferView.byteOffset + imageBufferView.byteLength)).toString();
         expect(testShaderText).toEqual(shaderText);
         expect(testImageText).toEqual(imageText);
         expect(image.mimeType).toEqual('image/png');
@@ -64,7 +63,7 @@ describe('getBinaryGltf', function() {
         var shaderBufferView = parsedGltf.bufferViews[shader.bufferView];
         var image = parsedGltf.images[0];
         expect(image.bufferView).not.toBeDefined();
-        var testShaderText = source.slice(shaderBufferView.byteOffset, shaderBufferView.byteOffset + shaderBufferView.byteLength).toString();
+        var testShaderText = Buffer.from(source.slice(shaderBufferView.byteOffset, shaderBufferView.byteOffset + shaderBufferView.byteLength)).toString();
         expect(testShaderText).toEqual(shaderText);
         expect(image.uri).toEqual(shaderText);
     });
@@ -95,7 +94,7 @@ describe('getBinaryGltf', function() {
         expect(shader.bufferView).not.toBeDefined();
         var image = parsedGltf.images[0];
         var imageBufferView = parsedGltf.bufferViews[image.bufferView];
-        var testImageText = source.slice(imageBufferView.byteOffset, imageBufferView.byteOffset + imageBufferView.byteLength).toString();
+        var testImageText = Buffer.from(source.slice(imageBufferView.byteOffset, imageBufferView.byteOffset + imageBufferView.byteLength)).toString();
         expect(testImageText).toEqual(imageText);
         expect(image.mimeType).toEqual('image/png');
         expect(shader.uri).toEqual(shaderText);

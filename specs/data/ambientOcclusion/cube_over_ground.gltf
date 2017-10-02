@@ -166,8 +166,10 @@
             "name": "Material-effect",
             "technique": 0,
             "values": {
-                "diffuse": [0],
-                "shininess": [256],
+                "diffuse": {
+                    "index" : 0
+                },
+                "shininess": 256,
                 "specular": [
                     0.2,
                     0.2,
@@ -180,8 +182,10 @@
             "name": "Material_001",
             "technique": 0,
             "values": {
-                "diffuse": [1],
-                "shininess": [256],
+                "diffuse": {
+                    "index" : 1
+                },
+                "shininess": 256,
                 "specular": [
                     0.2,
                     0.2,
@@ -194,8 +198,10 @@
             "name": "useless",
             "technique": 0,
             "values": {
-                "diffuse": [1],
-                "shininess": [256],
+                "diffuse": {
+                    "index" : 1
+                },
+                "shininess": 256,
                 "specular": [
                     0.2,
                     0.2,

@@ -114,8 +114,8 @@
           0,
           1
         ],
-        "shininess": [0],
-        "transparency": [1]
+        "shininess": 0,
+        "transparency": 1
       },
       "technique": 0
     }

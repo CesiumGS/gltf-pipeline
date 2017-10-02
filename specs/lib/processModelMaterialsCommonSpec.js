@@ -102,8 +102,10 @@ describe('processModelMaterialsCommon', function() {
             diffuse: [0.0, 0.0, 0.0, 1.0],
             emission: [0.0, 0.0, 0.0, 1.0],
             specular: [0.0, 0.0, 0.0, 1.0],
-            shininess: [0.0],
-            transparency: [1.0]
+            shininess: 0.0,
+            transparency: 1.0,
+            transparent: false,
+            doubleSided: false
         };
         addDefaults(gltf);
         addPipelineExtras(gltf);
@@ -127,7 +129,7 @@ describe('processModelMaterialsCommon', function() {
                             values: {
                                 ambient: [0.0, 0.0, 0.0, 1.0],
                                 diffuse: [1.0, 0.0, 0.0, 1.0],
-                                emission: [0]
+                                emission: [1.0, 1.0, 1.0, 1.0]
                             }
                         }
                     }
