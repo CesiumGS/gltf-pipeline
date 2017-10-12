@@ -1,6 +1,35 @@
 Change Log
 ==========
 
+### 1.0.3 - ???
+* Fixed a bug where animations in glTF 0.8 assets where not being converted from axis angle to quaternion.
+
+### 1.0.2 - 2017-09-27
+* Fixed specular computation for certain models using the `KHR_materials_common` extension. [#309](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/309)
+* Added a `optimizeDrawCalls` flag to merge nodes and meshes more aggressively to minimize draw calls. [#308](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/308)
+* Added minimum lighting to diffuse when the `cesium` flag is enabled. [#313](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/313)
+* Added a check for normals arrtibute for mesh in `modelMaterialsCommon`. [#318](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/318)
+* Fixed generating duplicate accessors in `cesiumGeometryToGltfPrimitive`. [#321](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/321)
+
+### 1.0.1 - 2017-07-07
+* Fix `gltf-pipeline` to work with Cesium 1.36 and newer.
+
+### 1.0.0 - 2017-07-07
+* Fixed issue where shader comparison in `MergeDuplicateProperties` would cause a crash. [#297](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/297)
+* Fixed an issue where `mergeBuffers` would not align buffer views to 4-byte boundaries. [#298](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/298)
+* Fixed an issue where face normal generation would crash for degenerate triangles. [#298](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/298)
+
+### 0.1.0-alpha15 - 2017-06-06
+* Fixed the `removeNormals` stage so that it can operate independently of `generateNormals`. [#287](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/287)
+* Fixed an issue with writing attributes with double underscores, which is reserved in GLSL. [#286](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/286)
+* Fixed issue with transparent diffuse texture overriding the render state of other materials. [#284](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/284)
+* Fixed crash when loading a model with a huge number of textures. [#283](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/283)
+
+### 0.1.0-alpha14 - 2017-05-09
+* Fixed byte offset alignment issue when loading converted models in Cesium. [#279](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/279)
+* Added case-insensitive regex checking for image extensions. [#278](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/278)
+* Added `mergeVertices` option to merge duplicate vertices. This operation is now disabled by default. [#276](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/276)
+
 ### 0.1.0-alpha13 - 2017-04-27
 * Fixed a bug in `processModelMaterialsCommon` that produced out-of-spec technique states. [#269](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/269)
 
