@@ -8,6 +8,7 @@
 .eslintrc.json
 .eslintcache
 .eslintignore
+.gitattributes
 .npmignore
 .travis.yml
 .appveyor.yml
