@@ -33,6 +33,7 @@ module.exports = {
     parseArguments : require('./lib/parseArguments'),
     parseBinaryGltf : require('./lib/parseBinaryGltf'),
     Pipeline : require('./lib/Pipeline'),
+    PrimitiveHelpers : require('./lib/PrimitiveHelpers'),
     quantizeAttributes : require('./lib/quantizeAttributes'),
     readAccessor : require('./lib/readAccessor'),
     readBufferComponent : require('./lib/readBufferComponent'),
