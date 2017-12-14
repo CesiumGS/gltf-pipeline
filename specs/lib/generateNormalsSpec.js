@@ -84,21 +84,20 @@ describe('generateNormals', function(){
     });
 
     it('generates normals checks for image transparency', function() {
-        readGltf(boxTexturedTransparentGltfPath)
+        return readGltf(boxTexturedTransparentGltfPath)
             .then(function(gltf) {
                 gltfNoNormals = gltf;
                 addPipelineExtras(gltfNoNormals);
             })
             .then(function() {
                 var gltf = gltfNoNormals;
-                var byteLengthBefore = 552;
                 generateNormals(gltf);
 
                 var attributes0 = gltf.meshes['Geometry-mesh002'].primitives[0].attributes;
                 var byteLengthAfter = gltf.buffers[Object.keys(gltf.buffers)[0]].byteLength;
                 expect(attributes0.NORMAL).toBeDefined();
                 expect(gltf.accessors[attributes0.NORMAL]).toBeDefined();
-                expect(byteLengthAfter).toBe(byteLengthBefore + 28 * 3 * 4); // 28 normals are generated
+                expect(byteLengthAfter).toBe(840);
 
                 var expectedStates = {
                     enable: [ 2929, 3042 ],
