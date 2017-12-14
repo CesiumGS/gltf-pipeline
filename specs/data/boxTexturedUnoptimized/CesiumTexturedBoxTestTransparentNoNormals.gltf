@@ -1,32 +1,32 @@
 {
 	"accessors": {
-		"accessor_21": {
-			"bufferView": "bufferView_1",
+		"accessor_0": {
+			"bufferView": "bufferView_0",
 			"byteOffset": 0,
 			"byteStride": 0,
 			"componentType": 5123,
 			"count": 36,
 			"type": "SCALAR"
 		},
-		"accessor_23": {
-			"bufferView": "bufferView_0",
+		"accessor_1": {
+			"bufferView": "bufferView_1",
 			"byteOffset": 0,
 			"byteStride": 0,
 			"componentType": 5126,
-			"count": 24,
-			"max": [0.5, 0.5, 0.5],
+			"count": 36,
+			"type": "VEC3",
 			"min": [-0.5, -0.5, -0.5],
-			"type": "VEC3"
+			"max": [0.5, 0.5, 0.5]
 		},
-		"accessor_27": {
-			"bufferView": "bufferView_0",
-			"byteOffset": 288,
+		"accessor_2": {
+			"bufferView": "bufferView_1",
+			"byteOffset": 432,
 			"byteStride": 0,
 			"componentType": 5126,
-			"count": 24,
-			"max": [6, 1],
+			"count": 36,
+			"type": "VEC2",
 			"min": [0, 0],
-			"type": "VEC2"
+			"max": [6, 1]
 		}
 	},
 	"animations": {},
@@ -42,22 +42,22 @@
 	"bufferViews": {
 		"bufferView_0": {
 			"buffer": "CesiumTexturedBoxTest",
-			"byteLength": 480,
-			"byteOffset": 0,
-			"target": 34962
+			"byteLength": 72,
+			"byteOffset": 720,
+			"target": 34963
 		},
 		"bufferView_1": {
 			"buffer": "CesiumTexturedBoxTest",
-			"byteLength": 72,
-			"byteOffset": 480,
-			"target": 34963
+			"byteLength": 720,
+			"byteOffset": 0,
+			"target": 34962
 		}
 	},
 	"buffers": {
 		"CesiumTexturedBoxTest": {
 			"type": "arraybuffer",
-			"byteLength": 552,
-			"uri": "data:application/octet-stream;base64,AAAAvwAAAD8AAAA/AAAAPwAAAD8AAAA/AAAAvwAAAD8AAAC/AAAAPwAAAD8AAAC/AAAAPwAAAD8AAAC/AAAAPwAAAD8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAL8AAAA/AAAAvwAAAD8AAAC/AAAAPwAAAD8AAAC/AAAAvwAAAL8AAAC/AAAAPwAAAL8AAAC/AAAAPwAAAD8AAAA/AAAAvwAAAD8AAAA/AAAAPwAAAL8AAAA/AAAAvwAAAL8AAAA/AAAAvwAAAD8AAAA/AAAAvwAAAD8AAAC/AAAAvwAAAL8AAAA/AAAAvwAAAL8AAAC/AAAAvwAAAL8AAAA/AAAAvwAAAL8AAAC/AAAAPwAAAL8AAAA/AAAAPwAAAL8AAAC/AADAQAAAAAAAAKBAAAAAAAAAwED+/38/AACgQP7/fz8AAIBAAAAAAAAAoEAAAAAAAACAQAAAgD8AAKBAAACAPwAAAEAAAAAAAACAPwAAAAAAAABAAACAPwAAgD8AAIA/AABAQAAAAAAAAIBAAAAAAAAAQEAAAIA/AACAQAAAgD8AAEBAAAAAAAAAAEAAAAAAAABAQAAAgD8AAABAAACAPwAAAAAAAAAAAAAAAP7/fz8AAIA/AAAAAAAAgD/+/38/AAABAAIAAwACAAEABAAFAAYABwAGAAUACAAJAAoACwAKAAkADAANAA4ADwAOAA0AEAARABIAEwASABEAFAAVABYAFwAWABUA"
+			"byteLength": 792,
+			"uri": "data:application/octet-stream;base64,AAAAvwAAAD8AAAA/AAAAPwAAAD8AAAA/AAAAvwAAAD8AAAC/AAAAPwAAAD8AAAC/AAAAvwAAAD8AAAC/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAC/AAAAPwAAAD8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAL8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAD8AAAA/AAAAvwAAAD8AAAC/AAAAPwAAAD8AAAC/AAAAvwAAAL8AAAC/AAAAPwAAAL8AAAC/AAAAvwAAAL8AAAC/AAAAPwAAAD8AAAC/AAAAPwAAAD8AAAA/AAAAvwAAAD8AAAA/AAAAPwAAAL8AAAA/AAAAvwAAAL8AAAA/AAAAPwAAAL8AAAA/AAAAvwAAAD8AAAA/AAAAvwAAAD8AAAA/AAAAvwAAAD8AAAC/AAAAvwAAAL8AAAA/AAAAvwAAAL8AAAC/AAAAvwAAAL8AAAA/AAAAvwAAAD8AAAC/AAAAvwAAAL8AAAA/AAAAvwAAAL8AAAC/AAAAPwAAAL8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAL8AAAA/AAAAvwAAAL8AAAC/AADAQAAAAAAAAKBAAAAAAAAAwED+/38/AACgQP7/fz8AAMBA/v9/PwAAoEAAAAAAAACAQAAAAAAAAKBAAAAAAAAAgEAAAIA/AACgQAAAgD8AAIBAAACAPwAAoEAAAAAAAAAAQAAAAAAAAIA/AAAAAAAAAEAAAIA/AACAPwAAgD8AAABAAACAPwAAgD8AAAAAAABAQAAAAAAAAIBAAAAAAAAAQEAAAIA/AACAQAAAgD8AAEBAAACAPwAAgEAAAAAAAABAQAAAAAAAAABAAAAAAAAAQEAAAIA/AAAAQAAAgD8AAEBAAACAPwAAAEAAAAAAAAAAAAAAAAAAAAAA/v9/PwAAgD8AAAAAAACAP/7/fz8AAIA/AAAAAAAAAAD+/38/AAABAAIAAwAEAAUABgAHAAgACQAKAAsADAANAA4ADwAQABEAEgATABQAFQAWABcAGAAZABoAGwAcAB0AHgAfACAAIQAiACMA"
 		}
 	},
 	"images": {
@@ -73,18 +73,18 @@
 				"shininess": 256,
 				"specular": [0.2, 0.2, 0.2, 1]
 			},
-			"technique": "technique1"
+			"technique": "technique0"
 		}
 	},
 	"meshes": {
-		"Geometry-mesh002": {
+		"mesh0": {
 			"name": "Mesh",
 			"primitives": [{
 					"attributes": {
-						"POSITION": "accessor_23",
-						"TEXCOORD_0": "accessor_27"
+						"POSITION": "accessor_1",
+						"TEXCOORD_0": "accessor_2"
 					},
-					"indices": "accessor_21",
+					"indices": "accessor_0",
 					"material": "Effect-Texture_0",
 					"mode": 4
 				}
@@ -94,7 +94,7 @@
 	"nodes": {
 		"rootNode": {
 			"children": [],
-			"meshes": ["Geometry-mesh002"],
+			"meshes": ["mesh0"],
 			"matrix": [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
 		}
 	},
@@ -131,7 +131,7 @@
 	},
 	"skins": {},
 	"techniques": {
-		"technique1": {
+		"technique0": {
 			"attributes": {
 				"a_position": "position",
 				"a_texcoord_0": "texcoord_0"

@@ -91,13 +91,14 @@ describe('generateNormals', function(){
             })
             .then(function() {
                 var gltf = gltfNoNormals;
+                var byteLengthBefore = 792;
                 generateNormals(gltf);
 
-                var attributes0 = gltf.meshes['Geometry-mesh002'].primitives[0].attributes;
+                var attributes0 = gltf.meshes['mesh0'].primitives[0].attributes;
                 var byteLengthAfter = gltf.buffers[Object.keys(gltf.buffers)[0]].byteLength;
                 expect(attributes0.NORMAL).toBeDefined();
                 expect(gltf.accessors[attributes0.NORMAL]).toBeDefined();
-                expect(byteLengthAfter).toBe(840);
+                expect(byteLengthAfter).toBe(byteLengthBefore + 36 * 3 * 4); // 36 normals are generated
 
                 var expectedStates = {
                     enable: [ 2929, 3042 ],
@@ -108,7 +109,7 @@ describe('generateNormals', function(){
                     }
                 };
 
-                expect(gltf.techniques.technique0.states).toEqual(expectedStates);
+                expect(gltf.techniques.technique1.states).toEqual(expectedStates);
             });
     });
 });
