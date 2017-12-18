@@ -3,6 +3,7 @@ Change Log
 
 ### 1.0.3 - ???
 * Fixed a bug where animations in glTF 0.8 assets where not being converted from axis angle to quaternion.
+* Fixed a bug where generating normals and materials did not take image transparency into account
 
 ### 1.0.2 - 2017-09-27
 * Fixed specular computation for certain models using the `KHR_materials_common` extension. [#309](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/309)
