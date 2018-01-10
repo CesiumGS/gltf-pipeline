@@ -10,6 +10,15 @@ var WebGLConstants = Cesium.WebGLConstants;
 describe('processModelMaterialsCommon', function() {
     it('generates techniques and nodes for KHR_materials_common lights', function() {
         var gltf = {
+            meshes: [
+                {
+                    primitives: [
+                        {
+                            material: 0
+                        }
+                    ]
+                }
+            ],
             materials: [
                 {
                     extensions : {
@@ -120,6 +129,15 @@ describe('processModelMaterialsCommon', function() {
 
     it('works with optimizeForCesium', function() {
         var gltf = {
+            meshes: [
+                {
+                    primitives: [
+                        {
+                            material: 0
+                        }
+                    ]
+                }
+            ],
             extensionsUsed: ['KHR_materials_common'],
             materials: [
                 {
@@ -296,5 +314,50 @@ describe('processModelMaterialsCommon', function() {
         var techniqueMat3 = techniques[materials[materialMat3Id].technique];
         expect(techniqueVec4.parameters.joint.type).toEqual(WebGLConstants.FLOAT_VEC4);
         expect(techniqueMat3.parameters.joint.type).toEqual(WebGLConstants.FLOAT_MAT3);
+    });
+
+    it('material referenced by a primitive with vertex colors and a primitive without vertex colors is split', function() {
+        var gltf = {
+            accessors: [
+                {
+                    componentType: WebGLConstants.FLOAT,
+                    type: 'VEC4'
+                }
+            ],
+            extensionsUsed: [
+                'KHR_materials_common'
+            ],
+            materials: [
+                {
+                    extensions: {
+                        KHR_materials_common: {
+                            technique: 'BLINN'
+                        }
+                    }
+                }
+            ],
+            meshes: [
+                {
+                    primitives: [{
+                        attributes: {
+                            COLOR_0: 0
+                        },
+                        material: 0
+                    }]
+                }, {
+                    primitives: [{
+                        material: 0
+                    }]
+                }
+            ]
+        };
+        addDefaults(gltf);
+        addPipelineExtras(gltf);
+        processModelMaterialsCommon(gltf);
+
+        var meshes = gltf.meshes;
+        var materialWithVertexColors = meshes[0].primitives[0].material;
+        var materialWithoutVertexColors = meshes[1].primitives[0].material;
+        expect(materialWithVertexColors).not.toEqual(materialWithoutVertexColors);
     });
 });
