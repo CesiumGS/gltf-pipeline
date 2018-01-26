@@ -180,6 +180,54 @@ describe('processModelMaterialsCommon', function() {
         expect(fragmentShaderSource.indexOf('czm_sunDirectionEC') > -1).toBe(false);
     });
 
+    function verifySunLighting(sunLighting)
+    {
+        var gltf = {
+            meshes: [
+                {
+                    primitives: [
+                        {
+                            material: 0
+                        }
+                    ]
+                }
+            ],
+            extensionsUsed: ['KHR_materials_common'],
+            materials: [
+                {
+                    extensions: {
+                        KHR_materials_common: {
+                            technique: 'BLINN',
+                            values: {
+                                ambient: [0.0, 0.0, 0.0, 1.0],
+                                diffuse: [1.0, 0.0, 0.0, 1.0],
+                                emission: [1.0, 1.0, 1.0, 1.0]
+                            }
+                        }
+                    }
+                }
+            ]
+        };
+
+        var gltfClone = clone(gltf, true);
+        var options = {
+            optimizeForCesium : true,
+            sunLighting : sunLighting
+        };
+        addDefaults(gltfClone, options);
+        addPipelineExtras(gltfClone);
+        processModelMaterialsCommon(gltfClone, options);
+
+        // Uses the Cesium sun as its default light source
+        var fragmentShaderSource = gltfClone.shaders[gltfClone.programs[0].fragmentShader].extras._pipeline.source;
+        expect(fragmentShaderSource.indexOf('czm_sunDirectionEC') > -1).toBe(sunLighting);
+    }
+
+    it('sets sunLighting', function() {
+        verifySunLighting(true);
+        verifySunLighting(false);
+    });
+
     it('adds nonstandard semantic', function() {
         var gltf = {
             accessors: [
