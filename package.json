@@ -39,6 +39,7 @@
     "yargs": "^10.0.3"
   },
   "devDependencies": {
+    "cloc": "^2.3.3",
     "coveralls": "^3.0.0",
     "eslint": "^4.10.0",
     "eslint-config-cesium": "^2.0.1",
@@ -59,7 +60,8 @@
     "test": "gulp test",
     "test-watch": "gulp test-watch",
     "coverage": "gulp coverage",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
+    "cloc": "gulp cloc"
   },
   "bin": {
     "gltf-pipeline": "./bin/gltf-pipeline.js"
