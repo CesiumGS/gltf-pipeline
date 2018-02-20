@@ -10,6 +10,15 @@ var WebGLConstants = Cesium.WebGLConstants;
 describe('processModelMaterialsCommon', function() {
     it('generates techniques and nodes for KHR_materials_common lights', function() {
         var gltf = {
+            meshes: {
+                mesh1 : {
+                    primitives: [
+                        {
+                            material: 'material1'
+                        }
+                    ]
+                }
+            },
             materials: {
                 material1: {
                     extensions : {
@@ -121,6 +130,15 @@ describe('processModelMaterialsCommon', function() {
     it('works with optimizeForCesium', function() {
         var gltf = {
             extensionsUsed: ['KHR_materials_common'],
+            meshes: {
+                mesh1 : {
+                    primitives: [
+                        {
+                            material: 'material1'
+                        }
+                    ]
+                }
+            },
             materials: {
                 material1: {
                     extensions: {
