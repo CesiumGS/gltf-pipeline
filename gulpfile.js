@@ -173,12 +173,11 @@ function amdify(source, subDependencyMapping) {
             paths.push(requireMapping[variable]);
         }
     }
-    var defineHeader = '/*global define*/\n' +
-            'define([], function() {\n    ';
+    var defineHeader = 'define([], function() {\n    ';
     if (paths.length > 0) {
         var definePathsHeader = '\'' + paths.join('\',\n        \'') + '\'';
         var defineVariablesHeader = variables.join(',\n        ');
-        defineHeader = '/*global define*/\n' +
+        defineHeader =
             'define([\n' +
             '        ' + definePathsHeader + '\n' +
             '    ], function(\n' +
@@ -239,8 +238,7 @@ function combine(source) {
             paths.push(requireMapping[variable]);
         }
     }
-    var defineHeader = '/*global define*/\n' +
-        'var ' + returnValue + ' = (function() {\n    ';
+    var defineHeader = 'var ' + returnValue + ' = (function() {\n    ';
     var defineFooter = '\n}());\n';
     if (defined(returnValue)) {
         defineFooter = '\n    return ' + returnValue + ';' + defineFooter;
