@@ -1,7 +1,5 @@
 'use strict';
-var fs = require('fs');
 var addDefaults = require('../../lib/addDefaults');
-var addPipelineExtras = require('../../lib/addPipelineExtras');
 var getStatistics = require('../../lib/getStatistics');
 var readGltf = require('../../lib/readGltf');
 

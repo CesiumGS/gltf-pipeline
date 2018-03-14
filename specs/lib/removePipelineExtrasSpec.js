@@ -2,12 +2,19 @@
 var fs = require('fs');
 var removePipelineExtras = require('../../lib/removePipelineExtras');
 var gltfExtrasPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestRemoveExtras.gltf';
+var Cesium = require('cesium');
+
+var defined = Cesium.defined;
 
 describe('removePipelineExtras', function() {
     var gltf;
 
     beforeAll(function(done) {
         fs.readFile(gltfExtrasPath, function(err, data) {
+            if(defined(err)) {
+                done.fail(err);
+                return;
+            }
             gltf = JSON.parse(data);
             removePipelineExtras(gltf);
             done();

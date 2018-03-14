@@ -10,8 +10,25 @@ var WebGLConstants = Cesium.WebGLConstants;
 describe('processModelMaterialsCommon', function() {
     it('generates techniques and nodes for KHR_materials_common lights', function() {
         var gltf = {
+            meshes: {
+                mesh1 : {
+                    primitives: [
+                        {
+                            material: 'material1'
+                        }
+                    ]
+                }
+            },
             materials: {
                 material1: {
+                    extensions : {
+                        KHR_materials_common : {
+                            technique : 'BLINN'
+                        }
+                    }
+                },
+                material2: {
+                    // Second unused material included for testing purposes
                     extensions : {
                         KHR_materials_common : {
                             technique : 'BLINN'
@@ -121,6 +138,15 @@ describe('processModelMaterialsCommon', function() {
     it('works with optimizeForCesium', function() {
         var gltf = {
             extensionsUsed: ['KHR_materials_common'],
+            meshes: {
+                mesh1 : {
+                    primitives: [
+                        {
+                            material: 'material1'
+                        }
+                    ]
+                }
+            },
             materials: {
                 material1: {
                     extensions: {
@@ -223,7 +249,7 @@ describe('processModelMaterialsCommon', function() {
         var program = gltfClone.programs[technique.program];
         expect(program.attributes.indexOf('a_batchid') > -1).toBe(true);
 
-        var vertexShaderSource = gltfClone.shaders[program.vertexShader].extras._pipeline.source.toString();
+        var vertexShaderSource = gltfClone.shaders[program.vertexShader].extras._pipeline.source;
         expect(vertexShaderSource.indexOf('a_batchid') > -1).toBe(true);
     });
 

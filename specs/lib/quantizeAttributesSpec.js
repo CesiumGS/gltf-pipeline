@@ -6,7 +6,7 @@ var numberOfComponentsForType = require('../../lib/numberOfComponentsForType');
 var quantizeAttributes = require('../../lib/quantizeAttributes');
 
 describe('quantizeAttributes', function() {
-    var buffer = new Buffer(new Uint8Array(120));
+    var buffer = Buffer.from(new Uint8Array(120));
     var testGltf = {
         accessors : {
             // Interleaved accessors in bufferView_0
@@ -116,7 +116,7 @@ describe('quantizeAttributes', function() {
                 type : 'array_buffer',
                 extras : {
                     _pipeline : {
-                        source : new Buffer(new Float32Array([0.0026710000820457935]).buffer)
+                        source : Buffer.from(new Float32Array([0.0026710000820457935]).buffer)
                     }
                 }
             }

@@ -1,7 +1,6 @@
 'use strict';
 var fs = require('fs');
-var async = require('async');
-var bufferEqual = require('buffer-equal');
+var Promise = require('bluebird');
 var parseBinaryGltf = require('../../lib/parseBinaryGltf');
 var removePipelineExtras = require('../../lib/removePipelineExtras');
 var binaryGltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.glb';
@@ -21,25 +20,12 @@ describe('parseBinaryGltf', function() {
         overlap: overlapGltfPath
     };
 
-    beforeAll(function(done) {
+    beforeAll(function (done) {
         var names = Object.keys(testData);
-        async.each(names, function(name, callback) {
-            fs.readFile(testData[name], function(err, data) {
-                if (err) {
-                    callback(err);
-                }
-                else {
-                    testData[name] = data;
-                    callback();
-                }
-            });
-        }, function(err) {
-            if (err) {
-                throw err;
-            }
-
-            done();
+        var promise = Promise.each(names, function (name) {
+            testData[name] = fs.readFileSync(testData[name]);
         });
+        expect(promise, done).toResolve();
     });
 
     it('loads a glTF scene', function() {
@@ -83,22 +69,22 @@ describe('parseBinaryGltf', function() {
         expect(gltf.buffers.bufferView_29_buffer).toBeDefined();
         expect(gltf.buffers.bufferView_30_buffer).toBeDefined();
 
-        expect(bufferEqual(gltf.buffers.bufferView_29_buffer.extras._pipeline.source, noOverlapGltf.buffers.bufferView_29_buffer.extras._pipeline.source)).toBe(true);
-        expect(bufferEqual(gltf.buffers.bufferView_30_buffer.extras._pipeline.source, noOverlapGltf.buffers.bufferView_30_buffer.extras._pipeline.source)).toBe(true);
+        expect(gltf.buffers.bufferView_29_buffer.extras._pipeline.source.equals(noOverlapGltf.buffers.bufferView_29_buffer.extras._pipeline.source)).toBe(true);
+        expect(gltf.buffers.bufferView_30_buffer.extras._pipeline.source.equals(noOverlapGltf.buffers.bufferView_30_buffer.extras._pipeline.source)).toBe(true);
     });
 
     it('loads an embedded buffer', function() {
         var gltf = parseBinaryGltf(testData.binary);
 
         expect(gltf.buffers.bufferView_30_buffer.extras._pipeline.source).toBeDefined();
-        expect(bufferEqual(gltf.buffers.bufferView_30_buffer.extras._pipeline.source, testData.buffer)).toBe(true);
+        expect(gltf.buffers.bufferView_30_buffer.extras._pipeline.source.equals(testData.buffer)).toBe(true);
     });
 
     it('loads an embedded image', function() {
         var gltf = parseBinaryGltf(testData.binary);
 
         expect(gltf.images.Image0001.extras._pipeline.source).toBeDefined();
-        expect(bufferEqual(gltf.images.Image0001.extras._pipeline.source, testData.image)).toBe(true);
+        expect(gltf.images.Image0001.extras._pipeline.source.equals(testData.image)).toBe(true);
     });
 
     it('loads an embedded shader', function() {
@@ -109,7 +95,7 @@ describe('parseBinaryGltf', function() {
     });
 
     it('throws an error', function() {
-        var magicError = new Buffer(testData.binary);
+        var magicError = Buffer.from(testData.binary);
         magicError.fill(0, 0, 4);
         expect(function() {
             try {
@@ -124,7 +110,7 @@ describe('parseBinaryGltf', function() {
     });
 
     it('throws a version error', function() {
-        var versionError = new Buffer(testData.binary);
+        var versionError = Buffer.from(testData.binary);
         versionError.fill(0, 4, 8);
         expect(function() {
             try {
@@ -139,7 +125,7 @@ describe('parseBinaryGltf', function() {
     });
 
     it('throws a format error', function() {
-        var formatError = new Buffer(testData.binary);
+        var formatError = Buffer.from(testData.binary);
         formatError.fill(1, 16, 20);
         expect(function() {
             try {

@@ -4,9 +4,8 @@ var Cesium = require('cesium');
 var child_process = require('child_process');
 var fsExtra = require('fs-extra');
 var gulp = require('gulp');
-var gulpJshint = require('gulp-jshint');
 var Jasmine = require('jasmine');
-var JasmineSpecReporter = require('jasmine-spec-reporter');
+var jasmineSpecReporter = require('jasmine-spec-reporter');
 var open = require('open');
 var path = require('path');
 var Promise = require('bluebird');
@@ -16,33 +15,13 @@ var defined = Cesium.defined;
 var DeveloperError = Cesium.DeveloperError;
 var argv = yargs.argv;
 
-var fsExtraReadFile = Promise.promisify(fsExtra.readFile);
-var fsExtraOutputFile = Promise.promisify(fsExtra.outputFile);
-
 // Add third-party node module binaries to the system path
 // since some tasks need to call them directly.
 var environmentSeparator = process.platform === 'win32' ? ';' : ':';
 var nodeBinaries = path.join(__dirname, 'node_modules', '.bin');
 process.env.PATH += environmentSeparator + nodeBinaries;
 
-var jsHintFiles = ['**/*.js', '!node_modules/**', '!coverage/**', '!doc/**', '!dist/**'];
 var specFiles = ['**/*.js', '!node_modules/**', '!coverage/**', '!dist/**'];
-
-gulp.task('jsHint', function () {
-    var stream = gulp.src(jsHintFiles)
-        .pipe(gulpJshint())
-        .pipe(gulpJshint.reporter('jshint-stylish'));
-
-    if (argv.failTaskOnError) {
-        stream = stream.pipe(gulpJshint.reporter('fail'));
-    }
-
-    return stream;
-});
-
-gulp.task('jsHint-watch', function () {
-    gulp.watch(jsHintFiles, ['jsHint']);
-});
 
 function excludeCompressedTextures(jasmine) {
     var excludedSpecs = ['compressTexturesSpec.js', 'compressTexturesMultipleFormatsSpec.js'];
@@ -67,7 +46,7 @@ gulp.task('test', function (done) {
         // Travis runs Ubuntu 12.04.5 which has glibc 2.15, while crunch requires glibc 2.22 or higher
         excludeCompressedTextures(jasmine);
     }
-    jasmine.addReporter(new JasmineSpecReporter({
+    jasmine.addReporter(new jasmineSpecReporter.SpecReporter({
         displaySuccessfulSpec: !defined(argv.suppressPassed) || !argv.suppressPassed
     }));
     jasmine.execute();
@@ -101,9 +80,9 @@ gulp.task('coverage', function () {
         additionalExcludes += '-x "specs/lib/compressTexturesMultipleFormatsSpec.js"';
     }
 
-    child_process.execSync('istanbul' +
-        ' cover' +
-        ' --include-all-sources' +
+    child_process.execSync('nyc' +
+        ' --all' +
+        ' --reporter=lcov' +
         ' --dir coverage' +
         ' -x "specs/**" -x "bin/**" -x "coverage/**" -x "dist/**" -x "index.js" -x "gulpfile.js"' + additionalExcludes +
         ' node_modules/jasmine/bin/jasmine.js' +
@@ -292,12 +271,12 @@ gulp.task('build-cesium', function () {
     };
     Promise.map(files, function(fileName) {
         var filePath = path.join(basePath, fileName);
-        return fsExtraReadFile(filePath)
+        return fsExtra.readFile(filePath)
             .then(function(buffer) {
                 var source = buffer.toString();
                 source = amdify(source, subDependencyMapping);
                 var outputPath = path.join(outputDir, fileName);
-                return fsExtraOutputFile(outputPath, source);
+                return fsExtra.outputFile(outputPath, source);
             });
     });
 });
@@ -310,12 +289,50 @@ gulp.task('build-cesium-combine', function () {
     ];
     Promise.map(files, function(fileName) {
         var filePath = path.join(basePath, fileName);
-        return fsExtraReadFile(filePath)
+        return fsExtra.readFile(filePath)
             .then(function(buffer) {
                 var source = buffer.toString();
                 source = combine(source);
                 var outputPath = path.join(outputDir, fileName);
-                return fsExtraOutputFile(outputPath, source);
+                return fsExtra.outputFile(outputPath, source);
             });
+    });
+});
+
+gulp.task('cloc', function() {
+    var cmdLine;
+    var clocPath = path.join('node_modules', 'cloc', 'lib', 'cloc');
+
+    //Run cloc on primary Source files only
+    var source = new Promise(function(resolve, reject) {
+        cmdLine = 'perl ' + clocPath + ' --quiet --progress-rate=0' +
+            ' lib/';
+
+        child_process.exec(cmdLine, function(error, stdout, stderr) {
+            if (error) {
+                console.log(stderr);
+                return reject(error);
+            }
+            console.log('Source:');
+            console.log(stdout);
+            resolve();
+        });
+    });
+
+    //If running cloc on source succeeded, also run it on the tests.
+    return source.then(function() {
+        return new Promise(function(resolve, reject) {
+            cmdLine = 'perl ' + clocPath + ' --quiet --progress-rate=0' +
+                ' specs/lib/';
+            child_process.exec(cmdLine, function(error, stdout, stderr) {
+                if (error) {
+                    console.log(stderr);
+                    return reject(error);
+                }
+                console.log('Specs:');
+                console.log(stdout);
+                resolve();
+            });
+        });
     });
 });

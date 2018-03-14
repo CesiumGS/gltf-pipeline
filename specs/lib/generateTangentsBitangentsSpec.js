@@ -1,6 +1,5 @@
 'use strict';
 var clone = require('clone');
-var fs = require('fs');
 var readGltf = require('../../lib/readGltf');
 var generateTangentsBitangents = require('../../lib/generateTangentsBitangents');
 

@@ -2,8 +2,8 @@
 var clone = require('clone');
 var fsExtra = require('fs-extra');
 var path = require('path');
-var Promise = require('bluebird');
 
+var mergeDuplicateVertices = require('../../lib/mergeDuplicateVertices');
 var Pipeline = require('../../lib/Pipeline');
 var readGltf = require('../../lib/readGltf');
 
@@ -11,8 +11,7 @@ var processFile = Pipeline.processFile;
 var processFileToDisk = Pipeline.processFileToDisk;
 var processJSON = Pipeline.processJSON;
 var processJSONToDisk = Pipeline.processJSONToDisk;
-
-var fsExtraReadFile = Promise.promisify(fsExtra.readFile);
+var processJSONWithExtras = Pipeline.processJSONWithExtras;
 
 var gltfPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf';
 var gltfEmbeddedPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestEmbedded.gltf';
@@ -23,7 +22,7 @@ var outputGlbPath = './output/CesiumTexturedBoxTest.glb';
 describe('Pipeline', function() {
     it('optimizes a gltf JSON with embedded resources', function(done) {
         var gltfCopy;
-        expect(fsExtraReadFile(gltfEmbeddedPath)
+        expect(fsExtra.readFile(gltfEmbeddedPath)
             .then(function(data) {
                 var gltf = JSON.parse(data);
                 gltfCopy = clone(gltfCopy);
@@ -41,7 +40,7 @@ describe('Pipeline', function() {
             basePath : path.dirname(gltfPath)
         };
         var gltfCopy;
-        expect(fsExtraReadFile(gltfPath, options)
+        expect(fsExtra.readFile(gltfPath, options)
             .then(function(data) {
                 var gltf = JSON.parse(data);
                 gltfCopy = clone(gltfCopy);
@@ -83,7 +82,7 @@ describe('Pipeline', function() {
     });
 
     it('will write a file to the correct directory', function(done) {
-        var spy = spyOn(fsExtra, 'outputJsonAsync').and.callFake(function() {});
+        var spy = spyOn(fsExtra, 'outputJson').and.callFake(function() {});
         var options = {
             createDirectory : false
         };
@@ -97,7 +96,7 @@ describe('Pipeline', function() {
     });
 
     it('will write a binary file', function(done) {
-        var spy = spyOn(fsExtra, 'outputFileAsync').and.callFake(function() {});
+        var spy = spyOn(fsExtra, 'outputFile').and.callFake(function() {});
         var options = {
             binary : true,
             createDirectory : false
@@ -113,7 +112,7 @@ describe('Pipeline', function() {
     });
 
     it('will write a file from JSON', function(done) {
-        var spy = spyOn(fsExtra, 'outputJsonAsync').and.callFake(function() {});
+        var spy = spyOn(fsExtra, 'outputJson').and.callFake(function() {});
         var processOptions = {
             createDirectory : false,
             basePath : path.dirname(gltfPath)
@@ -158,5 +157,29 @@ describe('Pipeline', function() {
                 var finalUri = testBuffer.uri;
                 expect(initialUri).not.toEqual(finalUri);
             }), done).toResolve();
+    });
+
+    it('processJSONWithExtras does not merge duplicate vertices by default', function (done) {
+        spyOn(mergeDuplicateVertices, '_implementation').and.callThrough();
+        var promise = readGltf(gltfPath)
+            .then(function (gltf) {
+                return processJSONWithExtras(gltf);
+            })
+            .then(function () {
+                expect(mergeDuplicateVertices._implementation).not.toHaveBeenCalled();
+            });
+        expect(promise, done).toResolve();
+    });
+
+    it('processJSONWithExtras can merge duplicate vertices.', function (done) {
+        spyOn(mergeDuplicateVertices, '_implementation').and.callThrough();
+        var promise = readGltf(gltfPath)
+            .then(function (gltf) {
+                return processJSONWithExtras(gltf, {mergeVertices: true});
+            })
+            .then(function (gltf) {
+                expect(mergeDuplicateVertices._implementation).toHaveBeenCalledWith(gltf);
+            });
+        expect(promise, done).toResolve();
     });
 });

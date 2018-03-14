@@ -64,7 +64,7 @@ describe('MergeDuplicateProperties', function() {
             }
         };
         it('merges a single duplicate accessor', function () {
-            var buffer = new Buffer([1, 2, 3, 1, 2, 3]);
+            var buffer = Buffer.from([1, 2, 3, 1, 2, 3]);
             var gltf = clone(testGltf);
             var gltfBuffer = gltf.buffers.buffer;
             gltfBuffer.extras._pipeline.source = buffer;
@@ -76,7 +76,7 @@ describe('MergeDuplicateProperties', function() {
         });
 
         it ('merges multiple duplicate accessors', function () {
-            var buffer = new Buffer([1, 2, 3, 1, 2, 3, 1, 2, 3]);
+            var buffer = Buffer.from([1, 2, 3, 1, 2, 3, 1, 2, 3]);
             var gltf = clone(testGltf);
             var gltfBuffer = gltf.buffers.buffer;
             gltfBuffer.extras._pipeline.source = buffer;
@@ -106,7 +106,7 @@ describe('MergeDuplicateProperties', function() {
         });
 
         it ('leaves a non-duplicate accessor alone', function () {
-            var buffer = new Buffer([1, 2, 3, 1, 2, 3, 3, 2, 1]);
+            var buffer = Buffer.from([1, 2, 3, 1, 2, 3, 3, 2, 1]);
             var gltf = clone(testGltf);
             var gltfBuffer = gltf.buffers.buffer;
             gltfBuffer.extras._pipeline.source = buffer;
@@ -139,8 +139,6 @@ describe('MergeDuplicateProperties', function() {
 
     var mergeShaders = MergeDuplicateProperties.mergeShaders;
     describe('mergeShaders', function() {
-        var testShaderBufferOne = new Buffer('test shader one', 'utf8');
-        var testShaderBufferTwo = new Buffer('test shader two', 'utf8');
         it('merges duplicate shaders', function() {
             var gltf = {
                 programs : {
@@ -158,7 +156,7 @@ describe('MergeDuplicateProperties', function() {
                         type : WebGLConstants.VERTEX_SHADER,
                         extras : {
                             _pipeline : {
-                                source : testShaderBufferOne
+                                source : 'test shader one'
                             }
                         }
                     },
@@ -166,7 +164,7 @@ describe('MergeDuplicateProperties', function() {
                         type : WebGLConstants.FRAGMENT_SHADER,
                         extras : {
                             _pipeline : {
-                                source : testShaderBufferOne
+                                source : 'test shader one'
                             }
                         }
                     },
@@ -174,7 +172,7 @@ describe('MergeDuplicateProperties', function() {
                         type : WebGLConstants.VERTEX_SHADER,
                         extras : {
                             _pipeline : {
-                                source : testShaderBufferTwo
+                                source : 'test shader two'
                             }
                         }
                     },
@@ -182,7 +180,7 @@ describe('MergeDuplicateProperties', function() {
                         type : WebGLConstants.FRAGMENT_SHADER,
                         extras : {
                             _pipeline : {
-                                source : testShaderBufferOne
+                                source : 'test shader one'
                             }
                         }
                     }
@@ -204,7 +202,8 @@ describe('MergeDuplicateProperties', function() {
                 programs: {
                     programOne: {
                         fragmentShader: 'FSOne',
-                        vertexShader: 'VSOne'
+                        vertexShader: 'VSOne',
+                        extras : {}
                     },
                     programTwo: {
                         fragmentShader: 'FSOne',
@@ -212,15 +211,18 @@ describe('MergeDuplicateProperties', function() {
                     },
                     programThree: {
                         fragmentShader: 'FSOne',
-                        vertexShader: 'VSTwo'
+                        vertexShader: 'VSTwo',
+                        extras : {}
                     }
                 },
                 techniques: {
                     techniqueOne: {
-                        program: 'programOne'
+                        program: 'programOne',
+                        extras: {}
                     },
                     techniqueTwo: {
-                        program: 'programTwo'
+                        program: 'programTwo',
+                        extras: {}
                     },
                     techniqueThree: {
                         program: 'programThree'
@@ -245,7 +247,8 @@ describe('MergeDuplicateProperties', function() {
                         arrayOf : ['values'],
                         nested : {
                             key : 'value'
-                        }
+                        },
+                        extras : {}
                     },
                     techniqueTwo : {
                         key : 'value',
@@ -259,15 +262,18 @@ describe('MergeDuplicateProperties', function() {
                         arrayOf : ['values'],
                         nested : {
                             key : 'value'
-                        }
+                        },
+                        extras : {}
                     }
                 },
                 materials : {
                     materialOne : {
-                        technique : 'techniqueOne'
+                        technique : 'techniqueOne',
+                        extras : {}
                     },
                     materialTwo : {
-                        technique : 'techniqueTwo'
+                        technique : 'techniqueTwo',
+                        extras : {}
                     },
                     materialThree : {
                         technique : 'techniqueThree'
@@ -314,14 +320,16 @@ describe('MergeDuplicateProperties', function() {
                         arrayOf : ['values'],
                         nested : {
                             key : 'value'
-                        }
+                        },
+                        extras : {}
                     },
                     materialTwo : {
                         key : 'value',
                         arrayOf : ['different', 'values'],
                         nested : {
                             key : 'value'
-                        }
+                        },
+                        extras : {}
                     },
                     materialThree : {
                         key : 'value',
@@ -343,5 +351,37 @@ describe('MergeDuplicateProperties', function() {
             expect(meshTwoPrimitives[0].material).toBe('materialTwo');
             expect(meshTwoPrimitives[1].material).toBe('materialOne');
         });
+    });
+
+    it('mergeAccessors is called if optimizeDrawCalls is false', function() {
+        var spyAccessors = spyOn(MergeDuplicateProperties, 'mergeAccessors');
+        var spyShaders = spyOn(MergeDuplicateProperties, 'mergeShaders');
+        var spyPrograms = spyOn(MergeDuplicateProperties, 'mergePrograms');
+        var spyTechniques = spyOn(MergeDuplicateProperties, 'mergeTechniques');
+        var spyMaterials = spyOn(MergeDuplicateProperties, 'mergeMaterials');
+
+        MergeDuplicateProperties.mergeAll({}, false);
+
+        expect(spyAccessors).toHaveBeenCalled();
+        expect(spyShaders).toHaveBeenCalled();
+        expect(spyPrograms).toHaveBeenCalled();
+        expect(spyTechniques).toHaveBeenCalled();
+        expect(spyMaterials).toHaveBeenCalled();
+    });
+
+    it('mergeAccessors isn\'t called if optimizeDrawCalls is true', function() {
+        var spyAccessors = spyOn(MergeDuplicateProperties, 'mergeAccessors');
+        var spyShaders = spyOn(MergeDuplicateProperties, 'mergeShaders');
+        var spyPrograms = spyOn(MergeDuplicateProperties, 'mergePrograms');
+        var spyTechniques = spyOn(MergeDuplicateProperties, 'mergeTechniques');
+        var spyMaterials = spyOn(MergeDuplicateProperties, 'mergeMaterials');
+
+        MergeDuplicateProperties.mergeAll({}, true);
+
+        expect(spyAccessors).not.toHaveBeenCalled();
+        expect(spyShaders).toHaveBeenCalled();
+        expect(spyPrograms).toHaveBeenCalled();
+        expect(spyTechniques).toHaveBeenCalled();
+        expect(spyMaterials).toHaveBeenCalled();
     });
 });

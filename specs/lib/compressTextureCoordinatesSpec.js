@@ -11,7 +11,7 @@ describe('compressTextureCoordinates', function() {
         var texCoords = new Float32Array([1.0, 0.0,
                                          0.0, 1.0,
                                          0.5, 0.5]);
-        var texCoordBuffer = new Buffer(texCoords.buffer.slice(0));
+        var texCoordBuffer = Buffer.from(texCoords.buffer.slice(0));
         var gltf = {
             accessors : {
                 texCoordAccessor : {
@@ -123,7 +123,7 @@ describe('compressTextureCoordinates', function() {
         });
     });
 
-    it('should only patch a program whos shader has not been patched yet', function(done) {
+    it('should only patch a program whose shader has not been patched yet', function(done) {
         var texCoords = new Float32Array([
             1.0, 0.0,
             0.0, 1.0,
@@ -135,7 +135,7 @@ describe('compressTextureCoordinates', function() {
             0.0, 1.0,
             0.5, 0.5
         ]);
-        var texCoordBuffer = new Buffer(texCoords.buffer.slice(0));
+        var texCoordBuffer = Buffer.from(texCoords.buffer.slice(0));
         var gltf = {
             accessors : {
                 texCoordAccessor_1 : {

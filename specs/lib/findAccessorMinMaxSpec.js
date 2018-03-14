@@ -38,7 +38,7 @@ describe('findAccessorMinMax', function() {
                 0.0, 0.0, 0.0,
                 0.5, -0.5, 0.5
             ]);
-        var source = new Buffer(bufferData.buffer);
+        var source = Buffer.from(bufferData.buffer);
         var gltfBuffer = gltf.buffers.buffer;
         gltfBuffer.extras._pipeline.source = source;
         gltfBuffer.byteLength = source.length;
@@ -67,7 +67,7 @@ describe('findAccessorMinMax', function() {
                 -1.0, -2.0, -3.0,
                 nan, nan, nan
             ]);
-        var source = new Buffer(bufferData.buffer);
+        var source = Buffer.from(bufferData.buffer);
         var gltfBuffer = gltf.buffers.buffer;
         gltfBuffer.extras._pipeline.source = source;
         gltfBuffer.byteLength = source.length;

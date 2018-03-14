@@ -1,9 +1,5 @@
 'use strict';
-var Promise = require('bluebird');
-var fs = require('fs');
-var bufferEqual = require('buffer-equal');
-
-var fsReadFile = Promise.promisify(fs.readFile);
+var fsExtra = require('fs-extra');
 
 var addPipelineExtras = require('../../lib/addPipelineExtras');
 var loadGltfUris = require('../../lib/loadGltfUris');
@@ -19,14 +15,12 @@ describe('loadBufferUris', function() {
     };
 
     beforeAll(function(done) {
-        fsReadFile(bufferPath)
+        fsExtra.readFile(bufferPath)
             .then(function(data) {
                 bufferData = data;
                 done();
             })
-            .catch(function(err) {
-                throw err;
-            });
+            .catch(done.fail);
     });
 
     it('loads an external buffer', function(done) {
@@ -42,7 +36,7 @@ describe('loadBufferUris', function() {
         loadGltfUris(gltf, options)
             .then(function() {
                 expect(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline.source).toBeDefined();
-                expect(bufferEqual(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline.source, bufferData)).toBe(true);
+                expect(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline.source.equals(bufferData)).toBe(true);
                 expect(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline.extension).toEqual('.bin');
                 done();
             });
@@ -61,7 +55,7 @@ describe('loadBufferUris', function() {
         loadGltfUris(gltf, options)
             .then(function() {
                 expect(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline.source).toBeDefined();
-                expect(bufferEqual(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline.source, bufferData)).toBe(true);
+                expect(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline.source.equals(bufferData)).toBe(true);
                 expect(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline.extension).toEqual('.bin');
                 done();
             });
@@ -83,7 +77,7 @@ describe('loadBufferUris', function() {
         loadGltfUris(gltf, options)
             .then(function() {
                 expect(gltf.buffers.embeddedBox.extras._pipeline.source).toBeDefined();
-                expect(bufferEqual(gltf.buffers.embeddedBox.extras._pipeline.source, bufferData)).toBe(true);
+                expect(gltf.buffers.embeddedBox.extras._pipeline.source.equals(bufferData)).toBe(true);
                 expect(gltf.buffers.externalBox.extras._pipeline.source).toBeDefined();
                 expect(gltf.buffers.externalBox.extras._pipeline.extension).toEqual('.bin');
                 done();

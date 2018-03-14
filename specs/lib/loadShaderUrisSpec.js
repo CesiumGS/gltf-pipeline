@@ -1,9 +1,5 @@
 'use strict';
-var Promise = require('bluebird');
-var fs = require('fs');
-var bufferEqual = require('buffer-equal');
-
-var fsReadFile = Promise.promisify(fs.readFile);
+var fsExtra = require('fs-extra');
 
 var addPipelineExtras = require('../../lib/addPipelineExtras');
 var loadGltfUris = require('../../lib/loadGltfUris');
@@ -19,15 +15,13 @@ describe('loadShaderUris', function() {
     };
 
     beforeAll(function(done) {
-        fsReadFile(fragmentShaderPath)
+        fsExtra.readFile(fragmentShaderPath)
             .then(function(data){
                 fragmentShaderData = data.toString();
-                fragmentShaderUri = 'data:text/plain;base64,' + new Buffer(fragmentShaderData).toString('base64');
+                fragmentShaderUri = 'data:text/plain;base64,' + Buffer.from(fragmentShaderData).toString('base64');
                 done();
             })
-            .catch(function(err) {
-                throw err;
-            });
+            .catch(done.fail);
     });
 
     it('loads an external shader', function(done) {

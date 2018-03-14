@@ -1,9 +1,5 @@
 'use strict';
-var Promise = require('bluebird');
-var fs = require('fs');
-var bufferEqual = require('buffer-equal');
-
-var fsReadFile = Promise.promisify(fs.readFile);
+var fsExtra = require('fs-extra');
 
 var addPipelineExtras = require('../../lib/addPipelineExtras');
 var loadGltfUris = require('../../lib/loadGltfUris');
@@ -20,7 +16,7 @@ describe('loadImageUris', function() {
     };
 
     beforeAll(function(done) {
-        fsReadFile(imagePath)
+        fsExtra.readFile(imagePath)
             .then(function(data) {
                 imageData = data;
                 done();
@@ -43,7 +39,7 @@ describe('loadImageUris', function() {
         loadGltfUris(gltf, options)
             .then(function() {
                 expect(gltf.images.Image0001.extras._pipeline.source).toBeDefined();
-                expect(bufferEqual(gltf.images.Image0001.extras._pipeline.source, imageData)).toBe(true);
+                expect(gltf.images.Image0001.extras._pipeline.source.equals(imageData)).toBe(true);
                 expect(gltf.images.Image0001.extras._pipeline.extension).toEqual('.png');
                 done();
             });
@@ -62,7 +58,7 @@ describe('loadImageUris', function() {
         loadGltfUris(gltf, options)
             .then(function() {
                 expect(gltf.images.Image0001.extras._pipeline.source).toBeDefined();
-                expect(bufferEqual(gltf.images.Image0001.extras._pipeline.source, imageData)).toBe(true);
+                expect(gltf.images.Image0001.extras._pipeline.source.equals(imageData)).toBe(true);
                 expect(gltf.images.Image0001.extras._pipeline.extension).toEqual('.png');
                 done();
             });
@@ -84,10 +80,10 @@ describe('loadImageUris', function() {
         loadGltfUris(gltf, options)
             .then(function() {
                 expect(gltf.images.embeddedImage0001.extras._pipeline.source).toBeDefined();
-                expect(bufferEqual(gltf.images.embeddedImage0001.extras._pipeline.source, imageData)).toBe(true);
+                expect(gltf.images.embeddedImage0001.extras._pipeline.source.equals(imageData)).toBe(true);
                 expect(gltf.images.embeddedImage0001.extras._pipeline.extension).toEqual('.png');
                 expect(gltf.images.externalImage0001.extras._pipeline.source).toBeDefined();
-                expect(bufferEqual(gltf.images.externalImage0001.extras._pipeline.source, imageData)).toBe(true);
+                expect(gltf.images.externalImage0001.extras._pipeline.source.equals(imageData)).toBe(true);
                 expect(gltf.images.externalImage0001.extras._pipeline.extension).toEqual('.png');
                 done();
             });

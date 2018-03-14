@@ -70,13 +70,13 @@ Run the tests:
 ```
 npm run test
 ```
-To run JSHint on the entire codebase, run:
+To run ESLint on the entire codebase, run:
 ```
-npm run jsHint
+npm run eslint
 ```
-To run JSHint automatically when a file is saved, run the following and leave it open in a console window:
+To run ESLint automatically when a file is saved, run the following and leave it open in a console window:
 ```
-npm run jsHint-watch
+npm run eslint-watch
 ```
 
 ### Building for Cesium integration
@@ -92,7 +92,7 @@ This will output a portion of the gltf-pipeline code into the `dist/cesium` fold
 
 This project bundles several native binaries for texture compression.
 
-* [PVRTexTool] (https://community.imgtec.com/developers/powervr/tools/pvrtextool/) - Windows, macOS, and Linux binaries are provided by the PowerVR SDK.
+* [PVRTexTool](https://community.imgtec.com/developers/powervr/tools/pvrtextool/) - Windows, macOS, and Linux binaries are provided by the PowerVR SDK.
 * [etc2comp](https://github.com/google/etc2comp) - Windows, macOS, and Linux binaries built from source.
 * [crunch](https://github.com/BinomialLLC/crunch) - Windows binary built from [crunch](https://github.com/BinomialLLC/crunch), macOS binary built from [BKcore/crunch-osx](https://github.com/BKcore/crunch-osx), Linux binary built from [tomerb/linux_fixes](https://github.com/tomerb/crunch/tree/linux_fixes).
 * [astc-encoder](https://github.com/ARM-software/astc-encoder) - Windows, macOS, and Linux binaries built from source.
@@ -112,7 +112,7 @@ This will output a portion of the gltf-pipeline code into the `dist/cesium-combi
 
 ### Running Test Coverage
 
-Coverage uses [istanbul](https://github.com/gotwarlost/istanbul).  Run:
+Coverage uses [nyc](https://github.com/istanbuljs/nyc).  Run:
 ```
 npm run coverage
 ```

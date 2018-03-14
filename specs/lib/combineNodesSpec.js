@@ -198,10 +198,10 @@ describe('combineNodes', function() {
         var positions = new Float32Array([1.0, 0.0, 0.0,  0.0, 1.0, 0.0,  0.0, 0.0, 1.0]);
         var normals = new Float32Array([1.0, 0.0, 0.0,  0.0, 1.0, 0.0,  0.0, 0.0, 1.0]);
         var indices = new Uint16Array([0, 1, 2, 2, 1, 0]);
-        var positionsBuffer = new Buffer(positions.buffer);
-        var normalsBuffer = new Buffer(normals.buffer);
+        var positionsBuffer = Buffer.from(positions.buffer);
+        var normalsBuffer = Buffer.from(normals.buffer);
         var attributesBuffer = Buffer.concat([positionsBuffer, normalsBuffer]);
-        var indicesBuffer = new Buffer(indices.buffer);
+        var indicesBuffer = Buffer.from(indices.buffer);
         var buffer = Buffer.concat([attributesBuffer, indicesBuffer]);
         var gltf = {
             accessors : {
@@ -318,11 +318,11 @@ describe('combineNodes', function() {
         var normals = new Float32Array([1.0, 0.0, 0.0,  0.0, 1.0, 0.0,  0.0, 0.0, 1.0]);
         var indices = new Uint16Array([0, 1]);
         var overlappedIndices = new Uint16Array([1, 2]);
-        var positionsBuffer = new Buffer(positions.buffer);
-        var normalsBuffer = new Buffer(normals.buffer);
+        var positionsBuffer = Buffer.from(positions.buffer);
+        var normalsBuffer = Buffer.from(normals.buffer);
         var attributesBuffer = Buffer.concat([positionsBuffer, normalsBuffer]);
-        var indicesBuffer = new Buffer(indices.buffer);
-        var overlappedIndicesBuffer = new Buffer(overlappedIndices.buffer);
+        var indicesBuffer = Buffer.from(indices.buffer);
+        var overlappedIndicesBuffer = Buffer.from(overlappedIndices.buffer);
         var allIndicesBuffer = Buffer.concat([indicesBuffer, overlappedIndicesBuffer]);
         var buffer = Buffer.concat([attributesBuffer, allIndicesBuffer]);
         var gltf = {
@@ -434,5 +434,156 @@ describe('combineNodes', function() {
         var nodes = gltf.nodes;
         expect(nodes.nodeB).toBeDefined();
         expect(nodes.nodeC).toBeDefined();
+    });
+
+    it('nodes with meshes with overlapping accessors that aren\'t transformable will still combine', function() {
+        var positions = new Float32Array([1.0, 0.0, 0.0,  0.0, 1.0, 0.0,  0.0, 0.0, 1.0]);
+        var normals = new Float32Array([1.0, 0.0, 0.0,  0.0, 1.0, 0.0,  0.0, 0.0, 1.0]);
+        var batchIds = new Uint16Array([0, 0, 0]);
+        var indices = new Uint16Array([0, 1]);
+        var overlappedIndices = new Uint16Array([1, 2]);
+        var positionsBuffer = Buffer.from(positions.buffer);
+        var normalsBuffer = Buffer.from(normals.buffer);
+        var batchIdsBuffer = Buffer.from(batchIds.buffer);
+        var attributesBuffer = Buffer.concat([positionsBuffer, normalsBuffer, batchIdsBuffer]);
+        var indicesBuffer = Buffer.from(indices.buffer);
+        var overlappedIndicesBuffer = Buffer.from(overlappedIndices.buffer);
+        var allIndicesBuffer = Buffer.concat([indicesBuffer, overlappedIndicesBuffer]);
+        var buffer = Buffer.concat([attributesBuffer, allIndicesBuffer]);
+        var gltf = {
+            accessors : {
+                positionAccessor : {
+                    bufferView : 'attributesBufferView',
+                    byteOffset : 0,
+                    byteStride : 0,
+                    componentType : WebGLConstants.FLOAT,
+                    count : positions.length / 3,
+                    type : "VEC3"
+                },
+                normalAccessor : {
+                    bufferView : 'attributesBufferView',
+                    byteOffset : normalsBuffer.length,
+                    byteStride : 0,
+                    componentType : WebGLConstants.FLOAT,
+                    count : normals.length / 3,
+                    type : "VEC3"
+                },
+                positionAccessor2 : {
+                    bufferView : 'attributesBufferView',
+                    byteOffset : 0,
+                    byteStride : 0,
+                    componentType : WebGLConstants.FLOAT,
+                    count : positions.length / 3,
+                    type : "VEC3"
+                },
+                normalAccessor2 : {
+                    bufferView : 'attributesBufferView',
+                    byteOffset : normalsBuffer.length,
+                    byteStride : 0,
+                    componentType : WebGLConstants.FLOAT,
+                    count : normals.length / 3,
+                    type : "VEC3"
+                },
+                batchIdAccessor : {
+                    bufferView : 'attributesBufferView',
+                    byteOffset : positionsBuffer.length + normalsBuffer.length,
+                    byteStride : 0,
+                    componentType : WebGLConstants.UNSIGNED_SHORT,
+                    count : batchIdsBuffer.length,
+                    type : "SCALAR"
+                },
+                indicesAccessor : {
+                    bufferView : 'indicesBufferView',
+                    byteOffset : 0,
+                    byteStride : 0,
+                    componentType : WebGLConstants.UNSIGNED_SHORT,
+                    count : indices.length,
+                    type : "SCALAR"
+                },
+                overlappedIndicesAccessor : {
+                    bufferView : 'indicesBufferView',
+                    byteOffset : indicesBuffer.length,
+                    byteStride : 0,
+                    componentType : WebGLConstants.UNSIGNED_SHORT,
+                    count : overlappedIndices.length,
+                    type : "SCALAR"
+                }
+            },
+            bufferViews : {
+                attributesBufferView : {
+                    buffer : 'buffer',
+                    byteLength : attributesBuffer.length,
+                    byteOffset : 0,
+                    target : WebGLConstants.ARRAY_BUFFER
+                },
+                indicesBufferView : {
+                    buffer : 'buffer',
+                    byteLength : allIndicesBuffer.length,
+                    byteOffset : attributesBuffer.length,
+                    target : WebGLConstants.ELEMENT_ARRAY_BUFFER
+                }
+            },
+            buffers : {
+                buffer : {
+                    type : "arraybuffer",
+                    byteLength : buffer.length,
+                    extras : {
+                        _pipeline : {
+                            source : buffer
+                        }
+                    }
+                }
+            },
+            meshes : {
+                meshA : {
+                    primitives : [
+                        {
+                            attributes : {
+                                NORMAL : 'normalAccessor',
+                                POSITION : 'positionAccessor',
+                                _BATCHID: 'batchIdAccessor'
+                            },
+                            indices : 'indicesAccessor'
+                        }
+                    ]
+                },
+                meshB : {
+                    primitives : [
+                        {
+                            attributes : {
+                                NORMAL : 'normalAccessor2',
+                                POSITION : 'positionAccessor2',
+                                _BATCHID: 'batchIdAccessor'
+                            },
+                            indices : 'overlappedIndicesAccessor'
+                        }
+                    ]
+                }
+            },
+            nodes : {
+                nodeA : {
+                    children : ['nodeB', 'nodeC']
+                },
+                nodeB : {
+                    meshes : ['meshA'],
+                    matrix : [1.0, 0.0, 0.0, 0.0,
+                        0.0, 1.0, 0.0, 0.0,
+                        0.0, 0.0, 1.0, 0.0,
+                        1.0, 2.0, 3.0, 1.0]
+                },
+                nodeC: {
+                    meshes : ['meshB']
+                }
+            },
+            scenes : {
+                scene : {
+                    nodes : ['nodeA']
+                }
+            }
+        };
+        combineNodes(gltf);
+        var nodes = gltf.nodes;
+        expect(nodes.nodeB).toBeUndefined();
+        expect(nodes.nodeC).toBeUndefined();
     });
 });

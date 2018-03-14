@@ -1,12 +1,8 @@
 'use strict';
 var clone = require('clone');
-var fs = require('fs');
-var Promise = require('bluebird');
+var fsExtra = require('fs-extra');
 
-var bufferEqual = require('buffer-equal');
 var writeGltf = require('../../lib/writeGltf');
-
-var fsReadFile = Promise.promisify(fs.readFile);
 
 var fragmentShaderPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest0FS.glsl';
 var outputPath = './specs/data/boxTexturedUnoptimized/output.gltf';
@@ -18,7 +14,7 @@ describe('writeShaders', function() {
     var testGltf;
 
     beforeAll(function(done) {
-        expect(fsReadFile(fragmentShaderPath)
+        expect(fsExtra.readFile(fragmentShaderPath)
             .then(function(data) {
                 fragmentShaderData = data;
                 testGltf = {
@@ -35,7 +31,7 @@ describe('writeShaders', function() {
                         }
                     }
                 };
-                fragmentShaderUri = 'data:text/plain;base64,' + new Buffer(fragmentShaderData).toString('base64');
+                fragmentShaderUri = 'data:text/plain;base64,' + Buffer.from(fragmentShaderData).toString('base64');
             }), done).toResolve();
     });
 
@@ -52,10 +48,10 @@ describe('writeShaders', function() {
             .then(function() {
                 expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras).not.toBeDefined();
                 expect(gltf.shaders.CesiumTexturedBoxTest0FS.uri).toEqual('CesiumTexturedBoxTest0FS.glsl');
-                return fsReadFile(outputFragmentShaderPath);
+                return fsExtra.readFile(outputFragmentShaderPath);
             })
             .then(function(outputData) {
-                expect(bufferEqual(outputData, fragmentShaderData)).toBe(true);
+                expect(outputData.equals(fragmentShaderData)).toBe(true);
             }), done).toResolve();
     });
 

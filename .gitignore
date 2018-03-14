@@ -1,12 +1,14 @@
 # NPM
 node_modules
 npm-debug.log
+package-lock.json
 
 # WebStorm user-specific
 .idea/workspace.xml
 .idea/tasks.xml
 
 # Generate data
+.eslintcache
 coverage
 dist
 output
@@ -14,3 +16,4 @@ test
 specs/data/boxTexturedUnoptimized/output
 doc
 *.tgz
+.nyc_output
