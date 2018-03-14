@@ -26,6 +26,14 @@ describe('processModelMaterialsCommon', function() {
                             technique : 'BLINN'
                         }
                     }
+                },
+                material2: {
+                    // Second unused material included for testing purposes
+                    extensions : {
+                        KHR_materials_common : {
+                            technique : 'BLINN'
+                        }
+                    }
                 }
             },
             nodes: {
