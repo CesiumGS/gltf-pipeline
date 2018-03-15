@@ -108,13 +108,14 @@ processGltf(gltf, options)
 |`--separateTextures`, `-t`|Write out separate textures only.|No, default `false`|
 |`--checkTransparency`|Do a more exhaustive check for texture transparency by looking at the alpha channel of each pixel. By default textures are considered to be opaque.|No, default `false`|
 |`--stats`|Print statistics to console for input and output glTF files.|No, default `false`|
+|`--compressMesh`, `-d`|Compress all of the Meshes using Draco.|No, default `false`|
 |`--draco.compressionLevel`|Draco compression level [0-10], most is 10, least is 0.|No, default `7`|
 |`--draco.quantizePosition`|Quantization bits for position attribute when using Draco compression.|No, default `14`|
 |`--draco.quantizeNormal`|Quantization bits for normal attribute when using Draco compression.|No, default `10`|
 |`--draco.quantizeTexcoord`|Quantization bits for texture coordinate attribute when using Draco compression.|No, default `12`|
 |`--draco.quantizeColor`|Quantization bits for color attribute when using Draco compression.|No, default `8`|
 |`--draco.quantizeSkin`|Quantization bits for skinning attribute (joint indices and joint weights) when using Draco compression.|No, default `12`|
-|`--draco.unifiedQuantization`|Quantize positions of all primitives using the same quantization grid defined by the unified bounding box of all primitives. If this option is not set, quantization is applied on each primitive separately which can result in gaps appearing between different primitives.|No, default `false`|
+|`--draco.unifiedQuantization`|Quantize positions, defined by the unified bounding box of all primitives. If not set, quantization is applied separately.|No, default `false`|
 
 ## Build Instructions
 
