@@ -383,4 +383,37 @@ describe('addDefaults', function() {
         expect(gltf.bufferViews[2].target).not.toBeDefined();
         expect(gltf.bufferViews[3].target).toEqual(WebGLConstants.ARRAY_BUFFER);
     });
+
+    it('Adds animation properties', function() {
+        var gltf = {
+            animations: [{
+                channels: [
+                    {
+                        sampler: 0,
+                        target: {
+                            node: 0,
+                            path: 'rotation'
+                        }
+                    }
+                ],
+                samplers: [{
+                    input: 0,
+                    output: 1
+                }]
+            }],
+            nodes: [
+                {
+                    mesh: 0
+                }
+            ]
+        };
+
+        addDefaults(gltf);
+        var node = gltf.nodes[0];
+        expect(node.translation).toEqual([0, 0, 0]);
+        expect(node.rotation).toEqual([0, 0, 0, 1]);
+        expect(node.scale).toEqual([1, 1, 1]);
+        expect(node.matrix).toBeUndefined();
+    });
+
 });
