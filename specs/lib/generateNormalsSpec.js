@@ -13,7 +13,7 @@ describe('generateNormals', function(){
     var gltfNoNormals;
     var gltfNormals;
 
-    beforeAll(function(done) {
+    beforeEach(function(done) {
         readGltf(gltfNoNormalsPath)
             .then(function(gltf) {
                 gltfNoNormals = gltf;
