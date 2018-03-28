@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-### 1.0.3 - ???
+### 1.0.3 - 2018-03-28
 * Fixed a bug where animations in glTF 0.8 assets where not being converted from axis angle to quaternion.
 * Fixed a bug where generating normals and materials did not take image transparency into account
 
