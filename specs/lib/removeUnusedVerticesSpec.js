@@ -4,7 +4,6 @@ var removeUnusedVertices = require('../../lib/removeUnusedVertices');
 var byteLengthForComponentType = require('../../lib/byteLengthForComponentType');
 var numberOfComponentsForType = require('../../lib/numberOfComponentsForType');
 
-
 describe('removeUnusedVertices', function() {
     var indices = new Uint16Array([0, 1, 2]);
     var indicesOneUnused = new Uint16Array([0, 2]);

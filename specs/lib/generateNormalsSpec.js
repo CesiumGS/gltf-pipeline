@@ -13,7 +13,7 @@ describe('generateNormals', function(){
     var gltfNoNormals;
     var gltfNormals;
 
-    beforeAll(function(done) {
+    beforeEach(function(done) {
         readGltf(gltfNoNormalsPath)
             .then(function(gltf) {
                 gltfNoNormals = gltf;
@@ -48,7 +48,6 @@ describe('generateNormals', function(){
 
     it('generates face normals if they do not exist', function() {
         var gltf = gltfNoNormals;
-        var byteLengthBefore = 168;
         generateNormals(gltf, {
             faceNormals : true
         });
@@ -57,7 +56,7 @@ describe('generateNormals', function(){
         var byteLengthAfter = gltf.buffers[Object.keys(gltf.buffers)[0]].byteLength;
         expect(attributes.NORMAL).toBeDefined();
         expect(gltf.accessors[attributes.NORMAL]).toBeDefined();
-        expect(byteLengthAfter).toBe(byteLengthBefore + 8 * 3 * 4); // 8 normals are generated
+        expect(byteLengthAfter).toBe(1032); // 36 indices, 24 positions, 24 normals (36 * 2 + 24 * 3 * 4 + 24 * 3 * 4)
     });
 
     it('generating smooth normals for mesh with more than 1 primitive produces unique normals accessors', function() {
