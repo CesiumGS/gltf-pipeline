@@ -115,9 +115,9 @@ var argv = yargs
             group: 'Options: Texture Compression',
             type: 'boolean'
         },
-        'compressMeshes': {
+        'draco.compressMeshes': {
             alias: 'd',
-            describe: 'Compress the geometries using mesh compression extension.',
+            describe: 'Compress the meshes using Draco. Adds the KHR_draco_mesh_compression extension.',
             type: 'boolean'
         },
         'draco.compressionLevel': {
@@ -219,7 +219,6 @@ var options = {
     quantize : argv.quantize,
     stats : argv.stats,
     textureCompressionOptions : textureCompressionOptions,
-    compressMeshes: argv.compressMeshes,
     dracoOptions: dracoOptions,
 };
 
