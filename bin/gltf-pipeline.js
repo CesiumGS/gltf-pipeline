@@ -219,7 +219,7 @@ var options = {
     quantize : argv.quantize,
     stats : argv.stats,
     textureCompressionOptions : textureCompressionOptions,
-    dracoOptions: dracoOptions,
+    dracoOptions: dracoOptions
 };
 
 var inputIsBinary = inputExtension === '.glb';
