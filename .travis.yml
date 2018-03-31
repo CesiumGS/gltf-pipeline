@@ -9,13 +9,9 @@ node_js:
 
 script:
   - npm run eslint
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]];
-    then npm run test -- --failTaskOnError --suppressPassed --excludeCompressedTextures;
-    else npm run test -- --failTaskOnError --suppressPassed;
-    fi
+  - npm run test -- --failTaskOnError --suppressPassed;
 
 after_success:
-  ## We only need to run coveralls for one node version (doesn't matter which one).
-  ## We also ignore publishing failures, since restarting an existing travis build would otherwise break.
-  ## Run coverage on OSX and not on linux as Linux will run compressed texture tests which will fail.
-  - if [[ "$TRAVIS_OS_NAME" == "osx" && $(node --version) == v8* ]]; then npm run coverage && npm run coveralls; fi
+## We only need to run coveralls for one node version (doesn't matter which one).
+## We also ignore publishing failures, since restarting an existing travis build would otherwise break.
+  - if node --version | grep -q ^v8 ; npm run coverage && npm run coveralls; fi

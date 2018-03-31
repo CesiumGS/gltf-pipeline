@@ -27,22 +27,23 @@
   },
   "dependencies": {
     "bluebird": "^3.5.1",
-    "cesium": "^1.39.0",
-    "fs-extra": "^4.0.2",
+    "cesium": "^1.43.0",
+    "fs-extra": "^5.0.0",
     "jimp": "^0.2.28",
-    "mime": "^2.0.3",
-    "uuid": "^3.1.0",
-    "yargs": "^10.0.3"
+    "mime": "^2.2.2",
+    "uuid": "^3.2.1",
+    "yargs": "^11.0.0"
   },
   "devDependencies": {
+    "cloc": "^2.3.3",
     "coveralls": "^3.0.0",
-    "eslint": "^4.10.0",
-    "eslint-config-cesium": "^2.0.1",
+    "eslint": "^4.19.1",
+    "eslint-config-cesium": "^4.0.0",
     "gulp": "^3.9.1",
-    "jasmine": "^2.8.0",
+    "jasmine": "^3.1.0",
     "jasmine-spec-reporter": "^4.2.1",
     "jsdoc": "^3.5.5",
-    "nyc": "^11.3.0",
+    "nyc": "^11.6.0",
     "open": "^0.0.5",
     "requirejs": "^2.3.5"
   },
@@ -53,7 +54,8 @@
     "test": "gulp test",
     "test-watch": "gulp test-watch",
     "coverage": "gulp coverage",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
+    "cloc": "gulp cloc"
   },
   "bin": {
     "gltf-pipeline": "./bin/gltf-pipeline.js"

@@ -22,7 +22,6 @@ var argv = yargs
     .example('node $0 -i ./specs/data/box.gltf')
     .example('node $0 -i ./specs/data/box.gltf -b')
     .example('node $0 -i ./specs/data/box.glb -o box.gltf')
-    .example('node $0 -i ./specs/data/box.gltf -o box-processed.gltf --texcomp.dxt1.enable --texcomp.dxt1.quality=10 --texcomp.etc1.enable')
     .help('h')
     .alias('h', 'help')
     .options({
@@ -73,47 +72,10 @@ var argv = yargs
             type : 'boolean',
             default : defaults.secure
         },
-        quantize : {
-            describe : 'Quantize the attributes of this glTF asset using the WEB3D_quantized_attributes extension.',
-            type : 'boolean',
-            default : defaults.quantize
-        },
         stats : {
             describe : 'Print statistics to console for input and output glTF files.',
             type : 'boolean',
             default : defaults.stats
-        },
-        'texcomp.<format>.enable': {
-            choices: ['pvrtc1', 'pvrtc2', 'etc1', 'etc2', 'astc', 'dxt1', 'dxt3', 'dxt5', 'crunch-dxt1', 'crunch-dxt5'],
-            describe: 'Whether to compress textures with the given compressed texture format. If other texcomp.<format> flags are enabled, this is implicitly true. Multiple formats may be supplied by repeating this flag. <format> must be replaced with one of the choices below. Compressed textures are saved as Cesium and 3D Tiles specific metadata inside image.extras.compressedImage3DTiles. More details about texture compression in glTF here: https://github.com/KhronosGroup/glTF/issues/739',
-            group: 'Options: Texture Compression',
-            type: 'string'
-        },
-        'texcomp.<format>.quality': {
-            choices: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-            default : 5,
-            describe: 'A value between 0 and 10 specifying the quality of the compressed textures. Higher values produce better quality compression but take longer to compute. Different texture formats and compress tools may treat this value differently.',
-            group: 'Options: Texture Compression',
-            type: 'number'
-        },
-        'texcomp.<format>.bitrate': {
-            default : 2.0,
-            describe: 'The bitrate when using the pvrtc or astc formats. For pvrtc supported values are 2.0 and 4.0.',
-            group: 'Options: Texture Compression',
-            type: 'number'
-        },
-        'texcomp.<format>.blockSize': {
-            choices: ['4x4', '5x4', '5x5', '6x5', '6x6', '8x5', '8x6', '8x8', '10x5', '10x6', '10x8', '10x10', '12x10', '12x12'],
-            default : '8x8',
-            describe: 'The block size for astc compression. Smaller block sizes result in higher bitrates. This value is ignored if options.bitrate is also set.',
-            group: 'Options: Texture Compression',
-            type: 'string'
-        },
-        'texcomp.<format>.alphaBit': {
-            default : false,
-            describe: 'Store a single bit for alpha. Only supported for etc2.',
-            group: 'Options: Texture Compression',
-            type: 'boolean'
         }
     }).parse(args);
 
@@ -147,41 +109,13 @@ if (outputExtension !== '.gltf' && outputExtension !== '.glb') {
     return;
 }
 
-// If any raw texcomp parameters were specified, they are enabled
-var i;
-var texcompOptions;
-var length = args.length;
-for (i = 0; i < length; ++i) {
-    var arg = args[i];
-    if (arg.indexOf('texcomp') >= 0) {
-        texcompOptions = argv.texcomp;
-    }
-}
-
-// Handle texture compression options
-var textureCompressionOptions;
-if (defined(texcompOptions)) {
-    textureCompressionOptions = [];
-    delete texcompOptions['<format>'];
-    for (var format in texcompOptions) {
-        if (texcompOptions.hasOwnProperty(format)) {
-            var formatOptions = texcompOptions[format];
-            delete formatOptions.enable;
-            formatOptions.format = format;
-            textureCompressionOptions.push(formatOptions);
-        }
-    }
-}
-
 var options = {
     resourceDirectory : inputDirectory,
     separate : argv.separate,
     separateTextures : argv.separateTextures,
     secure : argv.secure,
     checkTransparency : argv.checkTransparency,
-    quantize : argv.quantize,
-    stats : argv.stats,
-    textureCompressionOptions : textureCompressionOptions
+    stats : argv.stats
 };
 
 var inputIsBinary = inputExtension === '.glb';
