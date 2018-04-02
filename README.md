@@ -108,7 +108,7 @@ processGltf(gltf, options)
 |`--separateTextures`, `-t`|Write out separate textures only.|No, default `false`|
 |`--checkTransparency`|Do a more exhaustive check for texture transparency by looking at the alpha channel of each pixel. By default textures are considered to be opaque.|No, default `false`|
 |`--stats`|Print statistics to console for input and output glTF files.|No, default `false`|
-|`--compressMesh`, `-d`|Compress all of the Meshes using Draco.|No, default `false`|
+|`--draco.compressMeshes`, `-d`|Compress the meshes using Draco. Adds the KHR_draco_mesh_compression extension.|No, default `false`|
 |`--draco.compressionLevel`|Draco compression level [0-10], most is 10, least is 0.|No, default `7`|
 |`--draco.quantizePosition`|Quantization bits for position attribute when using Draco compression.|No, default `14`|
 |`--draco.quantizeNormal`|Quantization bits for normal attribute when using Draco compression.|No, default `10`|
