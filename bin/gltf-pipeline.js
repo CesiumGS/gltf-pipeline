@@ -145,6 +145,7 @@ var argv = yargs
             type: 'number'
         },
         'draco.unifiedQuantization': {
+            default : false,
             describe: 'Quantize positions of all primitives using the same quantization grid defined by the unified bounding box of all primitives. If this option is not set, quantization is applied on each primitive separately which can result in gaps appearing between different primitives. Default is false.',
             type: 'boolean'
         },
@@ -190,8 +191,8 @@ for (i = 0; i < length; ++i) {
     if (arg.indexOf('texcomp') >= 0) {
         texcompOptions = argv.texcomp;
     }
-    if (arg.indexOf('draco') >= 0) {
-        dracoOptions = argv.draco;
+    if (arg.indexOf('draco') >= 0 || arg === '-d') {
+        dracoOptions = defaultValue(argv.draco, {});
     }
 }
 
