@@ -191,7 +191,7 @@ for (i = 0; i < length; ++i) {
     if (arg.indexOf('texcomp') >= 0) {
         texcompOptions = argv.texcomp;
     }
-    if (arg.indexOf('draco') >= 0 || arg === '-d') {
+    if (arg.indexOf('--draco.') === 0 || arg === '-d') {
         dracoOptions = defaultValue(argv.draco, {});
     }
 }
