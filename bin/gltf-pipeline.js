@@ -83,6 +83,7 @@ var inputPath = argv.input;
 var outputPath = argv.output;
 
 var inputDirectory = path.dirname(inputPath);
+var inputName = path.basename(inputPath, path.extname(inputPath));
 var inputExtension = path.extname(inputPath).toLowerCase();
 if (inputExtension !== '.gltf' && inputExtension !== '.glb') {
     console.log('Error: unrecognized file extension "' + inputExtension + '".');
@@ -98,12 +99,11 @@ if (!defined(outputPath)) {
     } else {
         outputExtension = inputExtension;
     }
-    var inputName = path.basename(inputPath, inputExtension);
     outputPath = path.join(inputDirectory, inputName + '-processed' + outputExtension);
 }
 
 var outputDirectory = path.dirname(outputPath);
-outputExtension = path.extname(outputPath).toLowerCase();
+var outputName = path.basename(outputPath, outputExtension);
 if (outputExtension !== '.gltf' && outputExtension !== '.glb') {
     console.log('Error: unrecognized file extension "' + outputExtension + '".');
     return;
@@ -115,7 +115,8 @@ var options = {
     separateTextures : argv.separateTextures,
     secure : argv.secure,
     checkTransparency : argv.checkTransparency,
-    stats : argv.stats
+    stats : argv.stats,
+    name : outputName
 };
 
 var inputIsBinary = inputExtension === '.glb';

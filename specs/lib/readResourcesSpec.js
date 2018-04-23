@@ -33,6 +33,7 @@ function checkPaths(object, resourceDirectory) {
     var relativePath = pipelineExtras.relativePath;
     expect(path.basename(relativePath)).toBe(relativePath);
     expect(absolutePath).toBe(path.join(resourceDirectory, relativePath));
+    expect(object.name).toBe(path.basename(relativePath, path.extname(relativePath)));
 }
 
 function readsResources(gltfPath, binary, separate, done) {
