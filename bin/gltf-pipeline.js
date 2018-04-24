@@ -34,7 +34,7 @@ var argv = yargs
         },
         output : {
             alias : 'o',
-            describe : 'Output path of the glTF or glb file. External resources will be saved to the same directory.',
+            describe : 'Output path of the glTF or glb file. Separate resources will be saved to the same directory.',
             type : 'string',
             normalize : true
         },
@@ -131,11 +131,11 @@ var write = outputIsBinary ? fsExtra.outputFile : fsExtra.outputJson;
 var writeOptions = outputIsBinary ? undefined : jsonOptions;
 var run = inputIsBinary ? (outputIsBinary ? processGlb : glbToGltf) : (outputIsBinary ? gltfToGlb : processGltf);
 
-function saveExternalResources(externalResources) {
+function saveSeparateResources(separateResources) {
     var resourcePromises = [];
-    for (var relativePath in externalResources) {
-        if (externalResources.hasOwnProperty(relativePath)) {
-            var resource = externalResources[relativePath];
+    for (var relativePath in separateResources) {
+        if (separateResources.hasOwnProperty(relativePath)) {
+            var resource = separateResources[relativePath];
             var resourcePath = path.join(outputDirectory, relativePath);
             resourcePromises.push(fsExtra.outputFile(resourcePath, resource));
         }
@@ -151,10 +151,10 @@ read(inputPath)
     })
     .then(function(results) {
         var gltf = defaultValue(results.gltf, results.glb);
-        var externalResources = results.externalResources;
+        var separateResources = results.separateResources;
         return Promise.all([
             write(outputPath, gltf, writeOptions),
-            saveExternalResources(externalResources)
+            saveSeparateResources(separateResources)
         ]);
     })
     .then(function() {

@@ -39,11 +39,11 @@ describe('writeResources', function() {
     });
 
     it('writes resources as files with default names', function(done) {
-        var externalResources = {};
+        var separateResources = {};
         var options = {
             separateBuffers : true,
             separateTextures : true,
-            externalResources : externalResources
+            separateResources : separateResources
         };
         expect(writeResources(gltf, options)
             .then(function(gltf) {
@@ -54,18 +54,18 @@ describe('writeResources', function() {
                 expect(gltf.buffers.length).toBe(1);
                 var buffer = gltf.buffers[0];
                 expect(buffer.uri).toBe('buffer.bin');
-                expect(Object.keys(externalResources).length).toBe(2);
-                expect(Buffer.isBuffer(externalResources['buffer.bin']));
-                expect(Buffer.isBuffer(externalResources['image0.png']));
+                expect(Object.keys(separateResources).length).toBe(2);
+                expect(Buffer.isBuffer(separateResources['buffer.bin']));
+                expect(Buffer.isBuffer(separateResources['image0.png']));
             }), done).toResolve();
     });
 
     it('writes resources as files with object names', function(done) {
-        var externalResources = {};
+        var separateResources = {};
         var options = {
             separateBuffers : true,
             separateTextures : true,
-            externalResources : externalResources
+            separateResources : separateResources
         };
         gltf.buffers[0].name = 'my-buffer';
         gltf.images[0].name = 'my-image';
@@ -77,12 +77,12 @@ describe('writeResources', function() {
     });
 
     it('writes resources as files with gltf name', function(done) {
-        var externalResources = {};
+        var separateResources = {};
         var options = {
             name : 'my-gltf',
             separateBuffers : true,
             separateTextures : true,
-            externalResources : externalResources
+            separateResources : separateResources
         };
         expect(writeResources(gltf, options)
             .then(function() {

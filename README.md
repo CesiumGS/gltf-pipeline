@@ -80,11 +80,11 @@ var options = {
 processGltf(gltf, options)
     .then(function(results) {
         fsExtra.writeJsonSync('model.gltf', results.gltf);
-        // Save external resources
-        var externalResources = results.externalResources;
-        for (var relativePath in externalResources) {
-            if (externalResources.hasOwnProperty(relativePath)) {
-                var resource = externalResources[relativePath];
+        // Save separate resources
+        var separateResources = results.separateResources;
+        for (var relativePath in separateResources) {
+            if (separateResources.hasOwnProperty(relativePath)) {
+                var resource = separateResources[relativePath];
                 fsExtra.writeFileSync(relativePath, resource));
             }
         }
@@ -98,7 +98,7 @@ processGltf(gltf, options)
 |----|-----------|--------|
 |`--help`, `-h`|Display help|No|
 |`--input`, `-i`|Path to the glTF or glb file.|:white_check_mark: Yes|
-|`--output`, `-o`|Output path of the glTF or glb file. External resources will be saved to the same directory.|No|
+|`--output`, `-o`|Output path of the glTF or glb file. Separate resources will be saved to the same directory.|No|
 |`--binary`, `-b`|Convert the input glTF to glb.|No, default `false`|
 |`--json`, `-j`|Convert the input glb to glTF.|No, default `false`|
 |`--separate`, `-s`|Write separate buffers, shaders, and textures instead of embedding them in the glTF.|No, default `false`|
