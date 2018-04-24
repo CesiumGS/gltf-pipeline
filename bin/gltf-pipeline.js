@@ -148,7 +148,7 @@ var argv = yargs
             default : false,
             describe: 'Quantize positions of all primitives using the same quantization grid defined by the unified bounding box of all primitives. If this option is not set, quantization is applied on each primitive separately which can result in gaps appearing between different primitives. Default is false.',
             type: 'boolean'
-        },
+        }
     }).parse(args);
 
 var inputPath = argv.input;
