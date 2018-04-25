@@ -45,6 +45,8 @@ describe('writeResources', function() {
             separateTextures : true,
             separateResources : separateResources
         };
+        var originalBufferViewsLength = gltf.bufferViews.length;
+        var originalByteLength = gltf.buffers[0].byteLength;
         expect(writeResources(gltf, options)
             .then(function(gltf) {
                 ForEach.image(gltf, function(image) {
@@ -57,6 +59,8 @@ describe('writeResources', function() {
                 expect(Object.keys(separateResources).length).toBe(2);
                 expect(Buffer.isBuffer(separateResources['buffer.bin']));
                 expect(Buffer.isBuffer(separateResources['image0.png']));
+                expect(gltf.bufferViews.length).toBe(originalBufferViewsLength - 1);
+                expect(buffer.byteLength).toBeLessThan(originalByteLength);
             }), done).toResolve();
     });
 
@@ -94,6 +98,8 @@ describe('writeResources', function() {
         var options = {
             dataUris : true
         };
+        var originalBufferViewsLength = gltf.bufferViews.length;
+        var originalByteLength = gltf.buffers[0].byteLength;
         expect(writeResources(gltf, options)
             .then(function(gltf) {
                 var buffer = gltf.buffers[0];
@@ -101,10 +107,14 @@ describe('writeResources', function() {
                 expect(image.bufferView).toBeUndefined();
                 expect(Buffer.isBuffer(dataUriToBuffer(image.uri)));
                 expect(Buffer.isBuffer(dataUriToBuffer(buffer.uri)));
+                expect(gltf.bufferViews.length).toBe(originalBufferViewsLength - 1);
+                expect(buffer.byteLength).toBeLessThan(originalByteLength);
             }), done).toResolve();
     });
 
     it('writes resources as bufferViews', function(done) {
+        var originalBufferViewsLength = gltf.bufferViews.length;
+        var originalByteLength = gltf.buffers[0].byteLength;
         expect(writeResources(gltf)
             .then(function(gltf) {
                 var buffer = gltf.buffers[0];
@@ -114,6 +124,8 @@ describe('writeResources', function() {
                 expect(image.bufferView).toBeDefined();
                 expect(bufferViewByteLength).toBe(source.byteLength);
                 expect(Buffer.isBuffer(dataUriToBuffer(buffer.uri)));
+                expect(gltf.bufferViews.length).toBe(originalBufferViewsLength);
+                expect(buffer.byteLength).toBe(originalByteLength);
             }), done).toResolve();
     });
 });
