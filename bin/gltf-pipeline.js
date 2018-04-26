@@ -114,6 +114,40 @@ var argv = yargs
             describe: 'Store a single bit for alpha. Only supported for etc2.',
             group: 'Options: Texture Compression',
             type: 'boolean'
+        },
+        'draco.compressMeshes': {
+            alias: 'd',
+            describe: 'Compress the meshes using Draco. Adds the KHR_draco_mesh_compression extension.',
+            type: 'boolean'
+        },
+        'draco.compressionLevel': {
+            describe: 'Draco compression level [0-10], most is 10, least is 0, default is 7.',
+            type: 'number'
+        },
+        'draco.quantizePosition': {
+            describe: 'Quantization bits for position attribute when using Draco compression. Default is 14.',
+            type: 'number'
+        },
+        'draco.quantizeNormal': {
+            describe: 'Quantization bits for normal attribute when using Draco compression. Default is 10.',
+            type: 'number'
+        },
+        'draco.quantizeTexcoord': {
+            describe: 'Quantization bits for texture coordinate attribute when using Draco compression. Default is 12.',
+            type: 'number'
+        },
+        'draco.quantizeColor': {
+            describe: 'Quantization bits for color attribute when using Draco compression. Default is 8.',
+            type: 'number'
+        },
+        'draco.quantizeSkin': {
+            describe: 'Quantization bits for skinning attribute (joint indices and joint weights) when using Draco compression. Default is 12.',
+            type: 'number'
+        },
+        'draco.unifiedQuantization': {
+            default : false,
+            describe: 'Quantize positions of all primitives using the same quantization grid defined by the unified bounding box of all primitives. If this option is not set, quantization is applied on each primitive separately which can result in gaps appearing between different primitives. Default is false.',
+            type: 'boolean'
         }
     }).parse(args);
 
@@ -150,11 +184,15 @@ if (outputExtension !== '.gltf' && outputExtension !== '.glb') {
 // If any raw texcomp parameters were specified, they are enabled
 var i;
 var texcompOptions;
+var dracoOptions;
 var length = args.length;
 for (i = 0; i < length; ++i) {
     var arg = args[i];
     if (arg.indexOf('texcomp') >= 0) {
         texcompOptions = argv.texcomp;
+    }
+    if (arg.indexOf('--draco.') === 0 || arg === '-d') {
+        dracoOptions = defaultValue(argv.draco, {});
     }
 }
 
@@ -181,7 +219,8 @@ var options = {
     checkTransparency : argv.checkTransparency,
     quantize : argv.quantize,
     stats : argv.stats,
-    textureCompressionOptions : textureCompressionOptions
+    textureCompressionOptions : textureCompressionOptions,
+    dracoOptions: dracoOptions
 };
 
 var inputIsBinary = inputExtension === '.glb';
