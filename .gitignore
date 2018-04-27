@@ -13,6 +13,7 @@ coverage
 dist
 output
 test
-doc
 *.tgz
 .nyc_output
+doc/*
+!doc/gltf.png
