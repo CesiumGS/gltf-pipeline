@@ -21,26 +21,26 @@ Supports common operations including:
 
 Install [Node.js](https://nodejs.org/en/) if you don't already have it, and then:
 ```
-npm install -g gltf-pipeline
+npm install
 ```
 
 ### Using gltf-pipeline as a command-line tool:
 
 #### Converting a glTF to glb
-`gltf-pipeline -i model.gltf -o model.glb`
+`node bin/gltf-pipeline.js -i model.gltf -o model.glb`
 
-`gltf-pipeline -i model.gltf -b`
+`node bin/gltf-pipeline.js -i model.gltf -b`
 
 #### Converting a glb to glTF
-`gltf-pipeline -i model.glb -o model.gltf`
+`node bin/gltf-pipeline.js -i model.glb -o model.gltf`
 
-`gltf-pipeline -i model.glb -j`
+`node bin/gltf-pipeline.js -i model.glb -j`
 
 #### Converting a glTF to Draco glTF
-`gltf-pipeline.js -i model.gltf -d -s -o modelDraco.gltf`
+`node bin/gltf-pipeline.js -i model.gltf -d -s -o modelDraco.gltf`
 
 ### Saving separate textures
-`gltf-pipeline -i model.gltf -t`
+`node bin/gltf-pipeline.js -i model.gltf -t`
 
 ### Using gltf-pipeline as a library:
 
