@@ -40,7 +40,7 @@ function readsResources(gltfPath, binary, separate, done) {
     var gltf = readGltf(gltfPath, binary);
     var resourceDirectory = path.dirname(gltfPath);
     var options = {
-        resourceDirectory : resourceDirectory
+        resourceDirectory: resourceDirectory
     };
     expect(readResources(gltf, options)
         .then(function(gltf) {
@@ -75,8 +75,8 @@ function readsResources(gltfPath, binary, separate, done) {
 function checkTransparency(gltfPath, check, result) {
     var gltf = readGltf(gltfPath, false);
     var options = {
-        resourceDirectory : path.dirname(gltfPath),
-        checkTransparency : check
+        resourceDirectory: path.dirname(gltfPath),
+        checkTransparency: check
     };
     return readResources(gltf, options)
         .then(function(gltf) {

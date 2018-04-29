@@ -7,68 +7,68 @@ var WebGLConstants = Cesium.WebGLConstants;
 describe('addDefaults', function() {
     it('adds mesh, accessor, and bufferView defaults', function() {
         var gltf = {
-            meshes : [
+            meshes: [
                 {
-                    primitives : [
+                    primitives: [
                         {
-                            attributes : {
-                                POSITION : 0
+                            attributes: {
+                                POSITION: 0
                             },
-                            indices : 2,
-                            targets : [
+                            indices: 2,
+                            targets: [
                                 {
-                                    POSITION : 1
+                                    POSITION: 1
                                 }
                             ]
                         }
                     ]
                 }
             ],
-            accessors : [
+            accessors: [
                 {
-                    bufferView : 0,
-                    componentType : WebGLConstants.FLOAT,
-                    count : 24,
-                    type : 'VEC3',
-                    min : [-1.0, -1.0, -1.0],
-                    max : [1.0, 1.0, 1.0]
+                    bufferView: 0,
+                    componentType: WebGLConstants.FLOAT,
+                    count: 24,
+                    type: 'VEC3',
+                    min: [-1.0, -1.0, -1.0],
+                    max: [1.0, 1.0, 1.0]
                 },
                 {
-                    bufferView : 1,
-                    componentType : WebGLConstants.FLOAT,
-                    count : 24,
-                    type : 'VEC3',
-                    min : [-1.0, -1.0, -1.0],
-                    max : [1.0, 1.0, 1.0]
+                    bufferView: 1,
+                    componentType: WebGLConstants.FLOAT,
+                    count: 24,
+                    type: 'VEC3',
+                    min: [-1.0, -1.0, -1.0],
+                    max: [1.0, 1.0, 1.0]
                 },
                 {
-                    bufferView : 2,
-                    componentType : WebGLConstants.UNSIGNED_SHORT,
-                    count : 36,
-                    type : 'SCALAR',
-                    min : [0],
-                    max : [24]
+                    bufferView: 2,
+                    componentType: WebGLConstants.UNSIGNED_SHORT,
+                    count: 36,
+                    type: 'SCALAR',
+                    min: [0],
+                    max: [24]
                 }
             ],
-            bufferViews : [
+            bufferViews: [
                 {
-                    buffer : 0,
-                    byteLength : 288
+                    buffer: 0,
+                    byteLength: 288
                 },
                 {
-                    buffer : 0,
-                    byteLength : 288,
-                    byteOffset : 288
+                    buffer: 0,
+                    byteLength: 288,
+                    byteOffset: 288
                 },
                 {
-                    buffer : 0,
-                    byteLength : 72,
-                    byteOffset : 576
+                    buffer: 0,
+                    byteLength: 72,
+                    byteOffset: 576
                 },
                 {
-                    buffer : 0,
-                    byteLength : 10,
-                    byteOffset : 648
+                    buffer: 0,
+                    byteLength: 10,
+                    byteOffset: 648
                 }
             ]
         };
@@ -105,20 +105,20 @@ describe('addDefaults', function() {
 
     it('adds material defaults', function() {
         var gltf = {
-            materials : [
+            materials: [
                 {
-                    emissiveTexture : {
-                        index : 0
+                    emissiveTexture: {
+                        index: 0
                     },
-                    normalTexture : {
-                        index : 1
+                    normalTexture: {
+                        index: 1
                     },
-                    occlusionTexture : {
-                        index : 2
+                    occlusionTexture: {
+                        index: 2
                     }
                 },
                 {
-                    alphaMode : 'MASK'
+                    alphaMode: 'MASK'
                 }
             ]
         };
@@ -139,14 +139,14 @@ describe('addDefaults', function() {
 
     it('adds metallic roughness defaults', function() {
         var gltf = {
-            materials : [
+            materials: [
                 {
-                    pbrMetallicRoughness : {
-                        baseColorTexture : {
-                            index : 0
+                    pbrMetallicRoughness: {
+                        baseColorTexture: {
+                            index: 0
                         },
-                        metallicRoughnessTexture : {
-                            index : 1
+                        metallicRoughnessTexture: {
+                            index: 1
                         }
                     }
                 }
@@ -164,12 +164,12 @@ describe('addDefaults', function() {
 
     it('adds spec gloss defaults', function() {
         var gltf = {
-            materials : [
+            materials: [
                 {
-                    extensions : {
-                        pbrSpecularGlossiness : {
-                            specularGlossinessTexture : {
-                                index : 0
+                    extensions: {
+                        pbrSpecularGlossiness: {
+                            specularGlossinessTexture: {
+                                index: 0
                             }
                         }
                     }
@@ -187,25 +187,25 @@ describe('addDefaults', function() {
 
     it('adds materials common defaults', function() {
         var gltf = {
-            materials : [
+            materials: [
                 {
-                    extensions : {
-                        KHR_materials_common : {
-                            technique : 'BLINN'
+                    extensions: {
+                        KHR_materials_common: {
+                            technique: 'BLINN'
                         }
                     }
                 },
                 {
-                    extensions : {
-                        KHR_materials_common : {
-                            technique : 'CONSTANT'
+                    extensions: {
+                        KHR_materials_common: {
+                            technique: 'CONSTANT'
                         }
                     }
                 },
                 {
-                    extensions : {
-                        KHR_materials_common : {
-                            technique : 'LAMBERT'
+                    extensions: {
+                        KHR_materials_common: {
+                            technique: 'LAMBERT'
                         }
                     }
                 }
@@ -236,7 +236,7 @@ describe('addDefaults', function() {
 
     it('adds sampler defaults', function() {
         var gltf = {
-            samplers : [
+            samplers: [
                 {
                     // Intentionally empty
                 }
@@ -251,35 +251,35 @@ describe('addDefaults', function() {
 
     it('adds node defaults', function() {
         var gltf = {
-            animations : [
+            animations: [
                 {
-                    channels : [
+                    channels: [
                         {
-                            sampler : 0,
-                            target : {
-                                node : 0,
-                                path : 'rotation'
+                            sampler: 0,
+                            target: {
+                                node: 0,
+                                path: 'rotation'
                             }
                         }
                     ],
-                    samplers : [
+                    samplers: [
                         {
-                            input : 0,
-                            output : 1
+                            input: 0,
+                            output: 1
                         }
                     ]
                 }
             ],
-            nodes : [
+            nodes: [
                 {
-                    mesh : 0
+                    mesh: 0
                 },
                 {
-                    mesh : 1
+                    mesh: 1
                 },
                 {
-                    mesh : 2,
-                    translation : [1.0, 0.0, 0.0]
+                    mesh: 2,
+                    translation: [1.0, 0.0, 0.0]
                 }
             ]
         };
@@ -309,9 +309,9 @@ describe('addDefaults', function() {
 
     it('adds scene defaults', function() {
         var gltf = {
-            scenes : [
+            scenes: [
                 {
-                    nodes : [
+                    nodes: [
                         0
                     ]
                 }

@@ -78,7 +78,7 @@ var fsExtra = require('fs-extra');
 var gltfToGlb = gltfPipeline.gltfToGlb;
 var gltf = fsExtra.readJsonSync('model.gltf');
 var options = {
-    separateTextures : true
+    separateTextures: true
 };
 processGltf(gltf, options)
     .then(function(results) {

@@ -25,57 +25,57 @@ var argv = yargs
     .help('h')
     .alias('h', 'help')
     .options({
-        input : {
-            alias : 'i',
-            describe : 'Path to the glTF or glb file.',
-            type : 'string',
-            normalize : true,
-            demandOption : true
+        input: {
+            alias: 'i',
+            describe: 'Path to the glTF or glb file.',
+            type: 'string',
+            normalize: true,
+            demandOption: true
         },
-        output : {
-            alias : 'o',
-            describe : 'Output path of the glTF or glb file. Separate resources will be saved to the same directory.',
-            type : 'string',
-            normalize : true
+        output: {
+            alias: 'o',
+            describe: 'Output path of the glTF or glb file. Separate resources will be saved to the same directory.',
+            type: 'string',
+            normalize: true
         },
-        binary : {
-            alias : 'b',
-            describe : 'Convert the input glTF to glb.',
-            type : 'boolean',
-            default : false
+        binary: {
+            alias: 'b',
+            describe: 'Convert the input glTF to glb.',
+            type: 'boolean',
+            default: false
         },
-        json : {
-            alias : 'j',
-            describe : 'Convert the input glb to glTF.',
-            type : 'boolean',
-            default : false
+        json: {
+            alias: 'j',
+            describe: 'Convert the input glb to glTF.',
+            type: 'boolean',
+            default: false
         },
-        separate : {
-            alias : 's',
-            describe : 'Write separate buffers, shaders, and textures instead of embedding them in the glTF.',
-            type : 'boolean',
-            default : defaults.separate
+        separate: {
+            alias: 's',
+            describe: 'Write separate buffers, shaders, and textures instead of embedding them in the glTF.',
+            type: 'boolean',
+            default: defaults.separate
         },
-        separateTextures : {
-            alias : 't',
-            describe : 'Write out separate textures only.',
-            type : 'boolean',
-            default : defaults.separateTextures
+        separateTextures: {
+            alias: 't',
+            describe: 'Write out separate textures only.',
+            type: 'boolean',
+            default: defaults.separateTextures
         },
-        checkTransparency : {
-            describe : 'Do a more exhaustive check for texture transparency by looking at the alpha channel of each pixel. By default textures are considered to be opaque.',
-            type : 'boolean',
-            default : defaults.checkTransparency
+        checkTransparency: {
+            describe: 'Do a more exhaustive check for texture transparency by looking at the alpha channel of each pixel. By default textures are considered to be opaque.',
+            type: 'boolean',
+            default: defaults.checkTransparency
         },
-        secure : {
-            describe : 'Prevent the converter from reading textures or mtl files outside of the input obj directory.',
-            type : 'boolean',
-            default : defaults.secure
+        secure: {
+            describe: 'Prevent the converter from reading textures or mtl files outside of the input directory.',
+            type: 'boolean',
+            default: defaults.secure
         },
-        stats : {
-            describe : 'Print statistics to console for input and output glTF files.',
-            type : 'boolean',
-            default : defaults.stats
+        stats: {
+            describe: 'Print statistics to console for input and output glTF files.',
+            type: 'boolean',
+            default: defaults.stats
         },
         'draco.compressMeshes': {
             alias: 'd',
@@ -107,7 +107,7 @@ var argv = yargs
             type: 'number'
         },
         'draco.unifiedQuantization': {
-            default : false,
+            default: false,
             describe: 'Quantize positions of all primitives using the same quantization grid defined by the unified bounding box of all primitives. If this option is not set, quantization is applied on each primitive separately which can result in gaps appearing between different primitives. Default is false.',
             type: 'boolean'
         }
@@ -155,13 +155,13 @@ for (i = 0; i < length; ++i) {
 }
 
 var options = {
-    resourceDirectory : inputDirectory,
-    separate : argv.separate,
-    separateTextures : argv.separateTextures,
-    secure : argv.secure,
-    checkTransparency : argv.checkTransparency,
-    stats : argv.stats,
-    name : outputName,
+    resourceDirectory: inputDirectory,
+    separate: argv.separate,
+    separateTextures: argv.separateTextures,
+    secure: argv.secure,
+    checkTransparency: argv.checkTransparency,
+    stats: argv.stats,
+    name: outputName,
     dracoOptions: dracoOptions
 };
 
@@ -169,7 +169,7 @@ var inputIsBinary = inputExtension === '.glb';
 var outputIsBinary = outputExtension === '.glb';
 
 var jsonOptions = {
-    spaces : 2
+    spaces: 2
 };
 
 var read = inputIsBinary ? fsExtra.readFile : fsExtra.readJson;

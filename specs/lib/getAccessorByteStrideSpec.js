@@ -7,56 +7,56 @@ var WebGLConstants = Cesium.WebGLConstants;
 describe('getAccessorByteStride', function() {
     it('gets accessor byte stride', function() {
         var gltf = {
-            accessors : [
+            accessors: [
                 {
-                    componentType : WebGLConstants.FLOAT,
-                    count : 24,
-                    type : 'VEC3',
-                    min : [-1.0, -1.0, -1.0],
-                    max : [1.0, 1.0, 1.0]
+                    componentType: WebGLConstants.FLOAT,
+                    count: 24,
+                    type: 'VEC3',
+                    min: [-1.0, -1.0, -1.0],
+                    max: [1.0, 1.0, 1.0]
                 },
                 {
-                    bufferView : 0,
-                    componentType : WebGLConstants.FLOAT,
-                    count : 24,
-                    type : 'VEC3',
-                    min : [-1.0, -1.0, -1.0],
-                    max : [1.0, 1.0, 1.0]
+                    bufferView: 0,
+                    componentType: WebGLConstants.FLOAT,
+                    count: 24,
+                    type: 'VEC3',
+                    min: [-1.0, -1.0, -1.0],
+                    max: [1.0, 1.0, 1.0]
                 },
                 {
-                    bufferView : 1,
-                    componentType : WebGLConstants.FLOAT,
-                    count : 24,
-                    type : 'VEC3',
-                    min : [-1.0, -1.0, -1.0],
-                    max : [1.0, 1.0, 1.0]
+                    bufferView: 1,
+                    componentType: WebGLConstants.FLOAT,
+                    count: 24,
+                    type: 'VEC3',
+                    min: [-1.0, -1.0, -1.0],
+                    max: [1.0, 1.0, 1.0]
                 },
                 {
-                    componentType : WebGLConstants.FLOAT,
-                    count : 24,
-                    type : 'VEC2',
-                    min : [0.0, 0.0],
-                    max : [1.0, 1.0]
+                    componentType: WebGLConstants.FLOAT,
+                    count: 24,
+                    type: 'VEC2',
+                    min: [0.0, 0.0],
+                    max: [1.0, 1.0]
                 },
                 {
-                    componentType : WebGLConstants.INT,
-                    count : 36,
-                    type : 'SCALAR',
-                    min : [0],
-                    max : [24]
+                    componentType: WebGLConstants.INT,
+                    count: 36,
+                    type: 'SCALAR',
+                    min: [0],
+                    max: [24]
                 }
             ],
-            bufferViews : [
+            bufferViews: [
                 {
-                    buffer : 0,
-                    byteLength : 288,
-                    byteOffset : 0
+                    buffer: 0,
+                    byteLength: 288,
+                    byteOffset: 0
                 },
                 {
-                    buffer : 0,
-                    byteLength : 288,
-                    byteOffset : 288,
-                    byteStride : 32
+                    buffer: 0,
+                    byteLength: 288,
+                    byteOffset: 288,
+                    byteStride: 32
                 }
             ]
         };

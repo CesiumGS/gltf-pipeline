@@ -10,7 +10,7 @@ var writeResources = require('../../lib/writeResources');
 var gltfPath = 'specs/data/2.0/box-textured-embedded/box-textured-embedded.gltf';
 var gltf;
 
-// TODO : tests for shaders
+// TODO : KHR_techniques_webgl - add test for shaders
 
 describe('writeResources', function() {
     beforeEach(function(done) {
@@ -38,12 +38,12 @@ describe('writeResources', function() {
             }), done).toResolve();
     });
 
-    it('writes resources as files with default names', function(done) {
+    it('writes resources as files', function(done) {
         var separateResources = {};
         var options = {
-            separateBuffers : true,
-            separateTextures : true,
-            separateResources : separateResources
+            separateBuffers: true,
+            separateTextures: true,
+            separateResources: separateResources
         };
         var originalBufferViewsLength = gltf.bufferViews.length;
         var originalByteLength = gltf.buffers[0].byteLength;
@@ -67,9 +67,9 @@ describe('writeResources', function() {
     it('writes resources as files with object names', function(done) {
         var separateResources = {};
         var options = {
-            separateBuffers : true,
-            separateTextures : true,
-            separateResources : separateResources
+            separateBuffers: true,
+            separateTextures: true,
+            separateResources: separateResources
         };
         gltf.buffers[0].name = 'my-buffer';
         gltf.images[0].name = 'my-image';
@@ -83,10 +83,10 @@ describe('writeResources', function() {
     it('writes resources as files with gltf name', function(done) {
         var separateResources = {};
         var options = {
-            name : 'my-gltf',
-            separateBuffers : true,
-            separateTextures : true,
-            separateResources : separateResources
+            name: 'my-gltf',
+            separateBuffers: true,
+            separateTextures: true,
+            separateResources: separateResources
         };
         expect(writeResources(gltf, options)
             .then(function() {
@@ -96,7 +96,7 @@ describe('writeResources', function() {
     });
     it('writes resources as data uris', function(done) {
         var options = {
-            dataUris : true
+            dataUris: true
         };
         var originalBufferViewsLength = gltf.bufferViews.length;
         var originalByteLength = gltf.buffers[0].byteLength;
