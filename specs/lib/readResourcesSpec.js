@@ -130,8 +130,14 @@ describe('readResources', function() {
         expect(promises, done).toResolve();
     });
 
-    it('throws if gltf contains separate resources but no resource directory is supplied', function(done) {
+    it('rejects if gltf contains separate resources but no resource directory is supplied', function(done) {
         var gltf = readGltf(boxTexturedSeparate2Path);
+        expect(readResources(gltf), done).toRejectWith(RuntimeError);
+    });
+
+    it('rejects when loading resource outside of the resource directory when secure is true', function(done) {
+        var gltf = readGltf(boxTexturedSeparate2Path);
+        gltf.images[0].uri = '../cesium.png';
         expect(readResources(gltf), done).toRejectWith(RuntimeError);
     });
 });
