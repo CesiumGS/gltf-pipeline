@@ -5,6 +5,7 @@ var fsExtra = require('fs-extra');
 var path = require('path');
 var Promise = require('bluebird');
 var yargs = require('yargs');
+var compressDracoMeshes = require('../lib/compressDracoMeshes');
 var glbToGltf = require('../lib/glbToGltf');
 var gltfToGlb = require('../lib/gltfToGlb');
 var processGlb = require('../lib/processGlb');
@@ -14,6 +15,7 @@ var defaultValue = Cesium.defaultValue;
 var defined = Cesium.defined;
 
 var defaults = processGltf.defaults;
+var dracoDefaults = compressDracoMeshes.defaults;
 
 var args = process.argv;
 
@@ -80,36 +82,48 @@ var argv = yargs
         'draco.compressMeshes': {
             alias: 'd',
             describe: 'Compress the meshes using Draco. Adds the KHR_draco_mesh_compression extension.',
-            type: 'boolean'
+            type: 'boolean',
+            default: defaults.compressDracoMeshes
         },
         'draco.compressionLevel': {
-            describe: 'Draco compression level [0-10], most is 10, least is 0, default is 7.',
-            type: 'number'
+            describe: 'Draco compression level [0-10], most is 10, least is 0.',
+            type: 'number',
+            default: dracoDefaults.compressionLevel
         },
-        'draco.quantizePosition': {
-            describe: 'Quantization bits for position attribute when using Draco compression. Default is 14.',
-            type: 'number'
+        'draco.quantizePositionBits': {
+            describe: 'Quantization bits for position attribute when using Draco compression.',
+            type: 'number',
+            default: dracoDefaults.quantizePositionBits
         },
-        'draco.quantizeNormal': {
-            describe: 'Quantization bits for normal attribute when using Draco compression. Default is 10.',
-            type: 'number'
+        'draco.quantizeNormalBits': {
+            describe: 'Quantization bits for normal attribute when using Draco compression.',
+            type: 'number',
+            default: dracoDefaults.quantizeNormalBits
         },
-        'draco.quantizeTexcoord': {
-            describe: 'Quantization bits for texture coordinate attribute when using Draco compression. Default is 12.',
-            type: 'number'
+        'draco.quantizeTexcoordBits': {
+            describe: 'Quantization bits for texture coordinate attribute when using Draco compression.',
+            type: 'number',
+            default: dracoDefaults.quantizeTexcoordBits
         },
-        'draco.quantizeColor': {
-            describe: 'Quantization bits for color attribute when using Draco compression. Default is 8.',
-            type: 'number'
+        'draco.quantizeColorBits': {
+            describe: 'Quantization bits for color attribute when using Draco compression.',
+            type: 'number',
+            default: dracoDefaults.quantizeColorBits
         },
-        'draco.quantizeSkin': {
-            describe: 'Quantization bits for skinning attribute (joint indices and joint weights) when using Draco compression. Default is 12.',
-            type: 'number'
+        'draco.quantizeSkinBits': {
+            describe: 'Quantization bits for skinning attribute (joint indices and joint weights) when using Draco compression.',
+            type: 'number',
+            default: dracoDefaults.quantizeSkinBits
+        },
+        'draco.quantizeGenericBits': {
+            describe: 'Quantization bits for custom attributes when using Draco compression.',
+            type: 'number',
+            default: dracoDefaults.quantizeGenericBits
         },
         'draco.unifiedQuantization': {
-            default: false,
-            describe: 'Quantize positions of all primitives using the same quantization grid defined by the unified bounding box of all primitives. If this option is not set, quantization is applied on each primitive separately which can result in gaps appearing between different primitives. Default is false.',
-            type: 'boolean'
+            describe: 'Quantize positions of all primitives using the same quantization grid defined by the unified bounding box of all primitives. If this option is not set, quantization is applied on each primitive separately which can result in gaps appearing between different primitives.',
+            type: 'boolean',
+            default: dracoDefaults.unifiedQuantization
         }
     }).parse(args);
 
