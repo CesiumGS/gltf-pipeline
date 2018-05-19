@@ -114,9 +114,8 @@ processGltf(gltf, options)
 |`--draco.quantizeNormalBits`|Quantization bits for normal attribute when using Draco compression.|No, default `10`|
 |`--draco.quantizeTexcoordBits`|Quantization bits for texture coordinate attribute when using Draco compression.|No, default `12`|
 |`--draco.quantizeColorBits`|Quantization bits for color attribute when using Draco compression.|No, default `8`|
-|`--draco.quantizeSkinBits`|Quantization bits for skinning attribute (joint indices and joint weights) when using Draco compression.|No, default `12`|
-|`--draco.quantizeGenericBits`|Quantization bits for custom attributes when using Draco compression.|No, default `12`|
-|`--draco.unifiedQuantization`|Quantize positions, defined by the unified bounding box of all primitives. If not set, quantization is applied separately.|No, default `false`|
+|`--draco.quantizeGenericBits`|Quantization bits for skinning attribute (joint indices and joint weights) and custom attributes when using Draco compression.|No, default `12`|
+|`--draco.unifiedQuantization`|Quantize positions of all primitives using the same quantization grid. If not set, quantization is applied separately.|No, default `false`|
 
 ## Build Instructions
 

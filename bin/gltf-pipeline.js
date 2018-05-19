@@ -110,13 +110,8 @@ var argv = yargs
             type: 'number',
             default: dracoDefaults.quantizeColorBits
         },
-        'draco.quantizeSkinBits': {
-            describe: 'Quantization bits for skinning attribute (joint indices and joint weights) when using Draco compression.',
-            type: 'number',
-            default: dracoDefaults.quantizeSkinBits
-        },
         'draco.quantizeGenericBits': {
-            describe: 'Quantization bits for custom attributes when using Draco compression.',
+            describe: 'Quantization bits for skinning attribute (joint indices and joint weights) ad custom attributes when using Draco compression.',
             type: 'number',
             default: dracoDefaults.quantizeGenericBits
         },
