@@ -560,7 +560,7 @@ describe('updateVersion', function() {
                 expect(primitive.attributes._APPLICATIONSPECIFIC).toEqual(0);
                 expect(primitive.attributes._TEMPERATURE).toEqual(8);
 
-                // TODO : KHR_techniques_webl these checks will be removed
+                // TODO : KHR_techniques_webl - these checks will be removed
                 var states = technique.states;
                 expect(states.enable).toEqual([]);
                 expect(states.functions.scissor).toBeUndefined();

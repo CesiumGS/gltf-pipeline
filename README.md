@@ -15,6 +15,8 @@ Supports common operations including:
 * Saving buffers/textures as embedded or separate files
 * Converting glTF 1.0 models to glTF 2.0 (using the [KHR_technique_webgl](https://github.com/KhronosGroup/glTF/tree/master/extensions/2.0/Khronos/KHR_technique_webgl) extension)
 
+TODO: KHR_techniques_webgl - fix name in link once https://github.com/KhronosGroup/glTF/pull/1296 is merged
+
 `gltf-pipeline` can be used as a command-line tool or Node.js module.
 
 ## Getting Started
