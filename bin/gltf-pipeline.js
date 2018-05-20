@@ -106,6 +106,10 @@ var argv = yargs
             describe: 'Quantization bits for skinning attribute (joint indices and joint weights) when using Draco compression. Default is 12.',
             type: 'number'
         },
+        'draco.uncompressedFallback': {
+            describe: 'Adds uncompressed fallback versions of the compressed meshes.',
+            type: 'boolean'
+        },
         'draco.unifiedQuantization': {
             default: false,
             describe: 'Quantize positions of all primitives using the same quantization grid defined by the unified bounding box of all primitives. If this option is not set, quantization is applied on each primitive separately which can result in gaps appearing between different primitives. Default is false.',
