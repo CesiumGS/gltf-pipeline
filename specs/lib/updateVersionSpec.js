@@ -33,6 +33,7 @@ describe('updateVersion', function() {
         };
         updateVersion(gltf);
         expect(gltf.asset.version).toEqual('2.0');
+        expect(gltf.asset.extras.gltf_pipeline_upgrade_10to20).toEqual(true);
     });
 
     it('updates a glTF with non-standard version to 2.0', function() {
