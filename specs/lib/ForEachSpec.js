@@ -4,7 +4,6 @@ var ForEach = require('../../lib/ForEach');
 
 var WebGLConstants = Cesium.WebGLConstants;
 
-// TODO: KHR_techniques_webgl - add tests for ForEach.shader, ForEach.program, ForEach.techniqueAttribute, ForEach.techniqueUniform, ForEach.technique, ForEach.materialValue
 describe('ForEach', function() {
     var gltfAccessors = {
         accessors: [
@@ -370,6 +369,37 @@ describe('ForEach', function() {
         });
     });
 
+    it('loops over material values', function () {
+        var material = {
+            name: 'Texture',
+            extensions: {
+                KHR_techniques_webgl: {
+                    technique: 0,
+                    values: {
+                        u_diffuse: {
+                            index: 0
+                        },
+                        u_shininess: 256,
+                        u_specular: [
+                            0.2,
+                            0.2,
+                            0.2,
+                            1
+                        ]
+                    }
+                }
+            }
+        };
+
+        var count = 0;
+        ForEach.materialValue(material, function (value, uniformName) {
+            expect(value).toBeDefined();
+            expect(uniformName.indexOf('u_')).toBe(0);
+            count++;
+        });
+        expect(count).toBe(3);
+    });
+
     it('loops over meshes', function() {
         var gltf = {
             meshes: [
@@ -600,6 +630,187 @@ describe('ForEach', function() {
         ForEach.shaderLegacy(gltf, function(shader, name) {
             expect(shader.uri).toBe(name + '.glsl');
         });
+    });
+
+    it('loops over KHR_techniques_webgl shaders (gltf 2.0)', function () {
+        var gltf = {
+            extensions: {
+                KHR_techniques_webgl: {
+                    shaders: [
+                        {
+                            type: 35632,
+                            name: 'BoxTextured0FS',
+                            uri: 'BoxTextured0FS.glsl'
+                        },
+                        {
+                            type: 35633,
+                            name: 'BoxTextured0VS',
+                            uri: 'BoxTextured0VS.glsl'
+                        }
+                    ]
+                }
+            },
+            extensionsUsed: ['KHR_techniques_webgl']
+        };
+
+        var count = 0;
+        ForEach.shader(gltf, function (shader) {
+            expect(shader.uri).toBe(shader.name + '.glsl');
+            count++;
+        });
+
+        expect(count).toBe(2);
+
+        gltf = {
+
+        };
+
+        return expect(function () {
+            ForEach.shader(gltf, function () {
+                throw Error();
+            });
+        }).not.toThrowError();
+    });
+
+    it('loops over KHR_techniques_webgl programs (gltf 2.0)', function () {
+        var gltf = {
+            extensions: {
+                KHR_techniques_webgl: {
+                    programs: [
+                        {
+                            name: 'program_0',
+                            fragmentShader: 0,
+                            vertexShader: 1
+                        },
+                        {
+                            name: 'program_1',
+                            fragmentShader: 2,
+                            vertexShader: 3
+                        }
+                    ]
+                }
+            },
+            extensionsUsed: ['KHR_techniques_webgl']
+        };
+
+        var count = 0;
+        ForEach.program(gltf, function (program) {
+            expect(program.fragmentShader).toBeDefined();
+            expect(program.vertexShader).toBeDefined();
+            count++;
+        });
+
+        expect(count).toBe(2);
+
+        gltf = {
+
+        };
+
+        return expect(function () {
+            ForEach.shader(gltf, function () {
+                throw Error();
+            });
+        }).not.toThrowError();
+    });
+
+    it('loops over KHR_techniques_webgl techniques (gltf 2.0)', function () {
+        var gltf = {
+            extensions: {
+                KHR_techniques_webgl: {
+                    techniques: [
+                        {
+                            name: 'technique0',
+                            program: 0,
+                            attributes: {},
+                            uniforms: {}
+                        },
+                        {
+                            name: 'technique1',
+                            program: 1,
+                            attributes: {},
+                            uniforms: {}
+                        }
+                    ]
+                }
+            },
+            extensionsUsed: ['KHR_techniques_webgl']
+        };
+
+        var count = 0;
+        ForEach.technique(gltf, function (technique, index) {
+            expect(technique.name).toBe('technique' + index);
+            count++;
+        });
+
+        expect(count).toBe(2);
+
+        gltf = {
+
+        };
+
+        return expect(function () {
+            ForEach.technique(gltf, function () {
+                throw Error();
+            });
+        }).not.toThrowError();
+    });
+
+    it('loops over technique attributes', function () {
+        var technique = {
+            name: 'technique0',
+            program: 0,
+            attributes: {
+                a_normal: {
+                    semantic: 'NORMAL'
+                },
+                a_position: {
+                    semantic: 'POSITION'
+                },
+                a_texcoord0: {
+                    semantic: 'TEXCOORD_0'
+                }
+            },
+            uniforms: {}
+        };
+
+        var count = 0;
+        ForEach.techniqueAttribute(technique, function (attribute, attributeName) {
+            expect(attribute.semantic).toBeDefined();
+            expect(attributeName.indexOf('a_')).toBe(0);
+            count++;
+        });
+
+        expect(count).toBe(3);
+    });
+
+    it('loops over technique uniforms', function () {
+        var technique = {
+            name: 'technique0',
+            program: 0,
+            attributes: {},
+            uniforms: {
+                u_diffuse: {
+                    type: 35678
+                },
+                u_modelViewMatrix: {
+                    type: 35676,
+                    semantic: 'MODELVIEW'
+                },
+                u_normalMatrix: {
+                    type: 35675,
+                    semantic: 'MODELVIEWINVERSETRANSPOSE'
+                }
+            }
+        };
+
+        var count = 0;
+        ForEach.techniqueUniform(technique, function (uniform, uniformName) {
+            expect(uniform.type).toBeDefined();
+            expect(uniformName.indexOf('u_')).toBe(0);
+            count++;
+        });
+
+        expect(count).toBe(3);
     });
 
     it('loops over each skin', function() {

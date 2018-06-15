@@ -332,8 +332,9 @@ describe('updateVersion', function() {
             },
             materials: {
                 material: {
+                    technique: 'technique',
                     values: {
-                        shininess: 1.0
+                        lightAttenuation: 2.0
                     }
                 }
             },
@@ -349,6 +350,15 @@ describe('updateVersion', function() {
                     },
                     attributes: {
                         a_application: 'application'
+                    },
+                    uniforms: {
+                        u_lightAttenuation: 'lightAttenuation',
+                        u_texcoord: 'texcoord',
+                        u_color: 'color',
+                        u_application: 'application',
+                        u_jointMatrix: 'jointMatrix',
+                        u_notJointMatrix: 'notJointMatrix',
+                        u_notJointMatrixWithSemantic: 'notJointMatrixWithSemantic'
                     },
                     parameters: {
                         lightAttenuation: {
@@ -375,7 +385,8 @@ describe('updateVersion', function() {
                         notJointMatrixWithSemantic: {
                             count: 4
                         }
-                    }
+                    },
+                    program: 'program_0'
                 }
             },
             accessors: {
@@ -481,6 +492,15 @@ describe('updateVersion', function() {
                     children: []
                 }
             },
+            programs: {
+                program_0: {
+                    attributes: [
+                        "a_application"
+                    ],
+                    fragmentShader: "fs",
+                    vertexShader: "vs"
+                }
+            },
             samplers: [],
             scene: 'defaultScene',
             scenes: {
@@ -488,6 +508,16 @@ describe('updateVersion', function() {
                     nodes: [
                         'rootTransform'
                     ]
+                }
+            },
+            shaders: {
+                fs: {
+                    type: 35632,
+                    uri: 'data:,Hello%2C%20World!'
+                },
+                vs: {
+                    type: 35633,
+                    uri: 'data:,Hello%2C%20World!'
                 }
             },
             skins: {
@@ -518,13 +548,13 @@ describe('updateVersion', function() {
                     'KHR_materials_common',
                     'WEB3D_quantized_attributes',
                     'UNKOWN_EXTENSION',
-                    'KHR_technique_webgl'
+                    'KHR_techniques_webgl'
                 ]);
                 var extensionsRequired = gltf.extensionsRequired;
                 expect(extensionsRequired).toEqual([
                     'KHR_materials_common',
                     'WEB3D_quantized_attributes',
-                    'KHR_technique_webgl'
+                    'KHR_techniques_webgl'
                 ]);
 
                 // animation.parameters removed
@@ -540,32 +570,25 @@ describe('updateVersion', function() {
 
                 // Remove value from attribute but not uniform in material technique
                 var material = gltf.materials[0];
-                expect(material.values.shininess).toEqual(1);
-                var technique = gltf.techniques[0];
-                expect(technique.parameters.lightAttenuation.value).toEqual(1.0);
-                expect(technique.parameters.application.value).toBeUndefined();
+                expect(material.extensions['KHR_techniques_webgl'].values.u_lightAttenuation).toEqual(2);
+                var technique = gltf.extensions['KHR_techniques_webgl'].techniques[0];
+                expect(technique.uniforms.u_lightAttenuation.value).toEqual(1.0);
+                expect(technique.attributes.a_application.value).toBeUndefined();
 
                 // TEXCOORD and COLOR are now TEXCOORD_0 and COLOR_0
                 var primitive = gltf.meshes[0].primitives[0];
-                expect(technique.parameters.texcoord.semantic).toEqual('TEXCOORD_0');
-                expect(technique.parameters.color.semantic).toEqual('COLOR_0');
+                expect(technique.uniforms.u_texcoord.semantic).toEqual('TEXCOORD_0');
+                expect(technique.uniforms.u_color.semantic).toEqual('COLOR_0');
                 expect(primitive.attributes.TEXCOORD).toBeUndefined();
                 expect(primitive.attributes.TEXCOORD_0).toEqual(6);
                 expect(primitive.attributes.COLOR).toBeUndefined();
                 expect(primitive.attributes.COLOR_0).toEqual(7);
 
                 // Underscore added to application specific attributes
-                expect(technique.parameters.application.semantic).toEqual('_APPLICATIONSPECIFIC');
+                expect(technique.attributes.a_application.semantic).toEqual('_APPLICATIONSPECIFIC');
                 expect(primitive.attributes.APPLICATIONSPECIFIC).toBeUndefined();
                 expect(primitive.attributes._APPLICATIONSPECIFIC).toEqual(0);
                 expect(primitive.attributes._TEMPERATURE).toEqual(8);
-
-                // TODO : KHR_techniques_webl - these checks will be removed
-                var states = technique.states;
-                expect(states.enable).toEqual([]);
-                expect(states.functions.scissor).toBeUndefined();
-                expect(states.functions.blendColor).toEqual([0.0, 0.0, 0.0, 1.0]);
-                expect(states.functions.depthRange).toEqual([0.0, 0.0]);
 
                 // Clamp camera parameters
                 var camera = gltf.cameras[0];
@@ -580,10 +603,10 @@ describe('updateVersion', function() {
                 expect(bufferView.byteLength).toEqual(source.length);
 
                 // Only JOINTMATRIX or application specific semantics may have a count
-                expect(technique.parameters.application.count).toEqual(1);
-                expect(technique.parameters.jointMatrix.count).toEqual(2);
-                expect(technique.parameters.notJointMatrix.count).toBeUndefined();
-                expect(technique.parameters.notJointMatrixWithSemantic.count).toBeUndefined();
+                expect(technique.uniforms.u_application.count).toEqual(1);
+                expect(technique.uniforms.u_jointMatrix.count).toEqual(2);
+                expect(technique.uniforms.u_notJointMatrix.count).toBeUndefined();
+                expect(technique.uniforms.u_notJointMatrixWithSemantic.count).toBeUndefined();
 
                 // Min and max are added to all accessors
                 ForEach.accessor(gltf, function(accessor) {
