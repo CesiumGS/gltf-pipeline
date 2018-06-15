@@ -15,6 +15,8 @@ Supports common operations including:
 * Saving buffers/textures as embedded or separate files
 * Converting glTF 1.0 models to glTF 2.0 (using the [KHR_techniques_webgl](https://github.com/KhronosGroup/glTF/tree/master/extensions/2.0/Khronos/KHR_techniques_webgl) extension)
 
+TODO: KHR_techniques_webgl - fix name in link once https://github.com/KhronosGroup/glTF/pull/1296 is merged
+
 `gltf-pipeline` can be used as a command-line tool or Node.js module.
 
 ## Getting Started
@@ -110,12 +112,12 @@ processGltf(gltf, options)
 |`--stats`|Print statistics to console for input and output glTF files.|No, default `false`|
 |`--draco.compressMeshes`, `-d`|Compress the meshes using Draco. Adds the KHR_draco_mesh_compression extension.|No, default `false`|
 |`--draco.compressionLevel`|Draco compression level [0-10], most is 10, least is 0.|No, default `7`|
-|`--draco.quantizePosition`|Quantization bits for position attribute when using Draco compression.|No, default `14`|
-|`--draco.quantizeNormal`|Quantization bits for normal attribute when using Draco compression.|No, default `10`|
-|`--draco.quantizeTexcoord`|Quantization bits for texture coordinate attribute when using Draco compression.|No, default `12`|
-|`--draco.quantizeColor`|Quantization bits for color attribute when using Draco compression.|No, default `8`|
-|`--draco.quantizeSkin`|Quantization bits for skinning attribute (joint indices and joint weights) when using Draco compression.|No, default `12`|
-|`--draco.unifiedQuantization`|Quantize positions, defined by the unified bounding box of all primitives. If not set, quantization is applied separately.|No, default `false`|
+|`--draco.quantizePositionBits`|Quantization bits for position attribute when using Draco compression.|No, default `14`|
+|`--draco.quantizeNormalBits`|Quantization bits for normal attribute when using Draco compression.|No, default `10`|
+|`--draco.quantizeTexcoordBits`|Quantization bits for texture coordinate attribute when using Draco compression.|No, default `12`|
+|`--draco.quantizeColorBits`|Quantization bits for color attribute when using Draco compression.|No, default `8`|
+|`--draco.quantizeGenericBits`|Quantization bits for skinning attribute (joint indices and joint weights) and custom attributes when using Draco compression.|No, default `12`|
+|`--draco.unifiedQuantization`|Quantize positions of all primitives using the same quantization grid. If not set, quantization is applied separately.|No, default `false`|
 
 ## Build Instructions
 

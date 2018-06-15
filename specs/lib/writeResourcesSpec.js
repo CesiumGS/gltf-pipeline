@@ -1,7 +1,5 @@
 'use strict';
 var fsExtra = require('fs-extra');
-var Promise = require('bluebird');
-var addPipelineExtras = require('../../lib/addPipelineExtras');
 var dataUriToBuffer = require('../../lib/dataUriToBuffer');
 var ForEach = require('../../lib/ForEach');
 var readResources = require('../../lib/readResources');
@@ -15,13 +13,11 @@ var gltf;
 describe('writeResources', function() {
     beforeEach(function(done) {
         var gltfLoaded = fsExtra.readJsonSync(gltfPath);
-        return Promise.all([
-            addPipelineExtras(gltfLoaded),
-            readResources(gltfLoaded)
-        ]).then(function() {
-            gltf = gltfLoaded;
-            done();
-        });
+        return readResources(gltfLoaded)
+            .then(function() {
+                gltf = gltfLoaded;
+                done();
+            });
     });
 
     it('writes embedded resources', function(done) {
