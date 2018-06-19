@@ -322,6 +322,8 @@ describe('updateVersion', function() {
                                 NORMAL: 'accessor_normal',
                                 TEXCOORD: 'accessor_texcoord',
                                 COLOR: 'accessor_color',
+                                JOINT: 'accessor_joint',
+                                WEIGHT: 'accessor_weight',
                                 APPLICATIONSPECIFIC: 'accessor',
                                 _TEMPERATURE: 'accessor_temperature'
                             },
@@ -349,16 +351,16 @@ describe('updateVersion', function() {
                         }
                     },
                     attributes: {
-                        a_application: 'application'
+                        a_application: 'application',
+                        a_joints : 'joints',
+                        a_weights : 'weights'
                     },
                     uniforms: {
                         u_lightAttenuation: 'lightAttenuation',
                         u_texcoord: 'texcoord',
                         u_color: 'color',
                         u_application: 'application',
-                        u_jointMatrix: 'jointMatrix',
-                        u_notJointMatrix: 'notJointMatrix',
-                        u_notJointMatrixWithSemantic: 'notJointMatrixWithSemantic'
+                        u_jointMatrix: 'jointMatrix'
                     },
                     parameters: {
                         lightAttenuation: {
@@ -370,6 +372,12 @@ describe('updateVersion', function() {
                         color: {
                             semantic: 'COLOR'
                         },
+                        joints: {
+                            semantic: 'JOINT'
+                        },
+                        weights: {
+                            semantic: 'WEIGHT'
+                        },
                         application: {
                             semantic: 'APPLICATIONSPECIFIC',
                             count: 1,
@@ -378,12 +386,6 @@ describe('updateVersion', function() {
                         jointMatrix: {
                             semantic: 'JOINTMATRIX',
                             count: 2
-                        },
-                        notJointMatrix: {
-                            count: 3
-                        },
-                        notJointMatrixWithSemantic: {
-                            count: 4
                         }
                     },
                     program: 'program_0'
@@ -437,6 +439,16 @@ describe('updateVersion', function() {
                     componentType: WebGLConstants.FLOAT,
                     count: 3,
                     type: 'VEC3'
+                },
+                accessor_joint: {
+                    componentType: WebGLConstants.FLOAT,
+                    count: 1,
+                    type: 'SCALAR'
+                },
+                accessor_weight: {
+                    componentType: WebGLConstants.FLOAT,
+                    count: 1,
+                    type: 'SCALAR'
                 },
                 accessor_temperature: {
                     componentType: WebGLConstants.FLOAT,
@@ -495,10 +507,12 @@ describe('updateVersion', function() {
             programs: {
                 program_0: {
                     attributes: [
-                        "a_application"
+                        'a_application',
+                        'a_joints',
+                        'a_weights'
                     ],
-                    fragmentShader: "fs",
-                    vertexShader: "vs"
+                    fragmentShader: 'fs',
+                    vertexShader: 'vs'
                 }
             },
             samplers: [],
@@ -513,11 +527,11 @@ describe('updateVersion', function() {
             shaders: {
                 fs: {
                     type: 35632,
-                    uri: 'data:,Hello%2C%20World!'
+                    uri: 'data:,'
                 },
                 vs: {
                     type: 35633,
-                    uri: 'data:,Hello%2C%20World!'
+                    uri: 'data:,'
                 }
             },
             skins: {
@@ -568,10 +582,12 @@ describe('updateVersion', function() {
                 expect(gltf.samplers).toBeUndefined();
                 expect(getNodeByName(gltf, 'nodeWithoutChildren').children).toBeUndefined();
 
-                // Remove value from attribute but not uniform in material technique
+                // Expect material values to be moved to material KHR_techniques_webgl extension
                 var material = gltf.materials[0];
-                expect(material.extensions['KHR_techniques_webgl'].values.u_lightAttenuation).toEqual(2);
-                var technique = gltf.extensions['KHR_techniques_webgl'].techniques[0];
+                expect(material.extensions.KHR_techniques_webgl.values.u_lightAttenuation).toEqual(2);
+
+                // Expect techniques to be moved to asset KHR_techniques_webgl extension
+                var technique = gltf.extensions.KHR_techniques_webgl.techniques[0];
                 expect(technique.uniforms.u_lightAttenuation.value).toEqual(1.0);
                 expect(technique.attributes.a_application.value).toBeUndefined();
 
@@ -584,11 +600,19 @@ describe('updateVersion', function() {
                 expect(primitive.attributes.COLOR).toBeUndefined();
                 expect(primitive.attributes.COLOR_0).toEqual(7);
 
+                // JOINT is now JOINTS_0 and WEIGHT is not WEIGHTS_0
+                expect(technique.attributes.a_joints.semantic).toEqual('JOINTS_0');
+                expect(technique.attributes.a_weights.semantic).toEqual('WEIGHTS_0');
+                expect(primitive.attributes.JOINT).toBeUndefined();
+                expect(primitive.attributes.JOINTS_0).toEqual(8);
+                expect(primitive.attributes.WEIGHT).toBeUndefined();
+                expect(primitive.attributes.WEIGHTS_0).toEqual(9);
+
                 // Underscore added to application specific attributes
                 expect(technique.attributes.a_application.semantic).toEqual('_APPLICATIONSPECIFIC');
                 expect(primitive.attributes.APPLICATIONSPECIFIC).toBeUndefined();
                 expect(primitive.attributes._APPLICATIONSPECIFIC).toEqual(0);
-                expect(primitive.attributes._TEMPERATURE).toEqual(8);
+                expect(primitive.attributes._TEMPERATURE).toEqual(10);
 
                 // Clamp camera parameters
                 var camera = gltf.cameras[0];
@@ -601,12 +625,6 @@ describe('updateVersion', function() {
                 expect(buffer.byteLength).toEqual(source.length);
                 var bufferView = gltf.bufferViews[0];
                 expect(bufferView.byteLength).toEqual(source.length);
-
-                // Only JOINTMATRIX or application specific semantics may have a count
-                expect(technique.uniforms.u_application.count).toEqual(1);
-                expect(technique.uniforms.u_jointMatrix.count).toEqual(2);
-                expect(technique.uniforms.u_notJointMatrix.count).toBeUndefined();
-                expect(technique.uniforms.u_notJointMatrixWithSemantic.count).toBeUndefined();
 
                 // Min and max are added to all accessors
                 ForEach.accessor(gltf, function(accessor) {

@@ -130,9 +130,11 @@ describe('addDefaults', function() {
         expect(materialOpaque.emissiveFactor).toEqual([0.0, 0.0, 0.0]);
         expect(materialOpaque.alphaMode).toBe('OPAQUE');
         expect(materialOpaque.doubleSided).toBe(false);
-        expect(materialOpaque.emissiveTexture.texCoord).toBe(0);
-        expect(materialOpaque.normalTexture.texCoord).toBe(0);
-        expect(materialOpaque.occlusionTexture.texCoord).toBe(0);
+
+        var materialValues = materialOpaque.extensions.KHR_techniques_webgl.values;
+        expect(materialValues.emissiveTexture.texCoord).toBe(0);
+        expect(materialValues.normalTexture.texCoord).toBe(0);
+        expect(materialValues.occlusionTexture.texCoord).toBe(0);
 
         expect(materialAlphaMask.alphaCutoff).toBe(0.5);
     });

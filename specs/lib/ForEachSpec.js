@@ -400,6 +400,31 @@ describe('ForEach', function() {
         expect(count).toBe(3);
     });
 
+    it('loops over legacy material values', function () {
+        var material = {
+            name: 'Texture',
+            values: {
+                diffuse: {
+                    index: 0
+                },
+                shininess: 256,
+                specular: [
+                    0.2,
+                    0.2,
+                    0.2,
+                    1
+                ]
+            }
+        };
+
+        var count = 0;
+        ForEach.materialValueLegacy(material, function (value) {
+            expect(value).toBeDefined();
+            count++;
+        });
+        expect(count).toBe(3);
+    });
+
     it('loops over meshes', function() {
         var gltf = {
             meshes: [
@@ -638,12 +663,12 @@ describe('ForEach', function() {
                 KHR_techniques_webgl: {
                     shaders: [
                         {
-                            type: 35632,
+                            type: WebGLConstants.FRAGMENT_SHADER,
                             name: 'BoxTextured0FS',
                             uri: 'BoxTextured0FS.glsl'
                         },
                         {
-                            type: 35633,
+                            type: WebGLConstants.VERTEX_SHADER,
                             name: 'BoxTextured0VS',
                             uri: 'BoxTextured0VS.glsl'
                         }
@@ -658,18 +683,15 @@ describe('ForEach', function() {
             expect(shader.uri).toBe(shader.name + '.glsl');
             count++;
         });
-
         expect(count).toBe(2);
 
-        gltf = {
+        gltf = {};
 
-        };
-
-        return expect(function () {
-            ForEach.shader(gltf, function () {
-                throw Error();
-            });
-        }).not.toThrowError();
+        count = 0;
+        ForEach.shader(gltf, function () {
+            count++;
+        });
+        expect(count).toBe(0);
     });
 
     it('loops over KHR_techniques_webgl programs (gltf 2.0)', function () {
@@ -699,18 +721,38 @@ describe('ForEach', function() {
             expect(program.vertexShader).toBeDefined();
             count++;
         });
-
         expect(count).toBe(2);
 
-        gltf = {
+        gltf = {};
 
+        count = 0;
+        ForEach.program(gltf, function () {
+            count++;
+        });
+        expect(count).toBe(0);
+    });
+
+    it('loops over legacy programs (gltf 1.0)', function () {
+        var gltf = {
+            programs: {
+                program_0: {
+                    fragmentShader: 0,
+                    vertexShader: 1
+                },
+                program_1: {
+                    fragmentShader: 2,
+                    vertexShader: 3
+                }
+            }
         };
 
-        return expect(function () {
-            ForEach.shader(gltf, function () {
-                throw Error();
-            });
-        }).not.toThrowError();
+        var count = 0;
+        ForEach.programLegacy(gltf, function (program) {
+            expect(program.fragmentShader).toBeDefined();
+            expect(program.vertexShader).toBeDefined();
+            count++;
+        });
+        expect(count).toBe(2);
     });
 
     it('loops over KHR_techniques_webgl techniques (gltf 2.0)', function () {
@@ -741,18 +783,39 @@ describe('ForEach', function() {
             expect(technique.name).toBe('technique' + index);
             count++;
         });
-
         expect(count).toBe(2);
 
-        gltf = {
+        gltf = {};
 
+        count = 0;
+        ForEach.technique(gltf, function () {
+            count++;
+        });
+        expect(count).toBe(0);
+    });
+
+    it('loops over legacy techniques (gltf 1.0)', function () {
+        var gltf = {
+            techniques: {
+                technique0: {
+                    program: 0,
+                    attributes: {},
+                    uniforms: {}
+                },
+                technique1: {
+                    program: 1,
+                    attributes: {},
+                    uniforms: {}
+                }
+            }
         };
 
-        return expect(function () {
-            ForEach.technique(gltf, function () {
-                throw Error();
-            });
-        }).not.toThrowError();
+        var count = 0;
+        ForEach.techniqueLegacy(gltf, function (technique) {
+            expect(technique.program).toBeDefined();
+            count++;
+        });
+        expect(count).toBe(2);
     });
 
     it('loops over technique attributes', function () {
@@ -783,6 +846,28 @@ describe('ForEach', function() {
         expect(count).toBe(3);
     });
 
+    it('loops over legacy technique attributes', function () {
+        var technique = {
+            name: 'technique0',
+            program: 0,
+            parameters: {},
+            attributes: {
+                a_normal: 'normal',
+                a_position: 'position',
+                a_texcoord0: 'texcoord0'
+            },
+            uniforms: {}
+        };
+
+        var count = 0;
+        ForEach.techniqueAttributeLegacy(technique, function (parameterName, attributeName) {
+            expect(parameterName).toBe(attributeName.substring(2));
+            count++;
+        });
+
+        expect(count).toBe(3);
+    });
+
     it('loops over technique uniforms', function () {
         var technique = {
             name: 'technique0',
@@ -790,14 +875,14 @@ describe('ForEach', function() {
             attributes: {},
             uniforms: {
                 u_diffuse: {
-                    type: 35678
+                    type: WebGLConstants.SAMPLER_2D
                 },
                 u_modelViewMatrix: {
-                    type: 35676,
+                    type: WebGLConstants.FLOAT_MAT4,
                     semantic: 'MODELVIEW'
                 },
                 u_normalMatrix: {
-                    type: 35675,
+                    type: WebGLConstants.FLOAT_MAT3,
                     semantic: 'MODELVIEWINVERSETRANSPOSE'
                 }
             }
@@ -807,6 +892,59 @@ describe('ForEach', function() {
         ForEach.techniqueUniform(technique, function (uniform, uniformName) {
             expect(uniform.type).toBeDefined();
             expect(uniformName.indexOf('u_')).toBe(0);
+            count++;
+        });
+
+        expect(count).toBe(3);
+    });
+
+    it('loops over legacy technique uniforms', function () {
+        var technique = {
+            name: 'technique0',
+            program: 0,
+            parameters: {},
+            attributes: {},
+            uniforms: {
+                u_diffuse: 'diffuse',
+                u_modelViewMatrix: 'modelViewMatrix',
+                u_normalMatrix: 'normalMatrix'
+            }
+        };
+
+        var count = 0;
+        ForEach.techniqueUniformLegacy(technique, function (parameterName, uniformName) {
+            expect(parameterName).toBe(uniformName.substring(2));
+            count++;
+        });
+
+        expect(count).toBe(3);
+    });
+
+    it('loops over legacy technique parameters', function () {
+        var technique = {
+            name: 'technique0',
+            program: 0,
+            attributes: {},
+            uniforms: {},
+            parameters: {
+                diffuse: {
+                    type: WebGLConstants.SAMPLER_2D
+                },
+                modelViewMatrix: {
+                    semantic: 'MODELVIEW',
+                    type: WebGLConstants.FLOAT_MAT4
+                },
+                normal: {
+                    semantic: 'NORMAL',
+                    type: WebGLConstants.FLOAT_VEC3
+                }
+            }
+        };
+
+        var count = 0;
+        ForEach.techniqueParameterLegacy(technique, function (parameter, parameterName) {
+            expect(parameter.type).toBeDefined();
+            expect(parameterName).toBeDefined();
             count++;
         });
 

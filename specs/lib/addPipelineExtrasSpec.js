@@ -6,7 +6,6 @@ var WebGLConstants = Cesium.WebGLConstants;
 
 describe('addPipelineExtras', function() {
     it('adds pipeline extras', function() {
-        // TODO: KHR_techniques_webgl - remove shaders from top level, put inside extras.KHR_techniques_webgl
         var gltf = {
             buffers: [
                 {
