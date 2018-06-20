@@ -5,10 +5,11 @@ var ForEach = require('../../lib/ForEach');
 var readResources = require('../../lib/readResources');
 var writeResources = require('../../lib/writeResources');
 
+var Cesium = require('cesium');
+var CesiumMath = Cesium.Math;
+
 var gltfPath = 'specs/data/2.0/box-textured-embedded/box-textured-embedded.gltf';
 var gltf;
-
-// TODO : KHR_techniques_webgl - add test for shaders
 
 describe('writeResources', function() {
     beforeEach(function(done) {
@@ -39,6 +40,7 @@ describe('writeResources', function() {
         var options = {
             separateBuffers: true,
             separateTextures: true,
+            separateShaders: true,
             separateResources: separateResources
         };
         var originalBufferViewsLength = gltf.bufferViews.length;
@@ -47,16 +49,22 @@ describe('writeResources', function() {
             .then(function(gltf) {
                 ForEach.image(gltf, function(image) {
                     expect(image.bufferView).toBeUndefined();
-                    expect(image.uri).toBe('image0.png');
+                    expect(image.uri.indexOf('.png')).toBeGreaterThan(-1);
                 });
+
+                ForEach.shader(gltf, function (shader) {
+                    expect(shader.bufferView).toBeUndefined();
+                    expect(shader.uri.indexOf('.glsl')).toBeGreaterThan(-1);
+                });
+
                 expect(gltf.buffers.length).toBe(1);
                 var buffer = gltf.buffers[0];
-                expect(buffer.uri).toBe('buffer.bin');
-                expect(Object.keys(separateResources).length).toBe(2);
+                expect(buffer.uri.indexOf('.bin')).toBeGreaterThan(-1);
+                expect(Object.keys(separateResources).length).toBe(4);
                 expect(Buffer.isBuffer(separateResources['buffer.bin']));
                 expect(Buffer.isBuffer(separateResources['image0.png']));
-                expect(gltf.bufferViews.length).toBe(originalBufferViewsLength - 1);
-                expect(buffer.byteLength).toBeLessThan(originalByteLength);
+                expect(gltf.bufferViews.length).toBe(originalBufferViewsLength);
+                expect(buffer.byteLength).toBeLessThanOrEqual(originalByteLength);
             }), done).toResolve();
     });
 
@@ -65,31 +73,43 @@ describe('writeResources', function() {
         var options = {
             separateBuffers: true,
             separateTextures: true,
+            separateShaders: true,
             separateResources: separateResources
         };
         gltf.buffers[0].name = 'my-buffer';
         gltf.images[0].name = 'my-image';
+        gltf.extensions.KHR_techniques_webgl.shaders[0].name = 'my-shader';
         expect(writeResources(gltf, options)
             .then(function() {
                 expect(gltf.buffers[0].uri).toBe('my-buffer.bin');
                 expect(gltf.images[0].uri).toBe('my-image.png');
+                expect(gltf.extensions.KHR_techniques_webgl.shaders[0].uri).toBe('my-shader.glsl');
             }), done).toResolve();
     });
 
-    it('writes resources as files with gltf name', function(done) {
+    it('writes resources as files with gltf name when resources aren\'t named', function(done) {
         var separateResources = {};
         var options = {
             name: 'my-gltf',
             separateBuffers: true,
             separateTextures: true,
+            separateShaders: true,
             separateResources: separateResources
         };
+
+        delete gltf.buffers[0].name;
+        delete gltf.images[0].name;
+        delete gltf.extensions.KHR_techniques_webgl.programs[0].name;
+        delete gltf.extensions.KHR_techniques_webgl.shaders[0].name;
+
         expect(writeResources(gltf, options)
             .then(function() {
                 expect(gltf.buffers[0].uri).toBe('my-gltf.bin');
                 expect(gltf.images[0].uri).toBe('my-gltf0.png');
+                expect(gltf.extensions.KHR_techniques_webgl.shaders[0].uri).toBe('my-gltfFS0.glsl');
             }), done).toResolve();
     });
+
     it('writes resources as data uris', function(done) {
         var options = {
             dataUris: true
@@ -99,12 +119,20 @@ describe('writeResources', function() {
         expect(writeResources(gltf, options)
             .then(function(gltf) {
                 var buffer = gltf.buffers[0];
-                var image = gltf.images[0];
-                expect(image.bufferView).toBeUndefined();
-                expect(Buffer.isBuffer(dataUriToBuffer(image.uri)));
                 expect(Buffer.isBuffer(dataUriToBuffer(buffer.uri)));
-                expect(gltf.bufferViews.length).toBe(originalBufferViewsLength - 1);
-                expect(buffer.byteLength).toBeLessThan(originalByteLength);
+
+                ForEach.image(gltf, function (image) {
+                    expect(image.bufferView).toBeUndefined();
+                    expect(Buffer.isBuffer(dataUriToBuffer(image.uri)));
+                });
+
+                ForEach.shader(gltf, function (shader) {
+                    expect(shader.bufferView).toBeUndefined();
+                    expect(Buffer.isBuffer(dataUriToBuffer(shader.uri)));
+                });
+
+                expect(gltf.bufferViews.length).toBe(originalBufferViewsLength);
+                expect(buffer.byteLength).toBeLessThanOrEqual(originalByteLength);
             }), done).toResolve();
     });
 
@@ -114,14 +142,36 @@ describe('writeResources', function() {
         expect(writeResources(gltf)
             .then(function(gltf) {
                 var buffer = gltf.buffers[0];
-                var image = gltf.images[0];
-                var bufferViewByteLength = gltf.bufferViews[image.bufferView].byteLength;
-                var source = image.extras._pipeline.source;
-                expect(image.bufferView).toBeDefined();
-                expect(bufferViewByteLength).toBe(source.byteLength);
                 expect(Buffer.isBuffer(dataUriToBuffer(buffer.uri)));
-                expect(gltf.bufferViews.length).toBe(originalBufferViewsLength);
-                expect(buffer.byteLength).toBe(originalByteLength);
+
+                var bufferViewCount = 0;
+                var bufferViewByteLength = 0;
+                var bufferView;
+                var sourceByteLength;
+                ForEach.image(gltf, function (image) {
+                    expect(image.bufferView).toBeDefined();
+                    bufferView = gltf.bufferViews[image.bufferView];
+                    expect(bufferView).toBeDefined();
+                    sourceByteLength = image.extras._pipeline.source.byteLength;
+                    expect(sourceByteLength).toEqual(bufferView.byteLength);
+
+                    bufferViewByteLength += bufferView.byteLength;
+                    bufferViewCount++;
+                });
+
+                ForEach.shader(gltf, function (shader) {
+                    expect(shader.bufferView).toBeDefined();
+                    bufferView = gltf.bufferViews[shader.bufferView];
+                    expect(bufferView).toBeDefined();
+                    sourceByteLength = Buffer.byteLength(shader.extras._pipeline.source);
+                    expect(sourceByteLength).toEqual(bufferView.byteLength);
+
+                    bufferViewByteLength += bufferView.byteLength;
+                    bufferViewCount++;
+                });
+
+                expect(gltf.bufferViews.length).toBe(originalBufferViewsLength + bufferViewCount);
+                expect(CesiumMath.equalsEpsilon(buffer.byteLength, originalByteLength + bufferViewByteLength, 8)).toBe(true);
             }), done).toResolve();
     });
 });
