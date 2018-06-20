@@ -12,7 +12,6 @@ var Promise = require('bluebird');
 var yargs = require('yargs');
 
 var defined = Cesium.defined;
-var DeveloperError = Cesium.DeveloperError;
 var argv = yargs.argv;
 
 // Add third-party node module binaries to the system path
