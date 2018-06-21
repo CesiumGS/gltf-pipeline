@@ -38,9 +38,11 @@ describe('processGltf', function() {
         expect(processGltf(gltf, options)
             .then(function(results) {
                 expect(results.gltf).toBeDefined();
-                expect(Object.keys(results.separateResources).length).toBe(2);
-                expect(results.separateResources['image0.png']).toBeDefined();
-                expect(results.separateResources['buffer.bin']).toBeDefined();
+                expect(Object.keys(results.separateResources).length).toBe(4);
+                expect(results.separateResources['Image0001.png']).toBeDefined();
+                expect(results.separateResources['CesiumTexturedBoxTest.bin']).toBeDefined();
+                expect(results.separateResources['CesiumTexturedBoxTest0FS.glsl']).toBeDefined();
+                expect(results.separateResources['CesiumTexturedBoxTest0VS.glsl']).toBeDefined();
             }), done).toResolve();
     });
 
@@ -53,7 +55,7 @@ describe('processGltf', function() {
             .then(function(results) {
                 expect(results.gltf).toBeDefined();
                 expect(Object.keys(results.separateResources).length).toBe(1);
-                expect(results.separateResources['image0.png']).toBeDefined();
+                expect(results.separateResources['Image0001.png']).toBeDefined();
                 expect(results.gltf.buffers[0].uri.indexOf('data') >= 0).toBe(true);
             }), done).toResolve();
     });
@@ -64,11 +66,19 @@ describe('processGltf', function() {
             separate: true,
             name: 'my-model'
         };
+
+        delete gltf.buffers[0].name;
+        delete gltf.images[0].name;
+        delete gltf.extensions.KHR_techniques_webgl.programs[0].name;
+        delete gltf.extensions.KHR_techniques_webgl.shaders[0].name;
+
         expect(processGltf(gltf, options)
             .then(function(results) {
                 expect(results.gltf).toBeDefined();
                 expect(results.separateResources['my-model0.png']).toBeDefined();
                 expect(results.separateResources['my-model.bin']).toBeDefined();
+                expect(results.separateResources['my-modelFS0.glsl']).toBeDefined();
+                expect(results.separateResources['my-modelFS0.glsl']).toBeDefined();
             }), done).toResolve();
     });
 
