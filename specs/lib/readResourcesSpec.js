@@ -44,7 +44,7 @@ function readsResources(gltfPath, binary, separate, done) {
     };
     expect(readResources(gltf, options)
         .then(function(gltf) {
-            ForEach.shaderLegacy(gltf, function(shader) {
+            ForEach.shader(gltf, function(shader) {
                 var shaderText = shader.extras._pipeline.source;
                 expect(typeof shaderText === 'string').toBe(true);
                 expect(shaderText.length).toBeGreaterThan(0);
@@ -53,7 +53,7 @@ function readsResources(gltfPath, binary, separate, done) {
                     checkPaths(shader, resourceDirectory);
                 }
             });
-            ForEach.imageLegacy(gltf, function(image) {
+            ForEach.image(gltf, function(image) {
                 var imageSource = image.extras._pipeline.source;
                 expect(Buffer.isBuffer(imageSource)).toBe(true);
                 expect(image.uri).toBeUndefined();
@@ -61,7 +61,7 @@ function readsResources(gltfPath, binary, separate, done) {
                     checkPaths(image, resourceDirectory);
                 }
             });
-            ForEach.bufferLegacy(gltf, function(buffer) {
+            ForEach.buffer(gltf, function(buffer) {
                 var bufferSource = buffer.extras._pipeline.source;
                 expect(Buffer.isBuffer(bufferSource)).toBe(true);
                 expect(buffer.uri).toBeUndefined();

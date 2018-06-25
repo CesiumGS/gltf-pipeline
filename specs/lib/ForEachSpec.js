@@ -252,7 +252,7 @@ describe('ForEach', function() {
                 }
             }
         };
-        ForEach.bufferLegacy(gltf, function(buffer, name) {
+        ForEach.buffer(gltf, function(buffer, name) {
             expect(buffer.uri).toBe(name + '.bin');
         });
     });
@@ -325,7 +325,7 @@ describe('ForEach', function() {
                 }
             }
         };
-        ForEach.imageLegacy(gltf, function(image, name) {
+        ForEach.image(gltf, function(image, name) {
             expect(image.uri).toBe(name + '.png');
         });
     });
@@ -418,7 +418,7 @@ describe('ForEach', function() {
         };
 
         var count = 0;
-        ForEach.materialValueLegacy(material, function (value) {
+        ForEach.materialValue(material, function (value, l) {
             expect(value).toBeDefined();
             count++;
         });
@@ -652,7 +652,7 @@ describe('ForEach', function() {
                 }
             }
         };
-        ForEach.shaderLegacy(gltf, function(shader, name) {
+        ForEach.shader(gltf, function(shader, name) {
             expect(shader.uri).toBe(name + '.glsl');
         });
     });
@@ -747,7 +747,7 @@ describe('ForEach', function() {
         };
 
         var count = 0;
-        ForEach.programLegacy(gltf, function (program) {
+        ForEach.program(gltf, function (program) {
             expect(program.fragmentShader).toBeDefined();
             expect(program.vertexShader).toBeDefined();
             count++;
@@ -811,7 +811,7 @@ describe('ForEach', function() {
         };
 
         var count = 0;
-        ForEach.techniqueLegacy(gltf, function (technique) {
+        ForEach.technique(gltf, function (technique) {
             expect(technique.program).toBeDefined();
             count++;
         });
@@ -860,7 +860,7 @@ describe('ForEach', function() {
         };
 
         var count = 0;
-        ForEach.techniqueAttributeLegacy(technique, function (parameterName, attributeName) {
+        ForEach.techniqueAttribute(technique, function (parameterName, attributeName) {
             expect(parameterName).toBe(attributeName.substring(2));
             count++;
         });
@@ -912,7 +912,7 @@ describe('ForEach', function() {
         };
 
         var count = 0;
-        ForEach.techniqueUniformLegacy(technique, function (parameterName, uniformName) {
+        ForEach.techniqueUniform(technique, function (parameterName, uniformName) {
             expect(parameterName).toBe(uniformName.substring(2));
             count++;
         });
@@ -942,7 +942,7 @@ describe('ForEach', function() {
         };
 
         var count = 0;
-        ForEach.techniqueParameterLegacy(technique, function (parameter, parameterName) {
+        ForEach.techniqueParameter(technique, function (parameter, parameterName) {
             expect(parameter.type).toBeDefined();
             expect(parameterName).toBeDefined();
             count++;
