@@ -418,7 +418,7 @@ describe('ForEach', function() {
         };
 
         var count = 0;
-        ForEach.materialValue(material, function (value, l) {
+        ForEach.materialValue(material, function (value) {
             expect(value).toBeDefined();
             count++;
         });
