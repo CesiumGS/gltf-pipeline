@@ -8,7 +8,7 @@ var writeResources = require('../../lib/writeResources');
 var Cesium = require('cesium');
 var CesiumMath = Cesium.Math;
 
-var gltfPath = 'specs/data/2.0/box-textured-embedded/box-textured-embedded.gltf';
+var gltfPath = 'specs/data/2.0/box-techniques-embedded/box-techniques-embedded.gltf';
 var gltf;
 
 describe('writeResources', function() {
@@ -63,7 +63,7 @@ describe('writeResources', function() {
                 expect(Object.keys(separateResources).length).toBe(4);
                 expect(Buffer.isBuffer(separateResources['buffer.bin']));
                 expect(Buffer.isBuffer(separateResources['image0.png']));
-                expect(gltf.bufferViews.length).toBe(originalBufferViewsLength);
+                expect(gltf.bufferViews.length).toBeLessThan(originalBufferViewsLength);
                 expect(buffer.byteLength).toBeLessThanOrEqual(originalByteLength);
             }), done).toResolve();
     });
@@ -131,7 +131,7 @@ describe('writeResources', function() {
                     expect(Buffer.isBuffer(dataUriToBuffer(shader.uri)));
                 });
 
-                expect(gltf.bufferViews.length).toBe(originalBufferViewsLength);
+                expect(gltf.bufferViews.length).toBeLessThan(originalBufferViewsLength);
                 expect(buffer.byteLength).toBeLessThanOrEqual(originalByteLength);
             }), done).toResolve();
     });
@@ -144,7 +144,6 @@ describe('writeResources', function() {
                 var buffer = gltf.buffers[0];
                 expect(Buffer.isBuffer(dataUriToBuffer(buffer.uri)));
 
-                var bufferViewCount = 0;
                 var bufferViewByteLength = 0;
                 var bufferView;
                 var sourceByteLength;
@@ -156,7 +155,6 @@ describe('writeResources', function() {
                     expect(sourceByteLength).toEqual(bufferView.byteLength);
 
                     bufferViewByteLength += bufferView.byteLength;
-                    bufferViewCount++;
                 });
 
                 ForEach.shader(gltf, function (shader) {
@@ -167,10 +165,9 @@ describe('writeResources', function() {
                     expect(sourceByteLength).toEqual(bufferView.byteLength);
 
                     bufferViewByteLength += bufferView.byteLength;
-                    bufferViewCount++;
                 });
 
-                expect(gltf.bufferViews.length).toBe(originalBufferViewsLength + bufferViewCount);
+                expect(gltf.bufferViews.length).toBe(originalBufferViewsLength);
                 expect(CesiumMath.equalsEpsilon(buffer.byteLength, originalByteLength + bufferViewByteLength, 8)).toBe(true);
             }), done).toResolve();
     });
