@@ -7,8 +7,8 @@ var processGltf = require('../../lib/processGltf');
 
 var RuntimeError = Cesium.RuntimeError;
 
-var gltfPath = 'specs/data/2.0/box-textured-embedded/box-textured-embedded.gltf';
-var gltfSeparatePath = 'specs/data/2.0/box-textured-separate/box-textured-separate.gltf';
+var gltfPath = 'specs/data/2.0/box-techniques-embedded/box-techniques-embedded.gltf';
+var gltfSeparatePath = 'specs/data/2.0/box-techniques-separate/box-techniques-separate.gltf';
 
 describe('processGltf', function() {
     it('processes gltf with default options', function(done) {
