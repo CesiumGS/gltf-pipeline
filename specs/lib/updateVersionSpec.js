@@ -345,7 +345,8 @@ describe('updateVersion', function() {
                     states: {
                         enable: [
                             WebGLConstants.SCISSOR_TEST,
-                            WebGLConstants.BLEND
+                            WebGLConstants.BLEND,
+                            WebGLConstants.CULL_FACE
                         ],
                         functions: {
                             blendColor: [-1.0, 0.0, 0.0, 2.0],
@@ -594,6 +595,10 @@ describe('updateVersion', function() {
                 var material = gltf.materials[0];
                 expect(material.extensions.KHR_techniques_webgl.values.u_lightAttenuation).toEqual(2);
 
+                // Expect material paramters to be updated
+                expect(material.doubleSided).toBeUndefined();
+                expect(material.alphaMode).toBe('BLEND');
+
                 // Expect technique blending to be moved to material EXT_blend extension
                 var materialBlending = material.extensions.EXT_blend;
                 expect(materialBlending).toBeDefined();
@@ -601,12 +606,7 @@ describe('updateVersion', function() {
                     WebGLConstants.FUNC_SUBTRACT,
                     WebGLConstants.FUNC_SUBTRACT
                 ]);
-                expect(materialBlending.blendFactors).toEqual([
-                    WebGLConstants.ONE,
-                    WebGLConstants.ZERO,
-                    WebGLConstants.ONE,
-                    WebGLConstants.ZERO
-                ]);
+                expect(materialBlending.blendFactors).toBeUndefined();
 
                 // Expect techniques to be moved to asset KHR_techniques_webgl extension
                 var technique = gltf.extensions.KHR_techniques_webgl.techniques[0];
