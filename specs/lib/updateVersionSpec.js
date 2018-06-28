@@ -606,7 +606,12 @@ describe('updateVersion', function() {
                     WebGLConstants.FUNC_SUBTRACT,
                     WebGLConstants.FUNC_SUBTRACT
                 ]);
-                expect(materialBlending.blendFactors).toBeUndefined();
+                expect(materialBlending.blendFactors).toEqual([
+                    WebGLConstants.ONE,
+                    WebGLConstants.ZERO,
+                    WebGLConstants.ONE,
+                    WebGLConstants.ZERO
+                ]);
 
                 // Expect techniques to be moved to asset KHR_techniques_webgl extension
                 var technique = gltf.extensions.KHR_techniques_webgl.techniques[0];
