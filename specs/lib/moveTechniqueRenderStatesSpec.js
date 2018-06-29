@@ -44,9 +44,10 @@ var gltf = {
     ]
 };
 
-describe('updateMaterialProperties', function() {
+describe('moveTechniqueRenderStates', function() {
     it('sets material.doubleSided property if CULL_FACE is not enabled', function () {
-        var gltfWithUpdatedMaterials = moveTechniqueRenderStates(gltf);
+        var baseGltf = JSON.parse(JSON.stringify(gltf));
+        var gltfWithUpdatedMaterials = moveTechniqueRenderStates(baseGltf);
         var material = gltfWithUpdatedMaterials.materials[0];
         expect(material.doubleSided).toBeUndefined();
 
@@ -200,13 +201,10 @@ describe('updateMaterialProperties', function() {
 
     it('does not set alphaMode or add EXT_blend if no blending is found in render states', function () {
         var gltfWithoutBlending = JSON.parse(JSON.stringify(gltf));
-        delete gltfWithoutBlending.techniques.technique0.states;
-        gltfWithoutBlending.techniques.technique0.states = {
-            enable: [
-                WebGLConstants.DEPTH_TEST,
-                WebGLConstants.CULL_FACE
-            ]
-        };
+        gltfWithoutBlending.techniques.technique0.states.enable = [
+            WebGLConstants.DEPTH_TEST,
+            WebGLConstants.CULL_FACE
+        ];
 
         var updatedGltf = moveTechniqueRenderStates(gltfWithoutBlending);
         expect(updatedGltf.extensionsUsed).toBeUndefined();
