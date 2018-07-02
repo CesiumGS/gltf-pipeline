@@ -626,8 +626,9 @@ describe('updateVersion', function() {
                 var bufferView = gltf.bufferViews[0];
                 expect(bufferView.byteLength).toEqual(source.length);
 
-                // Min and max are added to all accessors
-                ForEach.accessor(gltf, function(accessor) {
+                // Min and max are added to all POSITION accessors
+                ForEach.accessorWithSemantic(gltf, 'POSITION', function(accessorId) {
+                    var accessor = gltf.accessors[accessorId];
                     expect(accessor.min.length).toEqual(numberOfComponentsForType(accessor.type));
                     expect(accessor.max.length).toEqual(numberOfComponentsForType(accessor.type));
                 });
