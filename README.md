@@ -13,7 +13,7 @@ Content pipeline tools for optimizing [glTF](https://www.khronos.org/gltf) asset
 Supports common operations including:
 * Converting glTF to glb (and reverse)
 * Saving buffers/textures as embedded or separate files
-* Converting glTF 1.0 models to glTF 2.0 (using the [KHR_techniques_webgl](https://github.com/KhronosGroup/glTF/tree/master/extensions/2.0/Khronos/KHR_techniques_webgl) extension)
+* Converting glTF 1.0 models to glTF 2.0 (using the [KHR_techniques_webgl](https://github.com/KhronosGroup/glTF/tree/master/extensions/2.0/Khronos/KHR_techniques_webgl) and [EXT_blend](https://github.com/KhronosGroup/glTF/tree/master/extensions/2.0/Khronos/EXT_blend) extensions)
 
 `gltf-pipeline` can be used as a command-line tool or Node.js module.
 
@@ -131,6 +131,16 @@ To run ESLint automatically when a file is saved, run the following and leave it
 ```
 npm run eslint-watch
 ```
+
+### Building for Cesium integration
+
+Some functionality of gltf-pipeline is used by Cesium as a third party library. The necessary files can be generated using:
+
+```
+npm run build-cesium
+```
+
+This will output a portion of the gltf-pipeline code into the `dist/cesium` folder, reformatted into AMD style for use with RequireJS and Cesium in the browser.
 
 ### Running Test Coverage
 
