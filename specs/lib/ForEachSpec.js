@@ -126,33 +126,56 @@ describe('ForEach', function() {
         ForEach.accessor(gltfAccessors, function(accessor, index) {
             expect(accessor.bufferView).toBe(index);
         });
+
+        var returnValue = ForEach.accessor(gltfAccessors, function(accessor, index) {
+            if (index === 1) {
+                return accessor;
+            }
+        });
+
+        expect(returnValue).toBe(gltfAccessors.accessors[1]);
     });
 
     it('loops over accessor with semantic', function() {
         var positionAccessorLength = 0;
-        ForEach.accessorWithSemantic(gltfAccessors, 'POSITION', function(accessorId) {
+        var returnValue = ForEach.accessorWithSemantic(gltfAccessors, 'POSITION', function(accessorId) {
             expect(gltfAccessors.accessors[accessorId].bufferView).toBe(accessorId);
             positionAccessorLength++;
+
+            if (positionAccessorLength === 5) {
+                return accessorId;
+            }
         });
         expect(positionAccessorLength).toBe(5);
+        expect(returnValue).toBe(10);
     });
 
     it('loops over accessors containing vertex data', function() {
         var vertexAccessorsLength = 0;
-        ForEach.accessorContainingVertexAttributeData(gltfAccessors, function(accessorId) {
+        var returnValue = ForEach.accessorContainingVertexAttributeData(gltfAccessors, function(accessorId) {
             expect(gltfAccessors.accessors[accessorId].bufferView).toBe(accessorId);
             vertexAccessorsLength++;
+
+            if (vertexAccessorsLength === 10) {
+                return accessorId;
+            }
         });
         expect(vertexAccessorsLength).toBe(10);
+        expect(returnValue).toBe(11);
     });
 
     it('loops over accessors containing index data', function() {
         var indicesAccessorsLength = 0;
-        ForEach.accessorContainingIndexData(gltfAccessors, function(accessorId) {
+        var returnValue = ForEach.accessorContainingIndexData(gltfAccessors, function(accessorId) {
             expect(gltfAccessors.accessors[accessorId].bufferView).toBe(accessorId);
             indicesAccessorsLength++;
+
+            if (indicesAccessorsLength === 2) {
+                return accessorId;
+            }
         });
         expect(indicesAccessorsLength).toBe(2);
+        expect(returnValue).toBe(1);
     });
 
     var gltfAnimations = {
@@ -206,21 +229,39 @@ describe('ForEach', function() {
     };
 
     it('loops over animations', function() {
-        ForEach.animation(gltfAnimations, function(animation, index) {
+        var returnValue = ForEach.animation(gltfAnimations, function(animation, index) {
             expect(animation.channels[0].target.node).toBe(index);
+
+            if (index === 1) {
+                return animation;
+            }
         });
+
+        expect(returnValue).toBe(gltfAnimations.animations[1]);
     });
 
     it('loops over animation channel', function() {
-        ForEach.animationChannel(gltfAnimations.animations[0], function(channel, index) {
+        var returnValue = ForEach.animationChannel(gltfAnimations.animations[0], function(channel, index) {
             expect(channel.sampler).toBe(index);
+
+            if (index === 1) {
+                return channel;
+            }
         });
+
+        expect(returnValue).toBe(gltfAnimations.animations[0].channels[1]);
     });
 
     it('loops over animation samplers', function() {
-        ForEach.animationSampler(gltfAnimations.animations[0], function(sampler, index) {
+        var returnValue = ForEach.animationSampler(gltfAnimations.animations[0], function(sampler, index) {
             expect(sampler.input).toBe(index);
+
+            if (index === 1) {
+                return sampler;
+            }
         });
+
+        expect(returnValue).toBe(gltfAnimations.animations[0].samplers[1]);
     });
 
     it('loops over buffers', function() {
@@ -236,9 +277,13 @@ describe('ForEach', function() {
                 }
             ]
         };
-        ForEach.buffer(gltf, function(buffer, index) {
+        var returnValue = ForEach.buffer(gltf, function(buffer, index) {
             expect(buffer.uri).toBe(index + '.bin');
+            if (index === 1) {
+                return buffer;
+            }
         });
+        expect(returnValue).toBe(gltf.buffers[1]);
     });
 
     it('loops over buffers (gltf 1.0)', function() {
@@ -252,9 +297,13 @@ describe('ForEach', function() {
                 }
             }
         };
-        ForEach.buffer(gltf, function(buffer, name) {
+        var returnValue = ForEach.buffer(gltf, function(buffer, name) {
             expect(buffer.uri).toBe(name + '.bin');
+            if (name === '1.bin') {
+                return buffer;
+            }
         });
+        expect(returnValue).toBe(gltf.buffers[1]);
     });
 
     it('loops over buffer views', function() {
@@ -270,9 +319,13 @@ describe('ForEach', function() {
                 }
             ]
         };
-        ForEach.bufferView(gltf, function(bufferView, index) {
+        var returnValue = ForEach.bufferView(gltf, function(bufferView, index) {
             expect(bufferView.buffer).toBe(index);
+            if (index === 1) {
+                return bufferView;
+            }
         });
+        expect(returnValue).toBe(gltf.bufferViews[1]);
     });
 
     it('loops over cameras', function() {
@@ -292,10 +345,14 @@ describe('ForEach', function() {
                 }
             ]
         };
-        ForEach.camera(gltf, function(camera, index) {
+        var returnValue = ForEach.camera(gltf, function(camera, index) {
             expect(camera.perspective.yfov).toBe(index);
             expect(camera.perspective.znear).toBe(index);
+            if (index === 1) {
+                return camera;
+            }
         });
+        expect(returnValue).toBe(gltf.cameras[1]);
     });
 
     it('loops over images', function() {
@@ -309,9 +366,13 @@ describe('ForEach', function() {
                 }
             ]
         };
-        ForEach.image(gltf, function(image, index) {
+        var returnValue = ForEach.image(gltf, function(image, index) {
             expect(image.bufferView).toBe(index);
+            if (index === 1) {
+                return image;
+            }
         });
+        expect(returnValue).toBe(gltf.images[1]);
     });
 
     it('loops over images (gltf 1.0)', function() {
@@ -325,9 +386,13 @@ describe('ForEach', function() {
                 }
             }
         };
-        ForEach.image(gltf, function(image, name) {
+        var returnValue = ForEach.image(gltf, function(image, name) {
             expect(image.uri).toBe(name + '.png');
+            if (name === 'image1') {
+                return image;
+            }
         });
+        expect(returnValue).toBe(gltf.images['image1']);
     });
 
     it('loops over compressed images', function() {
@@ -347,10 +412,13 @@ describe('ForEach', function() {
                 }
             ]
         };
-
-        ForEach.compressedImage(gltf.images[0], function(compressedImage, type) {
+        var returnValue = ForEach.compressedImage(gltf.images[0], function(compressedImage, type) {
             expect(compressedImage.uri).toBe(type + '.ktx');
+            if (type === 'etc1') {
+                return compressedImage;
+            }
         });
+        expect(returnValue).toBe(gltf.images[0].extras.compressedImage3DTiles['etc1']);
     });
 
     it('loops over materials', function() {
@@ -364,9 +432,13 @@ describe('ForEach', function() {
                 }
             ]
         };
-        ForEach.material(gltf, function(material, index) {
+        var returnValue = ForEach.material(gltf, function(material, index) {
             expect(material.emissiveTexture).toBe(index);
+            if (index === 1) {
+                return material;
+            }
         });
+        expect(returnValue).toBe(gltf.materials[1]);
     });
 
     it('loops over material values', function () {
@@ -392,12 +464,16 @@ describe('ForEach', function() {
         };
 
         var count = 0;
-        ForEach.materialValue(material, function (value, uniformName) {
+        var returnValue = ForEach.materialValue(material, function (value, uniformName) {
             expect(value).toBeDefined();
             expect(uniformName.indexOf('u_')).toBe(0);
             count++;
+            if (uniformName === 'u_specular') {
+                return value;
+            }
         });
         expect(count).toBe(3);
+        expect(returnValue).toBe(material.extensions.KHR_techniques_webgl.values['u_specular']);
     });
 
     it('loops over legacy material values', function () {
@@ -418,11 +494,15 @@ describe('ForEach', function() {
         };
 
         var count = 0;
-        ForEach.materialValue(material, function (value) {
+        var returnValue = ForEach.materialValue(material, function (value, materialId) {
             expect(value).toBeDefined();
             count++;
+            if (materialId === 'specular') {
+                return value;
+            }
         });
         expect(count).toBe(3);
+        expect(returnValue).toBe(material.values['specular']);
     });
 
     it('loops over meshes', function() {
@@ -451,9 +531,13 @@ describe('ForEach', function() {
             ]
         };
 
-        ForEach.mesh(gltf, function(mesh, index) {
+        var returnValue = ForEach.mesh(gltf, function(mesh, index) {
             expect(mesh.primitives[0].attributes.POSITION).toBe(index);
+            if (index === 1) {
+                return mesh;
+            }
         });
+        expect(returnValue).toBe(gltf.meshes[1]);
     });
 
     var gltfPrimitives = {
@@ -479,16 +563,24 @@ describe('ForEach', function() {
 
     it('loops over primitives', function() {
         var mesh = gltfPrimitives.meshes[0];
-        ForEach.meshPrimitive(mesh, function(primitive, index) {
+        var returnValue = ForEach.meshPrimitive(mesh, function(primitive, index) {
             expect(primitive.attributes.POSITION).toBe(index);
+            if (index === 1) {
+                return primitive;
+            }
         });
+        expect(returnValue).toBe(gltfPrimitives.meshes[0].primitives[1]);
     });
 
     it('loops over attributes', function() {
         var primitive = gltfPrimitives.meshes[0].primitives[0];
-        ForEach.meshPrimitiveAttribute(primitive, function(accessorId, semantic) {
+        var returnValue = ForEach.meshPrimitiveAttribute(primitive, function(accessorId, semantic) {
             expect(primitive.attributes[semantic]).toBe(accessorId);
+            if (semantic === 'NORMAL') {
+                return accessorId;
+            }
         });
+        expect(returnValue).toBe(gltfPrimitives.meshes[0].primitives[0].attributes['NORMAL']);
     });
 
     var gltfTargets = {
@@ -518,16 +610,24 @@ describe('ForEach', function() {
 
     it('loops over targets', function() {
         var primitive = gltfTargets.meshes[0].primitives[0];
-        ForEach.meshPrimitiveTarget(primitive, function(target, index) {
+        var returnValue = ForEach.meshPrimitiveTarget(primitive, function(target, index) {
             expect(target.POSITION).toBe(index);
+            if (index === 1) {
+                return target;
+            }
         });
+        expect(returnValue).toBe(gltfTargets.meshes[0].primitives[0].targets[1]);
     });
 
     it('loops over target attributes', function() {
         var target = gltfTargets.meshes[0].primitives[0].targets[0];
-        ForEach.meshPrimitiveTargetAttribute(target, function(accessorId, semantic) {
+        var returnValue = ForEach.meshPrimitiveTargetAttribute(target, function(accessorId, semantic) {
             expect(target[semantic]).toBe(accessorId);
+            if (semantic === 'NORMAL') {
+                return accessorId;
+            }
         });
+        expect(returnValue).toBe(gltfTargets.meshes[0].primitives[0].targets[0]['NORMAL']);
     });
 
     var gltfNodes = {
@@ -565,23 +665,33 @@ describe('ForEach', function() {
     it('loops over nodes', function() {
         var nodesLength = 0;
 
-        ForEach.node(gltfNodes, function(node, index) {
+        var returnValue = ForEach.node(gltfNodes, function(node, index) {
             expect(node.matrix[12]).toBe(index);
             nodesLength++;
+
+            if (nodesLength === 6) {
+                return node;
+            }
         });
 
         expect(nodesLength).toBe(6);
+        expect(returnValue).toBe(gltfNodes.nodes[5]);
     });
 
     it('loops over nodes in tree', function() {
         var nodesInTree = 0;
 
-        ForEach.nodeInTree(gltfNodes, gltfNodes.scenes[0].nodes, function(node, index) {
+        var returnValue = ForEach.nodeInTree(gltfNodes, gltfNodes.scenes[0].nodes, function(node, index) {
             expect(node.matrix[12]).toBe(index);
             nodesInTree++;
+
+            if (nodesInTree === 5) {
+                return node;
+            }
         });
 
         expect(nodesInTree).toBe(5);
+        expect(returnValue).toBe(gltfNodes.nodes[2]);
     });
 
     it('loops over nodes in scene', function() {
@@ -592,13 +702,18 @@ describe('ForEach', function() {
             expect(node.matrix[12]).toBe(index);
             nodesInScene0++;
         });
-        ForEach.nodeInScene(gltfNodes, gltfNodes.scenes[1], function(node, index) {
+        var returnValue = ForEach.nodeInScene(gltfNodes, gltfNodes.scenes[1], function(node, index) {
             expect(node.matrix[12]).toBe(index);
             nodesInScene1++;
+
+            if (nodesInScene1 === 1) {
+                return node;
+            }
         });
 
         expect(nodesInScene0).toBe(5);
         expect(nodesInScene1).toBe(1);
+        expect(returnValue).toBe(gltfNodes.nodes[3]);
     });
 
     it('loops over samplers', function() {
@@ -616,11 +731,17 @@ describe('ForEach', function() {
             ]
         };
         var count = 0;
-        ForEach.sampler(gltf, function(sampler, index) {
+        var returnValue = ForEach.sampler(gltf, function(sampler, index) {
             expect(sampler.magFilter).toBe(filters[index]);
             expect(sampler.minFilter).toBe(filters[index]);
             expect(index).toBe(count++);
+
+            if (index === 1) {
+                return sampler;
+            }
         });
+
+        expect(returnValue).toBe(gltf.samplers[1]);
     });
 
     it('loops over scenes', function() {
@@ -634,9 +755,14 @@ describe('ForEach', function() {
                 }
             ]
         };
-        ForEach.scene(gltf, function(scene, index) {
+        var returnValue = ForEach.scene(gltf, function(scene, index) {
             expect(scene.nodes[0]).toBe(index);
+
+            if (index === 1) {
+                return scene;
+            }
         });
+        expect(returnValue).toBe(gltf.scenes[1]);
     });
 
     it('loops over shaders (gltf 1.0)', function() {
@@ -652,9 +778,15 @@ describe('ForEach', function() {
                 }
             }
         };
-        ForEach.shader(gltf, function(shader, name) {
+        var returnValue = ForEach.shader(gltf, function(shader, name) {
             expect(shader.uri).toBe(name + '.glsl');
+
+            if (name === 'frag') {
+                return shader;
+            }
         });
+
+        expect(returnValue).toBe(gltf.shaders['frag']);
     });
 
     it('loops over KHR_techniques_webgl shaders (gltf 2.0)', function () {
@@ -679,11 +811,16 @@ describe('ForEach', function() {
         };
 
         var count = 0;
-        ForEach.shader(gltf, function (shader) {
+        var returnValue = ForEach.shader(gltf, function (shader) {
             expect(shader.uri).toBe(shader.name + '.glsl');
             count++;
+
+            if (count === 2) {
+                return shader;
+            }
         });
         expect(count).toBe(2);
+        expect(returnValue).toBe(gltf.extensions.KHR_techniques_webgl.shaders[1]);
 
         gltf = {};
 
@@ -716,12 +853,17 @@ describe('ForEach', function() {
         };
 
         var count = 0;
-        ForEach.program(gltf, function (program) {
+        var returnValue = ForEach.program(gltf, function (program) {
             expect(program.fragmentShader).toBeDefined();
             expect(program.vertexShader).toBeDefined();
             count++;
+
+            if (count === 2) {
+                return program;
+            }
         });
         expect(count).toBe(2);
+        expect(returnValue).toBe(gltf.extensions.KHR_techniques_webgl.programs[1]);
 
         gltf = {};
 
@@ -747,12 +889,17 @@ describe('ForEach', function() {
         };
 
         var count = 0;
-        ForEach.program(gltf, function (program) {
+        var returnValue = ForEach.program(gltf, function (program) {
             expect(program.fragmentShader).toBeDefined();
             expect(program.vertexShader).toBeDefined();
             count++;
+
+            if (count === 2) {
+                return program;
+            }
         });
         expect(count).toBe(2);
+        expect(returnValue).toBe(gltf.programs['program_1']);
     });
 
     it('loops over KHR_techniques_webgl techniques (gltf 2.0)', function () {
@@ -779,11 +926,16 @@ describe('ForEach', function() {
         };
 
         var count = 0;
-        ForEach.technique(gltf, function (technique, index) {
+        var returnValue = ForEach.technique(gltf, function (technique, index) {
             expect(technique.name).toBe('technique' + index);
             count++;
+
+            if (count === 2) {
+                return technique;
+            }
         });
         expect(count).toBe(2);
+        expect(returnValue).toBe(gltf.extensions.KHR_techniques_webgl.techniques[1]);
 
         gltf = {};
 
@@ -811,11 +963,16 @@ describe('ForEach', function() {
         };
 
         var count = 0;
-        ForEach.technique(gltf, function (technique) {
+        var returnValue = ForEach.technique(gltf, function (technique) {
             expect(technique.program).toBeDefined();
             count++;
+
+            if (count === 2) {
+                return technique;
+            }
         });
         expect(count).toBe(2);
+        expect(returnValue).toBe(gltf.techniques['technique1']);
     });
 
     it('loops over technique attributes', function () {
@@ -837,13 +994,18 @@ describe('ForEach', function() {
         };
 
         var count = 0;
-        ForEach.techniqueAttribute(technique, function (attribute, attributeName) {
+        var returnValue = ForEach.techniqueAttribute(technique, function (attribute, attributeName) {
             expect(attribute.semantic).toBeDefined();
             expect(attributeName.indexOf('a_')).toBe(0);
             count++;
+
+            if (count === 3) {
+                return attribute;
+            }
         });
 
         expect(count).toBe(3);
+        expect(returnValue).toBe(technique.attributes['a_texcoord0']);
     });
 
     it('loops over legacy technique attributes', function () {
@@ -860,12 +1022,17 @@ describe('ForEach', function() {
         };
 
         var count = 0;
-        ForEach.techniqueAttribute(technique, function (parameterName, attributeName) {
+        var returnValue = ForEach.techniqueAttribute(technique, function (parameterName, attributeName) {
             expect(parameterName).toBe(attributeName.substring(2));
             count++;
+
+            if (count === 3) {
+                return parameterName;
+            }
         });
 
         expect(count).toBe(3);
+        expect(returnValue).toBe(technique.attributes['a_texcoord0']);
     });
 
     it('loops over technique uniforms', function () {
@@ -889,13 +1056,18 @@ describe('ForEach', function() {
         };
 
         var count = 0;
-        ForEach.techniqueUniform(technique, function (uniform, uniformName) {
+        var returnValue = ForEach.techniqueUniform(technique, function (uniform, uniformName) {
             expect(uniform.type).toBeDefined();
             expect(uniformName.indexOf('u_')).toBe(0);
             count++;
+
+            if (count === 3) {
+                return uniform;
+            }
         });
 
         expect(count).toBe(3);
+        expect(returnValue).toBe(technique.uniforms['u_normalMatrix']);
     });
 
     it('loops over legacy technique uniforms', function () {
@@ -912,12 +1084,17 @@ describe('ForEach', function() {
         };
 
         var count = 0;
-        ForEach.techniqueUniform(technique, function (parameterName, uniformName) {
+        var returnValue = ForEach.techniqueUniform(technique, function (parameterName, uniformName) {
             expect(parameterName).toBe(uniformName.substring(2));
             count++;
+
+            if (count === 3) {
+                return parameterName;
+            }
         });
 
         expect(count).toBe(3);
+        expect(returnValue).toBe(technique.uniforms['u_normalMatrix']);
     });
 
     it('loops over legacy technique parameters', function () {
@@ -942,13 +1119,18 @@ describe('ForEach', function() {
         };
 
         var count = 0;
-        ForEach.techniqueParameter(technique, function (parameter, parameterName) {
+        var returnValue = ForEach.techniqueParameter(technique, function (parameter, parameterName) {
             expect(parameter.type).toBeDefined();
             expect(parameterName).toBeDefined();
             count++;
+
+            if (count === 3) {
+                return parameter;
+            }
         });
 
         expect(count).toBe(3);
+        expect(returnValue).toBe(technique.parameters['normal']);
     });
 
     it('loops over each skin', function() {
@@ -962,9 +1144,14 @@ describe('ForEach', function() {
                 }
             ]
         };
-        ForEach.skin(gltf, function(skin, index) {
+        var returnValue = ForEach.skin(gltf, function(skin, index) {
             expect(skin.joints[0]).toBe(index);
+
+            if (index === 1) {
+                return skin;
+            }
         });
+        expect(returnValue).toBe(gltf.skins[1]);
     });
 
     it('loops over each texture', function() {
@@ -978,8 +1165,13 @@ describe('ForEach', function() {
                 }
             ]
         };
-        ForEach.texture(gltf, function(texture, index) {
+        var returnValue = ForEach.texture(gltf, function(texture, index) {
             expect(texture.source).toBe(index);
+
+            if (index === 1) {
+                return texture;
+            }
         });
+        expect(returnValue).toBe(gltf.textures[1]);
     });
 });
