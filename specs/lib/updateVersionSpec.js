@@ -322,6 +322,8 @@ describe('updateVersion', function() {
                                 NORMAL: 'accessor_normal',
                                 TEXCOORD: 'accessor_texcoord',
                                 COLOR: 'accessor_color',
+                                JOINT: 'accessor_joint',
+                                WEIGHT: 'accessor_weight',
                                 APPLICATIONSPECIFIC: 'accessor',
                                 _TEMPERATURE: 'accessor_temperature'
                             },
@@ -332,8 +334,9 @@ describe('updateVersion', function() {
             },
             materials: {
                 material: {
+                    technique: 'technique',
                     values: {
-                        shininess: 1.0
+                        lightAttenuation: 2.0
                     }
                 }
             },
@@ -348,7 +351,16 @@ describe('updateVersion', function() {
                         }
                     },
                     attributes: {
-                        a_application: 'application'
+                        a_application: 'application',
+                        a_joints : 'joints',
+                        a_weights : 'weights'
+                    },
+                    uniforms: {
+                        u_lightAttenuation: 'lightAttenuation',
+                        u_texcoord: 'texcoord',
+                        u_color: 'color',
+                        u_application: 'application',
+                        u_jointMatrix: 'jointMatrix'
                     },
                     parameters: {
                         lightAttenuation: {
@@ -360,6 +372,12 @@ describe('updateVersion', function() {
                         color: {
                             semantic: 'COLOR'
                         },
+                        joints: {
+                            semantic: 'JOINT'
+                        },
+                        weights: {
+                            semantic: 'WEIGHT'
+                        },
                         application: {
                             semantic: 'APPLICATIONSPECIFIC',
                             count: 1,
@@ -368,14 +386,9 @@ describe('updateVersion', function() {
                         jointMatrix: {
                             semantic: 'JOINTMATRIX',
                             count: 2
-                        },
-                        notJointMatrix: {
-                            count: 3
-                        },
-                        notJointMatrixWithSemantic: {
-                            count: 4
                         }
-                    }
+                    },
+                    program: 'program_0'
                 }
             },
             accessors: {
@@ -426,6 +439,16 @@ describe('updateVersion', function() {
                     componentType: WebGLConstants.FLOAT,
                     count: 3,
                     type: 'VEC3'
+                },
+                accessor_joint: {
+                    componentType: WebGLConstants.FLOAT,
+                    count: 1,
+                    type: 'SCALAR'
+                },
+                accessor_weight: {
+                    componentType: WebGLConstants.FLOAT,
+                    count: 1,
+                    type: 'SCALAR'
                 },
                 accessor_temperature: {
                     componentType: WebGLConstants.FLOAT,
@@ -481,6 +504,17 @@ describe('updateVersion', function() {
                     children: []
                 }
             },
+            programs: {
+                program_0: {
+                    attributes: [
+                        'a_application',
+                        'a_joints',
+                        'a_weights'
+                    ],
+                    fragmentShader: 'fs',
+                    vertexShader: 'vs'
+                }
+            },
             samplers: [],
             scene: 'defaultScene',
             scenes: {
@@ -488,6 +522,16 @@ describe('updateVersion', function() {
                     nodes: [
                         'rootTransform'
                     ]
+                }
+            },
+            shaders: {
+                fs: {
+                    type: 35632,
+                    uri: 'data:,'
+                },
+                vs: {
+                    type: 35633,
+                    uri: 'data:,'
                 }
             },
             skins: {
@@ -518,13 +562,13 @@ describe('updateVersion', function() {
                     'KHR_materials_common',
                     'WEB3D_quantized_attributes',
                     'UNKOWN_EXTENSION',
-                    'KHR_technique_webgl'
+                    'KHR_techniques_webgl'
                 ]);
                 var extensionsRequired = gltf.extensionsRequired;
                 expect(extensionsRequired).toEqual([
                     'KHR_materials_common',
                     'WEB3D_quantized_attributes',
-                    'KHR_technique_webgl'
+                    'KHR_techniques_webgl'
                 ]);
 
                 // animation.parameters removed
@@ -538,34 +582,37 @@ describe('updateVersion', function() {
                 expect(gltf.samplers).toBeUndefined();
                 expect(getNodeByName(gltf, 'nodeWithoutChildren').children).toBeUndefined();
 
-                // Remove value from attribute but not uniform in material technique
+                // Expect material values to be moved to material KHR_techniques_webgl extension
                 var material = gltf.materials[0];
-                expect(material.values.shininess).toEqual(1);
-                var technique = gltf.techniques[0];
-                expect(technique.parameters.lightAttenuation.value).toEqual(1.0);
-                expect(technique.parameters.application.value).toBeUndefined();
+                expect(material.extensions.KHR_techniques_webgl.values.u_lightAttenuation).toEqual(2);
+
+                // Expect techniques to be moved to asset KHR_techniques_webgl extension
+                var technique = gltf.extensions.KHR_techniques_webgl.techniques[0];
+                expect(technique.uniforms.u_lightAttenuation.value).toEqual(1.0);
+                expect(technique.attributes.a_application.value).toBeUndefined();
 
                 // TEXCOORD and COLOR are now TEXCOORD_0 and COLOR_0
                 var primitive = gltf.meshes[0].primitives[0];
-                expect(technique.parameters.texcoord.semantic).toEqual('TEXCOORD_0');
-                expect(technique.parameters.color.semantic).toEqual('COLOR_0');
+                expect(technique.uniforms.u_texcoord.semantic).toEqual('TEXCOORD_0');
+                expect(technique.uniforms.u_color.semantic).toEqual('COLOR_0');
                 expect(primitive.attributes.TEXCOORD).toBeUndefined();
                 expect(primitive.attributes.TEXCOORD_0).toEqual(6);
                 expect(primitive.attributes.COLOR).toBeUndefined();
                 expect(primitive.attributes.COLOR_0).toEqual(7);
 
+                // JOINT is now JOINTS_0 and WEIGHT is not WEIGHTS_0
+                expect(technique.attributes.a_joints.semantic).toEqual('JOINTS_0');
+                expect(technique.attributes.a_weights.semantic).toEqual('WEIGHTS_0');
+                expect(primitive.attributes.JOINT).toBeUndefined();
+                expect(primitive.attributes.JOINTS_0).toEqual(8);
+                expect(primitive.attributes.WEIGHT).toBeUndefined();
+                expect(primitive.attributes.WEIGHTS_0).toEqual(9);
+
                 // Underscore added to application specific attributes
-                expect(technique.parameters.application.semantic).toEqual('_APPLICATIONSPECIFIC');
+                expect(technique.attributes.a_application.semantic).toEqual('_APPLICATIONSPECIFIC');
                 expect(primitive.attributes.APPLICATIONSPECIFIC).toBeUndefined();
                 expect(primitive.attributes._APPLICATIONSPECIFIC).toEqual(0);
-                expect(primitive.attributes._TEMPERATURE).toEqual(8);
-
-                // TODO : KHR_techniques_webl - these checks will be removed
-                var states = technique.states;
-                expect(states.enable).toEqual([]);
-                expect(states.functions.scissor).toBeUndefined();
-                expect(states.functions.blendColor).toEqual([0.0, 0.0, 0.0, 1.0]);
-                expect(states.functions.depthRange).toEqual([0.0, 0.0]);
+                expect(primitive.attributes._TEMPERATURE).toEqual(10);
 
                 // Clamp camera parameters
                 var camera = gltf.cameras[0];
@@ -579,14 +626,9 @@ describe('updateVersion', function() {
                 var bufferView = gltf.bufferViews[0];
                 expect(bufferView.byteLength).toEqual(source.length);
 
-                // Only JOINTMATRIX or application specific semantics may have a count
-                expect(technique.parameters.application.count).toEqual(1);
-                expect(technique.parameters.jointMatrix.count).toEqual(2);
-                expect(technique.parameters.notJointMatrix.count).toBeUndefined();
-                expect(technique.parameters.notJointMatrixWithSemantic.count).toBeUndefined();
-
-                // Min and max are added to all accessors
-                ForEach.accessor(gltf, function(accessor) {
+                // Min and max are added to all POSITION accessors
+                ForEach.accessorWithSemantic(gltf, 'POSITION', function(accessorId) {
+                    var accessor = gltf.accessors[accessorId];
                     expect(accessor.min.length).toEqual(numberOfComponentsForType(accessor.type));
                     expect(accessor.max.length).toEqual(numberOfComponentsForType(accessor.type));
                 });
