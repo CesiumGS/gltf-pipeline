@@ -7,19 +7,22 @@ var WebGLConstants = Cesium.WebGLConstants;
 
 describe('removePipelineExtras', function() {
     it('removes pipeline extras', function() {
-        // TODO: KHR_techniques_webgl - remove shaders from top level, put inside extras.KHR_techniques_webgl
         var gltf = {
             buffers: [
                 {
                     byteLength: 100
                 }
             ],
-            shaders: [
-                {
-                    type: WebGLConstants.VERTEX_SHADER,
-                    uri: 'data:,'
+            extensions: {
+                KHR_techniques_webgl: {
+                    shaders: [
+                        {
+                            type: WebGLConstants.VERTEX_SHADER,
+                            uri: 'data:,'
+                        }
+                    ]
                 }
-            ],
+            },
             images: [
                 {
                     extras: {
@@ -37,7 +40,7 @@ describe('removePipelineExtras', function() {
         };
         var gltfWithExtrasRemoved = removePipelineExtras(addPipelineExtras(gltf));
         expect(gltfWithExtrasRemoved.buffers[0].extras).toBeUndefined();
-        expect(gltfWithExtrasRemoved.shaders[0].extras).toBeUndefined();
+        expect(gltfWithExtrasRemoved.extensions.KHR_techniques_webgl.shaders[0].extras).toBeUndefined();
         expect(gltfWithExtrasRemoved.images[0].extras._pipeline).toBeUndefined();
         expect(gltfWithExtrasRemoved.images[0].extras.compressedImage3DTiles.s3tc.extras).toBeUndefined();
         expect(gltfWithExtrasRemoved.images[0].extras.compressedImage3DTiles.etc1.extras).toBeUndefined();
