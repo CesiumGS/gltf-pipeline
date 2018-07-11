@@ -13,7 +13,7 @@ Content pipeline tools for optimizing [glTF](https://www.khronos.org/gltf) asset
 Supports common operations including:
 * Converting glTF to glb (and reverse)
 * Saving buffers/textures as embedded or separate files
-* Converting glTF 1.0 models to glTF 2.0 (using the [KHR_techniques_webgl](https://github.com/KhronosGroup/glTF/tree/master/extensions/2.0/Khronos/KHR_techniques_webgl) and [EXT_blend](https://github.com/KhronosGroup/glTF/tree/master/extensions/2.0/Khronos/EXT_blend) extensions)
+* Converting glTF 1.0 models to glTF 2.0 (using the [KHR_techniques_webgl](https://github.com/KhronosGroup/glTF/tree/master/extensions/2.0/Khronos/KHR_techniques_webgl) and [KHR_blend](https://github.com/KhronosGroup/glTF/tree/master/extensions/2.0/Khronos/KHR_blend) extensions)
 
 `gltf-pipeline` can be used as a command-line tool or Node.js module.
 
