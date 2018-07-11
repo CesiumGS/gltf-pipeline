@@ -570,7 +570,7 @@ describe('updateVersion', function() {
                     'KHR_materials_common',
                     'WEB3D_quantized_attributes',
                     'UNKOWN_EXTENSION',
-                    'EXT_blend',
+                    'KHR_blend',
                     'KHR_techniques_webgl'
                 ]);
                 var extensionsRequired = gltf.extensionsRequired;
@@ -599,8 +599,8 @@ describe('updateVersion', function() {
                 expect(material.doubleSided).toBeUndefined();
                 expect(material.alphaMode).toBe('BLEND');
 
-                // Expect technique blending to be moved to material EXT_blend extension
-                var materialBlending = material.extensions.EXT_blend;
+                // Expect technique blending to be moved to material KHR_blend extension
+                var materialBlending = material.extensions.KHR_blend;
                 expect(materialBlending).toBeDefined();
                 expect(materialBlending.blendEquation).toEqual([
                     WebGLConstants.FUNC_SUBTRACT,

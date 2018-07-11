@@ -64,7 +64,7 @@ describe('moveTechniqueRenderStates', function() {
         expect(material.doubleSided).toBe(true);
     });
 
-    it('sets alphaMode and moves technique render state blending functions to material EXT_blend extension', function() {
+    it('sets alphaMode and moves technique render state blending functions to material KHR_blend extension', function() {
         var gltfWithBlendFunctions = JSON.parse(JSON.stringify(gltf));
 
         gltfWithBlendFunctions.techniques.technique0.states = {
@@ -88,13 +88,13 @@ describe('moveTechniqueRenderStates', function() {
         };
 
         var gltfWithBlendExtension = moveTechniqueRenderStates(gltfWithBlendFunctions);
-        expect(gltfWithBlendExtension.extensionsUsed.indexOf('EXT_blend')).toBeGreaterThan(-1);
+        expect(gltfWithBlendExtension.extensionsUsed.indexOf('KHR_blend')).toBeGreaterThan(-1);
         expect(gltfWithBlendExtension.extensionsRequired).toBeUndefined();
 
         var material = gltfWithBlendExtension.materials[0];
         expect(material.alphaMode).toBe('BLEND');
         expect(material.extensions).toBeDefined();
-        var materialBlending = material.extensions.EXT_blend;
+        var materialBlending = material.extensions.KHR_blend;
         expect(materialBlending).toBeDefined();
         expect(materialBlending.blendEquation).toEqual([
             WebGLConstants.FUNC_ADD,
@@ -127,7 +127,7 @@ describe('moveTechniqueRenderStates', function() {
         };
 
         var gltfWithBlendExtension = moveTechniqueRenderStates(gltfWithBlendFunctions);
-        var materialBlending = gltfWithBlendExtension.materials[0].extensions.EXT_blend;
+        var materialBlending = gltfWithBlendExtension.materials[0].extensions.KHR_blend;
         expect(materialBlending).toBeDefined();
         expect(materialBlending.blendEquation).toEqual([
             WebGLConstants.FUNC_ADD,
@@ -155,7 +155,7 @@ describe('moveTechniqueRenderStates', function() {
         };
 
         gltfWithBlendExtension = moveTechniqueRenderStates(gltfWithBlendFunctions);
-        materialBlending = gltfWithBlendExtension.materials[0].extensions.EXT_blend;
+        materialBlending = gltfWithBlendExtension.materials[0].extensions.KHR_blend;
         expect(materialBlending).toBeDefined();
         expect(materialBlending.blendEquation).toEqual([
             WebGLConstants.FUNC_ADD,
@@ -189,7 +189,7 @@ describe('moveTechniqueRenderStates', function() {
 
         var gltfWithBlendExtension = moveTechniqueRenderStates(gltfWithBlendFunctions);
 
-        var materialBlending = gltfWithBlendExtension.materials[0].extensions.EXT_blend;
+        var materialBlending = gltfWithBlendExtension.materials[0].extensions.KHR_blend;
         expect(materialBlending).toBeDefined();
         expect(materialBlending.blendFactors).toEqual([
             WebGLConstants.ONE,
@@ -199,7 +199,7 @@ describe('moveTechniqueRenderStates', function() {
         ]);
     });
 
-    it('does not set alphaMode or add EXT_blend if no blending is found in render states', function () {
+    it('does not set alphaMode or add KHR_blend if no blending is found in render states', function () {
         var gltfWithoutBlending = JSON.parse(JSON.stringify(gltf));
         gltfWithoutBlending.techniques.technique0.states.enable = [
             WebGLConstants.DEPTH_TEST,
