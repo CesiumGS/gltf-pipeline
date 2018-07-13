@@ -15,6 +15,15 @@ describe('moveTechniquesToExtension', function() {
                     ],
                     fragmentShader: 'BoxTextured0FS',
                     vertexShader: 'BoxTextured0VS'
+                },
+                program_1: {
+                    attributes: [
+                        'a_normal',
+                        'a_position',
+                        'a_texcoord0'
+                    ],
+                    fragmentShader: 'BoxTextured1FS',
+                    vertexShader: 'BoxTextured0VS'
                 }
             },
             shaders: {
@@ -25,6 +34,10 @@ describe('moveTechniquesToExtension', function() {
                 BoxTextured0VS: {
                     type: WebGLConstants.VERTEX_SHADER,
                     uri: 'BoxTextured0VS.glsl'
+                },
+                BoxTextured1FS: {
+                    type: WebGLConstants.FRAGMENT_SHADER,
+                    uri: 'BoxTextured1FS.glsl'
                 }
             },
             techniques: {
@@ -84,6 +97,9 @@ describe('moveTechniquesToExtension', function() {
                         u_shininess: 'shininess',
                         u_specular: 'specular'
                     }
+                },
+                technique1 : {
+                    program: 'program_1'
                 }
             },
             materials: [
@@ -108,7 +124,7 @@ describe('moveTechniquesToExtension', function() {
         expect(gltfWithTechniquesWebgl.extensions).toBeDefined();
         var techniques = gltfWithTechniquesWebgl.extensions.KHR_techniques_webgl;
         expect(techniques).toBeDefined();
-        expect(techniques.techniques.length).toBe(1);
+        expect(techniques.techniques.length).toBe(2);
 
         var technique = techniques.techniques[0];
         var attributes = technique.attributes;
@@ -124,11 +140,11 @@ describe('moveTechniquesToExtension', function() {
         expect(technique.parameters).toBeUndefined();
         expect(technique.states).toBeUndefined();
 
-        expect(techniques.programs.length).toBe(1);
+        expect(techniques.programs.length).toBe(2);
         var program = techniques.programs[technique.program];
         expect(program).toBeDefined();
 
-        expect(techniques.shaders.length).toBe(2);
+        expect(techniques.shaders.length).toBe(3);
         expect(techniques.shaders[program.fragmentShader].type).toBe(WebGLConstants.FRAGMENT_SHADER);
         expect(techniques.shaders[program.vertexShader].type).toBe(WebGLConstants.VERTEX_SHADER);
 
@@ -145,5 +161,10 @@ describe('moveTechniquesToExtension', function() {
 
         expect(material.technique).toBeUndefined();
         expect(material.values).toBeUndefined();
+
+        var technique2 = techniques.techniques[1];
+        var program2 = techniques.programs[technique2.program];
+        expect(program2.vertexShader).toBe(program.vertexShader);
+        expect(program2.fragmentShader).not.toBe(program.fragmentShader);
     });
 });
