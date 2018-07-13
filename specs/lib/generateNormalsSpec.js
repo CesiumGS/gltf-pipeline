@@ -60,7 +60,7 @@ describe('generateNormals', function(){
     });
 
     it('generating smooth normals for mesh with more than 1 primitive produces unique normals accessors', function() {
-        readGltf(boxahedronNoNormalsGltfPath)
+        return readGltf(boxahedronNoNormalsGltfPath)
             .then(function(gltf) {
                 gltfNoNormals = gltf;
                 addPipelineExtras(gltfNoNormals);
