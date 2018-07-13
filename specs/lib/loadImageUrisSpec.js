@@ -45,6 +45,25 @@ describe('loadImageUris', function() {
             });
     });
 
+    it('loads a percent-encoded external image', function(done) {
+        var gltf = {
+            "images": {
+                "Image0001": {
+                    "uri": "Cesium%20Logo%20Flat%20Low.png"
+                }
+            }
+        };
+
+        addPipelineExtras(gltf);
+        loadGltfUris(gltf, options)
+            .then(function() {
+                expect(gltf.images.Image0001.extras._pipeline.source).toBeDefined();
+                expect(gltf.images.Image0001.extras._pipeline.source.equals(imageData)).toBe(true);
+                expect(gltf.images.Image0001.extras._pipeline.extension).toEqual('.png');
+                done();
+            });
+    });
+
     it('loads an embedded image', function(done) {
         var gltf = {
             "images": {
