@@ -91,7 +91,8 @@ describe('parseBinaryGltf', function() {
         var gltf = parseBinaryGltf(testData.binary);
 
         expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras._pipeline.source).toBeDefined();
-        expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras._pipeline.source).toEqual(testData.shader.toString());
+        // Remove line endings for platform agnosticism
+        expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras._pipeline.source.replace(/\r?\n|\r/g, '')).toEqual(testData.shader.toString().replace(/\r?\n|\r/g, ''));
     });
 
     it('throws an error', function() {
