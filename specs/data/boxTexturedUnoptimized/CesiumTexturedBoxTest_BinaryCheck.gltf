@@ -86,24 +86,24 @@
     },
     "binary_bufferView0": {
       "buffer": "binary_glTF",
-      "byteLength": 529,
+      "byteLength": 493,
       "byteOffset": 840
     },
     "binary_bufferView1": {
       "buffer": "binary_glTF",
-      "byteLength": 439,
-      "byteOffset": 1369
+      "byteLength": 409,
+      "byteOffset": 1333
     },
     "binary_bufferView2": {
       "buffer": "binary_glTF",
       "byteLength": 11982,
-      "byteOffset": 1808
+      "byteOffset": 1742
     }
   },
   "buffers": {
     "binary_glTF": {
       "type": "arraybuffer",
-      "byteLength": 13790,
+      "byteLength": 13724,
       "uri": "data:,"
     }
   },
