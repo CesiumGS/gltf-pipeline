@@ -343,9 +343,17 @@ describe('updateVersion', function() {
             techniques: {
                 technique: {
                     states: {
-                        enable: [ WebGLConstants.SCISSOR_TEST ],
+                        enable: [
+                            WebGLConstants.SCISSOR_TEST,
+                            WebGLConstants.BLEND,
+                            WebGLConstants.CULL_FACE
+                        ],
                         functions: {
                             blendColor: [-1.0, 0.0, 0.0, 2.0],
+                            blendEquationSeparate: [
+                                WebGLConstants.FUNC_SUBTRACT,
+                                WebGLConstants.FUNC_SUBTRACT
+                            ],
                             depthRange: [1.0, -1.0],
                             scissor: [0.0, 0.0, 0.0, 0.0]
                         }
@@ -562,6 +570,7 @@ describe('updateVersion', function() {
                     'KHR_materials_common',
                     'WEB3D_quantized_attributes',
                     'UNKOWN_EXTENSION',
+                    'KHR_blend',
                     'KHR_techniques_webgl'
                 ]);
                 var extensionsRequired = gltf.extensionsRequired;
@@ -585,6 +594,24 @@ describe('updateVersion', function() {
                 // Expect material values to be moved to material KHR_techniques_webgl extension
                 var material = gltf.materials[0];
                 expect(material.extensions.KHR_techniques_webgl.values.u_lightAttenuation).toEqual(2);
+
+                // Expect material paramters to be updated
+                expect(material.doubleSided).toBeUndefined();
+                expect(material.alphaMode).toBe('BLEND');
+
+                // Expect technique blending to be moved to material KHR_blend extension
+                var materialBlending = material.extensions.KHR_blend;
+                expect(materialBlending).toBeDefined();
+                expect(materialBlending.blendEquation).toEqual([
+                    WebGLConstants.FUNC_SUBTRACT,
+                    WebGLConstants.FUNC_SUBTRACT
+                ]);
+                expect(materialBlending.blendFactors).toEqual([
+                    WebGLConstants.ONE,
+                    WebGLConstants.ZERO,
+                    WebGLConstants.ONE,
+                    WebGLConstants.ZERO
+                ]);
 
                 // Expect techniques to be moved to asset KHR_techniques_webgl extension
                 var technique = gltf.extensions.KHR_techniques_webgl.techniques[0];
