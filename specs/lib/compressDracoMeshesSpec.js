@@ -173,4 +173,24 @@ describe('compressDracoMeshes', function() {
                 expect(dracoBufferMorph).not.toEqual(dracoBufferNoMorph);
             }), done).toResolve();
     });
+
+    it('applies uncompressed fallback', function() {
+        compressDracoMeshes(gltf, {
+            dracoOptions: {
+                uncompressedFallback: true
+            }
+        });
+        compressDracoMeshes(gltfOther, {
+            dracoOptions: {
+                uncompressedFallback: false
+            }
+        });
+
+        expect(gltf.extensionsUsed.indexOf('KHR_draco_mesh_compression') >= 0).toBe(true);
+        expect(gltf.extensionsRequired).toBeUndefined();
+        expect(gltfOther.extensionsUsed.indexOf('KHR_draco_mesh_compression') >= 0).toBe(true);
+        expect(gltfOther.extensionsRequired.indexOf('KHR_draco_mesh_compression') >= 0).toBe(true);
+        expect(gltf.buffers.length).toBe(6); // draco + image + 4 uncompressed attributes
+        expect(gltfOther.buffers.length).toBe(2); // draco + image
+    });
 });
