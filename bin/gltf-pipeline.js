@@ -86,7 +86,7 @@ var argv = yargs
             default: defaults.compressDracoMeshes
         },
         'draco.compressionLevel': {
-            describe: 'Draco compression level [0-10], most is 10, least is 0.',
+            describe: 'Draco compression level [0-10], most is 10, least is 0. A value of 0 will apply sequential encoding and preserve face order.',
             type: 'number',
             default: dracoDefaults.compressionLevel
         },
