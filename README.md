@@ -106,7 +106,6 @@ processGltf(gltf, options)
 |`--json`, `-j`|Convert the input glb to glTF.|No, default `false`|
 |`--separate`, `-s`|Write separate buffers, shaders, and textures instead of embedding them in the glTF.|No, default `false`|
 |`--separateTextures`, `-t`|Write out separate textures only.|No, default `false`|
-|`--checkTransparency`|Do a more exhaustive check for texture transparency by looking at the alpha channel of each pixel. By default textures are considered to be opaque.|No, default `false`|
 |`--stats`|Print statistics to console for input and output glTF files.|No, default `false`|
 |`--draco.compressMeshes`, `-d`|Compress the meshes using Draco. Adds the KHR_draco_mesh_compression extension.|No, default `false`|
 |`--draco.compressionLevel`|Draco compression level [0-10], most is 10, least is 0. A value of 0 will apply sequential encoding and preserve face order.|No, default `7`|
