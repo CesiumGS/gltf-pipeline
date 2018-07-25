@@ -64,11 +64,6 @@ var argv = yargs
             type: 'boolean',
             default: defaults.separateTextures
         },
-        checkTransparency: {
-            describe: 'Do a more exhaustive check for texture transparency by looking at the alpha channel of each pixel. By default textures are considered to be opaque.',
-            type: 'boolean',
-            default: defaults.checkTransparency
-        },
         secure: {
             describe: 'Prevent the converter from reading textures or mtl files outside of the input directory.',
             type: 'boolean',
@@ -168,7 +163,6 @@ var options = {
     separate: argv.separate,
     separateTextures: argv.separateTextures,
     secure: argv.secure,
-    checkTransparency: argv.checkTransparency,
     stats: argv.stats,
     name: outputName,
     dracoOptions: dracoOptions
