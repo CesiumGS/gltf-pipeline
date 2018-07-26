@@ -14,6 +14,7 @@ Supports common operations including:
 * Converting glTF to glb (and reverse)
 * Saving buffers/textures as embedded or separate files
 * Converting glTF 1.0 models to glTF 2.0 (using the [KHR_techniques_webgl](https://github.com/KhronosGroup/glTF/tree/master/extensions/2.0/Khronos/KHR_techniques_webgl) and [KHR_blend](https://github.com/KhronosGroup/glTF/tree/master/extensions/2.0/Khronos/KHR_blend) extensions)
+* Applying [Draco](https://github.com/google/draco) mesh compression
 
 `gltf-pipeline` can be used as a command-line tool or Node.js module.
 
@@ -21,26 +22,26 @@ Supports common operations including:
 
 Install [Node.js](https://nodejs.org/en/) if you don't already have it, and then:
 ```
-npm install
+npm install -g gltf-pipeline
 ```
 
 ### Using gltf-pipeline as a command-line tool:
 
 #### Converting a glTF to glb
-`node bin/gltf-pipeline.js -i model.gltf -o model.glb`
+`gltf-pipeline -i model.gltf -o model.glb`
 
-`node bin/gltf-pipeline.js -i model.gltf -b`
+`gltf-pipeline -i model.gltf -b`
 
 #### Converting a glb to glTF
-`node bin/gltf-pipeline.js -i model.glb -o model.gltf`
+`gltf-pipeline -i model.glb -o model.gltf`
 
-`node bin/gltf-pipeline.js -i model.glb -j`
+`gltf-pipeline -i model.glb -j`
 
 #### Converting a glTF to Draco glTF
-`node bin/gltf-pipeline.js -i model.gltf -d -s -o modelDraco.gltf`
+`gltf-pipeline -i model.gltf -o modelDraco.gltf -d -s`
 
 ### Saving separate textures
-`node bin/gltf-pipeline.js -i model.gltf -t`
+`gltf-pipeline -i model.gltf -t`
 
 ### Using gltf-pipeline as a library:
 
@@ -70,12 +71,28 @@ glbToGltf(glb)
     }
 ```
 
+#### Converting a glTF to Draco glTF
+
+```javascript
+var gltfPipeline = require('gltf-pipeline');
+var fsExtra = require('fs-extra');
+var gltf = fsExtra.readJsonSync('model.gltf');
+var options = {
+    dracoOptions: {
+        compressionLevel: 10
+    }
+}
+processGltf(gltf, options)
+    .then(function(results) {
+        fsExtra.writeJsonSync('model.gltf', results.gltf);
+    }
+```
+
 #### Saving separate textures
 
 ```javascript
 var gltfPipeline = require('gltf-pipeline');
 var fsExtra = require('fs-extra');
-var gltfToGlb = gltfPipeline.gltfToGlb;
 var gltf = fsExtra.readJsonSync('model.gltf');
 var options = {
     separateTextures: true
@@ -94,7 +111,6 @@ processGltf(gltf, options)
     }
 ```
 
-
 ### Command-Line Flags
 
 |Flag|Description|Required|
@@ -106,7 +122,6 @@ processGltf(gltf, options)
 |`--json`, `-j`|Convert the input glb to glTF.|No, default `false`|
 |`--separate`, `-s`|Write separate buffers, shaders, and textures instead of embedding them in the glTF.|No, default `false`|
 |`--separateTextures`, `-t`|Write out separate textures only.|No, default `false`|
-|`--checkTransparency`|Do a more exhaustive check for texture transparency by looking at the alpha channel of each pixel. By default textures are considered to be opaque.|No, default `false`|
 |`--stats`|Print statistics to console for input and output glTF files.|No, default `false`|
 |`--draco.compressMeshes`, `-d`|Compress the meshes using Draco. Adds the KHR_draco_mesh_compression extension.|No, default `false`|
 |`--draco.compressionLevel`|Draco compression level [0-10], most is 10, least is 0. A value of 0 will apply sequential encoding and preserve face order.|No, default `7`|
@@ -160,37 +175,6 @@ npm run jsdoc
 ```
 
 The documentation will be placed in the `doc` folder.
-
-## Deploying to npm
-
-* Proofread [CHANGES.md](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/blob/master/CHANGES.md).
-* Update the `version` in [package.json](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/blob/master/package.json) to match the latest version in [CHANGES.md](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/blob/master/CHANGES.md).
-* Make sure to run the tests and ensure they pass.
-* If any changes are required, commit and push them to the repository.
-* Create and test the package.
-```
-## NPM Pack
-## Creates tarball. Verify using 7-zip (or your favorite archiver).
-## If you find unexpected/unwanted files, add them to .npmignore, and then run npm pack again.
-npm pack
-
-## Test the package
-## Copy and install the package in a temporary directory
-mkdir temp && cp <tarball> temp/
-npm install --production <tarball>
-node -e "var test = require('gltf-pipeline');" # No output on success
-
-# If module has executables, then test those now.
-```
-* Tag and push the release.
-  * `git tag -a <version> -m "<message>"`
-  * `git push origin <version>`
-* Publish
-```
-npm publish
-```
-
-Contact [@lilleyse](https://github.com/lilleyse) if you need access to publish.
 
 ## Contributions
 

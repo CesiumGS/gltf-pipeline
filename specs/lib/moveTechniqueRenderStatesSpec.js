@@ -53,7 +53,7 @@ describe('moveTechniqueRenderStates', function() {
 
         var gltfDoubleSided = JSON.parse(JSON.stringify(gltf));
         gltfDoubleSided.techniques.technique0.states = {
-            enable : [
+            enable: [
                 WebGLConstants.DEPTH_TEST,
                 WebGLConstants.BLEND
             ]
@@ -177,7 +177,7 @@ describe('moveTechniqueRenderStates', function() {
                 WebGLConstants.BLEND,
                 WebGLConstants.CULL_FACE
             ],
-            functions : {
+            functions: {
                 blendFuncSeparate: [
                     WebGLConstants.SRC_ALPHA_SATURATE,
                     WebGLConstants.ONE_MINUS_SRC_ALPHA,

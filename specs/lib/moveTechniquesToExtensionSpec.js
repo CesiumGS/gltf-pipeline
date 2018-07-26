@@ -41,7 +41,7 @@ describe('moveTechniquesToExtension', function() {
                 }
             },
             techniques: {
-                technique0 : {
+                technique0: {
                     attributes: {
                         a_normal: 'normal',
                         a_position: 'position',
@@ -98,7 +98,7 @@ describe('moveTechniquesToExtension', function() {
                         u_specular: 'specular'
                     }
                 },
-                technique1 : {
+                technique1: {
                     program: 'program_1'
                 }
             },

@@ -360,8 +360,8 @@ describe('updateVersion', function() {
                     },
                     attributes: {
                         a_application: 'application',
-                        a_joints : 'joints',
-                        a_weights : 'weights'
+                        a_joints: 'joints',
+                        a_weights: 'weights'
                     },
                     uniforms: {
                         u_lightAttenuation: 'lightAttenuation',

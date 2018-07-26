@@ -1,8 +1,29 @@
 Change Log
 ==========
 
-### 1.0.3 - ???
+### 2.0.0 2018-??-??
+
+* Breaking changes
+    * Project updated to process glTF 2.0 models. Any glTF 1.0 models will be upgraded to glTF 2.0 automatically and use the `KHR_techniques_webgl` and `KHR_blend` extensions.
+    * The entire public API has changed. See usage examples in the project README.
+    * Removed many pipeline stages in an effort to simplify the project:
+        * Removed ambient occlusion baking.
+        * Removed texture compression.
+        * Removed support for the `KHR_materials_common` extension.
+        * Removed support for the `WEB3D_quantized_attributes` extension.
+        * Removed optimization stages.
+        * Removed generate normals stages.
+* Added support for `KHR_draco_mesh_compression`.
+
+### 1.0.5 - 2018-07-13
+* Fixed a bug where percent-encoded characters (like %20) were not decoded before attempting to read a uri.
+
+### 1.0.4 - 2018-05-30
+* Fixed a bug where multiple inclusions of the same mime type lead to conflicts.
+
+### 1.0.3 - 2018-03-28
 * Fixed a bug where animations in glTF 0.8 assets where not being converted from axis angle to quaternion.
+* Fixed a bug where generating normals and materials did not take image transparency into account
 
 ### 1.0.2 - 2017-09-27
 * Fixed specular computation for certain models using the `KHR_materials_common` extension. [#309](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/309)
