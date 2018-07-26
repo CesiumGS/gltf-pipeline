@@ -583,6 +583,7 @@ describe('updateVersion', function() {
                 // animation.parameters removed
                 var animation = gltf.animations[0];
                 var sampler = animation.samplers[0];
+                expect(sampler.name).toBeUndefined();
                 expect(sampler.input).toEqual(2);
                 expect(sampler.output).toEqual(3);
                 expect(animation.parameters).toBeUndefined();
@@ -640,6 +641,9 @@ describe('updateVersion', function() {
                 expect(primitive.attributes.APPLICATIONSPECIFIC).toBeUndefined();
                 expect(primitive.attributes._APPLICATIONSPECIFIC).toEqual(0);
                 expect(primitive.attributes._TEMPERATURE).toEqual(10);
+
+                // JOINTS_0 has converted component type
+                expect(gltf.accessors[8].componentType).toBe(WebGLConstants.UNSIGNED_SHORT);
 
                 // Clamp camera parameters
                 var camera = gltf.cameras[0];
