@@ -13,7 +13,7 @@ Content pipeline tools for optimizing [glTF](https://www.khronos.org/gltf) asset
 Supports common operations including:
 * Converting glTF to glb (and reverse)
 * Saving buffers/textures as embedded or separate files
-* Converting glTF 1.0 models to glTF 2.0 (using the [KHR_techniques_webgl](https://github.com/KhronosGroup/glTF/tree/master/extensions/2.0/Khronos/KHR_techniques_webgl) and [KHR_blend](https://github.com/KhronosGroup/glTF/tree/master/extensions/2.0/Khronos/KHR_blend) extensions)
+* Converting glTF 1.0 models to glTF 2.0 (using the [KHR_techniques_webgl](https://github.com/KhronosGroup/glTF/tree/master/extensions/2.0/Khronos/KHR_techniques_webgl) and [KHR_blend](https://github.com/KhronosGroup/glTF/pull/1302) extensions)
 * Applying [Draco](https://github.com/google/draco) mesh compression
 
 `gltf-pipeline` can be used as a command-line tool or Node.js module.
@@ -122,7 +122,8 @@ processGltf(gltf, options)
 |`--json`, `-j`|Convert the input glb to glTF.|No, default `false`|
 |`--separate`, `-s`|Write separate buffers, shaders, and textures instead of embedding them in the glTF.|No, default `false`|
 |`--separateTextures`, `-t`|Write out separate textures only.|No, default `false`|
-|`--stats`|Print statistics to console for input and output glTF files.|No, default `false`|
+|`--secure`|Prevent the source model from referencing paths outside of its directory.|No, default `false`|
+|`--stats`|Print statistics to console for output glTF file.|No, default `false`|
 |`--draco.compressMeshes`, `-d`|Compress the meshes using Draco. Adds the KHR_draco_mesh_compression extension.|No, default `false`|
 |`--draco.compressionLevel`|Draco compression level [0-10], most is 10, least is 0. A value of 0 will apply sequential encoding and preserve face order.|No, default `7`|
 |`--draco.quantizePositionBits`|Quantization bits for position attribute when using Draco compression.|No, default `14`|

@@ -146,7 +146,7 @@ describe('processGltf', function() {
         };
         expect(processGltf(gltf, options)
             .then(function() {
-                expect(loggedMessages).toBe(4);
+                expect(loggedMessages).toBe(2);
             }), done).toResolve();
     });
 });
