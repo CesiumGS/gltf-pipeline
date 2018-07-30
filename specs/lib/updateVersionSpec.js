@@ -661,10 +661,12 @@ describe('updateVersion', function() {
                 });
 
                 // Min and max are added to all animation sampler input accessors
-                ForEach.animationSampler(gltf, function(sampler) {
-                    var accessor = gltf.accessors[sampler.input];
-                    expect(accessor.min.length).toEqual(numberOfComponentsForType(accessor.type));
-                    expect(accessor.max.length).toEqual(numberOfComponentsForType(accessor.type));
+                ForEach.animation(gltf, function(animation) {
+                    ForEach.animationSampler(animation, function(sampler) {
+                        var accessor = gltf.accessors[sampler.input];
+                        expect(accessor.min.length).toEqual(numberOfComponentsForType(accessor.type));
+                        expect(accessor.max.length).toEqual(numberOfComponentsForType(accessor.type));
+                    });
                 });
 
                 // byteStride moved from accessor to bufferView
