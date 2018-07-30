@@ -509,7 +509,28 @@ describe('updateVersion', function() {
                     ]
                 },
                 nodeWithoutChildren: {
-                    children: []
+                    children: [],
+                    camera: 0
+                },
+                nonEmptyNodeParent: {
+                    children: [
+                        'emptyNode'
+                    ],
+                    scale: [1, 2, 3]
+                },
+                emptyNodeParent: {
+                    children: [
+                        'emptyNode'
+                    ]
+                },
+                emptyNode: {
+                    children: [],
+                    matrix: [
+                        1, 0, 0, 0,
+                        0, 1, 0, 0,
+                        0, 0, 1, 0,
+                        0, 0, 0, 1
+                    ]
                 }
             },
             programs: {
@@ -528,7 +549,8 @@ describe('updateVersion', function() {
             scenes: {
                 defaultScene: {
                     nodes: [
-                        'rootTransform'
+                        'rootTransform',
+                        'emptyNodeParent'
                     ]
                 }
             },
@@ -590,6 +612,12 @@ describe('updateVersion', function() {
                 // Empty arrays removed
                 expect(gltf.samplers).toBeUndefined();
                 expect(getNodeByName(gltf, 'nodeWithoutChildren').children).toBeUndefined();
+
+                // Empty nodes removed
+                expect(getNodeByName(gltf, 'nonEmptyNodeParent')).toBeDefined();
+                expect(getNodeByName(gltf, 'emptyNodeParent')).toBeUndefined();
+                expect(getNodeByName(gltf, 'emptyNode')).toBeUndefined();
+                expect(gltf.scenes[0].nodes.length).toBe(1);
 
                 // Expect material values to be moved to material KHR_techniques_webgl extension
                 var material = gltf.materials[0];
