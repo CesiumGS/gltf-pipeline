@@ -21,9 +21,9 @@ var args = process.argv;
 
 var argv = yargs
     .usage('Usage: node $0 -i inputPath -o outputPath')
-    .example('node $0 -i ./specs/data/box.gltf')
-    .example('node $0 -i ./specs/data/box.gltf -b')
-    .example('node $0 -i ./specs/data/box.glb -o box.gltf')
+    .example('node $0 -i model.gltf')
+    .example('node $0 -i model.gltf -b')
+    .example('node $0 -i model.glb -o model.gltf')
     .help('h')
     .alias('h', 'help')
     .options({
@@ -65,12 +65,12 @@ var argv = yargs
             default: defaults.separateTextures
         },
         secure: {
-            describe: 'Prevent the converter from reading textures or mtl files outside of the input directory.',
+            describe: 'Prevent the source model from referencing paths outside of its directory.',
             type: 'boolean',
             default: defaults.secure
         },
         stats: {
-            describe: 'Print statistics to console for input and output glTF files.',
+            describe: 'Print statistics to console for output glTF file.',
             type: 'boolean',
             default: defaults.stats
         },

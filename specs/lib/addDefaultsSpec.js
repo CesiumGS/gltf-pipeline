@@ -122,7 +122,7 @@ describe('addDefaults', function() {
                 },
                 {
                     extensions: {
-                        KHR_techniques_webgl : {
+                        KHR_techniques_webgl: {
                             values: {
                                 u_custom: {
                                     index: 3
