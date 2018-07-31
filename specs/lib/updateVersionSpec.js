@@ -575,7 +575,8 @@ describe('updateVersion', function() {
                     target: WebGLConstants.TEXTURE_2D,
                     type: WebGLConstants.UNSIGNED_BYTE
                 }
-            ]
+            ],
+            glExtensionsUsed: ['OES_element_index_uint']
         };
 
         expect(readResources(gltf)
@@ -719,6 +720,10 @@ describe('updateVersion', function() {
                 expect(positionAccessor.byteStride).toBeUndefined();
                 expect(normalAccessor.byteStride).toBeUndefined();
                 expect(texcoordAccessor.byteStride).toBeUndefined();
+
+                // glExtensionsUsed removed
+                expect(gltf.glExtensionsUsed).toBeUndefined();
+                expect(gltf.extensions.KHR_techniques_webgl.programs[0].glExtensions).toEqual(['OES_element_index_uint']);
             }), done).toResolve();
     });
 });
