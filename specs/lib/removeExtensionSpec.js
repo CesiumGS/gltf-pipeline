@@ -1,5 +1,8 @@
 'use strict';
+var Cesium = require('cesium');
 var removeExtension = require('../../lib/removeExtension');
+
+var WebGLConstants = Cesium.WebGLConstants;
 
 describe('removeExtension', function() {
     it('removes extension', function() {
@@ -86,4 +89,42 @@ describe('removeExtension', function() {
         removeExtension(gltf, 'extension1');
         expect(emptyGltf).toEqual({});
     });
+
+    it('removes CESIUM_RTC extension', function() {
+        var gltf = {
+            extensionsRequired: [
+                'CESIUM_RTC',
+                'KHR_techniques_webgl'
+            ],
+            extensionsUsed: [
+                'CESIUM_RTC',
+                'KHR_techniques_webgl'
+            ],
+            extensions: {
+                CESIUM_RTC: {
+                    center: [1.0, 2.0, 3.0]
+                },
+                KHR_techniques_webgl: {
+                    techniques: [
+                        {
+                            uniforms: {
+                                u_modelViewMatrix: {
+                                    type: WebGLConstants.FLOAT_MAT4,
+                                    semantic: 'CESIUM_RTC_MODELVIEW'
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        };
+        var extension = removeExtension(gltf, 'CESIUM_RTC');
+        expect(extension).toEqual({
+            center: [1.0, 2.0, 3.0]
+        });
+        expect(gltf.extensionsRequired).toEqual(['KHR_techniques_webgl']);
+        expect(gltf.extensionsUsed).toEqual(['KHR_techniques_webgl']);
+        expect(gltf.extensions.KHR_techniques_webgl.techniques[0].uniforms.u_modelViewMatrix.semantic).toBe('MODELVIEW');
+    });
+
 });
