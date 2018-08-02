@@ -2,7 +2,6 @@
 var Cesium = require('cesium');
 var fsExtra = require('fs-extra');
 var path = require('path');
-var Promise = require('bluebird');
 var ForEach = require('../../lib/ForEach');
 var parseGlb = require('../../lib/parseGlb');
 var readResources = require('../../lib/readResources');
@@ -17,7 +16,6 @@ var boxTexturedSeparate2Path = 'specs/data/2.0/box-textured-separate/box-texture
 var boxTexturedBinarySeparate2Path = 'specs/data/2.0/box-textured-binary-separate/box-textured-binary-separate.glb';
 var boxTexturedBinary2Path = 'specs/data/2.0/box-textured-binary/box-textured-binary.glb';
 var boxTexturedEmbedded2Path = 'specs/data/2.0/box-textured-embedded/box-textured-embedded.gltf';
-var boxTexturedTransparentPath = 'specs/data/2.0/box-textured-transparent/box-textured-transparent.gltf';
 
 function readGltf(gltfPath, binary) {
     if (binary) {
@@ -72,20 +70,6 @@ function readsResources(gltfPath, binary, separate, done) {
         }), done).toResolve();
 }
 
-function checkTransparency(gltfPath, check, result) {
-    var gltf = readGltf(gltfPath, false);
-    var options = {
-        resourceDirectory: path.dirname(gltfPath),
-        checkTransparency: check
-    };
-    return readResources(gltf, options)
-        .then(function(gltf) {
-            ForEach.image(gltf, function(image) {
-                expect(image.extras._pipeline.transparent).toBe(result);
-            });
-        });
-}
-
 describe('readResources', function() {
     it('reads separate resources from 1.0 model', function(done) {
         readsResources(boxTexturedSeparate1Path, false, true, done);
@@ -117,17 +101,6 @@ describe('readResources', function() {
 
     it('reads resources from glb', function(done) {
         readsResources(boxTexturedBinary2Path, true, false, done);
-    });
-
-    it('checks transparency', function(done) {
-        // Transparency is detected if the checkTransparency flag is passed in and the texture actually has transparency in it.
-        var promises = Promise.all([
-            checkTransparency(boxTexturedTransparentPath, false, false),
-            checkTransparency(boxTexturedTransparentPath, true, true),
-            checkTransparency(boxTexturedEmbedded2Path, false, false),
-            checkTransparency(boxTexturedEmbedded2Path, true, false)
-        ]);
-        expect(promises, done).toResolve();
     });
 
     it('rejects if gltf contains separate resources but no resource directory is supplied', function(done) {

@@ -4,7 +4,7 @@ var hasExtension = require('../../lib/hasExtension');
 describe('hasExtension', function() {
     it('has extension', function() {
         var gltf = {
-            extensionsUsed : [
+            extensionsUsed: [
                 'extension1',
                 'extension2'
             ]

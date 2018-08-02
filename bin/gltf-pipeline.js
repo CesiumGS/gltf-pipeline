@@ -21,9 +21,9 @@ var args = process.argv;
 
 var argv = yargs
     .usage('Usage: node $0 -i inputPath -o outputPath')
-    .example('node $0 -i ./specs/data/box.gltf')
-    .example('node $0 -i ./specs/data/box.gltf -b')
-    .example('node $0 -i ./specs/data/box.glb -o box.gltf')
+    .example('node $0 -i model.gltf')
+    .example('node $0 -i model.gltf -b')
+    .example('node $0 -i model.glb -o model.gltf')
     .help('h')
     .alias('h', 'help')
     .options({
@@ -64,18 +64,13 @@ var argv = yargs
             type: 'boolean',
             default: defaults.separateTextures
         },
-        checkTransparency: {
-            describe: 'Do a more exhaustive check for texture transparency by looking at the alpha channel of each pixel. By default textures are considered to be opaque.',
-            type: 'boolean',
-            default: defaults.checkTransparency
-        },
         secure: {
-            describe: 'Prevent the converter from reading textures or mtl files outside of the input directory.',
+            describe: 'Prevent the source model from referencing paths outside of its directory.',
             type: 'boolean',
             default: defaults.secure
         },
         stats: {
-            describe: 'Print statistics to console for input and output glTF files.',
+            describe: 'Print statistics to console for output glTF file.',
             type: 'boolean',
             default: defaults.stats
         },
@@ -86,7 +81,7 @@ var argv = yargs
             default: defaults.compressDracoMeshes
         },
         'draco.compressionLevel': {
-            describe: 'Draco compression level [0-10], most is 10, least is 0.',
+            describe: 'Draco compression level [0-10], most is 10, least is 0. A value of 0 will apply sequential encoding and preserve face order.',
             type: 'number',
             default: dracoDefaults.compressionLevel
         },
@@ -173,7 +168,6 @@ var options = {
     separate: argv.separate,
     separateTextures: argv.separateTextures,
     secure: argv.secure,
-    checkTransparency: argv.checkTransparency,
     stats: argv.stats,
     name: outputName,
     dracoOptions: dracoOptions

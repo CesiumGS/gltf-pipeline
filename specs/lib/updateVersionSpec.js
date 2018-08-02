@@ -360,8 +360,8 @@ describe('updateVersion', function() {
                     },
                     attributes: {
                         a_application: 'application',
-                        a_joints : 'joints',
-                        a_weights : 'weights'
+                        a_joints: 'joints',
+                        a_weights: 'weights'
                     },
                     uniforms: {
                         u_lightAttenuation: 'lightAttenuation',
@@ -509,7 +509,28 @@ describe('updateVersion', function() {
                     ]
                 },
                 nodeWithoutChildren: {
-                    children: []
+                    children: [],
+                    camera: 0
+                },
+                nonEmptyNodeParent: {
+                    children: [
+                        'emptyNode'
+                    ],
+                    scale: [1, 2, 3]
+                },
+                emptyNodeParent: {
+                    children: [
+                        'emptyNode'
+                    ]
+                },
+                emptyNode: {
+                    children: [],
+                    matrix: [
+                        1, 0, 0, 0,
+                        0, 1, 0, 0,
+                        0, 0, 1, 0,
+                        0, 0, 0, 1
+                    ]
                 }
             },
             programs: {
@@ -528,7 +549,8 @@ describe('updateVersion', function() {
             scenes: {
                 defaultScene: {
                     nodes: [
-                        'rootTransform'
+                        'rootTransform',
+                        'emptyNodeParent'
                     ]
                 }
             },
@@ -553,7 +575,8 @@ describe('updateVersion', function() {
                     target: WebGLConstants.TEXTURE_2D,
                     type: WebGLConstants.UNSIGNED_BYTE
                 }
-            ]
+            ],
+            glExtensionsUsed: ['OES_element_index_uint']
         };
 
         expect(readResources(gltf)
@@ -583,6 +606,7 @@ describe('updateVersion', function() {
                 // animation.parameters removed
                 var animation = gltf.animations[0];
                 var sampler = animation.samplers[0];
+                expect(sampler.name).toBeUndefined();
                 expect(sampler.input).toEqual(2);
                 expect(sampler.output).toEqual(3);
                 expect(animation.parameters).toBeUndefined();
@@ -590,6 +614,12 @@ describe('updateVersion', function() {
                 // Empty arrays removed
                 expect(gltf.samplers).toBeUndefined();
                 expect(getNodeByName(gltf, 'nodeWithoutChildren').children).toBeUndefined();
+
+                // Empty nodes removed
+                expect(getNodeByName(gltf, 'nonEmptyNodeParent')).toBeDefined();
+                expect(getNodeByName(gltf, 'emptyNodeParent')).toBeUndefined();
+                expect(getNodeByName(gltf, 'emptyNode')).toBeUndefined();
+                expect(gltf.scenes[0].nodes.length).toBe(1);
 
                 // Expect material values to be moved to material KHR_techniques_webgl extension
                 var material = gltf.materials[0];
@@ -641,6 +671,9 @@ describe('updateVersion', function() {
                 expect(primitive.attributes._APPLICATIONSPECIFIC).toEqual(0);
                 expect(primitive.attributes._TEMPERATURE).toEqual(10);
 
+                // JOINTS_0 has converted component type
+                expect(gltf.accessors[8].componentType).toBe(WebGLConstants.UNSIGNED_SHORT);
+
                 // Clamp camera parameters
                 var camera = gltf.cameras[0];
                 expect(camera.perspective.aspectRatio).toBeUndefined();
@@ -658,6 +691,15 @@ describe('updateVersion', function() {
                     var accessor = gltf.accessors[accessorId];
                     expect(accessor.min.length).toEqual(numberOfComponentsForType(accessor.type));
                     expect(accessor.max.length).toEqual(numberOfComponentsForType(accessor.type));
+                });
+
+                // Min and max are added to all animation sampler input accessors
+                ForEach.animation(gltf, function(animation) {
+                    ForEach.animationSampler(animation, function(sampler) {
+                        var accessor = gltf.accessors[sampler.input];
+                        expect(accessor.min.length).toEqual(numberOfComponentsForType(accessor.type));
+                        expect(accessor.max.length).toEqual(numberOfComponentsForType(accessor.type));
+                    });
                 });
 
                 // byteStride moved from accessor to bufferView
@@ -678,6 +720,10 @@ describe('updateVersion', function() {
                 expect(positionAccessor.byteStride).toBeUndefined();
                 expect(normalAccessor.byteStride).toBeUndefined();
                 expect(texcoordAccessor.byteStride).toBeUndefined();
+
+                // glExtensionsUsed removed
+                expect(gltf.glExtensionsUsed).toBeUndefined();
+                expect(gltf.extensions.KHR_techniques_webgl.programs[0].glExtensions).toEqual(['OES_element_index_uint']);
             }), done).toResolve();
     });
 });

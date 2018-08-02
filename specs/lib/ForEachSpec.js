@@ -266,7 +266,7 @@ describe('ForEach', function() {
 
     it('loops over buffers', function() {
         var gltf = {
-            buffers : [
+            buffers: [
                 {
                     uri: '0.bin',
                     byteLength: 10
@@ -288,7 +288,7 @@ describe('ForEach', function() {
 
     it('loops over buffers (gltf 1.0)', function() {
         var gltf = {
-            buffers : {
+            buffers: {
                 buffer0: {
                     uri: 'buffer0.bin'
                 },
@@ -330,7 +330,7 @@ describe('ForEach', function() {
 
     it('loops over cameras', function() {
         var gltf = {
-            cameras : [
+            cameras: [
                 {
                     perspective: {
                         yfov: 0.0,
@@ -357,7 +357,7 @@ describe('ForEach', function() {
 
     it('loops over images', function() {
         var gltf = {
-            images : [
+            images: [
                 {
                     bufferView: 0
                 },
@@ -377,7 +377,7 @@ describe('ForEach', function() {
 
     it('loops over images (gltf 1.0)', function() {
         var gltf = {
-            images : {
+            images: {
                 image0: {
                     uri: 'image0.png'
                 },
@@ -767,7 +767,7 @@ describe('ForEach', function() {
 
     it('loops over shaders (gltf 1.0)', function() {
         var gltf = {
-            shaders : {
+            shaders: {
                 vert: {
                     type: WebGLConstants.VERTEX_SHADER,
                     uri: 'vert.glsl'
