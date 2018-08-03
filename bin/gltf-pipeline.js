@@ -110,6 +110,11 @@ var argv = yargs
             type: 'number',
             default: dracoDefaults.quantizeGenericBits
         },
+        'draco.uncompressedFallback': {
+            describe: 'Adds uncompressed fallback versions of the compressed meshes.',
+            type: 'boolean',
+            default: dracoDefaults.uncompressedFallback
+        },
         'draco.unifiedQuantization': {
             describe: 'Quantize positions of all primitives using the same quantization grid defined by the unified bounding box of all primitives. If this option is not set, quantization is applied on each primitive separately which can result in gaps appearing between different primitives.',
             type: 'boolean',
