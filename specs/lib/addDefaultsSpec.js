@@ -75,6 +75,7 @@ describe('addDefaults', function() {
 
         var gltfWithDefaults = addDefaults(gltf);
         var primitive = gltfWithDefaults.meshes[0].primitives[0];
+        var material = gltfWithDefaults.materials[0];
         var positionAccessor = gltfWithDefaults.accessors[0];
         var positionTargetAccessor = gltfWithDefaults.accessors[1];
         var indicesAccessor = gltfWithDefaults.accessors[2];
@@ -84,6 +85,11 @@ describe('addDefaults', function() {
         var otherBufferView = gltfWithDefaults.bufferViews[3];
 
         expect(primitive.mode).toBe(WebGLConstants.TRIANGLES);
+        expect(primitive.material).toBe(0);
+
+        expect(material.emissiveFactor).toEqual([0.0, 0.0, 0.0]);
+        expect(material.alphaMode).toBe('OPAQUE');
+        expect(material.doubleSided).toBe(false);
 
         expect(positionAccessor.byteOffset).toBe(0);
         expect(positionAccessor.normalized).toBe(false);
