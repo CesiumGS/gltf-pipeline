@@ -192,5 +192,15 @@ describe('compressDracoMeshes', function() {
         expect(gltfOther.extensionsRequired.indexOf('KHR_draco_mesh_compression') >= 0).toBe(true);
         expect(gltf.buffers.length).toBe(6); // draco + image + 4 uncompressed attributes
         expect(gltfOther.buffers.length).toBe(2); // draco + image
+
+        expect(gltf.buffers[0].extras._pipeline.mergedBufferName).toBeUndefined();
+        expect(gltf.buffers[1].extras._pipeline.mergedBufferName).toBe('draco');
+        expect(gltf.buffers[2].extras._pipeline.mergedBufferName).toBe('uncompressed');
+        expect(gltf.buffers[3].extras._pipeline.mergedBufferName).toBe('uncompressed');
+        expect(gltf.buffers[4].extras._pipeline.mergedBufferName).toBe('uncompressed');
+        expect(gltf.buffers[5].extras._pipeline.mergedBufferName).toBe('uncompressed');
+
+        expect(gltfOther.buffers[0].extras._pipeline.mergedBufferName).toBeUndefined();
+        expect(gltfOther.buffers[1].extras._pipeline.mergedBufferName).toBeUndefined();
     });
 });
