@@ -154,11 +154,11 @@ describe('mergeBuffers', function() {
                 mergeBuffers(gltf);
                 expect(gltf.buffers.length).toBe(3);
                 expect(gltf.buffers[0].extras._pipeline.source).toEqual(expectedBuffer0);
-                expect(gltf.buffers[0].name).toEqual('first');
+                expect(gltf.buffers[0].name).toEqual('buffer-first');
                 expect(gltf.buffers[1].extras._pipeline.source).toEqual(expectedBuffer1);
-                expect(gltf.buffers[1].name).toEqual('second');
+                expect(gltf.buffers[1].name).toEqual('buffer-second');
                 expect(gltf.buffers[2].extras._pipeline.source).toEqual(expectedBuffer2);
-                expect(gltf.buffers[2].name).toBeUndefined();
+                expect(gltf.buffers[2].name).toBe('buffer');
             }), done).toResolve();
     });
 });
