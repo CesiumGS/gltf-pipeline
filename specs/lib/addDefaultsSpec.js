@@ -90,6 +90,7 @@ describe('addDefaults', function() {
         expect(material.emissiveFactor).toEqual([0.0, 0.0, 0.0]);
         expect(material.alphaMode).toBe('OPAQUE');
         expect(material.doubleSided).toBe(false);
+        expect(material.name).toBe('default');
 
         expect(positionAccessor.byteOffset).toBe(0);
         expect(positionAccessor.normalized).toBe(false);
