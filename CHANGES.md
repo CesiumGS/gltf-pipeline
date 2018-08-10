@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-### 2.0.0 2018-??-??
+### 2.0.0 2018-08-10
 
 * Breaking changes
     * Project updated to process glTF 2.0 models. Any glTF 1.0 models will be upgraded to glTF 2.0 automatically and use the `KHR_techniques_webgl` and `KHR_blend` extensions.
