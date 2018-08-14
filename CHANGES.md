@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-### 2.0.0 2018-08-10
+### 2.0.0 2018-08-14
 
 * Breaking changes
     * Project updated to process glTF 2.0 models. Any glTF 1.0 models will be upgraded to glTF 2.0 automatically and use the `KHR_techniques_webgl` and `KHR_blend` extensions.
@@ -14,6 +14,9 @@ Change Log
         * Removed optimization stages.
         * Removed generate normals stages.
 * Added support for `KHR_draco_mesh_compression`.
+
+### 1.0.6 - 2018-08-14
+ * Fixed `UNSIGNED_SHORT` overflow when generating face normals.
 
 ### 1.0.5 - 2018-07-13
 * Fixed a bug where percent-encoded characters (like %20) were not decoded before attempting to read a uri.
