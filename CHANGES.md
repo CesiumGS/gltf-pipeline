@@ -1,6 +1,20 @@
 Change Log
 ==========
 
+### 2.0.0 2018-08-10
+
+* Breaking changes
+    * Project updated to process glTF 2.0 models. Any glTF 1.0 models will be upgraded to glTF 2.0 automatically and use the `KHR_techniques_webgl` and `KHR_blend` extensions.
+    * The entire public API has changed. See usage examples in the project README.
+    * Removed many pipeline stages in an effort to simplify the project:
+        * Removed ambient occlusion baking.
+        * Removed texture compression.
+        * Removed support for the `KHR_materials_common` extension.
+        * Removed support for the `WEB3D_quantized_attributes` extension.
+        * Removed optimization stages.
+        * Removed generate normals stages.
+* Added support for `KHR_draco_mesh_compression`.
+
 ### 1.0.5 - 2018-07-13
 * Fixed a bug where percent-encoded characters (like %20) were not decoded before attempting to read a uri.
 
@@ -55,6 +69,8 @@ Change Log
 * Change Cesium `Geometry`'s and `VertexFormat`'s `binormal` attribute to bitangent.
 * Fixed a bug in `combinePrimitives` where combining primitives can overflow uint16 for the resulting indices. [#230](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/issues/230)
 * Made `generateNormals` stage optional and added `smoothNormals` option for generating smooth normals if the model does not have normals. [#240](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/240)
+* `updateVersion` stage for upgrades the glTF version of an asset from `1.0` to `2.0`. [#223](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/223) 
+   * All pipeline stages now operate on glTF `2.0` assets.
 
 ### 0.1.0-alpha10 - 2017-01-10
 * Added `tangentsBitangents` generation option

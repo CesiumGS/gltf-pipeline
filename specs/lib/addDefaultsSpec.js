@@ -1,460 +1,346 @@
 'use strict';
 var Cesium = require('cesium');
-var clone = require('clone');
-var fsExtra = require('fs-extra');
+var addDefaults = require('../../lib/addDefaults');
 
 var WebGLConstants = Cesium.WebGLConstants;
 
-var addDefaults = require('../../lib/addDefaults');
-var addPipelineExtras = require('../../lib/addPipelineExtras');
-var loadGltfUris = require('../../lib/loadGltfUris');
-var readGltf = require('../../lib/readGltf');
-
-var opaqueImageUri = './specs/data/boxTexturedUnoptimized/Cesium_Logo_Flat.jpg';
-var transparentImageUri = './specs/data/boxTexturedUnoptimized/Cesium_Logo_Flat_Transparent.png';
-var gltfTransparentPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestTransparent.gltf';
-
 describe('addDefaults', function() {
-    it('Adds accessor properties', function() {
+    it('adds mesh, accessor, and bufferView defaults', function() {
         var gltf = {
-            "accessors": {
-                "accessorId": {
-                    "bufferView": "bufferViewId",
-                    "byteOffset": 0,
-                    "componentType": 5123,
-                    "count": 36,
-                    "type": "SCALAR"
-                }
-            }
-        };
-
-        addDefaults(gltf);
-        var accessor = gltf.accessors.accessorId;
-        expect(accessor.byteStride).toEqual(0);
-    });
-
-    it('Adds animation properties', function() {
-        var gltf = {
-            "animations": {
-                "animationId": {
-                    "channels": [
+            meshes: [
+                {
+                    primitives: [
                         {
-                            "sampler": "samplerId",
-                            "target": {
-                                "id": "jointId",
-                                "path": "rotation"
-                            }
-                        }
-                    ],
-                    "parameters": {
-                        "TIME": "timeAccessorId",
-                        "rotation": "rotationAccessorId"
-                    },
-                    "samplers": {
-                        "samplerId": {
-                            "input": "TIME",
-                            "output": "rotation"
-                        }
-                    }
-                }
-            }
-        };
-
-        addDefaults(gltf);
-        expect(gltf.animations.animationId.samplers.samplerId.interpolation).toEqual('LINEAR');
-    });
-
-    it('Adds animation empty properties', function() {
-        var gltf = {
-            "animations": {
-                "animationId" : {
-                }
-            }
-        };
-
-        addDefaults(gltf);
-        expect(gltf.animations.animationId.channels).toEqual([]);
-        expect(gltf.animations.animationId.parameters).toEqual({});
-        expect(gltf.animations.animationId.samplers).toEqual({});
-    });
-
-    it('Adds asset properties', function() {
-        var gltf = {};
-
-        addDefaults(gltf);
-        expect(gltf.asset).toBeDefined();
-        expect(gltf.asset.premultipliedAlpha).toEqual(false);
-        expect(gltf.asset.profile).toBeDefined();
-        expect(gltf.asset.profile.api).toEqual('WebGL');
-        expect(gltf.asset.profile.version).toEqual('1.0.3');
-    });
-
-    it('Adds buffer properties', function() {
-        var gltf = {
-            "buffers": {
-                "bufferId": {
-                    "byteLength": 840,
-                    "uri": "buffer.bin"
-                }
-            }
-        };
-
-        addDefaults(gltf);
-        expect(gltf.buffers.bufferId.type).toEqual('arraybuffer');
-    });
-
-    it('does not change the material if the material has a technique', function() {
-        var gltf = {
-            "techniques": {
-                "technique1": {
-                    "states": {
-                        "enable": [
-                            2929,
-                            2884
-                        ]
-                    }
-                }
-            },
-            "materials": {
-                "blinn-1": {
-                    "technique": "technique1",
-                    "values": {
-                        "ambient": [0, 0, 0, 1],
-                        "diffuse": [1, 0, 0, 1],
-                        "emission": "texture_file2",
-                        "shininess": 38.4,
-                        "specular": [0, 0, 0, 1]
-                    },
-                    "name": "blinn1"
-                }
-            }
-        };
-        var materialsCopy = clone(gltf.materials);
-        addDefaults(gltf);
-        expect(gltf.materials).toEqual(materialsCopy);
-    });
-
-    var alphaBlendState = {
-        enable : [
-            WebGLConstants.DEPTH_TEST,
-            WebGLConstants.BLEND
-        ],
-        depthMask : false,
-        functions : {
-            blendEquationSeparate : [
-                WebGLConstants.FUNC_ADD,
-                WebGLConstants.FUNC_ADD
-            ],
-            blendFuncSeparate : [
-                WebGLConstants.ONE,
-                WebGLConstants.ONE_MINUS_SRC_ALPHA,
-                WebGLConstants.ONE,
-                WebGLConstants.ONE_MINUS_SRC_ALPHA
-            ]
-        }
-    };
-
-    var opaqueBlendState = {
-        enable : [
-            WebGLConstants.CULL_FACE,
-            WebGLConstants.DEPTH_TEST
-        ]
-    };
-
-    it('generates a material with alpha blending if the diffuse texture is transparent and no technique or extension values are given', function(done) {
-        var gltf = {
-            "textures": {
-                "texture0001": {
-                    "format": 6408,
-                    "internalFormat": 6408,
-                    "sampler": "sampler_0",
-                    "source": "Image0001",
-                    "target": 3553,
-                    "type": 5121
-                },
-                "texture0002": {
-                    "format": 6408,
-                    "internalFormat": 6408,
-                    "sampler": "sampler_0",
-                    "source": "Image0002",
-                    "target": 3553,
-                    "type": 5121
-                }
-            },
-            "images": {
-                "Image0001": {
-                    "name": "Image0001",
-                    "uri": transparentImageUri
-                },
-                "Image0002": {
-                    "name": "Image0002",
-                    "uri": opaqueImageUri
-                }
-            },
-            "materials": {
-                "material1": {
-                    "values": {
-                        "ambient": [0, 0, 0, 1],
-                        "diffuse": "texture0001",
-                        "emission": [1, 0, 0, 1]
-                    }
-                },
-                "material2": {
-                    "values": {
-                        "ambient": [0, 0, 0, 1],
-                        "diffuse": "texture0002",
-                        "emission": [1, 0, 0, 1]
-                    }
-                }
-            }
-        };
-
-        var options = {
-            basePath : './'
-        };
-        addPipelineExtras(gltf);
-        expect(loadGltfUris(gltf, options)
-            .then(function() {
-                addDefaults(gltf);
-                var techniqueOpaque = gltf.techniques[Object.keys(gltf.techniques)[0]];
-                var techniqueAlpha = gltf.techniques[Object.keys(gltf.techniques)[1]];
-                expect(techniqueAlpha.states).toEqual(alphaBlendState);
-                expect(techniqueOpaque.states).toEqual(opaqueBlendState);
-            }), done).toResolve();
-    });
-
-    it('generates a material with alpha blending if the diffuse color is transparent and no technique or extension values are given', function() {
-        var gltf = {
-            "materials": {
-                "material1": {
-                    "values": {
-                        "ambient": [0, 0, 0, 1],
-                        "diffuse": [1, 0, 0, 0.5],
-                        "emission": [1, 0, 0, 1]
-                    }
-                }
-            }
-        };
-
-        addDefaults(gltf);
-        var technique = gltf.techniques[Object.keys(gltf.techniques)[0]];
-        expect(technique.states).toEqual(alphaBlendState);
-    });
-
-    it('modifies the material\'s technique to support alpha blending if the diffuse texture is transparent', function(done) {
-        expect(fsExtra.readFile(gltfTransparentPath)
-            .then(function(data) {
-                var gltf = JSON.parse(data);
-                var originalState = gltf.techniques[Object.keys(gltf.techniques)[0]].states;
-                expect(originalState).not.toEqual(alphaBlendState);
-                return readGltf(gltfTransparentPath);
-            })
-            .then(function (gltf) {
-                addDefaults(gltf);
-                var technique = gltf.techniques[Object.keys(gltf.techniques)[0]];
-                expect(technique.states).toEqual(alphaBlendState);
-            }), done).toResolve();
-    });
-
-    it('modifies the material\'s technique to support alpha blending if the diffuse color is transparent', function(done) {
-        expect(fsExtra.readFile(gltfTransparentPath)
-            .then(function(data) {
-                var gltf = JSON.parse(data);
-                var originalState = gltf.techniques[Object.keys(gltf.techniques)[0]].states;
-                expect(originalState).not.toEqual(alphaBlendState);
-                return readGltf(gltfTransparentPath);
-            })
-            .then(function (gltf) {
-                var material = gltf.materials[Object.keys(gltf.materials)[0]];
-                material.values.diffuse = [1, 0, 0, 0.5];
-                addDefaults(gltf);
-                var technique = gltf.techniques[Object.keys(gltf.techniques)[0]];
-                expect(technique.states).toEqual(alphaBlendState);
-            }), done).toResolve();
-    });
-
-    it('Adds _3DTILESDIFFUSE semantic to the technique\'s diffuse parameter when optimizeForCesium is true', function(done) {
-        expect(readGltf(gltfTransparentPath)
-            .then(function (gltf) {
-                addDefaults(gltf, {
-                    optimizeForCesium : true
-                });
-                var technique = gltf.techniques[Object.keys(gltf.techniques)[0]];
-                expect(technique.parameters.diffuse.semantic).toEqual('_3DTILESDIFFUSE');
-            }), done).toResolve();
-    });
-
-    it('Adds mesh properties', function() {
-        var gltf = {
-            "meshes": {
-                "meshId": {
-                }
-            }
-        };
-
-        addDefaults(gltf);
-        expect(gltf.meshes.meshId.primitives).toEqual([]);
-
-        gltf = {
-            "meshes": {
-                "meshId": {
-                    "primitives": [
-                        {
-                            "indices": "accessorId",
-                            "material": "materialId"
+                            attributes: {
+                                POSITION: 0
+                            },
+                            indices: 2,
+                            targets: [
+                                {
+                                    POSITION: 1
+                                }
+                            ]
                         }
                     ]
                 }
-            }
+            ],
+            accessors: [
+                {
+                    bufferView: 0,
+                    componentType: WebGLConstants.FLOAT,
+                    count: 24,
+                    type: 'VEC3',
+                    min: [-1.0, -1.0, -1.0],
+                    max: [1.0, 1.0, 1.0]
+                },
+                {
+                    bufferView: 1,
+                    componentType: WebGLConstants.FLOAT,
+                    count: 24,
+                    type: 'VEC3',
+                    min: [-1.0, -1.0, -1.0],
+                    max: [1.0, 1.0, 1.0]
+                },
+                {
+                    bufferView: 2,
+                    componentType: WebGLConstants.UNSIGNED_SHORT,
+                    count: 36,
+                    type: 'SCALAR',
+                    min: [0],
+                    max: [24]
+                }
+            ],
+            bufferViews: [
+                {
+                    buffer: 0,
+                    byteLength: 288
+                },
+                {
+                    buffer: 0,
+                    byteLength: 288,
+                    byteOffset: 288
+                },
+                {
+                    buffer: 0,
+                    byteLength: 72,
+                    byteOffset: 576
+                },
+                {
+                    buffer: 0,
+                    byteLength: 10,
+                    byteOffset: 648
+                }
+            ]
         };
 
-        addDefaults(gltf);
-        expect(gltf.meshes.meshId.primitives[0].attributes).toBeDefined();
-        expect(gltf.meshes.meshId.primitives[0].mode).toEqual(WebGLConstants.TRIANGLES);
+        var gltfWithDefaults = addDefaults(gltf);
+        var primitive = gltfWithDefaults.meshes[0].primitives[0];
+        var material = gltfWithDefaults.materials[0];
+        var positionAccessor = gltfWithDefaults.accessors[0];
+        var positionTargetAccessor = gltfWithDefaults.accessors[1];
+        var indicesAccessor = gltfWithDefaults.accessors[2];
+        var positionBufferView = gltfWithDefaults.bufferViews[0];
+        var positionTargetBufferView = gltfWithDefaults.bufferViews[1];
+        var indicesBufferView = gltfWithDefaults.bufferViews[2];
+        var otherBufferView = gltfWithDefaults.bufferViews[3];
+
+        expect(primitive.mode).toBe(WebGLConstants.TRIANGLES);
+        expect(primitive.material).toBe(0);
+
+        expect(material.emissiveFactor).toEqual([0.0, 0.0, 0.0]);
+        expect(material.alphaMode).toBe('OPAQUE');
+        expect(material.doubleSided).toBe(false);
+        expect(material.name).toBe('default');
+
+        expect(positionAccessor.byteOffset).toBe(0);
+        expect(positionAccessor.normalized).toBe(false);
+        expect(positionBufferView.byteOffset).toBe(0);
+        expect(positionBufferView.byteStride).toBe(12);
+        expect(positionBufferView.target).toBe(WebGLConstants.ARRAY_BUFFER);
+
+        expect(positionTargetAccessor.byteOffset).toBe(0);
+        expect(positionTargetAccessor.normalized).toBe(false);
+        expect(positionTargetBufferView.byteStride).toBe(12);
+
+        expect(indicesAccessor.byteOffset).toBe(0);
+        expect(indicesAccessor.normalized).toBeUndefined();
+        expect(indicesBufferView.byteStride).toBeUndefined();
+        expect(indicesBufferView.target).toBe(WebGLConstants.ELEMENT_ARRAY_BUFFER);
+
+        expect(otherBufferView.target).toBeUndefined();
     });
 
-    it('Adds node properties', function() {
+    it('adds material defaults', function() {
         var gltf = {
-            "nodes": {
-                "nodeId": {
+            materials: [
+                {
+                    emissiveTexture: {
+                        index: 0
+                    },
+                    normalTexture: {
+                        index: 1
+                    },
+                    occlusionTexture: {
+                        index: 2
+                    }
+                },
+                {
+                    alphaMode: 'MASK'
+                },
+                {
+                    extensions: {
+                        KHR_techniques_webgl: {
+                            values: {
+                                u_custom: {
+                                    index: 3
+                                }
+                            }
+                        }
+                    }
                 }
-            }
+            ]
         };
 
-        addDefaults(gltf);
-        var node = gltf.nodes.nodeId;
-        expect(node.children).toEqual([]);
-        expect(node.matrix).toEqual([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
-        expect(node.translation).not.toBeDefined();
-        expect(node.rotation).not.toBeDefined();
-        expect(node.scale).not.toBeDefined();
+        var gltfWithDefaults = addDefaults(gltf);
+        var materialOpaque = gltfWithDefaults.materials[0];
+        var materialAlphaMask = gltfWithDefaults.materials[1];
+        var materialTechnique = gltfWithDefaults.materials[2].extensions.KHR_techniques_webgl;
 
-        gltf = {
-            "nodes": {
-                "nodeId": {
-                    "translation": [0.0, 0.0, 0.0]
-                }
-            }
-        };
+        expect(materialOpaque.emissiveFactor).toEqual([0.0, 0.0, 0.0]);
+        expect(materialOpaque.alphaMode).toBe('OPAQUE');
+        expect(materialOpaque.doubleSided).toBe(false);
 
-        addDefaults(gltf);
-        expect(gltf.nodes.nodeId.translation).toEqual([0.0, 0.0, 0.0]);
-        expect(gltf.nodes.nodeId.rotation).toEqual([0.0, 0.0, 0.0, 1.0]);
-        expect(gltf.nodes.nodeId.scale).toEqual([1.0, 1.0, 1.0]);
-        expect(gltf.nodes.nodeId.matrix).not.toBeDefined();
+        expect(materialOpaque.emissiveTexture.texCoord).toBe(0);
+        expect(materialOpaque.normalTexture.texCoord).toBe(0);
+        expect(materialOpaque.occlusionTexture.texCoord).toBe(0);
 
-        gltf = {
-            "nodes": {
-                "nodeId": {
-                    "scale": [1.0, 1.0, 1.0]
-                }
-            }
-        };
+        expect(materialAlphaMask.alphaCutoff).toBe(0.5);
 
-        addDefaults(gltf);
-        expect(gltf.nodes.nodeId.translation).toEqual([0.0, 0.0, 0.0]);
-        expect(gltf.nodes.nodeId.rotation).toEqual([0.0, 0.0, 0.0, 1.0]);
-        expect(gltf.nodes.nodeId.scale).toEqual([1.0, 1.0, 1.0]);
-        expect(gltf.nodes.nodeId.matrix).not.toBeDefined();
+        expect(materialTechnique.values.u_custom.texCoord).toBe(0);
     });
 
-    it('Adds program properties', function() {
+    it('adds metallic roughness defaults', function() {
         var gltf = {
-            "programs": {
-                "programId": {
-                    "fragmentShader": "bufferId0FS",
-                    "vertexShader": "bufferId0VS"
+            materials: [
+                {
+                    pbrMetallicRoughness: {
+                        baseColorTexture: {
+                            index: 0
+                        },
+                        metallicRoughnessTexture: {
+                            index: 1
+                        }
+                    }
                 }
-            }
+            ]
         };
+        var gltfWithDefaults = addDefaults(gltf);
+        var pbrMetallicRoughness = gltfWithDefaults.materials[0].pbrMetallicRoughness;
 
-        addDefaults(gltf);
-        expect(gltf.programs.programId.attributes).toEqual([]);
+        expect(pbrMetallicRoughness.baseColorFactor).toEqual([1.0, 1.0, 1.0, 1.0]);
+        expect(pbrMetallicRoughness.metallicFactor).toBe(1.0);
+        expect(pbrMetallicRoughness.roughnessFactor).toBe(1.0);
+        expect(pbrMetallicRoughness.baseColorTexture.texCoord).toBe(0);
+        expect(pbrMetallicRoughness.metallicRoughnessTexture.texCoord).toBe(0);
     });
 
-    it('Adds sampler properties', function() {
+    it('adds spec gloss defaults', function() {
         var gltf = {
-            "samplers": {
-                "samplerId": {
+            materials: [
+                {
+                    extensions: {
+                        pbrSpecularGlossiness: {
+                            specularGlossinessTexture: {
+                                index: 0
+                            }
+                        }
+                    }
                 }
-            }
+            ]
         };
+        var gltfWithDefaults = addDefaults(gltf);
+        var pbrSpecularGlossiness = gltfWithDefaults.materials[0].extensions.pbrSpecularGlossiness;
 
-        addDefaults(gltf);
-        expect(gltf.samplers.samplerId.magFilter).toEqual(WebGLConstants.LINEAR);
-        expect(gltf.samplers.samplerId.minFilter).toEqual(WebGLConstants.NEAREST_MIPMAP_LINEAR);
-        expect(gltf.samplers.samplerId.wrapS).toEqual(WebGLConstants.REPEAT);
-        expect(gltf.samplers.samplerId.wrapT).toEqual(WebGLConstants.REPEAT);
+        expect(pbrSpecularGlossiness.diffuseFactor).toEqual([1.0, 1.0, 1.0, 1.0]);
+        expect(pbrSpecularGlossiness.specularFactor).toEqual([1.0, 1.0, 1.0]);
+        expect(pbrSpecularGlossiness.glossinessFactor).toBe(1.0);
+        expect(pbrSpecularGlossiness.specularGlossinessTexture.texCoord).toBe(0);
     });
 
-    it('Adds scene properties', function() {
+    it('adds materials common defaults', function() {
         var gltf = {
-            "scenes": {
-                "defaultScene": {
+            materials: [
+                {
+                    extensions: {
+                        KHR_materials_common: {
+                            technique: 'BLINN'
+                        }
+                    }
+                },
+                {
+                    extensions: {
+                        KHR_materials_common: {
+                            technique: 'CONSTANT'
+                        }
+                    }
+                },
+                {
+                    extensions: {
+                        KHR_materials_common: {
+                            technique: 'LAMBERT'
+                        }
+                    }
                 }
-            }
+            ]
         };
 
-        addDefaults(gltf);
-        expect(gltf.scenes.defaultScene.nodes).toEqual([]);
+        var gltfWithDefaults = addDefaults(gltf);
+        var materialsCommonBlinn = gltfWithDefaults.materials[0].extensions.KHR_materials_common.values;
+        var materialsCommonConstant = gltfWithDefaults.materials[1].extensions.KHR_materials_common.values;
+        var materialsCommonLambert = gltfWithDefaults.materials[2].extensions.KHR_materials_common.values;
+
+        expect(materialsCommonBlinn.ambient).toEqual([0.0, 0.0, 0.0, 1.0]);
+        expect(materialsCommonBlinn.diffuse).toEqual([0.0, 0.0, 0.0, 1.0]);
+        expect(materialsCommonBlinn.emission).toEqual([0.0, 0.0, 0.0, 1.0]);
+        expect(materialsCommonBlinn.specular).toEqual([0.0, 0.0, 0.0, 1.0]);
+        expect(materialsCommonBlinn.shininess).toBe(0.0);
+        expect(materialsCommonBlinn.transparency).toBe(1.0);
+        expect(materialsCommonBlinn.transparent).toBe(false);
+        expect(materialsCommonBlinn.doubleSided).toBe(false);
+
+        expect(materialsCommonConstant.diffuse).toBeUndefined();
+        expect(materialsCommonConstant.specular).toBeUndefined();
+        expect(materialsCommonConstant.shininess).toBeUndefined();
+
+        expect(materialsCommonLambert.specular).toBeUndefined();
+        expect(materialsCommonLambert.shininess).toBeUndefined();
     });
 
-    it('Adds skin properties', function() {
+    it('adds sampler defaults', function() {
         var gltf = {
-            "skins": {
-                "skinId": {
-                    "inverseBindMatrices": "accessorId",
-                    "jointNames": [
-                        "jointId"
+            samplers: [
+                {
+                    // Intentionally empty
+                }
+            ]
+        };
+
+        var gltfWithDefaults = addDefaults(gltf);
+        var sampler = gltfWithDefaults.samplers[0];
+        expect(sampler.wrapS).toBe(WebGLConstants.REPEAT);
+        expect(sampler.wrapT).toBe(WebGLConstants.REPEAT);
+    });
+
+    it('adds node defaults', function() {
+        var gltf = {
+            animations: [
+                {
+                    channels: [
+                        {
+                            sampler: 0,
+                            target: {
+                                node: 0,
+                                path: 'rotation'
+                            }
+                        }
                     ],
-                    "name": "Armature"
+                    samplers: [
+                        {
+                            input: 0,
+                            output: 1
+                        }
+                    ]
                 }
-            }
+            ],
+            nodes: [
+                {
+                    mesh: 0
+                },
+                {
+                    mesh: 1
+                },
+                {
+                    mesh: 2,
+                    translation: [1.0, 0.0, 0.0]
+                }
+            ]
         };
 
-        addDefaults(gltf);
-        expect(gltf.skins.skinId.bindShapeMatrix).toEqual([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
+        var gltfWithDefaults = addDefaults(gltf);
+        var animatedNode = gltfWithDefaults.nodes[0];
+        var staticNode1 = gltfWithDefaults.nodes[1];
+        var staticNode2 = gltfWithDefaults.nodes[2];
+
+        expect(gltfWithDefaults.animations[0].samplers[0].interpolation).toBe('LINEAR');
+
+        expect(animatedNode.matrix).toBeUndefined();
+        expect(animatedNode.translation).toEqual([0.0, 0.0, 0.0]);
+        expect(animatedNode.rotation).toEqual([0.0, 0.0, 0.0, 1.0]);
+        expect(animatedNode.scale).toEqual([1.0, 1.0, 1.0]);
+
+        expect(staticNode1.matrix).toEqual([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
+        expect(staticNode1.translation).toBeUndefined();
+        expect(staticNode1.rotation).toBeUndefined();
+        expect(staticNode1.scale).toBeUndefined();
+
+        expect(staticNode2.matrix).toBeUndefined();
+        expect(staticNode2.translation).toEqual([1.0, 0.0, 0.0]);
+        expect(staticNode2.rotation).toEqual([0.0, 0.0, 0.0, 1.0]);
+        expect(staticNode2.scale).toEqual([1.0, 1.0, 1.0]);
     });
 
-    it('Adds texture properties', function() {
+    it('adds scene defaults', function() {
         var gltf = {
-            "textures": {
-                "textureId": {
-                    "format": 6408,
-                    "sampler": "samplerId",
-                    "source": "Image0001"
+            scenes: [
+                {
+                    nodes: [
+                        0
+                    ]
                 }
-            }
+            ]
         };
 
-        addDefaults(gltf);
-        expect(gltf.textures.textureId.format).toEqual(WebGLConstants.RGBA);
-        expect(gltf.textures.textureId.internalFormat).toEqual(6408);
-        expect(gltf.textures.textureId.target).toEqual(WebGLConstants.TEXTURE_2D);
-        expect(gltf.textures.textureId.type).toEqual(WebGLConstants.UNSIGNED_BYTE);
-    });
-
-    it('Adds empty top-level properties', function() {
-        var gltf = {};
-
-        addDefaults(gltf);
-        expect(gltf.extensionsUsed).toBeDefined();
-        expect(gltf.accessors).toBeDefined();
-        expect(gltf.animations).toBeDefined();
-        expect(gltf.asset).toBeDefined();
-        expect(gltf.buffers).toBeDefined();
-        expect(gltf.bufferViews).toBeDefined();
-        expect(gltf.cameras).toBeDefined();
-        expect(gltf.images).toBeDefined();
-        expect(gltf.materials).toBeDefined();
-        expect(gltf.meshes).toBeDefined();
-        expect(gltf.nodes).toBeDefined();
-        expect(gltf.programs).toBeDefined();
-        expect(gltf.samplers).toBeDefined();
-        expect(gltf.scenes).toBeDefined();
-        expect(gltf.shaders).toBeDefined();
-        expect(gltf.skins).toBeDefined();
-        expect(gltf.techniques).toBeDefined();
-        expect(gltf.textures).toBeDefined();
+        var gltfWithDefaults = addDefaults(gltf);
+        expect(gltfWithDefaults.scene).toBe(0);
     });
 });
