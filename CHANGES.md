@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+### 1.0.6 - 2018-08-14
+
+* Fixed `UNSIGNED_SHORT` overflow when generating face normals.
+
 ### 1.0.5 - 2018-07-13
 * Fixed a bug where percent-encoded characters (like %20) were not decoded before attempting to read a uri.
 
