@@ -3,6 +3,7 @@ Change Log
 
 ### 2.0.1 - ????
 
+* Added ability to apply Draco compression to meshes without indices. [#424](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/424)
 * Fixed a bug where the buffer `byteOffset` was not set properly when updating 1.0 accessor types to 2.0 allowed values. [#418](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/418)
 * Fixed a bug where bufferViews were not properly byte aligned when updating accessors from 1.0 to 2.0. [#421](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/421)
 * Fixed a bug in `removePipelineExtras` when run in the browser. [#422](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/422)
