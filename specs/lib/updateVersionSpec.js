@@ -5,6 +5,7 @@ var numberOfComponentsForType = require('../../lib/numberOfComponentsForType');
 var readResources = require('../../lib/readResources');
 var updateVersion = require('../../lib/updateVersion');
 
+var arrayFill = Cesium.arrayFill;
 var Cartesian3 = Cesium.Cartesian3;
 var Quaternion = Cesium.Quaternion;
 var WebGLConstants = Cesium.WebGLConstants;
@@ -273,17 +274,28 @@ describe('updateVersion', function() {
     });
 
     function getNodeByName(gltf, name) {
-        var nodeWithName;
-        ForEach.node(gltf, function(node) {
+        return ForEach.node(gltf, function(node) {
             if (node.name === name) {
-                nodeWithName = node;
+                return node;
             }
         });
-        return nodeWithName;
+    }
+
+    function getBufferViewByName(gltf, name) {
+        return ForEach.bufferView(gltf, function(bufferView) {
+            if (bufferView.name === name) {
+                return bufferView;
+            }
+        });
     }
 
     it('updates glTF from 1.0 to 2.0', function(done) {
-        var source = Buffer.from((new Int16Array([-2.0, 1.0, 0.0, 1.0, 2.0, 3.0])).buffer);
+        var applicationSpecificBuffer = Buffer.from((new Int16Array([-2, 1, 0, 1, 2, 3])).buffer);
+        var positionBuffer = Buffer.from(arrayFill(new Float32Array(9), 1.0).buffer);
+        var normalBuffer = Buffer.from(arrayFill(new Float32Array(9), 2.0).buffer);
+        var texcoordBuffer = Buffer.from(arrayFill(new Float32Array(6), 3.0).buffer);
+        var source = Buffer.concat([applicationSpecificBuffer, positionBuffer, normalBuffer, texcoordBuffer]);
+
         var dataUri = 'data:application/octet-stream;base64,' + source.toString('base64');
 
         var gltf = {
@@ -467,7 +479,7 @@ describe('updateVersion', function() {
             bufferViews: {
                 bufferView: {
                     buffer: 'buffer',
-                    byteOffset: 96
+                    byteOffset: 0
                 },
                 bufferViewAttributes: {
                     buffer: 'buffer',
@@ -683,8 +695,9 @@ describe('updateVersion', function() {
                 var buffer = gltf.buffers[0];
                 expect(buffer.type).toBeUndefined();
                 expect(buffer.byteLength).toEqual(source.length);
-                var bufferView = gltf.bufferViews[0];
-                expect(bufferView.byteLength).toEqual(source.length);
+
+                var bufferView = getBufferViewByName(gltf, 'bufferView');
+                expect(bufferView.byteLength).toEqual(12);
 
                 // Min and max are added to all POSITION accessors
                 ForEach.accessorWithSemantic(gltf, 'POSITION', function(accessorId) {
