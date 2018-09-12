@@ -48,6 +48,7 @@ describe('updateAccessorComponentTypes', function() {
                 }, {
                     bufferView: 1,
                     componentType: WebGLConstants.FLOAT,
+                    byteOffset: 12,
                     count: 24,
                     type: 'VEC4'
                 }, {
@@ -87,6 +88,7 @@ describe('updateAccessorComponentTypes', function() {
 
             expect(gltf.accessors[1].componentType).toBe(WebGLConstants.UNSIGNED_SHORT);
             expect(gltf.accessors[1].bufferView).toBe(4);
+            expect(gltf.accessors[1].byteOffset).toBe(0);
             expect(gltf.bufferViews[4].buffer).toBe(2);
             expect(gltf.bufferViews[4].byteLength).toBe(192);
 
@@ -125,6 +127,7 @@ describe('updateAccessorComponentTypes', function() {
                 }, {
                     bufferView: 1,
                     componentType: WebGLConstants.BYTE,
+                    byteOffset: 12,
                     count: 24,
                     type: 'VEC4'
                 }, {
@@ -162,6 +165,7 @@ describe('updateAccessorComponentTypes', function() {
 
             expect(gltf.accessors[1].componentType).toBe(WebGLConstants.UNSIGNED_BYTE);
             expect(gltf.accessors[1].bufferView).toBe(3);
+            expect(gltf.accessors[1].byteOffset).toBe(0);
             expect(gltf.bufferViews[3].buffer).toBe(1);
             expect(gltf.bufferViews[3].byteLength).toBe(96);
 

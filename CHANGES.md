@@ -1,7 +1,12 @@
 Change Log
 ==========
 
-### 2.0.0 2018-08-14
+### 2.0.1 - ????
+
+* Fixed a bug where the buffer `byteOffset` was not set properly when updating 1.0 accessor types to 2.0 allowed values. [#418](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/418)
+* Fixed a bug in `removePipelineExtras` when run in the browser. [#422](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/422)
+
+### 2.0.0 - 2018-08-14
 
 * Breaking changes
     * Project updated to process glTF 2.0 models. Any glTF 1.0 models will be upgraded to glTF 2.0 automatically and use the `KHR_techniques_webgl` and `KHR_blend` extensions.
@@ -72,7 +77,7 @@ Change Log
 * Change Cesium `Geometry`'s and `VertexFormat`'s `binormal` attribute to bitangent.
 * Fixed a bug in `combinePrimitives` where combining primitives can overflow uint16 for the resulting indices. [#230](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/issues/230)
 * Made `generateNormals` stage optional and added `smoothNormals` option for generating smooth normals if the model does not have normals. [#240](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/240)
-* `updateVersion` stage for upgrades the glTF version of an asset from `1.0` to `2.0`. [#223](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/223) 
+* `updateVersion` stage for upgrades the glTF version of an asset from `1.0` to `2.0`. [#223](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/223)
    * All pipeline stages now operate on glTF `2.0` assets.
 
 ### 0.1.0-alpha10 - 2017-01-10

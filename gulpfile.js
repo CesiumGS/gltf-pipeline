@@ -210,6 +210,7 @@ gulp.task('build-cesium', function () {
         'addPipelineExtras.js',
         'ForEach.js',
         'parseGlb.js',
+        'removePipelineExtras.js',
         'updateVersion.js'
     ];
 
