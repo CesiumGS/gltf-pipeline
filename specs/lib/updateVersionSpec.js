@@ -436,21 +436,21 @@ describe('updateVersion', function() {
                 },
                 accessor_position: {
                     bufferView: 'bufferViewAttributes',
-                    byteOffset: 72,
+                    byteOffset: 0,
                     componentType: WebGLConstants.FLOAT,
                     count: 3,
                     type: 'VEC3'
                 },
                 accessor_normal: {
                     bufferView: 'bufferViewAttributes',
-                    byteOffset: 0,
+                    byteOffset: 42,
                     componentType: WebGLConstants.BYTE,
                     count: 3,
                     type: 'VEC2'
                 },
                 accessor_texcoord: {
                     bufferView: 'bufferViewAttributes',
-                    byteOffset: 36,
+                    byteOffset: 50,
                     componentType: WebGLConstants.BYTE,
                     count: 3,
                     type: 'VEC2'
@@ -721,15 +721,15 @@ describe('updateVersion', function() {
                 var texcoordAccessor = gltf.accessors[primitive.attributes.TEXCOORD_0];
                 var positionBufferView = gltf.bufferViews[positionAccessor.bufferView];
                 var texcoordBufferView = gltf.bufferViews[texcoordAccessor.bufferView];
-                expect(positionAccessor.bufferView).toBe(2);
-                expect(normalAccessor.bufferView).toBe(1);
-                expect(texcoordAccessor.bufferView).toBe(1);
-                expect(texcoordBufferView.byteLength).toBe(42);
-                expect(texcoordBufferView.byteOffset).toBe(12); // First unrelated buffer view is 12 bytes
-                expect(texcoordBufferView.byteStride).toBe(2);
-                expect(positionBufferView.byteLength).toBe(64);
-                expect(positionBufferView.byteOffset).toBe(42 + 12 + 2); // First unrelated buffer view is 12 bytes + byte alignment
+                expect(positionAccessor.bufferView).toBe(1);
+                expect(normalAccessor.bufferView).toBe(2);
+                expect(texcoordAccessor.bufferView).toBe(2);
+                expect(positionBufferView.byteLength).toBe(36);
+                expect(positionBufferView.byteOffset).toBe(12); // First unrelated buffer view is 12 bytes
                 expect(positionBufferView.byteStride).toBe(12);
+                expect(texcoordBufferView.byteLength).toBe(50 - 42 + 6); // Padding to next buffer view
+                expect(texcoordBufferView.byteOffset).toBe(42 + 12); // Byte offset of previous accessor plus byte length
+                expect(texcoordBufferView.byteStride).toBe(2);
                 expect(positionAccessor.byteStride).toBeUndefined();
                 expect(normalAccessor.byteStride).toBeUndefined();
                 expect(texcoordAccessor.byteStride).toBeUndefined();
