@@ -3,13 +3,17 @@ var Cesium = require('cesium');
 var readResources = require('../../lib/readResources');
 var updateAccessorComponentTypes = require('../../lib/updateAccessorComponentTypes');
 
+var arrayFill = Cesium.arrayFill;
 var WebGLConstants = Cesium.WebGLConstants;
 
 var buffer;
 
 describe('updateAccessorComponentTypes', function() {
     beforeAll(function() {
-        var source = Buffer.from((new Float32Array([-2.0, 1.0, 0.0, 1.0, 2.0, 3.0])).buffer);
+        var byteBuffer = Buffer.from(arrayFill(new Int8Array(96), 0).buffer);
+        var floatBuffer = Buffer.from(arrayFill(new Float32Array(96), 0.0).buffer);
+        var unsignedShortBuffer = Buffer.from(arrayFill(new Uint16Array(96), 0).buffer);
+        var source = Buffer.concat([byteBuffer, floatBuffer, unsignedShortBuffer]);
         var byteLength = source.length;
         var dataUri = 'data:application/octet-stream;base64,' + source.toString('base64');
         buffer = {
@@ -61,14 +65,16 @@ describe('updateAccessorComponentTypes', function() {
             bufferViews: [
                 {
                     buffer: 0,
-                    byteLength: 12
+                    byteOffset: 0,
+                    byteLength: 96
                 }, {
                     buffer: 0,
-                    byteOffset: 12,
-                    byteLength: 12
+                    byteOffset: 96,
+                    byteLength: 384
                 }, {
                     buffer: 0,
-                    byteLength: 12
+                    byteOffset: 480,
+                    byteLength: 192
                 }
             ],
             buffers: [buffer]

@@ -5,6 +5,7 @@ var numberOfComponentsForType = require('../../lib/numberOfComponentsForType');
 var readResources = require('../../lib/readResources');
 var updateVersion = require('../../lib/updateVersion');
 
+var arrayFill = Cesium.arrayFill;
 var Cartesian3 = Cesium.Cartesian3;
 var Quaternion = Cesium.Quaternion;
 var WebGLConstants = Cesium.WebGLConstants;
@@ -273,17 +274,28 @@ describe('updateVersion', function() {
     });
 
     function getNodeByName(gltf, name) {
-        var nodeWithName;
-        ForEach.node(gltf, function(node) {
+        return ForEach.node(gltf, function(node) {
             if (node.name === name) {
-                nodeWithName = node;
+                return node;
             }
         });
-        return nodeWithName;
+    }
+
+    function getBufferViewByName(gltf, name) {
+        return ForEach.bufferView(gltf, function(bufferView) {
+            if (bufferView.name === name) {
+                return bufferView;
+            }
+        });
     }
 
     it('updates glTF from 1.0 to 2.0', function(done) {
-        var source = Buffer.from((new Int16Array([-2.0, 1.0, 0.0, 1.0, 2.0, 3.0])).buffer);
+        var applicationSpecificBuffer = Buffer.from((new Int16Array([-2, 1, 0, 1, 2, 3])).buffer);
+        var positionBuffer = Buffer.from(arrayFill(new Float32Array(9), 1.0).buffer);
+        var normalBuffer = Buffer.from(arrayFill(new Float32Array(9), 2.0).buffer);
+        var texcoordBuffer = Buffer.from(arrayFill(new Float32Array(6), 3.0).buffer);
+        var source = Buffer.concat([applicationSpecificBuffer, positionBuffer, normalBuffer, texcoordBuffer]);
+
         var dataUri = 'data:application/octet-stream;base64,' + source.toString('base64');
 
         var gltf = {
@@ -431,15 +443,15 @@ describe('updateVersion', function() {
                 },
                 accessor_normal: {
                     bufferView: 'bufferViewAttributes',
-                    byteOffset: 36,
-                    componentType: WebGLConstants.FLOAT,
+                    byteOffset: 42,
+                    componentType: WebGLConstants.BYTE,
                     count: 3,
-                    type: 'VEC3'
+                    type: 'VEC2'
                 },
                 accessor_texcoord: {
                     bufferView: 'bufferViewAttributes',
-                    byteOffset: 72,
-                    componentType: WebGLConstants.FLOAT,
+                    byteOffset: 50,
+                    componentType: WebGLConstants.BYTE,
                     count: 3,
                     type: 'VEC2'
                 },
@@ -467,7 +479,7 @@ describe('updateVersion', function() {
             bufferViews: {
                 bufferView: {
                     buffer: 'buffer',
-                    byteOffset: 96
+                    byteOffset: 0
                 },
                 bufferViewAttributes: {
                     buffer: 'buffer',
@@ -683,8 +695,9 @@ describe('updateVersion', function() {
                 var buffer = gltf.buffers[0];
                 expect(buffer.type).toBeUndefined();
                 expect(buffer.byteLength).toEqual(source.length);
-                var bufferView = gltf.bufferViews[0];
-                expect(bufferView.byteLength).toEqual(source.length);
+
+                var bufferView = getBufferViewByName(gltf, 'bufferView');
+                expect(bufferView.byteLength).toEqual(12);
 
                 // Min and max are added to all POSITION accessors
                 ForEach.accessorWithSemantic(gltf, 'POSITION', function(accessorId) {
@@ -709,14 +722,14 @@ describe('updateVersion', function() {
                 var positionBufferView = gltf.bufferViews[positionAccessor.bufferView];
                 var texcoordBufferView = gltf.bufferViews[texcoordAccessor.bufferView];
                 expect(positionAccessor.bufferView).toBe(1);
-                expect(normalAccessor.bufferView).toBe(1);
+                expect(normalAccessor.bufferView).toBe(2);
                 expect(texcoordAccessor.bufferView).toBe(2);
-                expect(positionBufferView.byteLength).toBe(72);
+                expect(positionBufferView.byteLength).toBe(36);
                 expect(positionBufferView.byteOffset).toBe(12); // First unrelated buffer view is 12 bytes
                 expect(positionBufferView.byteStride).toBe(12);
-                expect(texcoordBufferView.byteLength).toBe(24);
-                expect(texcoordBufferView.byteOffset).toBe(72 + 12); // First unrelated buffer view is 12 bytes
-                expect(texcoordBufferView.byteStride).toBe(8);
+                expect(texcoordBufferView.byteLength).toBe(50 - 42 + 6); // Padding to next buffer view
+                expect(texcoordBufferView.byteOffset).toBe(42 + 12); // Byte offset of previous accessor plus byte length
+                expect(texcoordBufferView.byteStride).toBe(2);
                 expect(positionAccessor.byteStride).toBeUndefined();
                 expect(normalAccessor.byteStride).toBeUndefined();
                 expect(texcoordAccessor.byteStride).toBeUndefined();
