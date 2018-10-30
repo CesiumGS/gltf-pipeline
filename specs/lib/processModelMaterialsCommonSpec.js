@@ -325,4 +325,84 @@ describe('processModelMaterialsCommon', function() {
         expect(techniqueVec4.parameters.joint.type).toEqual(WebGLConstants.FLOAT_VEC4);
         expect(techniqueMat3.parameters.joint.type).toEqual(WebGLConstants.FLOAT_MAT3);
     });
+
+    it('splits two materials with different attributes', function() {
+        var gltf = {
+            accessors: {
+                positionAccessor_0: {
+                    componentType: WebGLConstants.FLOAT,
+                    type: 'VEC3'
+                },
+                normalAccessor_0: {
+                    componentType: WebGLConstants.FLOAT,
+                    type: 'VEC3'
+                },
+                texcoordAccessor_0: {
+                    componentType: WebGLConstants.FLOAT,
+                    type: 'VEC2'
+                },
+                positionAccessor_1: {
+                    componentType: WebGLConstants.FLOAT,
+                    type: 'VEC3'
+                },
+                normalAccessor_1: {
+                    componentType: WebGLConstants.FLOAT,
+                    type: 'VEC3'
+                }
+            },
+            extensionsUsed: [
+                'KHR_materials_common'
+            ],
+            materials: {
+                material: {
+                    extensions: {
+                        KHR_materials_common: {
+                            jointCount: 14,
+                            technique: 'BLINN'
+                        }
+                    }
+                }
+            },
+            meshes: {
+                mesh_0: {
+                    primitives: [{
+                        attributes: {
+                            POSITION: 'positionAccessor_0',
+                            NORMAL: 'normalAccessor_0',
+                            TEXCOORD: 'texcoordAccessor_0'
+                        },
+                        material: 'material'
+                    }]
+                },
+                mesh_1: {
+                    primitives: [{
+                        attributes: {
+                            POSITION: 'positionAccessor_1',
+                            NORMAL: 'normalAccessor_1'
+                        },
+                        material: 'material'
+                    }]
+                }
+            }
+        };
+        addDefaults(gltf);
+        addPipelineExtras(gltf);
+        processModelMaterialsCommon(gltf);
+
+        var meshes = gltf.meshes;
+        var primitive0 = meshes.mesh_0.primitives[0];
+        var primitive1 = meshes.mesh_1.primitives[0];
+        var material0Id = primitive0.material;
+        var material1Id = primitive1.material;
+        expect(primitive0).not.toEqual(primitive1);
+
+        var materials = gltf.materials;
+        var techniques = gltf.techniques;
+        var technique0 = techniques[materials[material0Id].technique];
+        var technique1 = techniques[materials[material1Id].technique];
+        expect(technique0.parameters.normal).toBeDefined();
+        expect(technique0.parameters.texcoord).toBeDefined();
+        expect(technique1.parameters.normal).toBeDefined();
+        expect(technique1.parameters.texcoord).toBeUndefined();
+    });
 });
