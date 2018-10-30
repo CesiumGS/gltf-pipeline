@@ -325,6 +325,18 @@ describe('updateVersion', function() {
                 'WEB3D_quantized_attributes',
                 'UNKOWN_EXTENSION'
             ],
+            extensions: {
+                KHR_materials_common: {
+                    lights: {
+                        directionalLight: {
+                            directional: {
+                                color: [1, 0, 0]
+                            },
+                            type: 'directional'
+                        }
+                    }
+                }
+            },
             meshes: {
                 mesh: {
                     primitives: [
@@ -543,6 +555,13 @@ describe('updateVersion', function() {
                         0, 0, 1, 0,
                         0, 0, 0, 1
                     ]
+                },
+                lightNode: {
+                    extensions: {
+                        KHR_materials_common: {
+                            light: 'directionalLight'
+                        }
+                    }
                 }
             },
             programs: {
@@ -562,7 +581,8 @@ describe('updateVersion', function() {
                 defaultScene: {
                     nodes: [
                         'rootTransform',
-                        'emptyNodeParent'
+                        'emptyNodeParent',
+                        'lightNode'
                     ]
                 }
             },
@@ -631,7 +651,8 @@ describe('updateVersion', function() {
                 expect(getNodeByName(gltf, 'nonEmptyNodeParent')).toBeDefined();
                 expect(getNodeByName(gltf, 'emptyNodeParent')).toBeUndefined();
                 expect(getNodeByName(gltf, 'emptyNode')).toBeUndefined();
-                expect(gltf.scenes[0].nodes.length).toBe(1);
+                expect(getNodeByName(gltf, 'lightNode')).toBeDefined();
+                expect(gltf.scenes[0].nodes.length).toBe(2);
 
                 // Expect material values to be moved to material KHR_techniques_webgl extension
                 var material = gltf.materials[0];
