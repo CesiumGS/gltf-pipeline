@@ -326,7 +326,7 @@ describe('processModelMaterialsCommon', function() {
         expect(techniqueMat3.parameters.joint.type).toEqual(WebGLConstants.FLOAT_MAT3);
     });
 
-    it('splits two materials with different attributes', function() {
+    it('splits a material used by meshes with different attributes', function() {
         var gltf = {
             accessors: {
                 positionAccessor_0: {
