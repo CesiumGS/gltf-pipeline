@@ -23,7 +23,15 @@ process.env.PATH += environmentSeparator + nodeBinaries;
 
 var specFiles = ['**/*.js', '!node_modules/**', '!coverage/**', '!doc/**', '!bin/**', '!dist/**'];
 
-gulp.task('test', function (done) {
+module.exports = {
+    'build-cesium': buildCesium,
+    test: test,
+    'test-watch': testWatch,
+    coverage: coverage,
+    cloc: cloc
+};
+
+function test(done) {
     var jasmine = new Jasmine();
     jasmine.loadConfigFile('specs/jasmine.json');
     jasmine.addReporter(new JasmineSpecReporter({
@@ -33,10 +41,10 @@ gulp.task('test', function (done) {
     jasmine.onComplete(function (passed) {
         done(argv.failTaskOnError && !passed ? 1 : 0);
     });
-});
+}
 
-gulp.task('test-watch', function () {
-    gulp.watch(specFiles).on('change', function () {
+function testWatch() {
+    return gulp.watch(specFiles).on('change', function () {
         // We can't simply depend on the test task because Jasmine
         // does not like being run multiple times in the same process.
         try {
@@ -47,9 +55,9 @@ gulp.task('test-watch', function () {
             console.log('Tests failed to execute.');
         }
     });
-});
+}
 
-gulp.task('coverage', function () {
+function coverage() {
     fsExtra.removeSync('coverage/server');
     child_process.execSync('nyc' +
         ' --all' +
@@ -61,9 +69,11 @@ gulp.task('coverage', function () {
         stdio: [process.stdin, process.stdout, process.stderr]
     });
     open('coverage/lcov-report/index.html');
-});
 
-gulp.task('cloc', function() {
+    return Promise.resolve();
+}
+
+function cloc() {
     var cmdLine;
     var clocPath = path.join('node_modules', 'cloc', 'lib', 'cloc');
 
@@ -99,7 +109,7 @@ gulp.task('cloc', function() {
             });
         });
     });
-});
+}
 
 function amdify(source, subDependencyMapping) {
     var fullMatch;
@@ -202,7 +212,7 @@ function amdify(source, subDependencyMapping) {
     return outputSource;
 }
 
-gulp.task('build-cesium', function () {
+function buildCesium() {
     var basePath = 'lib';
     var outputDir = 'dist/cesium';
     var files = [
@@ -247,4 +257,4 @@ gulp.task('build-cesium', function () {
                 });
         });
     });
-});
+}
