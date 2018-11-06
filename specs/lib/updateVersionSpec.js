@@ -1,18 +1,18 @@
 'use strict';
-var Cesium = require('cesium');
-var ForEach = require('../../lib/ForEach');
-var numberOfComponentsForType = require('../../lib/numberOfComponentsForType');
-var readResources = require('../../lib/readResources');
-var updateVersion = require('../../lib/updateVersion');
+const Cesium = require('cesium');
+const ForEach = require('../../lib/ForEach');
+const numberOfComponentsForType = require('../../lib/numberOfComponentsForType');
+const readResources = require('../../lib/readResources');
+const updateVersion = require('../../lib/updateVersion');
 
-var arrayFill = Cesium.arrayFill;
-var Cartesian3 = Cesium.Cartesian3;
-var Quaternion = Cesium.Quaternion;
-var WebGLConstants = Cesium.WebGLConstants;
+const arrayFill = Cesium.arrayFill;
+const Cartesian3 = Cesium.Cartesian3;
+const Quaternion = Cesium.Quaternion;
+const WebGLConstants = Cesium.WebGLConstants;
 
 describe('updateVersion', function() {
     it('defaults to 1.0 if gltf has no version', function() {
-        var gltf = {};
+        const gltf = {};
         updateVersion(gltf, {
             targetVersion: '1.0'
         });
@@ -20,7 +20,7 @@ describe('updateVersion', function() {
     });
 
     it('updates empty glTF with version from 0.8 to 2.0', function() {
-        var gltf = {
+        const gltf = {
             version: '0.8'
         };
         updateVersion(gltf);
@@ -29,7 +29,7 @@ describe('updateVersion', function() {
     });
 
     it('updates empty glTF with version 1.0 to 2.0', function() {
-        var gltf = {
+        const gltf = {
             asset: {
                 version: '1.0'
             }
@@ -39,7 +39,7 @@ describe('updateVersion', function() {
     });
 
     it('updates a glTF with non-standard version to 2.0', function() {
-        var gltf = {
+        const gltf = {
             asset: {
                 version: '1.0.1'
             }
@@ -49,20 +49,20 @@ describe('updateVersion', function() {
     });
 
     it('updates glTF from 0.8 to 1.0', function(done) {
-        var times = [0.0, 1.0];
-        var axisA = new Cartesian3(0.0, 0.0, 1.0);
-        var axisB = new Cartesian3(0.0, 1.0, 0.0);
-        var angleA = 0.0;
-        var angleB = 0.5;
-        var quatA = Quaternion.fromAxisAngle(axisA, angleA);
-        var quatB = Quaternion.fromAxisAngle(axisB, angleB);
+        const times = [0.0, 1.0];
+        const axisA = new Cartesian3(0.0, 0.0, 1.0);
+        const axisB = new Cartesian3(0.0, 1.0, 0.0);
+        const angleA = 0.0;
+        const angleB = 0.5;
+        const quatA = Quaternion.fromAxisAngle(axisA, angleA);
+        const quatB = Quaternion.fromAxisAngle(axisB, angleB);
 
-        var originalBuffer = Buffer.from((new Float32Array([times[0], times[1], axisA.x, axisA.y, axisA.z, angleA, axisB.x, axisB.y, axisB.z, angleB])).buffer);
-        var expectedBuffer = Buffer.from((new Float32Array([times[0], times[1], quatA.x, quatA.y, quatA.z, quatA.w, quatB.x, quatB.y, quatB.z, quatB.w])).buffer);
+        const originalBuffer = Buffer.from((new Float32Array([times[0], times[1], axisA.x, axisA.y, axisA.z, angleA, axisB.x, axisB.y, axisB.z, angleB])).buffer);
+        const expectedBuffer = Buffer.from((new Float32Array([times[0], times[1], quatA.x, quatA.y, quatA.z, quatA.w, quatB.x, quatB.y, quatB.z, quatB.w])).buffer);
 
-        var dataUri = 'data:application/octet-stream;base64,' + originalBuffer.toString('base64');
+        const dataUri = 'data:application/octet-stream;base64,' + originalBuffer.toString('base64');
 
-        var gltf = {
+        const gltf = {
             version: '0.8',
             asset: {
                 profile: 'WebGL 1.0'
@@ -234,19 +234,19 @@ describe('updateVersion', function() {
                 });
 
                 // material.instanceTechnique properties moved onto the material directly
-                var material = gltf.materials.material;
+                const material = gltf.materials.material;
                 expect(material.technique).toEqual('technique');
                 expect(material.values).toEqual({
                     ambient: [0.0, 0.0, 0.0, 1.0]
                 });
 
                 // primitive.primitive renamed to primitive.mode
-                var primitive = gltf.meshes.mesh.primitives[0];
+                const primitive = gltf.meshes.mesh.primitives[0];
                 expect(primitive.primitive).toBeUndefined();
                 expect(primitive.mode).toEqual(WebGLConstants.TRIANGLES);
 
                 // node.instanceSkin is split into node.skeletons, node.skin, and node.meshes
-                var node = gltf.nodes.node;
+                const node = gltf.nodes.node;
                 expect(node.skeletons).toEqual(['skeleton']);
                 expect(node.skin).toEqual('skin');
                 expect(node.meshes).toEqual(['mesh']);
@@ -255,7 +255,7 @@ describe('updateVersion', function() {
                 expect(node.rotation).toEqual([0.0, 0.0, 0.0, 1.0]);
 
                 // Technique pass and passes removed
-                var technique = gltf.techniques.technique;
+                const technique = gltf.techniques.technique;
                 expect(technique.pass).toBeUndefined();
                 expect(technique.passes).toBeUndefined();
                 expect(technique.attributes).toEqual({
@@ -268,7 +268,7 @@ describe('updateVersion', function() {
                 expect(technique.states).toEqual(['TEST_STATE']);
 
                 // Animation rotations converted from axis-angle to quaternion
-                var buffer = gltf.buffers.buffer.extras._pipeline.source;
+                const buffer = gltf.buffers.buffer.extras._pipeline.source;
                 expect(buffer.equals(expectedBuffer)).toBe(true);
             }), done).toResolve();
     });
@@ -290,15 +290,15 @@ describe('updateVersion', function() {
     }
 
     it('updates glTF from 1.0 to 2.0', function(done) {
-        var applicationSpecificBuffer = Buffer.from((new Int16Array([-2, 1, 0, 1, 2, 3])).buffer);
-        var positionBuffer = Buffer.from(arrayFill(new Float32Array(9), 1.0).buffer);
-        var normalBuffer = Buffer.from(arrayFill(new Float32Array(9), 2.0).buffer);
-        var texcoordBuffer = Buffer.from(arrayFill(new Float32Array(6), 3.0).buffer);
-        var source = Buffer.concat([applicationSpecificBuffer, positionBuffer, normalBuffer, texcoordBuffer]);
+        const applicationSpecificBuffer = Buffer.from((new Int16Array([-2, 1, 0, 1, 2, 3])).buffer);
+        const positionBuffer = Buffer.from(arrayFill(new Float32Array(9), 1.0).buffer);
+        const normalBuffer = Buffer.from(arrayFill(new Float32Array(9), 2.0).buffer);
+        const texcoordBuffer = Buffer.from(arrayFill(new Float32Array(6), 3.0).buffer);
+        const source = Buffer.concat([applicationSpecificBuffer, positionBuffer, normalBuffer, texcoordBuffer]);
 
-        var dataUri = 'data:application/octet-stream;base64,' + source.toString('base64');
+        const dataUri = 'data:application/octet-stream;base64,' + source.toString('base64');
 
-        var gltf = {
+        const gltf = {
             asset: {
                 profile: {
                     api: 'WebGL',
@@ -600,7 +600,7 @@ describe('updateVersion', function() {
                 expect(gltf.asset.profile).toBeUndefined();
 
                 // Extensions used become extensions required
-                var extensionsUsed = gltf.extensionsUsed;
+                const extensionsUsed = gltf.extensionsUsed;
                 expect(extensionsUsed).toEqual([
                     'KHR_materials_common',
                     'WEB3D_quantized_attributes',
@@ -608,7 +608,7 @@ describe('updateVersion', function() {
                     'KHR_blend',
                     'KHR_techniques_webgl'
                 ]);
-                var extensionsRequired = gltf.extensionsRequired;
+                const extensionsRequired = gltf.extensionsRequired;
                 expect(extensionsRequired).toEqual([
                     'KHR_materials_common',
                     'WEB3D_quantized_attributes',
@@ -616,8 +616,8 @@ describe('updateVersion', function() {
                 ]);
 
                 // animation.parameters removed
-                var animation = gltf.animations[0];
-                var sampler = animation.samplers[0];
+                const animation = gltf.animations[0];
+                const sampler = animation.samplers[0];
                 expect(sampler.name).toBeUndefined();
                 expect(sampler.input).toEqual(2);
                 expect(sampler.output).toEqual(3);
@@ -634,7 +634,7 @@ describe('updateVersion', function() {
                 expect(gltf.scenes[0].nodes.length).toBe(1);
 
                 // Expect material values to be moved to material KHR_techniques_webgl extension
-                var material = gltf.materials[0];
+                const material = gltf.materials[0];
                 expect(material.extensions.KHR_techniques_webgl.values.u_lightAttenuation).toEqual(2);
 
                 // Expect material paramters to be updated
@@ -642,7 +642,7 @@ describe('updateVersion', function() {
                 expect(material.alphaMode).toBe('BLEND');
 
                 // Expect technique blending to be moved to material KHR_blend extension
-                var materialBlending = material.extensions.KHR_blend;
+                const materialBlending = material.extensions.KHR_blend;
                 expect(materialBlending).toBeDefined();
                 expect(materialBlending.blendEquation).toEqual([
                     WebGLConstants.FUNC_SUBTRACT,
@@ -656,12 +656,12 @@ describe('updateVersion', function() {
                 ]);
 
                 // Expect techniques to be moved to asset KHR_techniques_webgl extension
-                var technique = gltf.extensions.KHR_techniques_webgl.techniques[0];
+                const technique = gltf.extensions.KHR_techniques_webgl.techniques[0];
                 expect(technique.uniforms.u_lightAttenuation.value).toEqual(1.0);
                 expect(technique.attributes.a_application.value).toBeUndefined();
 
                 // TEXCOORD and COLOR are now TEXCOORD_0 and COLOR_0
-                var primitive = gltf.meshes[0].primitives[0];
+                const primitive = gltf.meshes[0].primitives[0];
                 expect(technique.uniforms.u_texcoord.semantic).toEqual('TEXCOORD_0');
                 expect(technique.uniforms.u_color.semantic).toEqual('COLOR_0');
                 expect(primitive.attributes.TEXCOORD).toBeUndefined();
@@ -687,21 +687,21 @@ describe('updateVersion', function() {
                 expect(gltf.accessors[8].componentType).toBe(WebGLConstants.UNSIGNED_SHORT);
 
                 // Clamp camera parameters
-                var camera = gltf.cameras[0];
+                const camera = gltf.cameras[0];
                 expect(camera.perspective.aspectRatio).toBeUndefined();
                 expect(camera.perspective.yfov).toEqual(1.0);
 
                 // Sets byteLength for buffers and bufferViews
-                var buffer = gltf.buffers[0];
+                const buffer = gltf.buffers[0];
                 expect(buffer.type).toBeUndefined();
                 expect(buffer.byteLength).toEqual(source.length);
 
-                var bufferView = getBufferViewByName(gltf, 'bufferView');
+                const bufferView = getBufferViewByName(gltf, 'bufferView');
                 expect(bufferView.byteLength).toEqual(12);
 
                 // Min and max are added to all POSITION accessors
                 ForEach.accessorWithSemantic(gltf, 'POSITION', function(accessorId) {
-                    var accessor = gltf.accessors[accessorId];
+                    const accessor = gltf.accessors[accessorId];
                     expect(accessor.min.length).toEqual(numberOfComponentsForType(accessor.type));
                     expect(accessor.max.length).toEqual(numberOfComponentsForType(accessor.type));
                 });
@@ -709,18 +709,18 @@ describe('updateVersion', function() {
                 // Min and max are added to all animation sampler input accessors
                 ForEach.animation(gltf, function(animation) {
                     ForEach.animationSampler(animation, function(sampler) {
-                        var accessor = gltf.accessors[sampler.input];
+                        const accessor = gltf.accessors[sampler.input];
                         expect(accessor.min.length).toEqual(numberOfComponentsForType(accessor.type));
                         expect(accessor.max.length).toEqual(numberOfComponentsForType(accessor.type));
                     });
                 });
 
                 // byteStride moved from accessor to bufferView
-                var positionAccessor = gltf.accessors[primitive.attributes.POSITION];
-                var normalAccessor = gltf.accessors[primitive.attributes.NORMAL];
-                var texcoordAccessor = gltf.accessors[primitive.attributes.TEXCOORD_0];
-                var positionBufferView = gltf.bufferViews[positionAccessor.bufferView];
-                var texcoordBufferView = gltf.bufferViews[texcoordAccessor.bufferView];
+                const positionAccessor = gltf.accessors[primitive.attributes.POSITION];
+                const normalAccessor = gltf.accessors[primitive.attributes.NORMAL];
+                const texcoordAccessor = gltf.accessors[primitive.attributes.TEXCOORD_0];
+                const positionBufferView = gltf.bufferViews[positionAccessor.bufferView];
+                const texcoordBufferView = gltf.bufferViews[texcoordAccessor.bufferView];
                 expect(positionAccessor.bufferView).toBe(1);
                 expect(normalAccessor.bufferView).toBe(2);
                 expect(texcoordAccessor.bufferView).toBe(2);

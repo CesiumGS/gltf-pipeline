@@ -1,12 +1,12 @@
 'use strict';
-var Cesium = require('cesium');
-var removeExtension = require('../../lib/removeExtension');
+const Cesium = require('cesium');
+const removeExtension = require('../../lib/removeExtension');
 
-var WebGLConstants = Cesium.WebGLConstants;
+const WebGLConstants = Cesium.WebGLConstants;
 
 describe('removeExtension', function() {
     it('removes extension', function() {
-        var gltf = {
+        const gltf = {
             extensionsRequired: [
                 'extension1',
                 'extension2',
@@ -52,7 +52,7 @@ describe('removeExtension', function() {
                 }
             ]
         };
-        var extension1 = removeExtension(gltf, 'extension1');
+        const extension1 = removeExtension(gltf, 'extension1');
         expect(gltf.extensionsRequired).toEqual(['extension2', 'extension3']);
         expect(gltf.extensionsUsed).toEqual(['extension2', 'extension3']);
         expect(gltf.extensions).toEqual({
@@ -67,7 +67,7 @@ describe('removeExtension', function() {
             value: 9
         });
 
-        var extension2 = removeExtension(gltf, 'extension2');
+        const extension2 = removeExtension(gltf, 'extension2');
         expect(gltf.extensionsRequired).toEqual(['extension3']);
         expect(gltf.extensionsUsed).toEqual(['extension3']);
         expect(gltf.extensions).toBeUndefined();
@@ -76,7 +76,7 @@ describe('removeExtension', function() {
         expect(gltf.cameras[0].extensions).toBeUndefined();
         expect(extension2).toEqual([0, 1, 2]);
 
-        var extension3 = removeExtension(gltf, 'extension3');
+        const extension3 = removeExtension(gltf, 'extension3');
         expect(gltf.extensionsRequired).toBeUndefined();
         expect(gltf.extensionsUsed).toBeUndefined();
         expect(gltf.extensions).toBeUndefined();
@@ -85,13 +85,13 @@ describe('removeExtension', function() {
         expect(gltf.cameras[0].extensions).toBeUndefined();
         expect(extension3).toBeUndefined();
 
-        var emptyGltf = {};
+        const emptyGltf = {};
         removeExtension(gltf, 'extension1');
         expect(emptyGltf).toEqual({});
     });
 
     it('removes CESIUM_RTC extension', function() {
-        var gltf = {
+        const gltf = {
             extensionsRequired: [
                 'CESIUM_RTC',
                 'KHR_techniques_webgl'
@@ -118,7 +118,7 @@ describe('removeExtension', function() {
                 }
             }
         };
-        var extension = removeExtension(gltf, 'CESIUM_RTC');
+        const extension = removeExtension(gltf, 'CESIUM_RTC');
         expect(extension).toEqual({
             center: [1.0, 2.0, 3.0]
         });

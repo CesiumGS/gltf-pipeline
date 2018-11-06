@@ -1,11 +1,11 @@
 'use strict';
-var Cesium = require('cesium');
-var ForEach = require('../../lib/ForEach');
+const Cesium = require('cesium');
+const ForEach = require('../../lib/ForEach');
 
-var WebGLConstants = Cesium.WebGLConstants;
+const WebGLConstants = Cesium.WebGLConstants;
 
 describe('ForEach', function() {
-    var gltfAccessors = {
+    const gltfAccessors = {
         accessors: [
             {
                 componentType: WebGLConstants.UNSIGNED_SHORT,
@@ -127,7 +127,7 @@ describe('ForEach', function() {
             expect(accessor.bufferView).toBe(index);
         });
 
-        var returnValue = ForEach.accessor(gltfAccessors, function(accessor, index) {
+        const returnValue = ForEach.accessor(gltfAccessors, function(accessor, index) {
             if (index === 1) {
                 return accessor;
             }
@@ -137,8 +137,8 @@ describe('ForEach', function() {
     });
 
     it('loops over accessor with semantic', function() {
-        var positionAccessorLength = 0;
-        var returnValue = ForEach.accessorWithSemantic(gltfAccessors, 'POSITION', function(accessorId) {
+        let positionAccessorLength = 0;
+        const returnValue = ForEach.accessorWithSemantic(gltfAccessors, 'POSITION', function(accessorId) {
             expect(gltfAccessors.accessors[accessorId].bufferView).toBe(accessorId);
             positionAccessorLength++;
 
@@ -151,8 +151,8 @@ describe('ForEach', function() {
     });
 
     it('loops over accessors containing vertex data', function() {
-        var vertexAccessorsLength = 0;
-        var returnValue = ForEach.accessorContainingVertexAttributeData(gltfAccessors, function(accessorId) {
+        let vertexAccessorsLength = 0;
+        const returnValue = ForEach.accessorContainingVertexAttributeData(gltfAccessors, function(accessorId) {
             expect(gltfAccessors.accessors[accessorId].bufferView).toBe(accessorId);
             vertexAccessorsLength++;
 
@@ -165,8 +165,8 @@ describe('ForEach', function() {
     });
 
     it('loops over accessors containing index data', function() {
-        var indicesAccessorsLength = 0;
-        var returnValue = ForEach.accessorContainingIndexData(gltfAccessors, function(accessorId) {
+        let indicesAccessorsLength = 0;
+        const returnValue = ForEach.accessorContainingIndexData(gltfAccessors, function(accessorId) {
             expect(gltfAccessors.accessors[accessorId].bufferView).toBe(accessorId);
             indicesAccessorsLength++;
 
@@ -178,7 +178,7 @@ describe('ForEach', function() {
         expect(returnValue).toBe(1);
     });
 
-    var gltfAnimations = {
+    const gltfAnimations = {
         animations: [
             {
                 channels: [
@@ -229,7 +229,7 @@ describe('ForEach', function() {
     };
 
     it('loops over animations', function() {
-        var returnValue = ForEach.animation(gltfAnimations, function(animation, index) {
+        const returnValue = ForEach.animation(gltfAnimations, function(animation, index) {
             expect(animation.channels[0].target.node).toBe(index);
 
             if (index === 1) {
@@ -241,7 +241,7 @@ describe('ForEach', function() {
     });
 
     it('loops over animation channel', function() {
-        var returnValue = ForEach.animationChannel(gltfAnimations.animations[0], function(channel, index) {
+        const returnValue = ForEach.animationChannel(gltfAnimations.animations[0], function(channel, index) {
             expect(channel.sampler).toBe(index);
 
             if (index === 1) {
@@ -253,7 +253,7 @@ describe('ForEach', function() {
     });
 
     it('loops over animation samplers', function() {
-        var returnValue = ForEach.animationSampler(gltfAnimations.animations[0], function(sampler, index) {
+        const returnValue = ForEach.animationSampler(gltfAnimations.animations[0], function(sampler, index) {
             expect(sampler.input).toBe(index);
 
             if (index === 1) {
@@ -265,7 +265,7 @@ describe('ForEach', function() {
     });
 
     it('loops over buffers', function() {
-        var gltf = {
+        const gltf = {
             buffers: [
                 {
                     uri: '0.bin',
@@ -277,7 +277,7 @@ describe('ForEach', function() {
                 }
             ]
         };
-        var returnValue = ForEach.buffer(gltf, function(buffer, index) {
+        const returnValue = ForEach.buffer(gltf, function(buffer, index) {
             expect(buffer.uri).toBe(index + '.bin');
             if (index === 1) {
                 return buffer;
@@ -287,7 +287,7 @@ describe('ForEach', function() {
     });
 
     it('loops over buffers (gltf 1.0)', function() {
-        var gltf = {
+        const gltf = {
             buffers: {
                 buffer0: {
                     uri: 'buffer0.bin'
@@ -297,7 +297,7 @@ describe('ForEach', function() {
                 }
             }
         };
-        var returnValue = ForEach.buffer(gltf, function(buffer, name) {
+        const returnValue = ForEach.buffer(gltf, function(buffer, name) {
             expect(buffer.uri).toBe(name + '.bin');
             if (name === '1.bin') {
                 return buffer;
@@ -307,7 +307,7 @@ describe('ForEach', function() {
     });
 
     it('loops over buffer views', function() {
-        var gltf = {
+        const gltf = {
             bufferViews: [
                 {
                     buffer: 0,
@@ -319,7 +319,7 @@ describe('ForEach', function() {
                 }
             ]
         };
-        var returnValue = ForEach.bufferView(gltf, function(bufferView, index) {
+        const returnValue = ForEach.bufferView(gltf, function(bufferView, index) {
             expect(bufferView.buffer).toBe(index);
             if (index === 1) {
                 return bufferView;
@@ -329,7 +329,7 @@ describe('ForEach', function() {
     });
 
     it('loops over cameras', function() {
-        var gltf = {
+        const gltf = {
             cameras: [
                 {
                     perspective: {
@@ -345,7 +345,7 @@ describe('ForEach', function() {
                 }
             ]
         };
-        var returnValue = ForEach.camera(gltf, function(camera, index) {
+        const returnValue = ForEach.camera(gltf, function(camera, index) {
             expect(camera.perspective.yfov).toBe(index);
             expect(camera.perspective.znear).toBe(index);
             if (index === 1) {
@@ -356,7 +356,7 @@ describe('ForEach', function() {
     });
 
     it('loops over images', function() {
-        var gltf = {
+        const gltf = {
             images: [
                 {
                     bufferView: 0
@@ -366,7 +366,7 @@ describe('ForEach', function() {
                 }
             ]
         };
-        var returnValue = ForEach.image(gltf, function(image, index) {
+        const returnValue = ForEach.image(gltf, function(image, index) {
             expect(image.bufferView).toBe(index);
             if (index === 1) {
                 return image;
@@ -376,7 +376,7 @@ describe('ForEach', function() {
     });
 
     it('loops over images (gltf 1.0)', function() {
-        var gltf = {
+        const gltf = {
             images: {
                 image0: {
                     uri: 'image0.png'
@@ -386,7 +386,7 @@ describe('ForEach', function() {
                 }
             }
         };
-        var returnValue = ForEach.image(gltf, function(image, name) {
+        const returnValue = ForEach.image(gltf, function(image, name) {
             expect(image.uri).toBe(name + '.png');
             if (name === 'image1') {
                 return image;
@@ -396,7 +396,7 @@ describe('ForEach', function() {
     });
 
     it('loops over compressed images', function() {
-        var gltf = {
+        const gltf = {
             images: [
                 {
                     extras: {
@@ -412,7 +412,7 @@ describe('ForEach', function() {
                 }
             ]
         };
-        var returnValue = ForEach.compressedImage(gltf.images[0], function(compressedImage, type) {
+        const returnValue = ForEach.compressedImage(gltf.images[0], function(compressedImage, type) {
             expect(compressedImage.uri).toBe(type + '.ktx');
             if (type === 'etc1') {
                 return compressedImage;
@@ -422,7 +422,7 @@ describe('ForEach', function() {
     });
 
     it('loops over materials', function() {
-        var gltf = {
+        const gltf = {
             materials: [
                 {
                     emissiveTexture: 0
@@ -432,7 +432,7 @@ describe('ForEach', function() {
                 }
             ]
         };
-        var returnValue = ForEach.material(gltf, function(material, index) {
+        const returnValue = ForEach.material(gltf, function(material, index) {
             expect(material.emissiveTexture).toBe(index);
             if (index === 1) {
                 return material;
@@ -442,7 +442,7 @@ describe('ForEach', function() {
     });
 
     it('loops over material values', function () {
-        var material = {
+        const material = {
             name: 'Texture',
             extensions: {
                 KHR_techniques_webgl: {
@@ -463,8 +463,8 @@ describe('ForEach', function() {
             }
         };
 
-        var count = 0;
-        var returnValue = ForEach.materialValue(material, function (value, uniformName) {
+        let count = 0;
+        const returnValue = ForEach.materialValue(material, function (value, uniformName) {
             expect(value).toBeDefined();
             expect(uniformName.indexOf('u_')).toBe(0);
             count++;
@@ -477,7 +477,7 @@ describe('ForEach', function() {
     });
 
     it('loops over legacy material values', function () {
-        var material = {
+        const material = {
             name: 'Texture',
             values: {
                 diffuse: {
@@ -493,8 +493,8 @@ describe('ForEach', function() {
             }
         };
 
-        var count = 0;
-        var returnValue = ForEach.materialValue(material, function (value, materialId) {
+        let count = 0;
+        const returnValue = ForEach.materialValue(material, function (value, materialId) {
             expect(value).toBeDefined();
             count++;
             if (materialId === 'specular') {
@@ -506,7 +506,7 @@ describe('ForEach', function() {
     });
 
     it('loops over meshes', function() {
-        var gltf = {
+        const gltf = {
             meshes: [
                 {
                     primitives: [
@@ -531,7 +531,7 @@ describe('ForEach', function() {
             ]
         };
 
-        var returnValue = ForEach.mesh(gltf, function(mesh, index) {
+        const returnValue = ForEach.mesh(gltf, function(mesh, index) {
             expect(mesh.primitives[0].attributes.POSITION).toBe(index);
             if (index === 1) {
                 return mesh;
@@ -540,7 +540,7 @@ describe('ForEach', function() {
         expect(returnValue).toBe(gltf.meshes[1]);
     });
 
-    var gltfPrimitives = {
+    const gltfPrimitives = {
         meshes: [
             {
                 primitives: [
@@ -562,8 +562,8 @@ describe('ForEach', function() {
     };
 
     it('loops over primitives', function() {
-        var mesh = gltfPrimitives.meshes[0];
-        var returnValue = ForEach.meshPrimitive(mesh, function(primitive, index) {
+        const mesh = gltfPrimitives.meshes[0];
+        const returnValue = ForEach.meshPrimitive(mesh, function(primitive, index) {
             expect(primitive.attributes.POSITION).toBe(index);
             if (index === 1) {
                 return primitive;
@@ -573,8 +573,8 @@ describe('ForEach', function() {
     });
 
     it('loops over attributes', function() {
-        var primitive = gltfPrimitives.meshes[0].primitives[0];
-        var returnValue = ForEach.meshPrimitiveAttribute(primitive, function(accessorId, semantic) {
+        const primitive = gltfPrimitives.meshes[0].primitives[0];
+        const returnValue = ForEach.meshPrimitiveAttribute(primitive, function(accessorId, semantic) {
             expect(primitive.attributes[semantic]).toBe(accessorId);
             if (semantic === 'NORMAL') {
                 return accessorId;
@@ -583,7 +583,7 @@ describe('ForEach', function() {
         expect(returnValue).toBe(gltfPrimitives.meshes[0].primitives[0].attributes['NORMAL']);
     });
 
-    var gltfTargets = {
+    const gltfTargets = {
         meshes: [
             {
                 primitives: [
@@ -609,8 +609,8 @@ describe('ForEach', function() {
     };
 
     it('loops over targets', function() {
-        var primitive = gltfTargets.meshes[0].primitives[0];
-        var returnValue = ForEach.meshPrimitiveTarget(primitive, function(target, index) {
+        const primitive = gltfTargets.meshes[0].primitives[0];
+        const returnValue = ForEach.meshPrimitiveTarget(primitive, function(target, index) {
             expect(target.POSITION).toBe(index);
             if (index === 1) {
                 return target;
@@ -620,8 +620,8 @@ describe('ForEach', function() {
     });
 
     it('loops over target attributes', function() {
-        var target = gltfTargets.meshes[0].primitives[0].targets[0];
-        var returnValue = ForEach.meshPrimitiveTargetAttribute(target, function(accessorId, semantic) {
+        const target = gltfTargets.meshes[0].primitives[0].targets[0];
+        const returnValue = ForEach.meshPrimitiveTargetAttribute(target, function(accessorId, semantic) {
             expect(target[semantic]).toBe(accessorId);
             if (semantic === 'NORMAL') {
                 return accessorId;
@@ -630,7 +630,7 @@ describe('ForEach', function() {
         expect(returnValue).toBe(gltfTargets.meshes[0].primitives[0].targets[0]['NORMAL']);
     });
 
-    var gltfNodes = {
+    const gltfNodes = {
         nodes: [
             {
                 matrix: [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0],
@@ -663,9 +663,9 @@ describe('ForEach', function() {
     };
 
     it('loops over nodes', function() {
-        var nodesLength = 0;
+        let nodesLength = 0;
 
-        var returnValue = ForEach.node(gltfNodes, function(node, index) {
+        const returnValue = ForEach.node(gltfNodes, function(node, index) {
             expect(node.matrix[12]).toBe(index);
             nodesLength++;
 
@@ -679,9 +679,9 @@ describe('ForEach', function() {
     });
 
     it('loops over nodes in tree', function() {
-        var nodesInTree = 0;
+        let nodesInTree = 0;
 
-        var returnValue = ForEach.nodeInTree(gltfNodes, gltfNodes.scenes[0].nodes, function(node, index) {
+        const returnValue = ForEach.nodeInTree(gltfNodes, gltfNodes.scenes[0].nodes, function(node, index) {
             expect(node.matrix[12]).toBe(index);
             nodesInTree++;
 
@@ -695,14 +695,14 @@ describe('ForEach', function() {
     });
 
     it('loops over nodes in scene', function() {
-        var nodesInScene0 = 0;
-        var nodesInScene1 = 0;
+        let nodesInScene0 = 0;
+        let nodesInScene1 = 0;
 
         ForEach.nodeInScene(gltfNodes, gltfNodes.scenes[0], function(node, index) {
             expect(node.matrix[12]).toBe(index);
             nodesInScene0++;
         });
-        var returnValue = ForEach.nodeInScene(gltfNodes, gltfNodes.scenes[1], function(node, index) {
+        const returnValue = ForEach.nodeInScene(gltfNodes, gltfNodes.scenes[1], function(node, index) {
             expect(node.matrix[12]).toBe(index);
             nodesInScene1++;
 
@@ -717,8 +717,8 @@ describe('ForEach', function() {
     });
 
     it('loops over samplers', function() {
-        var filters = [WebGLConstants.NEAREST, WebGLConstants.LINEAR];
-        var gltf = {
+        const filters = [WebGLConstants.NEAREST, WebGLConstants.LINEAR];
+        const gltf = {
             samplers: [
                 {
                     magFilter: filters[0],
@@ -730,8 +730,8 @@ describe('ForEach', function() {
                 }
             ]
         };
-        var count = 0;
-        var returnValue = ForEach.sampler(gltf, function(sampler, index) {
+        let count = 0;
+        const returnValue = ForEach.sampler(gltf, function(sampler, index) {
             expect(sampler.magFilter).toBe(filters[index]);
             expect(sampler.minFilter).toBe(filters[index]);
             expect(index).toBe(count++);
@@ -745,7 +745,7 @@ describe('ForEach', function() {
     });
 
     it('loops over scenes', function() {
-        var gltf = {
+        const gltf = {
             scenes: [
                 {
                     nodes: [0]
@@ -755,7 +755,7 @@ describe('ForEach', function() {
                 }
             ]
         };
-        var returnValue = ForEach.scene(gltf, function(scene, index) {
+        const returnValue = ForEach.scene(gltf, function(scene, index) {
             expect(scene.nodes[0]).toBe(index);
 
             if (index === 1) {
@@ -766,7 +766,7 @@ describe('ForEach', function() {
     });
 
     it('loops over shaders (gltf 1.0)', function() {
-        var gltf = {
+        const gltf = {
             shaders: {
                 vert: {
                     type: WebGLConstants.VERTEX_SHADER,
@@ -778,7 +778,7 @@ describe('ForEach', function() {
                 }
             }
         };
-        var returnValue = ForEach.shader(gltf, function(shader, name) {
+        const returnValue = ForEach.shader(gltf, function(shader, name) {
             expect(shader.uri).toBe(name + '.glsl');
 
             if (name === 'frag') {
@@ -790,7 +790,7 @@ describe('ForEach', function() {
     });
 
     it('loops over KHR_techniques_webgl shaders (gltf 2.0)', function () {
-        var gltf = {
+        let gltf = {
             extensions: {
                 KHR_techniques_webgl: {
                     shaders: [
@@ -810,8 +810,8 @@ describe('ForEach', function() {
             extensionsUsed: ['KHR_techniques_webgl']
         };
 
-        var count = 0;
-        var returnValue = ForEach.shader(gltf, function (shader) {
+        let count = 0;
+        const returnValue = ForEach.shader(gltf, function (shader) {
             expect(shader.uri).toBe(shader.name + '.glsl');
             count++;
 
@@ -832,7 +832,7 @@ describe('ForEach', function() {
     });
 
     it('loops over KHR_techniques_webgl programs (gltf 2.0)', function () {
-        var gltf = {
+        let gltf = {
             extensions: {
                 KHR_techniques_webgl: {
                     programs: [
@@ -852,8 +852,8 @@ describe('ForEach', function() {
             extensionsUsed: ['KHR_techniques_webgl']
         };
 
-        var count = 0;
-        var returnValue = ForEach.program(gltf, function (program) {
+        let count = 0;
+        const returnValue = ForEach.program(gltf, function (program) {
             expect(program.fragmentShader).toBeDefined();
             expect(program.vertexShader).toBeDefined();
             count++;
@@ -875,7 +875,7 @@ describe('ForEach', function() {
     });
 
     it('loops over legacy programs (gltf 1.0)', function () {
-        var gltf = {
+        const gltf = {
             programs: {
                 program_0: {
                     fragmentShader: 0,
@@ -888,8 +888,8 @@ describe('ForEach', function() {
             }
         };
 
-        var count = 0;
-        var returnValue = ForEach.program(gltf, function (program) {
+        let count = 0;
+        const returnValue = ForEach.program(gltf, function (program) {
             expect(program.fragmentShader).toBeDefined();
             expect(program.vertexShader).toBeDefined();
             count++;
@@ -903,7 +903,7 @@ describe('ForEach', function() {
     });
 
     it('loops over KHR_techniques_webgl techniques (gltf 2.0)', function () {
-        var gltf = {
+        let gltf = {
             extensions: {
                 KHR_techniques_webgl: {
                     techniques: [
@@ -925,8 +925,8 @@ describe('ForEach', function() {
             extensionsUsed: ['KHR_techniques_webgl']
         };
 
-        var count = 0;
-        var returnValue = ForEach.technique(gltf, function (technique, index) {
+        let count = 0;
+        const returnValue = ForEach.technique(gltf, function (technique, index) {
             expect(technique.name).toBe('technique' + index);
             count++;
 
@@ -947,7 +947,7 @@ describe('ForEach', function() {
     });
 
     it('loops over legacy techniques (gltf 1.0)', function () {
-        var gltf = {
+        const gltf = {
             techniques: {
                 technique0: {
                     program: 0,
@@ -962,8 +962,8 @@ describe('ForEach', function() {
             }
         };
 
-        var count = 0;
-        var returnValue = ForEach.technique(gltf, function (technique) {
+        let count = 0;
+        const returnValue = ForEach.technique(gltf, function (technique) {
             expect(technique.program).toBeDefined();
             count++;
 
@@ -976,7 +976,7 @@ describe('ForEach', function() {
     });
 
     it('loops over technique attributes', function () {
-        var technique = {
+        const technique = {
             name: 'technique0',
             program: 0,
             attributes: {
@@ -993,8 +993,8 @@ describe('ForEach', function() {
             uniforms: {}
         };
 
-        var count = 0;
-        var returnValue = ForEach.techniqueAttribute(technique, function (attribute, attributeName) {
+        let count = 0;
+        const returnValue = ForEach.techniqueAttribute(technique, function (attribute, attributeName) {
             expect(attribute.semantic).toBeDefined();
             expect(attributeName.indexOf('a_')).toBe(0);
             count++;
@@ -1009,7 +1009,7 @@ describe('ForEach', function() {
     });
 
     it('loops over legacy technique attributes', function () {
-        var technique = {
+        const technique = {
             name: 'technique0',
             program: 0,
             parameters: {},
@@ -1021,8 +1021,8 @@ describe('ForEach', function() {
             uniforms: {}
         };
 
-        var count = 0;
-        var returnValue = ForEach.techniqueAttribute(technique, function (parameterName, attributeName) {
+        let count = 0;
+        const returnValue = ForEach.techniqueAttribute(technique, function (parameterName, attributeName) {
             expect(parameterName).toBe(attributeName.substring(2));
             count++;
 
@@ -1036,7 +1036,7 @@ describe('ForEach', function() {
     });
 
     it('loops over technique uniforms', function () {
-        var technique = {
+        const technique = {
             name: 'technique0',
             program: 0,
             attributes: {},
@@ -1055,8 +1055,8 @@ describe('ForEach', function() {
             }
         };
 
-        var count = 0;
-        var returnValue = ForEach.techniqueUniform(technique, function (uniform, uniformName) {
+        let count = 0;
+        const returnValue = ForEach.techniqueUniform(technique, function (uniform, uniformName) {
             expect(uniform.type).toBeDefined();
             expect(uniformName.indexOf('u_')).toBe(0);
             count++;
@@ -1071,7 +1071,7 @@ describe('ForEach', function() {
     });
 
     it('loops over legacy technique uniforms', function () {
-        var technique = {
+        const technique = {
             name: 'technique0',
             program: 0,
             parameters: {},
@@ -1083,8 +1083,8 @@ describe('ForEach', function() {
             }
         };
 
-        var count = 0;
-        var returnValue = ForEach.techniqueUniform(technique, function (parameterName, uniformName) {
+        let count = 0;
+        const returnValue = ForEach.techniqueUniform(technique, function (parameterName, uniformName) {
             expect(parameterName).toBe(uniformName.substring(2));
             count++;
 
@@ -1098,7 +1098,7 @@ describe('ForEach', function() {
     });
 
     it('loops over legacy technique parameters', function () {
-        var technique = {
+        const technique = {
             name: 'technique0',
             program: 0,
             attributes: {},
@@ -1118,8 +1118,8 @@ describe('ForEach', function() {
             }
         };
 
-        var count = 0;
-        var returnValue = ForEach.techniqueParameter(technique, function (parameter, parameterName) {
+        let count = 0;
+        const returnValue = ForEach.techniqueParameter(technique, function (parameter, parameterName) {
             expect(parameter.type).toBeDefined();
             expect(parameterName).toBeDefined();
             count++;
@@ -1134,7 +1134,7 @@ describe('ForEach', function() {
     });
 
     it('loops over each skin', function() {
-        var gltf = {
+        const gltf = {
             skins: [
                 {
                     joints: [0]
@@ -1144,7 +1144,7 @@ describe('ForEach', function() {
                 }
             ]
         };
-        var returnValue = ForEach.skin(gltf, function(skin, index) {
+        const returnValue = ForEach.skin(gltf, function(skin, index) {
             expect(skin.joints[0]).toBe(index);
 
             if (index === 1) {
@@ -1155,7 +1155,7 @@ describe('ForEach', function() {
     });
 
     it('loops over each texture', function() {
-        var gltf = {
+        const gltf = {
             textures: [
                 {
                     source: 0
@@ -1165,7 +1165,7 @@ describe('ForEach', function() {
                 }
             ]
         };
-        var returnValue = ForEach.texture(gltf, function(texture, index) {
+        const returnValue = ForEach.texture(gltf, function(texture, index) {
             expect(texture.source).toBe(index);
 
             if (index === 1) {
