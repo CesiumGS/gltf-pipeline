@@ -1,9 +1,9 @@
 'use strict';
-var getStatistics = require('../../lib/getStatistics');
+const getStatistics = require('../../lib/getStatistics');
 
 describe('getStatistics', function() {
     it('returns statistics for a gltf', function() {
-        var gltf = {
+        const gltf = {
             accessors: [
                 {
                     componentType: 5123,
@@ -83,7 +83,7 @@ describe('getStatistics', function() {
                 {}
             ]
         };
-        var statistics = getStatistics(gltf);
+        const statistics = getStatistics(gltf);
         expect(statistics.buffersByteLength).toEqual(260);
         expect(statistics.numberOfImages).toEqual(3);
         expect(statistics.numberOfExternalRequests).toEqual(3);

@@ -1,11 +1,11 @@
 'use strict';
-var Cesium = require('cesium');
-var moveTechniquesToExtension = require('../../lib/moveTechniquesToExtension');
+const Cesium = require('cesium');
+const moveTechniquesToExtension = require('../../lib/moveTechniquesToExtension');
 
-var WebGLConstants = Cesium.WebGLConstants;
+const WebGLConstants = Cesium.WebGLConstants;
 describe('moveTechniquesToExtension', function() {
     it('moves techniques, shaders, and programs to extension', function() {
-        var gltf = {
+        const gltf = {
             programs: {
                 program_0: {
                     attributes: [
@@ -120,18 +120,18 @@ describe('moveTechniquesToExtension', function() {
             ]
         };
 
-        var gltfWithTechniquesWebgl = moveTechniquesToExtension(gltf);
+        const gltfWithTechniquesWebgl = moveTechniquesToExtension(gltf);
         expect(gltfWithTechniquesWebgl.extensions).toBeDefined();
-        var techniques = gltfWithTechniquesWebgl.extensions.KHR_techniques_webgl;
+        const techniques = gltfWithTechniquesWebgl.extensions.KHR_techniques_webgl;
         expect(techniques).toBeDefined();
         expect(techniques.techniques.length).toBe(2);
 
-        var technique = techniques.techniques[0];
-        var attributes = technique.attributes;
+        const technique = techniques.techniques[0];
+        const attributes = technique.attributes;
         expect(attributes).toBeDefined();
         expect(attributes.a_position.semantic).toBe('POSITION');
 
-        var uniforms = technique.uniforms;
+        const uniforms = technique.uniforms;
         expect(uniforms).toBeDefined();
         expect(uniforms.u_modelViewMatrix.semantic).toBe('MODELVIEW');
         expect(uniforms.u_modelViewMatrix.type).toBe(WebGLConstants.FLOAT_MAT4);
@@ -141,7 +141,7 @@ describe('moveTechniquesToExtension', function() {
         expect(technique.states).toBeUndefined();
 
         expect(techniques.programs.length).toBe(2);
-        var program = techniques.programs[technique.program];
+        const program = techniques.programs[technique.program];
         expect(program).toBeDefined();
 
         expect(techniques.shaders.length).toBe(3);
@@ -152,9 +152,9 @@ describe('moveTechniquesToExtension', function() {
         expect(gltfWithTechniquesWebgl.programs).toBeUndefined();
         expect(gltfWithTechniquesWebgl.shaders).toBeUndefined();
 
-        var material = gltf.materials[0];
+        const material = gltf.materials[0];
         expect(material.extensions).toBeDefined();
-        var materialTechniques = material.extensions.KHR_techniques_webgl;
+        const materialTechniques = material.extensions.KHR_techniques_webgl;
         expect(materialTechniques).toBeDefined();
         expect(materialTechniques.technique).toBe(0);
         expect(materialTechniques.values.u_shininess).toBe(256);
@@ -162,8 +162,8 @@ describe('moveTechniquesToExtension', function() {
         expect(material.technique).toBeUndefined();
         expect(material.values).toBeUndefined();
 
-        var technique2 = techniques.techniques[1];
-        var program2 = techniques.programs[technique2.program];
+        const technique2 = techniques.techniques[1];
+        const program2 = techniques.programs[technique2.program];
         expect(program2.vertexShader).toBe(program.vertexShader);
         expect(program2.fragmentShader).not.toBe(program.fragmentShader);
     });

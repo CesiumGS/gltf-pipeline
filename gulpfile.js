@@ -1,30 +1,30 @@
 'use strict';
 
-var Cesium = require('cesium');
-var child_process = require('child_process');
-var dependencyTree = require('dependency-tree');
-var fsExtra = require('fs-extra');
-var gulp = require('gulp');
-var Jasmine = require('jasmine');
-var JasmineSpecReporter = require('jasmine-spec-reporter').SpecReporter;
-var open = require('open');
-var path = require('path');
-var Promise = require('bluebird');
-var yargs = require('yargs');
+const Cesium = require('cesium');
+const child_process = require('child_process');
+const dependencyTree = require('dependency-tree');
+const fsExtra = require('fs-extra');
+const gulp = require('gulp');
+const Jasmine = require('jasmine');
+const JasmineSpecReporter = require('jasmine-spec-reporter').SpecReporter;
+const open = require('open');
+const path = require('path');
+const Promise = require('bluebird');
+const yargs = require('yargs');
 
-var defined = Cesium.defined;
-var argv = yargs.argv;
+const defined = Cesium.defined;
+const argv = yargs.argv;
 
 // Add third-party node module binaries to the system path
 // since some tasks need to call them directly.
-var environmentSeparator = process.platform === 'win32' ? ';' : ':';
-var nodeBinaries = path.join(__dirname, 'node_modules', '.bin');
+const environmentSeparator = process.platform === 'win32' ? ';' : ':';
+const nodeBinaries = path.join(__dirname, 'node_modules', '.bin');
 process.env.PATH += environmentSeparator + nodeBinaries;
 
-var specFiles = ['**/*.js', '!node_modules/**', '!coverage/**', '!doc/**', '!bin/**', '!dist/**'];
+const specFiles = ['**/*.js', '!node_modules/**', '!coverage/**', '!doc/**', '!bin/**', '!dist/**'];
 
 gulp.task('test', function (done) {
-    var jasmine = new Jasmine();
+    const jasmine = new Jasmine();
     jasmine.loadConfigFile('specs/jasmine.json');
     jasmine.addReporter(new JasmineSpecReporter({
         displaySuccessfulSpec: !defined(argv.suppressPassed) || !argv.suppressPassed
@@ -64,11 +64,11 @@ gulp.task('coverage', function () {
 });
 
 gulp.task('cloc', function() {
-    var cmdLine;
-    var clocPath = path.join('node_modules', 'cloc', 'lib', 'cloc');
+    let cmdLine;
+    const clocPath = path.join('node_modules', 'cloc', 'lib', 'cloc');
 
     // Run cloc on primary Source files only
-    var source = new Promise(function(resolve, reject) {
+    const source = new Promise(function(resolve, reject) {
         cmdLine = 'perl ' + clocPath + ' --quiet --progress-rate=0' +
             ' lib/ bin/';
 
@@ -102,18 +102,18 @@ gulp.task('cloc', function() {
 });
 
 function amdify(source, subDependencyMapping) {
-    var fullMatch;
-    var variableName;
-    var requireVariable;
-    var requirePath;
+    let fullMatch;
+    let variableName;
+    let requireVariable;
+    let requirePath;
 
     source = source.replace(/\r\n/g, '\n');
-    var outputSource = source;
+    let outputSource = source;
 
     // find module exports
-    var returnValue;
-    var findModuleExportsRegex = /module.exports\s*=\s*(.*?);\n/;
-    var findModuleExports = findModuleExportsRegex.exec(source);
+    let returnValue;
+    const findModuleExportsRegex = /module.exports\s*=\s*(.*?);\n/;
+    const findModuleExports = findModuleExportsRegex.exec(source);
     if (defined(findModuleExports && findModuleExports.length > 0)) {
         fullMatch = findModuleExports[0];
         returnValue = findModuleExports[1];
@@ -122,9 +122,9 @@ function amdify(source, subDependencyMapping) {
     }
 
     // create require mapping for dependencies
-    var findRequireRegex = /var\s+(.+?)\s*=\s*require\('(.+?)'\);\n/g;
-    var findRequire = findRequireRegex.exec(source);
-    var requireMapping = {};
+    const findRequireRegex = /var\s+(.+?)\s*=\s*require\('(.+?)'\);\n/g;
+    let findRequire = findRequireRegex.exec(source);
+    const requireMapping = {};
     while (defined(findRequire) && findRequire.length > 0) {
         fullMatch = findRequire[0];
         variableName = findRequire[1];
@@ -135,23 +135,23 @@ function amdify(source, subDependencyMapping) {
         findRequire = findRequireRegex.exec(source);
     }
     // find places where sub-dependencies are pulled from a require
-    var subdependencyMapping = {};
-    var removeRequireMapping = [];
+    const subdependencyMapping = {};
+    const removeRequireMapping = [];
     for (requireVariable in requireMapping) {
         if (requireMapping.hasOwnProperty(requireVariable)) {
             requirePath = requireMapping[requireVariable];
-            var findSubdependencyString = 'var\\s+(.+?)\\s*?=\\s*?' + requireVariable + '\\.(.+?);\n';
-            var findSubdependencyRegex = new RegExp(findSubdependencyString, 'g');
-            var findSubdependency = findSubdependencyRegex.exec(source);
+            const findSubdependencyString = 'var\\s+(.+?)\\s*?=\\s*?' + requireVariable + '\\.(.+?);\n';
+            const findSubdependencyRegex = new RegExp(findSubdependencyString, 'g');
+            let findSubdependency = findSubdependencyRegex.exec(source);
             while (defined(findSubdependency) && findSubdependency.length > 0) {
-                var mapping = subDependencyMapping[requirePath];
+                const mapping = subDependencyMapping[requirePath];
                 if (!defined(mapping)) {
                     throw new Error('Build Failed: Module sub-dependency found for ' + requirePath + ' with no defined mapping behavior.');
                 }
                 removeRequireMapping.push(requireVariable);
                 fullMatch = findSubdependency[0];
                 variableName = findSubdependency[1];
-                var subdependencyPath = findSubdependency[2];
+                const subdependencyPath = findSubdependency[2];
                 subdependencyMapping[variableName] = mapping.prefix + subdependencyPath;
                 // remove sub-dependency declarations from output source
                 outputSource = outputSource.replace(fullMatch, '');
@@ -161,11 +161,11 @@ function amdify(source, subDependencyMapping) {
     }
     // Top-level modules can be removed if mapped
     while (removeRequireMapping.length > 0) {
-        var removeVariableName = removeRequireMapping.pop();
+        const removeVariableName = removeRequireMapping.pop();
         delete requireMapping[removeVariableName];
     }
     // join sub-dependencies with requireMapping
-    for (var subdependencyVariable in subdependencyMapping) {
+    for (const subdependencyVariable in subdependencyMapping) {
         if (subdependencyMapping.hasOwnProperty(subdependencyVariable)) {
             requireMapping[subdependencyVariable] = subdependencyMapping[subdependencyVariable];
         }
@@ -174,25 +174,25 @@ function amdify(source, subDependencyMapping) {
     // indent
     outputSource = outputSource.replace(/\n/g, '\n    ');
     // wrap define header
-    var variables = [];
-    var paths = [];
-    for (var variable in requireMapping) {
+    const variables = [];
+    const paths = [];
+    for (const variable in requireMapping) {
         if (requireMapping.hasOwnProperty(variable)) {
             variables.push(variable);
             paths.push(requireMapping[variable]);
         }
     }
-    var defineHeader = 'define([], function() {\n    ';
+    let defineHeader = 'define([], function() {\n    ';
     if (paths.length > 0) {
-        var definePathsHeader = '\'' + paths.join('\',\n        \'') + '\'';
-        var defineVariablesHeader = variables.join(',\n        ');
+        const definePathsHeader = '\'' + paths.join('\',\n        \'') + '\'';
+        const defineVariablesHeader = variables.join(',\n        ');
         defineHeader =
             'define([\n' +
             '        ' + definePathsHeader + '\n' +
             '    ], function(\n' +
             '        ' + defineVariablesHeader + ') {\n    ';
     }
-    var defineFooter = '\n});\n';
+    let defineFooter = '\n});\n';
     if (defined(returnValue)) {
         defineFooter = '\n    return ' + returnValue + ';' + defineFooter;
     }
@@ -203,9 +203,9 @@ function amdify(source, subDependencyMapping) {
 }
 
 gulp.task('build-cesium', function () {
-    var basePath = 'lib';
-    var outputDir = 'dist/cesium';
-    var files = [
+    const basePath = 'lib';
+    const outputDir = 'dist/cesium';
+    const files = [
         'addDefaults.js',
         'addPipelineExtras.js',
         'ForEach.js',
@@ -214,15 +214,15 @@ gulp.task('build-cesium', function () {
         'updateVersion.js'
     ];
 
-    var subDependencyMapping = {
+    const subDependencyMapping = {
         cesium : {
             prefix : '../../Core/'
         }
     };
 
-    var filesToAmdify = {};
+    const filesToAmdify = {};
     Promise.map(files, function (fileName) {
-        var filePath = path.join(basePath, fileName);
+        const filePath = path.join(basePath, fileName);
 
         // Get list of dependant files
         filesToAmdify[filePath] = true;
@@ -237,12 +237,12 @@ gulp.task('build-cesium', function () {
         });
     }).then(function () {
         return Promise.map(Object.keys(filesToAmdify), function(filePath) {
-            var fileName = path.relative(basePath, filePath);
+            const fileName = path.relative(basePath, filePath);
             return fsExtra.readFile(filePath)
                 .then(function (buffer) {
-                    var source = buffer.toString();
+                    let source = buffer.toString();
                     source = amdify(source, subDependencyMapping);
-                    var outputPath = path.join(outputDir, fileName);
+                    const outputPath = path.join(outputDir, fileName);
                     return fsExtra.outputFile(outputPath, source);
                 });
         });

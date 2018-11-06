@@ -1,16 +1,16 @@
 'use strict';
-var findAccessorMinMax = require('../../lib/findAccessorMinMax');
-var readResources = require('../../lib/readResources');
+const findAccessorMinMax = require('../../lib/findAccessorMinMax');
+const readResources = require('../../lib/readResources');
 
-var contiguousData = [
+const contiguousData = [
     -1.0, -2.0, -3.0,
     3.0, 2.0, 1.0,
     0.0, 0.0, 0.0,
     0.5, -0.5, 0.5
 ];
 
-var nan = Number.NaN;
-var nonContiguousData = [
+const nan = Number.NaN;
+const nonContiguousData = [
     -1.0, 1.0, -1.0,
     nan, nan, nan,
     0.0, 0.0, 0.0,
@@ -22,10 +22,10 @@ var nonContiguousData = [
 ];
 
 function createGltf(elements, byteStride) {
-    var buffer = Buffer.from((new Float32Array(elements)).buffer);
-    var byteLength = buffer.length;
-    var dataUri = 'data:application/octet-stream;base64,' + buffer.toString('base64');
-    var gltf =  {
+    const buffer = Buffer.from((new Float32Array(elements)).buffer);
+    const byteLength = buffer.length;
+    const dataUri = 'data:application/octet-stream;base64,' + buffer.toString('base64');
+    const gltf =  {
         asset: {
             version: '2.0'
         },
@@ -60,9 +60,9 @@ describe('findAccessorMinMax', function() {
     it('finds the min and max of an accessor', function(done) {
         expect(createGltf(contiguousData, 12)
             .then(function(gltf) {
-                var expectedMin = [-1.0, -2.0, -3.0];
-                var expectedMax = [3.0, 2.0, 1.0];
-                var minMax = findAccessorMinMax(gltf, gltf.accessors[0]);
+                const expectedMin = [-1.0, -2.0, -3.0];
+                const expectedMax = [3.0, 2.0, 1.0];
+                const minMax = findAccessorMinMax(gltf, gltf.accessors[0]);
                 expect(minMax.min).toEqual(expectedMin);
                 expect(minMax.max).toEqual(expectedMax);
             }), done).toResolve();
@@ -71,9 +71,9 @@ describe('findAccessorMinMax', function() {
     it('finds the min and max in a non-contiguous accessor', function(done) {
         expect(createGltf(nonContiguousData, 24)
             .then(function(gltf) {
-                var expectedMin = [-1.0, -2.0, -3.0];
-                var expectedMax = [3.0, 2.0, 1.0];
-                var minMax = findAccessorMinMax(gltf, gltf.accessors[0]);
+                const expectedMin = [-1.0, -2.0, -3.0];
+                const expectedMax = [3.0, 2.0, 1.0];
+                const minMax = findAccessorMinMax(gltf, gltf.accessors[0]);
                 expect(minMax.min).toEqual(expectedMin);
                 expect(minMax.max).toEqual(expectedMax);
             }), done).toResolve();

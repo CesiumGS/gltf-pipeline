@@ -8,7 +8,7 @@ define([
     'use strict';
     /*global CanvasPixelArray*/
 
-    var typedArrayTypes = [];
+    const typedArrayTypes = [];
 
     // Earlier versions of IE do not support typed arrays
     if (FeatureDetection.supportsTypedArrays()) {

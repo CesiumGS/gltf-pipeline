@@ -1,19 +1,19 @@
 'use strict';
-var fsExtra = require('fs-extra');
-var dataUriToBuffer = require('../../lib/dataUriToBuffer');
-var ForEach = require('../../lib/ForEach');
-var readResources = require('../../lib/readResources');
-var writeResources = require('../../lib/writeResources');
+const fsExtra = require('fs-extra');
+const dataUriToBuffer = require('../../lib/dataUriToBuffer');
+const ForEach = require('../../lib/ForEach');
+const readResources = require('../../lib/readResources');
+const writeResources = require('../../lib/writeResources');
 
-var Cesium = require('cesium');
-var CesiumMath = Cesium.Math;
+const Cesium = require('cesium');
+const CesiumMath = Cesium.Math;
 
-var gltfPath = 'specs/data/2.0/box-techniques-embedded/box-techniques-embedded.gltf';
-var gltf;
+const gltfPath = 'specs/data/2.0/box-techniques-embedded/box-techniques-embedded.gltf';
+let gltf;
 
 describe('writeResources', function() {
     beforeEach(function(done) {
-        var gltfLoaded = fsExtra.readJsonSync(gltfPath);
+        const gltfLoaded = fsExtra.readJsonSync(gltfPath);
         return readResources(gltfLoaded)
             .then(function() {
                 gltf = gltfLoaded;
@@ -28,21 +28,21 @@ describe('writeResources', function() {
             expect(image.uri).toBeUndefined();
         });
         expect(gltf.buffers.length).toBe(1);
-        var buffer = gltf.buffers[0];
-        var contents = dataUriToBuffer(buffer.uri);
+        const buffer = gltf.buffers[0];
+        const contents = dataUriToBuffer(buffer.uri);
         expect(contents.byteLength).toBe(buffer.byteLength);
     });
 
     it('writes resources as files', function() {
-        var separateResources = {};
-        var options = {
+        const separateResources = {};
+        const options = {
             separateBuffers: true,
             separateTextures: true,
             separateShaders: true,
             separateResources: separateResources
         };
-        var originalBufferViewsLength = gltf.bufferViews.length;
-        var originalByteLength = gltf.buffers[0].byteLength;
+        const originalBufferViewsLength = gltf.bufferViews.length;
+        const originalByteLength = gltf.buffers[0].byteLength;
         writeResources(gltf, options);
         ForEach.image(gltf, function(image) {
             expect(image.bufferView).toBeUndefined();
@@ -55,7 +55,7 @@ describe('writeResources', function() {
         });
 
         expect(gltf.buffers.length).toBe(1);
-        var buffer = gltf.buffers[0];
+        const buffer = gltf.buffers[0];
         expect(buffer.uri.indexOf('.bin')).toBeGreaterThan(-1);
         expect(Object.keys(separateResources).length).toBe(4);
         expect(Buffer.isBuffer(separateResources['buffer.bin']));
@@ -65,8 +65,8 @@ describe('writeResources', function() {
     });
 
     it('writes resources as files with object names', function() {
-        var separateResources = {};
-        var options = {
+        const separateResources = {};
+        const options = {
             separateBuffers: true,
             separateTextures: true,
             separateShaders: true,
@@ -82,8 +82,8 @@ describe('writeResources', function() {
     });
 
     it('writes resources as files with gltf name when resources aren\'t named', function() {
-        var separateResources = {};
-        var options = {
+        const separateResources = {};
+        const options = {
             name: 'my-gltf',
             separateBuffers: true,
             separateTextures: true,
@@ -103,13 +103,13 @@ describe('writeResources', function() {
     });
 
     it('writes resources as data uris', function() {
-        var options = {
+        const options = {
             dataUris: true
         };
-        var originalBufferViewsLength = gltf.bufferViews.length;
-        var originalByteLength = gltf.buffers[0].byteLength;
+        const originalBufferViewsLength = gltf.bufferViews.length;
+        const originalByteLength = gltf.buffers[0].byteLength;
         writeResources(gltf, options);
-        var buffer = gltf.buffers[0];
+        const buffer = gltf.buffers[0];
         expect(Buffer.isBuffer(dataUriToBuffer(buffer.uri)));
 
         ForEach.image(gltf, function (image) {
@@ -127,15 +127,15 @@ describe('writeResources', function() {
     });
 
     it('writes resources as bufferViews', function() {
-        var originalBufferViewsLength = gltf.bufferViews.length;
-        var originalByteLength = gltf.buffers[0].byteLength;
+        const originalBufferViewsLength = gltf.bufferViews.length;
+        const originalByteLength = gltf.buffers[0].byteLength;
         writeResources(gltf);
-        var buffer = gltf.buffers[0];
+        const buffer = gltf.buffers[0];
         expect(Buffer.isBuffer(dataUriToBuffer(buffer.uri)));
 
-        var bufferViewByteLength = 0;
-        var bufferView;
-        var sourceByteLength;
+        let bufferViewByteLength = 0;
+        let bufferView;
+        let sourceByteLength;
         ForEach.image(gltf, function (image) {
             expect(image.bufferView).toBeDefined();
             bufferView = gltf.bufferViews[image.bufferView];
