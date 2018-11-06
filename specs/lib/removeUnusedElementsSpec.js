@@ -1,11 +1,11 @@
 'use strict';
-var Cesium = require('cesium');
-var ForEach = require('../../lib/ForEach');
-var removeUnusedElements = require('../../lib/removeUnusedElements');
+const Cesium = require('cesium');
+const ForEach = require('../../lib/ForEach');
+const removeUnusedElements = require('../../lib/removeUnusedElements');
 
-var WebGLConstants = Cesium.WebGLConstants;
+const WebGLConstants = Cesium.WebGLConstants;
 
-var gltf = {
+const gltf = {
     nodes: [
         {
             skin: 0,
@@ -279,11 +279,11 @@ describe('removeUnusedElements', function() {
         gltf.images.splice(1, 2);
         removeUnusedElements(gltf);
 
-        var remainingAccessorNames = ['positions', 'normals', 'texcoords', 'positions-target1', 'normals-target1', 'indices'];
-        var remainingAcessorBufferViewIds = [0, 1, 2, 3, 4, 5];
-        var remainingBufferViewNames = ['positions', 'normals', 'texcoords', 'positions-target1', 'normals-target1', 'indices', 'image0'];
-        var remainingBufferViewBufferIds = [0, 0, 0, 0, 0, 0, 1];
-        var remainingBufferNames = ['mesh', 'image01'];
+        const remainingAccessorNames = ['positions', 'normals', 'texcoords', 'positions-target1', 'normals-target1', 'indices'];
+        const remainingAcessorBufferViewIds = [0, 1, 2, 3, 4, 5];
+        const remainingBufferViewNames = ['positions', 'normals', 'texcoords', 'positions-target1', 'normals-target1', 'indices', 'image0'];
+        const remainingBufferViewBufferIds = [0, 0, 0, 0, 0, 0, 1];
+        const remainingBufferNames = ['mesh', 'image01'];
 
         expect(gltf.accessors.length).toBe(remainingAccessorNames.length);
         expect(gltf.bufferViews.length).toBe(remainingBufferViewNames.length);

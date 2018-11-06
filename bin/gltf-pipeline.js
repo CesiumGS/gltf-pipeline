@@ -1,25 +1,25 @@
 #!/usr/bin/env node
 'use strict';
-var Cesium = require('cesium');
-var fsExtra = require('fs-extra');
-var path = require('path');
-var Promise = require('bluebird');
-var yargs = require('yargs');
-var compressDracoMeshes = require('../lib/compressDracoMeshes');
-var glbToGltf = require('../lib/glbToGltf');
-var gltfToGlb = require('../lib/gltfToGlb');
-var processGlb = require('../lib/processGlb');
-var processGltf = require('../lib/processGltf');
+const Cesium = require('cesium');
+const fsExtra = require('fs-extra');
+const path = require('path');
+const Promise = require('bluebird');
+const yargs = require('yargs');
+const compressDracoMeshes = require('../lib/compressDracoMeshes');
+const glbToGltf = require('../lib/glbToGltf');
+const gltfToGlb = require('../lib/gltfToGlb');
+const processGlb = require('../lib/processGlb');
+const processGltf = require('../lib/processGltf');
 
-var defaultValue = Cesium.defaultValue;
-var defined = Cesium.defined;
+const defaultValue = Cesium.defaultValue;
+const defined = Cesium.defined;
 
-var defaults = processGltf.defaults;
-var dracoDefaults = compressDracoMeshes.defaults;
+const defaults = processGltf.defaults;
+const dracoDefaults = compressDracoMeshes.defaults;
 
-var args = process.argv;
+const args = process.argv;
 
-var argv = yargs
+const argv = yargs
     .usage('Usage: node $0 -i inputPath -o outputPath')
     .example('node $0 -i model.gltf')
     .example('node $0 -i model.gltf -b')
@@ -122,18 +122,18 @@ var argv = yargs
         }
     }).parse(args);
 
-var inputPath = argv.input;
-var outputPath = argv.output;
+const inputPath = argv.input;
+let outputPath = argv.output;
 
-var inputDirectory = path.dirname(inputPath);
-var inputName = path.basename(inputPath, path.extname(inputPath));
-var inputExtension = path.extname(inputPath).toLowerCase();
+const inputDirectory = path.dirname(inputPath);
+const inputName = path.basename(inputPath, path.extname(inputPath));
+const inputExtension = path.extname(inputPath).toLowerCase();
 if (inputExtension !== '.gltf' && inputExtension !== '.glb') {
     console.log('Error: unrecognized file extension "' + inputExtension + '".');
     return;
 }
 
-var outputExtension;
+let outputExtension;
 if (!defined(outputPath)) {
     if (argv.binary) {
         outputExtension = '.glb';
@@ -145,25 +145,25 @@ if (!defined(outputPath)) {
     outputPath = path.join(inputDirectory, inputName + '-processed' + outputExtension);
 }
 
-var outputDirectory = path.dirname(outputPath);
-var outputName = path.basename(outputPath, path.extname(outputPath));
+const outputDirectory = path.dirname(outputPath);
+const outputName = path.basename(outputPath, path.extname(outputPath));
 outputExtension = path.extname(outputPath).toLowerCase();
 if (outputExtension !== '.gltf' && outputExtension !== '.glb') {
     console.log('Error: unrecognized file extension "' + outputExtension + '".');
     return;
 }
 
-var i;
-var dracoOptions;
-var length = args.length;
+let i;
+let dracoOptions;
+const length = args.length;
 for (i = 0; i < length; ++i) {
-    var arg = args[i];
+    const arg = args[i];
     if (arg.indexOf('--draco.') === 0 || arg === '-d') {
         dracoOptions = defaultValue(argv.draco, {});
     }
 }
 
-var options = {
+const options = {
     resourceDirectory: inputDirectory,
     separate: argv.separate,
     separateTextures: argv.separateTextures,
@@ -173,24 +173,24 @@ var options = {
     dracoOptions: dracoOptions
 };
 
-var inputIsBinary = inputExtension === '.glb';
-var outputIsBinary = outputExtension === '.glb';
+const inputIsBinary = inputExtension === '.glb';
+const outputIsBinary = outputExtension === '.glb';
 
-var jsonOptions = {
+const jsonOptions = {
     spaces: 2
 };
 
-var read = inputIsBinary ? fsExtra.readFile : fsExtra.readJson;
-var write = outputIsBinary ? fsExtra.outputFile : fsExtra.outputJson;
-var writeOptions = outputIsBinary ? undefined : jsonOptions;
-var run = inputIsBinary ? (outputIsBinary ? processGlb : glbToGltf) : (outputIsBinary ? gltfToGlb : processGltf);
+const read = inputIsBinary ? fsExtra.readFile : fsExtra.readJson;
+const write = outputIsBinary ? fsExtra.outputFile : fsExtra.outputJson;
+const writeOptions = outputIsBinary ? undefined : jsonOptions;
+const run = inputIsBinary ? (outputIsBinary ? processGlb : glbToGltf) : (outputIsBinary ? gltfToGlb : processGltf);
 
 function saveSeparateResources(separateResources) {
-    var resourcePromises = [];
-    for (var relativePath in separateResources) {
+    const resourcePromises = [];
+    for (const relativePath in separateResources) {
         if (separateResources.hasOwnProperty(relativePath)) {
-            var resource = separateResources[relativePath];
-            var resourcePath = path.join(outputDirectory, relativePath);
+            const resource = separateResources[relativePath];
+            const resourcePath = path.join(outputDirectory, relativePath);
             resourcePromises.push(fsExtra.outputFile(resourcePath, resource));
         }
     }
@@ -204,8 +204,8 @@ read(inputPath)
         return run(gltf, options);
     })
     .then(function(results) {
-        var gltf = defaultValue(results.gltf, results.glb);
-        var separateResources = results.separateResources;
+        const gltf = defaultValue(results.gltf, results.glb);
+        const separateResources = results.separateResources;
         return Promise.all([
             write(outputPath, gltf, writeOptions),
             saveSeparateResources(separateResources)

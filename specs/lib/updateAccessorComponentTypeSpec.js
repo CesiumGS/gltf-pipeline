@@ -1,21 +1,21 @@
 'use strict';
-var Cesium = require('cesium');
-var readResources = require('../../lib/readResources');
-var updateAccessorComponentTypes = require('../../lib/updateAccessorComponentTypes');
+const Cesium = require('cesium');
+const readResources = require('../../lib/readResources');
+const updateAccessorComponentTypes = require('../../lib/updateAccessorComponentTypes');
 
-var arrayFill = Cesium.arrayFill;
-var WebGLConstants = Cesium.WebGLConstants;
+const arrayFill = Cesium.arrayFill;
+const WebGLConstants = Cesium.WebGLConstants;
 
-var buffer;
+let buffer;
 
 describe('updateAccessorComponentTypes', function() {
     beforeAll(function() {
-        var byteBuffer = Buffer.from(arrayFill(new Int8Array(96), 0).buffer);
-        var floatBuffer = Buffer.from(arrayFill(new Float32Array(96), 0.0).buffer);
-        var unsignedShortBuffer = Buffer.from(arrayFill(new Uint16Array(96), 0).buffer);
-        var source = Buffer.concat([byteBuffer, floatBuffer, unsignedShortBuffer]);
-        var byteLength = source.length;
-        var dataUri = 'data:application/octet-stream;base64,' + source.toString('base64');
+        const byteBuffer = Buffer.from(arrayFill(new Int8Array(96), 0).buffer);
+        const floatBuffer = Buffer.from(arrayFill(new Float32Array(96), 0.0).buffer);
+        const unsignedShortBuffer = Buffer.from(arrayFill(new Uint16Array(96), 0).buffer);
+        const source = Buffer.concat([byteBuffer, floatBuffer, unsignedShortBuffer]);
+        const byteLength = source.length;
+        const dataUri = 'data:application/octet-stream;base64,' + source.toString('base64');
         buffer = {
             uri: dataUri,
             byteLength: byteLength
@@ -23,7 +23,7 @@ describe('updateAccessorComponentTypes', function() {
     });
 
     it('converts joints accessor types', function() {
-        var gltf = {
+        const gltf = {
             meshes: [
                 {
                     primitives: [
@@ -104,7 +104,7 @@ describe('updateAccessorComponentTypes', function() {
     });
 
     it('converts weights accessor types', function() {
-        var gltf = {
+        const gltf = {
             meshes: [
                 {
                     primitives: [

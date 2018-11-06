@@ -1,12 +1,12 @@
 'use strict';
-var Cesium = require('cesium');
-var addDefaults = require('../../lib/addDefaults');
+const Cesium = require('cesium');
+const addDefaults = require('../../lib/addDefaults');
 
-var WebGLConstants = Cesium.WebGLConstants;
+const WebGLConstants = Cesium.WebGLConstants;
 
 describe('addDefaults', function() {
     it('adds mesh, accessor, and bufferView defaults', function() {
-        var gltf = {
+        const gltf = {
             meshes: [
                 {
                     primitives: [
@@ -73,16 +73,16 @@ describe('addDefaults', function() {
             ]
         };
 
-        var gltfWithDefaults = addDefaults(gltf);
-        var primitive = gltfWithDefaults.meshes[0].primitives[0];
-        var material = gltfWithDefaults.materials[0];
-        var positionAccessor = gltfWithDefaults.accessors[0];
-        var positionTargetAccessor = gltfWithDefaults.accessors[1];
-        var indicesAccessor = gltfWithDefaults.accessors[2];
-        var positionBufferView = gltfWithDefaults.bufferViews[0];
-        var positionTargetBufferView = gltfWithDefaults.bufferViews[1];
-        var indicesBufferView = gltfWithDefaults.bufferViews[2];
-        var otherBufferView = gltfWithDefaults.bufferViews[3];
+        const gltfWithDefaults = addDefaults(gltf);
+        const primitive = gltfWithDefaults.meshes[0].primitives[0];
+        const material = gltfWithDefaults.materials[0];
+        const positionAccessor = gltfWithDefaults.accessors[0];
+        const positionTargetAccessor = gltfWithDefaults.accessors[1];
+        const indicesAccessor = gltfWithDefaults.accessors[2];
+        const positionBufferView = gltfWithDefaults.bufferViews[0];
+        const positionTargetBufferView = gltfWithDefaults.bufferViews[1];
+        const indicesBufferView = gltfWithDefaults.bufferViews[2];
+        const otherBufferView = gltfWithDefaults.bufferViews[3];
 
         expect(primitive.mode).toBe(WebGLConstants.TRIANGLES);
         expect(primitive.material).toBe(0);
@@ -111,7 +111,7 @@ describe('addDefaults', function() {
     });
 
     it('adds material defaults', function() {
-        var gltf = {
+        const gltf = {
             materials: [
                 {
                     emissiveTexture: {
@@ -141,10 +141,10 @@ describe('addDefaults', function() {
             ]
         };
 
-        var gltfWithDefaults = addDefaults(gltf);
-        var materialOpaque = gltfWithDefaults.materials[0];
-        var materialAlphaMask = gltfWithDefaults.materials[1];
-        var materialTechnique = gltfWithDefaults.materials[2].extensions.KHR_techniques_webgl;
+        const gltfWithDefaults = addDefaults(gltf);
+        const materialOpaque = gltfWithDefaults.materials[0];
+        const materialAlphaMask = gltfWithDefaults.materials[1];
+        const materialTechnique = gltfWithDefaults.materials[2].extensions.KHR_techniques_webgl;
 
         expect(materialOpaque.emissiveFactor).toEqual([0.0, 0.0, 0.0]);
         expect(materialOpaque.alphaMode).toBe('OPAQUE');
@@ -160,7 +160,7 @@ describe('addDefaults', function() {
     });
 
     it('adds metallic roughness defaults', function() {
-        var gltf = {
+        const gltf = {
             materials: [
                 {
                     pbrMetallicRoughness: {
@@ -174,8 +174,8 @@ describe('addDefaults', function() {
                 }
             ]
         };
-        var gltfWithDefaults = addDefaults(gltf);
-        var pbrMetallicRoughness = gltfWithDefaults.materials[0].pbrMetallicRoughness;
+        const gltfWithDefaults = addDefaults(gltf);
+        const pbrMetallicRoughness = gltfWithDefaults.materials[0].pbrMetallicRoughness;
 
         expect(pbrMetallicRoughness.baseColorFactor).toEqual([1.0, 1.0, 1.0, 1.0]);
         expect(pbrMetallicRoughness.metallicFactor).toBe(1.0);
@@ -185,7 +185,7 @@ describe('addDefaults', function() {
     });
 
     it('adds spec gloss defaults', function() {
-        var gltf = {
+        const gltf = {
             materials: [
                 {
                     extensions: {
@@ -198,8 +198,8 @@ describe('addDefaults', function() {
                 }
             ]
         };
-        var gltfWithDefaults = addDefaults(gltf);
-        var pbrSpecularGlossiness = gltfWithDefaults.materials[0].extensions.pbrSpecularGlossiness;
+        const gltfWithDefaults = addDefaults(gltf);
+        const pbrSpecularGlossiness = gltfWithDefaults.materials[0].extensions.pbrSpecularGlossiness;
 
         expect(pbrSpecularGlossiness.diffuseFactor).toEqual([1.0, 1.0, 1.0, 1.0]);
         expect(pbrSpecularGlossiness.specularFactor).toEqual([1.0, 1.0, 1.0]);
@@ -208,7 +208,7 @@ describe('addDefaults', function() {
     });
 
     it('adds materials common defaults', function() {
-        var gltf = {
+        const gltf = {
             materials: [
                 {
                     extensions: {
@@ -234,10 +234,10 @@ describe('addDefaults', function() {
             ]
         };
 
-        var gltfWithDefaults = addDefaults(gltf);
-        var materialsCommonBlinn = gltfWithDefaults.materials[0].extensions.KHR_materials_common.values;
-        var materialsCommonConstant = gltfWithDefaults.materials[1].extensions.KHR_materials_common.values;
-        var materialsCommonLambert = gltfWithDefaults.materials[2].extensions.KHR_materials_common.values;
+        const gltfWithDefaults = addDefaults(gltf);
+        const materialsCommonBlinn = gltfWithDefaults.materials[0].extensions.KHR_materials_common.values;
+        const materialsCommonConstant = gltfWithDefaults.materials[1].extensions.KHR_materials_common.values;
+        const materialsCommonLambert = gltfWithDefaults.materials[2].extensions.KHR_materials_common.values;
 
         expect(materialsCommonBlinn.ambient).toEqual([0.0, 0.0, 0.0, 1.0]);
         expect(materialsCommonBlinn.diffuse).toEqual([0.0, 0.0, 0.0, 1.0]);
@@ -257,7 +257,7 @@ describe('addDefaults', function() {
     });
 
     it('adds sampler defaults', function() {
-        var gltf = {
+        const gltf = {
             samplers: [
                 {
                     // Intentionally empty
@@ -265,14 +265,14 @@ describe('addDefaults', function() {
             ]
         };
 
-        var gltfWithDefaults = addDefaults(gltf);
-        var sampler = gltfWithDefaults.samplers[0];
+        const gltfWithDefaults = addDefaults(gltf);
+        const sampler = gltfWithDefaults.samplers[0];
         expect(sampler.wrapS).toBe(WebGLConstants.REPEAT);
         expect(sampler.wrapT).toBe(WebGLConstants.REPEAT);
     });
 
     it('adds node defaults', function() {
-        var gltf = {
+        const gltf = {
             animations: [
                 {
                     channels: [
@@ -306,10 +306,10 @@ describe('addDefaults', function() {
             ]
         };
 
-        var gltfWithDefaults = addDefaults(gltf);
-        var animatedNode = gltfWithDefaults.nodes[0];
-        var staticNode1 = gltfWithDefaults.nodes[1];
-        var staticNode2 = gltfWithDefaults.nodes[2];
+        const gltfWithDefaults = addDefaults(gltf);
+        const animatedNode = gltfWithDefaults.nodes[0];
+        const staticNode1 = gltfWithDefaults.nodes[1];
+        const staticNode2 = gltfWithDefaults.nodes[2];
 
         expect(gltfWithDefaults.animations[0].samplers[0].interpolation).toBe('LINEAR');
 
@@ -330,7 +330,7 @@ describe('addDefaults', function() {
     });
 
     it('adds scene defaults', function() {
-        var gltf = {
+        const gltf = {
             scenes: [
                 {
                     nodes: [
@@ -340,7 +340,7 @@ describe('addDefaults', function() {
             ]
         };
 
-        var gltfWithDefaults = addDefaults(gltf);
+        const gltfWithDefaults = addDefaults(gltf);
         expect(gltfWithDefaults.scene).toBe(0);
     });
 });

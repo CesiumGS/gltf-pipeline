@@ -1,14 +1,14 @@
 'use strict';
-var addBuffer = require('../../lib/addBuffer');
+const addBuffer = require('../../lib/addBuffer');
 
 describe('addBuffer', function() {
     it('adds Buffer to gltf and returns its bufferView id', function() {
-        var gltf = {
+        const gltf = {
             buffers: [],
             bufferViews: []
         };
-        var buffer0 = Buffer.alloc(100);
-        var buffer1 = Buffer.alloc(200);
+        const buffer0 = Buffer.alloc(100);
+        const buffer1 = Buffer.alloc(200);
 
         expect(addBuffer(gltf, buffer0)).toBe(0);
         expect(addBuffer(gltf, buffer1)).toBe(1);

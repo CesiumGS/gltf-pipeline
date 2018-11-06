@@ -8,7 +8,7 @@ define([
     'use strict';
 
     return function(a, b) {
-        var to_run;
+        let to_run;
         // if either a or b have an equals method, call it.
         if (a !== null && defined(a)) {
             if (typeof a.equals === 'function') {

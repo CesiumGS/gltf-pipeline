@@ -1,9 +1,9 @@
 'use strict';
-var removeExtensionsRequired = require('../../lib/removeExtensionsRequired');
+const removeExtensionsRequired = require('../../lib/removeExtensionsRequired');
 
 describe('removeExtensionsRequired', function() {
     it('removes extension from extensionsRequired', function() {
-        var gltf = {
+        const gltf = {
             extensionsRequired: [
                 'extension1',
                 'extension2'
@@ -19,7 +19,7 @@ describe('removeExtensionsRequired', function() {
         expect(gltf.extensionsRequired).toBeUndefined();
         expect(gltf.extensionsUsed).toEqual(['extension1', 'extension2']);
 
-        var emptyGltf = {};
+        const emptyGltf = {};
         removeExtensionsRequired(gltf, 'extension1');
         expect(emptyGltf).toEqual({});
     });

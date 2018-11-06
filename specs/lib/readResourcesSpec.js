@@ -1,49 +1,49 @@
 'use strict';
-var Cesium = require('cesium');
-var fsExtra = require('fs-extra');
-var path = require('path');
-var ForEach = require('../../lib/ForEach');
-var parseGlb = require('../../lib/parseGlb');
-var readResources = require('../../lib/readResources');
+const Cesium = require('cesium');
+const fsExtra = require('fs-extra');
+const path = require('path');
+const ForEach = require('../../lib/ForEach');
+const parseGlb = require('../../lib/parseGlb');
+const readResources = require('../../lib/readResources');
 
-var RuntimeError = Cesium.RuntimeError;
+const RuntimeError = Cesium.RuntimeError;
 
-var boxTexturedSeparate1Path = 'specs/data/1.0/box-textured-separate/box-textured-separate.gltf';
-var boxTexturedBinarySeparate1Path = 'specs/data/1.0/box-textured-binary-separate/box-textured-binary-separate.glb';
-var boxTexturedBinary1Path = 'specs/data/1.0/box-textured-binary/box-textured-binary.glb';
-var boxTexturedEmbedded1Path = 'specs/data/1.0/box-textured-embedded/box-textured-embedded.gltf';
-var boxTexturedSeparate2Path = 'specs/data/2.0/box-textured-separate/box-textured-separate.gltf';
-var boxTexturedBinarySeparate2Path = 'specs/data/2.0/box-textured-binary-separate/box-textured-binary-separate.glb';
-var boxTexturedBinary2Path = 'specs/data/2.0/box-textured-binary/box-textured-binary.glb';
-var boxTexturedEmbedded2Path = 'specs/data/2.0/box-textured-embedded/box-textured-embedded.gltf';
+const boxTexturedSeparate1Path = 'specs/data/1.0/box-textured-separate/box-textured-separate.gltf';
+const boxTexturedBinarySeparate1Path = 'specs/data/1.0/box-textured-binary-separate/box-textured-binary-separate.glb';
+const boxTexturedBinary1Path = 'specs/data/1.0/box-textured-binary/box-textured-binary.glb';
+const boxTexturedEmbedded1Path = 'specs/data/1.0/box-textured-embedded/box-textured-embedded.gltf';
+const boxTexturedSeparate2Path = 'specs/data/2.0/box-textured-separate/box-textured-separate.gltf';
+const boxTexturedBinarySeparate2Path = 'specs/data/2.0/box-textured-binary-separate/box-textured-binary-separate.glb';
+const boxTexturedBinary2Path = 'specs/data/2.0/box-textured-binary/box-textured-binary.glb';
+const boxTexturedEmbedded2Path = 'specs/data/2.0/box-textured-embedded/box-textured-embedded.gltf';
 
 function readGltf(gltfPath, binary) {
     if (binary) {
-        var glb = fsExtra.readFileSync(gltfPath);
+        const glb = fsExtra.readFileSync(gltfPath);
         return parseGlb(glb);
     }
     return fsExtra.readJsonSync(gltfPath);
 }
 
 function checkPaths(object, resourceDirectory) {
-    var pipelineExtras = object.extras._pipeline;
-    var absolutePath = pipelineExtras.absolutePath;
-    var relativePath = pipelineExtras.relativePath;
+    const pipelineExtras = object.extras._pipeline;
+    const absolutePath = pipelineExtras.absolutePath;
+    const relativePath = pipelineExtras.relativePath;
     expect(path.basename(relativePath)).toBe(relativePath);
     expect(absolutePath).toBe(path.join(resourceDirectory, relativePath));
     expect(object.name).toBe(path.basename(relativePath, path.extname(relativePath)));
 }
 
 function readsResources(gltfPath, binary, separate, done) {
-    var gltf = readGltf(gltfPath, binary);
-    var resourceDirectory = path.dirname(gltfPath);
-    var options = {
+    const gltf = readGltf(gltfPath, binary);
+    const resourceDirectory = path.dirname(gltfPath);
+    const options = {
         resourceDirectory: resourceDirectory
     };
     expect(readResources(gltf, options)
         .then(function(gltf) {
             ForEach.shader(gltf, function(shader) {
-                var shaderText = shader.extras._pipeline.source;
+                const shaderText = shader.extras._pipeline.source;
                 expect(typeof shaderText === 'string').toBe(true);
                 expect(shaderText.length).toBeGreaterThan(0);
                 expect(shader.uri).toBeUndefined();
@@ -52,7 +52,7 @@ function readsResources(gltfPath, binary, separate, done) {
                 }
             });
             ForEach.image(gltf, function(image) {
-                var imageSource = image.extras._pipeline.source;
+                const imageSource = image.extras._pipeline.source;
                 expect(Buffer.isBuffer(imageSource)).toBe(true);
                 expect(image.uri).toBeUndefined();
                 if (separate) {
@@ -60,7 +60,7 @@ function readsResources(gltfPath, binary, separate, done) {
                 }
             });
             ForEach.buffer(gltf, function(buffer) {
-                var bufferSource = buffer.extras._pipeline.source;
+                const bufferSource = buffer.extras._pipeline.source;
                 expect(Buffer.isBuffer(bufferSource)).toBe(true);
                 expect(buffer.uri).toBeUndefined();
                 if (separate && !binary) {
@@ -104,12 +104,12 @@ describe('readResources', function() {
     });
 
     it('rejects if gltf contains separate resources but no resource directory is supplied', function(done) {
-        var gltf = readGltf(boxTexturedSeparate2Path);
+        const gltf = readGltf(boxTexturedSeparate2Path);
         expect(readResources(gltf), done).toRejectWith(RuntimeError);
     });
 
     it('rejects when loading resource outside of the resource directory when secure is true', function(done) {
-        var gltf = readGltf(boxTexturedSeparate2Path);
+        const gltf = readGltf(boxTexturedSeparate2Path);
         gltf.images[0].uri = '../cesium.png';
         expect(readResources(gltf), done).toRejectWith(RuntimeError);
     });

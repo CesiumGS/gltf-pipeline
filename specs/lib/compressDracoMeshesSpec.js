@@ -1,21 +1,21 @@
 'use strict';
-var Cesium = require('cesium');
-var fsExtra = require('fs-extra');
-var Promise = require('bluebird');
-var readResources = require('../../lib/readResources');
-var compressDracoMeshes = require('../../lib/compressDracoMeshes');
+const Cesium = require('cesium');
+const fsExtra = require('fs-extra');
+const Promise = require('bluebird');
+const readResources = require('../../lib/readResources');
+const compressDracoMeshes = require('../../lib/compressDracoMeshes');
 
-var clone = Cesium.clone;
+const clone = Cesium.clone;
 
-var boxPath = 'specs/data/2.0/box-textured-embedded/box-textured-embedded.gltf';
-var boxMorphPath = 'specs/data/2.0/box-morph/box-morph.gltf';
-var multipleBoxesPath = 'specs/data/2.0/multiple-boxes/multiple-boxes.gltf';
+const boxPath = 'specs/data/2.0/box-textured-embedded/box-textured-embedded.gltf';
+const boxMorphPath = 'specs/data/2.0/box-morph/box-morph.gltf';
+const multipleBoxesPath = 'specs/data/2.0/multiple-boxes/multiple-boxes.gltf';
 
-var gltf;
-var gltfOther;
+let gltf;
+let gltfOther;
 
 function expectOutOfRange(gltf, name, value) {
-    var options = {
+    const options = {
         dracoOptions: {}
     };
     options.dracoOptions[name] = value;
@@ -25,7 +25,7 @@ function expectOutOfRange(gltf, name, value) {
 }
 
 function readGltf(gltfPath) {
-    var gltf = fsExtra.readJsonSync(gltfPath);
+    const gltf = fsExtra.readJsonSync(gltfPath);
     return readResources(gltf);
 }
 
@@ -36,8 +36,8 @@ function readGltfs(paths) {
 }
 
 function getDracoBuffer(gltf) {
-    var bufferView = gltf.bufferViews[gltf.meshes[0].primitives[0].extensions.KHR_draco_mesh_compression.bufferView];
-    var source = gltf.buffers[0].extras._pipeline.source;
+    const bufferView = gltf.bufferViews[gltf.meshes[0].primitives[0].extensions.KHR_draco_mesh_compression.bufferView];
+    const source = gltf.buffers[0].extras._pipeline.source;
     return source.slice(bufferView.byteOffset, bufferView.byteOffset + bufferView.byteLength);
 }
 
@@ -60,14 +60,14 @@ describe('compressDracoMeshes', function() {
         expect(gltf.accessors.length).toBe(4); // accessors are not removed
         expect(gltf.bufferViews.length).toBe(2); // draco + image
 
-        var dracoExtension = gltf.meshes[0].primitives[0].extensions.KHR_draco_mesh_compression;
+        const dracoExtension = gltf.meshes[0].primitives[0].extensions.KHR_draco_mesh_compression;
         expect(dracoExtension.bufferView).toBeDefined();
         expect(gltf.extensionsUsed.indexOf('KHR_draco_mesh_compression') >= 0).toBe(true);
         expect(gltf.extensionsRequired.indexOf('KHR_draco_mesh_compression') >= 0).toBe(true);
 
-        var positionAccessor = gltf.accessors[dracoExtension.attributes.POSITION];
-        var normalAccessor = gltf.accessors[dracoExtension.attributes.NORMAL];
-        var texcoordAccessor = gltf.accessors[dracoExtension.attributes.TEXCOORD_0];
+        const positionAccessor = gltf.accessors[dracoExtension.attributes.POSITION];
+        const normalAccessor = gltf.accessors[dracoExtension.attributes.NORMAL];
+        const texcoordAccessor = gltf.accessors[dracoExtension.attributes.TEXCOORD_0];
 
         expect(positionAccessor.bufferView).toBeUndefined();
         expect(positionAccessor.byteLength).toBeUndefined();
@@ -95,8 +95,8 @@ describe('compressDracoMeshes', function() {
     it('applies unified quantization', function(done) {
         expect(readGltfs([multipleBoxesPath, multipleBoxesPath])
             .then(function(gltfs) {
-                var gltfUnified = gltfs[0];
-                var gltfNonUnified = gltfs[1];
+                const gltfUnified = gltfs[0];
+                const gltfNonUnified = gltfs[1];
                 compressDracoMeshes(gltfUnified, {
                     dracoOptions: {
                         unifiedQuantization: true
@@ -107,8 +107,8 @@ describe('compressDracoMeshes', function() {
                         unifiedQuantization: false
                     }
                 });
-                var dracoBufferUnified = getDracoBuffer(gltfUnified);
-                var dracoBufferNonUnified = getDracoBuffer(gltfNonUnified);
+                const dracoBufferUnified = getDracoBuffer(gltfUnified);
+                const dracoBufferNonUnified = getDracoBuffer(gltfNonUnified);
                 expect(dracoBufferNonUnified).not.toEqual(dracoBufferUnified);
             }), done).toResolve();
     });
@@ -125,8 +125,8 @@ describe('compressDracoMeshes', function() {
             }
         });
 
-        var dracoBuffer8 = getDracoBuffer(gltf);
-        var dracoBuffer14 = getDracoBuffer(gltfOther);
+        const dracoBuffer8 = getDracoBuffer(gltf);
+        const dracoBuffer14 = getDracoBuffer(gltfOther);
         expect(dracoBuffer8.length).toBeLessThan(dracoBuffer14.length);
     });
 
@@ -141,21 +141,21 @@ describe('compressDracoMeshes', function() {
             }
         });
         compressDracoMeshes(gltfOther);
-        var dracoBufferUncompressed = getDracoBuffer(gltf);
-        var dracoBufferCompressed = getDracoBuffer(gltfOther);
+        const dracoBufferUncompressed = getDracoBuffer(gltf);
+        const dracoBufferCompressed = getDracoBuffer(gltfOther);
         expect(dracoBufferCompressed.length).toBeLessThan(dracoBufferUncompressed.length);
     });
 
     it('only compresses duplicate primitive once', function() {
-        var primitives = gltf.meshes[0].primitives;
+        const primitives = gltf.meshes[0].primitives;
         primitives.push(clone(primitives[0], true));
         compressDracoMeshes(gltf);
         expect(primitives[0]).toEqual(primitives[1]);
     });
 
     function removeMorphTargets(gltf) {
-        var mesh = gltf.meshes[0];
-        var primitive = mesh.primitives[0];
+        const mesh = gltf.meshes[0];
+        const primitive = mesh.primitives[0];
         delete primitive.targets;
         delete mesh.weights;
         return gltf;
@@ -164,12 +164,12 @@ describe('compressDracoMeshes', function() {
     it('applied sequential encoding when the primitive has morph targets', function(done) {
         expect(readGltfs([boxMorphPath, boxMorphPath])
             .then(function(gltfs) {
-                var gltfMorph = gltfs[0];
-                var gltfNoMorph = removeMorphTargets(gltfs[1]);
+                const gltfMorph = gltfs[0];
+                const gltfNoMorph = removeMorphTargets(gltfs[1]);
                 compressDracoMeshes(gltfMorph);
                 compressDracoMeshes(gltfNoMorph);
-                var dracoBufferMorph = getDracoBuffer(gltfMorph);
-                var dracoBufferNoMorph = getDracoBuffer(gltfNoMorph);
+                const dracoBufferMorph = getDracoBuffer(gltfMorph);
+                const dracoBufferNoMorph = getDracoBuffer(gltfNoMorph);
                 expect(dracoBufferMorph).not.toEqual(dracoBufferNoMorph);
             }), done).toResolve();
     });
