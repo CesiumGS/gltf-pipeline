@@ -38,7 +38,7 @@ npm install -g gltf-pipeline
 `gltf-pipeline -i model.glb -j`
 
 #### Converting a glTF to Draco glTF
-`gltf-pipeline -i model.gltf -o modelDraco.gltf -d -s`
+`gltf-pipeline -i model.gltf -o modelDraco.gltf -d`
 
 ### Saving separate textures
 `gltf-pipeline -i model.gltf -t`
