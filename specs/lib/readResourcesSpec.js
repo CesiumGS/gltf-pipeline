@@ -111,6 +111,10 @@ describe('readResources', function() {
     it('rejects when loading resource outside of the resource directory when secure is true', function(done) {
         const gltf = readGltf(boxTexturedSeparate2Path);
         gltf.images[0].uri = '../cesium.png';
-        expect(readResources(gltf), done).toRejectWith(RuntimeError);
+        const options = {
+            secure : true,
+            resourceDirectory : 'specs/data/2.0/box-textured-separate'
+        };
+        expect(readResources(gltf, options), done).toRejectWith(RuntimeError);
     });
 });
