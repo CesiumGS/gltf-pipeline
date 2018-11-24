@@ -1,12 +1,12 @@
 'use strict';
-var Cesium = require('cesium');
-var addPipelineExtras = require('../../lib/addPipelineExtras');
+const Cesium = require('cesium');
+const addPipelineExtras = require('../../lib/addPipelineExtras');
 
-var WebGLConstants = Cesium.WebGLConstants;
+const WebGLConstants = Cesium.WebGLConstants;
 
 describe('addPipelineExtras', function() {
     it('adds pipeline extras to glTF 1.0 assets', function() {
-        var gltf = {
+        const gltf = {
             buffers: {
                 sampleBuffer0: {
                     byteLength: 100
@@ -33,7 +33,7 @@ describe('addPipelineExtras', function() {
                 }
             }
         };
-        var gltfWithExtras = addPipelineExtras(gltf);
+        const gltfWithExtras = addPipelineExtras(gltf);
         expect(gltfWithExtras.buffers['sampleBuffer0'].extras._pipeline).toBeDefined();
         expect(gltfWithExtras.shaders['sample0VS'].extras._pipeline).toBeDefined();
         expect(gltfWithExtras.images['sampleImage0'].extras._pipeline).toBeDefined();
@@ -42,7 +42,7 @@ describe('addPipelineExtras', function() {
     });
 
     it('adds pipeline extras to glTF 2.0 assets', function () {
-        var gltf = {
+        const gltf = {
             buffers: [
                 {
                     byteLength: 100
@@ -79,7 +79,7 @@ describe('addPipelineExtras', function() {
                 'KHR_techniques_webgl'
             ]
         };
-        var gltfWithExtras = addPipelineExtras(gltf);
+        const gltfWithExtras = addPipelineExtras(gltf);
         expect(gltfWithExtras.buffers[0].extras._pipeline).toBeDefined();
         expect(gltfWithExtras.extensions.KHR_techniques_webgl.shaders[0].extras._pipeline).toBeDefined();
         expect(gltfWithExtras.images[0].extras._pipeline).toBeDefined();

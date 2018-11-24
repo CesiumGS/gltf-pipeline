@@ -1,18 +1,18 @@
 'use strict';
-var Cesium = require('cesium');
-var fsExtra = require('fs-extra');
-var path = require('path');
-var hasExtension = require('../../lib/hasExtension');
-var processGltf = require('../../lib/processGltf');
+const Cesium = require('cesium');
+const fsExtra = require('fs-extra');
+const path = require('path');
+const hasExtension = require('../../lib/hasExtension');
+const processGltf = require('../../lib/processGltf');
 
-var RuntimeError = Cesium.RuntimeError;
+const RuntimeError = Cesium.RuntimeError;
 
-var gltfPath = 'specs/data/2.0/box-techniques-embedded/box-techniques-embedded.gltf';
-var gltfSeparatePath = 'specs/data/2.0/box-techniques-separate/box-techniques-separate.gltf';
+const gltfPath = 'specs/data/2.0/box-techniques-embedded/box-techniques-embedded.gltf';
+const gltfSeparatePath = 'specs/data/2.0/box-techniques-separate/box-techniques-separate.gltf';
 
 describe('processGltf', function() {
     it('processes gltf with default options', function(done) {
-        var gltf = fsExtra.readJsonSync(gltfPath);
+        const gltf = fsExtra.readJsonSync(gltfPath);
         expect(processGltf(gltf)
             .then(function(results) {
                 expect(results.gltf).toBeDefined();
@@ -20,8 +20,8 @@ describe('processGltf', function() {
     });
 
     it('uses resource directory', function(done) {
-        var gltf = fsExtra.readJsonSync(gltfSeparatePath);
-        var options = {
+        const gltf = fsExtra.readJsonSync(gltfSeparatePath);
+        const options = {
             resourceDirectory: path.dirname(gltfSeparatePath)
         };
         expect(processGltf(gltf, options)
@@ -31,8 +31,8 @@ describe('processGltf', function() {
     });
 
     it('saves separate resources', function(done) {
-        var gltf = fsExtra.readJsonSync(gltfPath);
-        var options = {
+        const gltf = fsExtra.readJsonSync(gltfPath);
+        const options = {
             separate: true
         };
         expect(processGltf(gltf, options)
@@ -47,8 +47,8 @@ describe('processGltf', function() {
     });
 
     it('saves separate textures', function(done) {
-        var gltf = fsExtra.readJsonSync(gltfPath);
-        var options = {
+        const gltf = fsExtra.readJsonSync(gltfPath);
+        const options = {
             separateTextures: true
         };
         expect(processGltf(gltf, options)
@@ -61,8 +61,8 @@ describe('processGltf', function() {
     });
 
     it('uses name to save separate resources', function(done) {
-        var gltf = fsExtra.readJsonSync(gltfPath);
-        var options = {
+        const gltf = fsExtra.readJsonSync(gltfPath);
+        const options = {
             separate: true,
             name: 'my-model'
         };
@@ -83,8 +83,8 @@ describe('processGltf', function() {
     });
 
     it('rejects when loading resource outside of the resource directory when secure is true', function(done) {
-        var gltf = fsExtra.readJsonSync(gltfSeparatePath);
-        var options = {
+        const gltf = fsExtra.readJsonSync(gltfSeparatePath);
+        const options = {
             secure: true
         };
         gltf.images[0].uri = '../cesium.png';
@@ -93,8 +93,8 @@ describe('processGltf', function() {
 
     it('prints stats', function(done) {
         spyOn(console, 'log');
-        var gltf = fsExtra.readJsonSync(gltfPath);
-        var options = {
+        const gltf = fsExtra.readJsonSync(gltfPath);
+        const options = {
             stats: true
         };
         expect(processGltf(gltf, options)
@@ -104,8 +104,8 @@ describe('processGltf', function() {
     });
 
     it('uses draco compression', function(done) {
-        var gltf = fsExtra.readJsonSync(gltfPath);
-        var options = {
+        const gltf = fsExtra.readJsonSync(gltfPath);
+        const options = {
             dracoOptions: {
                 compressionLevel: 7
             }
@@ -118,8 +118,8 @@ describe('processGltf', function() {
 
     it('runs custom stages', function(done) {
         spyOn(console, 'log');
-        var gltf = fsExtra.readJsonSync(gltfPath);
-        var options = {
+        const gltf = fsExtra.readJsonSync(gltfPath);
+        const options = {
             customStages: [
                 function(gltf) {
                     gltf.meshes[0].name = 'new-name';
@@ -136,9 +136,9 @@ describe('processGltf', function() {
     });
 
     it('uses logger', function(done) {
-        var loggedMessages = 0;
-        var gltf = fsExtra.readJsonSync(gltfPath);
-        var options = {
+        let loggedMessages = 0;
+        const gltf = fsExtra.readJsonSync(gltfPath);
+        const options = {
             stats: true,
             logger: function() {
                 loggedMessages++;

@@ -1,25 +1,25 @@
 'use strict';
-var Cesium = require('cesium');
-var readAccessorPacked = require('../../lib/readAccessorPacked');
-var readResources = require('../../lib/readResources');
-var splitPrimitives = require('../../lib/splitPrimitives');
+const Cesium = require('cesium');
+const readAccessorPacked = require('../../lib/readAccessorPacked');
+const readResources = require('../../lib/readResources');
+const splitPrimitives = require('../../lib/splitPrimitives');
 
-var clone = Cesium.clone;
-var WebGLConstants = Cesium.WebGLConstants;
+const clone = Cesium.clone;
+const WebGLConstants = Cesium.WebGLConstants;
 
 describe('splitPrimitives', function() {
     it('splits primitives that reference different indices within the same mesh', function(done) {
         // A rectangle split into two quads.
         // A second mesh contains a primitive that is a duplicate of the first quad.
-        var indices = [0, 1, 2, 0, 2, 3, 1, 4, 5, 1, 5, 2];
-        var positions = [0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.5, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0];
-        var normals = [-1.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 1.0, 0.0, -1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0];
-        var target0Positions = [0.0, 0.0, 0.0, 0.25, 0.0, 0.0, 0.25, 0.5, 0.0, 0.0, 0.5, 0.0, 0.5, 0.0, 0.0, 0.5, 0.5, 0.0];
-        var target0Normals = [-0.5, 0.0, 0.0, 0.0, -0.5, 0.0, 0.0, 0.5, 0.0, -0.5, 0.0, 0.0, 0.5, 0.0, 0.0, 0.5, 0.0, 0.0];
-        var target1Positions = [0.0, 0.0, 0.0, 0.125, 0.0, 0.0, 0.125, 0.25, 0.0, 0.0, 0.25, 0.0, 0.25, 0.0, 0.0, 0.25, 0.25, 0.0];
-        var target1Normals = [-0.25, 0.0, 0.0, 0.0, -0.25, 0.0, 0.0, 0.25, 0.0, -0.25, 0.0, 0.0, 0.25, 0.0, 0.0, 0.25, 0.0, 0.0];
+        const indices = [0, 1, 2, 0, 2, 3, 1, 4, 5, 1, 5, 2];
+        const positions = [0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.5, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0];
+        const normals = [-1.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 1.0, 0.0, -1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0];
+        const target0Positions = [0.0, 0.0, 0.0, 0.25, 0.0, 0.0, 0.25, 0.5, 0.0, 0.0, 0.5, 0.0, 0.5, 0.0, 0.0, 0.5, 0.5, 0.0];
+        const target0Normals = [-0.5, 0.0, 0.0, 0.0, -0.5, 0.0, 0.0, 0.5, 0.0, -0.5, 0.0, 0.0, 0.5, 0.0, 0.0, 0.5, 0.0, 0.0];
+        const target1Positions = [0.0, 0.0, 0.0, 0.125, 0.0, 0.0, 0.125, 0.25, 0.0, 0.0, 0.25, 0.0, 0.25, 0.0, 0.0, 0.25, 0.25, 0.0];
+        const target1Normals = [-0.25, 0.0, 0.0, 0.0, -0.25, 0.0, 0.0, 0.25, 0.0, -0.25, 0.0, 0.0, 0.25, 0.0, 0.0, 0.25, 0.0, 0.0];
 
-        var source = Buffer.concat([
+        const source = Buffer.concat([
             Buffer.from((new Uint16Array(indices)).buffer),
             Buffer.from((new Float32Array(positions)).buffer),
             Buffer.from((new Float32Array(normals)).buffer),
@@ -29,38 +29,38 @@ describe('splitPrimitives', function() {
             Buffer.from((new Float32Array(target1Normals)).buffer)
         ]);
 
-        var dataUri = 'data:application/octet-stream;base64,' + source.toString('base64');
+        const dataUri = 'data:application/octet-stream;base64,' + source.toString('base64');
 
-        var expectedIndices = [
+        const expectedIndices = [
             [0, 1, 2, 0, 2, 3],
             [0, 1, 2, 0, 2, 3]
         ];
-        var expectedPositions = [
+        const expectedPositions = [
             [0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.5, 1.0, 0.0, 0.0, 1.0, 0.0],
             [0.5, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.5, 1.0, 0.0]
         ];
-        var expectedNormals = [
+        const expectedNormals = [
             [-1.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 1.0, 0.0, -1.0, 0.0, 0.0],
             [0.0, -1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0]
         ];
-        var expectedTarget0Positions = [
+        const expectedTarget0Positions = [
             [0.0, 0.0, 0.0, 0.25, 0.0, 0.0, 0.25, 0.5, 0.0, 0.0, 0.5, 0.0],
             [0.25, 0.0, 0.0, 0.5, 0.0, 0.0, 0.5, 0.5, 0.0, 0.25, 0.5, 0.0]
         ];
-        var expectedTarget0Normals = [
+        const expectedTarget0Normals = [
             [-0.5, 0.0, 0.0, 0.0, -0.5, 0.0, 0.0, 0.5, 0.0, -0.5, 0.0, 0.0],
             [0.0, -0.5, 0.0, 0.5, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.5, 0.0]
         ];
-        var expectedTarget1Positions = [
+        const expectedTarget1Positions = [
             [0.0, 0.0, 0.0, 0.125, 0.0, 0.0, 0.125, 0.25, 0.0, 0.0, 0.25, 0.0],
             [0.125, 0.0, 0.0, 0.25, 0.0, 0.0, 0.25, 0.25, 0.0, 0.125, 0.25, 0.0]
         ];
-        var expectedTarget1Normals = [
+        const expectedTarget1Normals = [
             [-0.25, 0.0, 0.0, 0.0, -0.25, 0.0, 0.0, 0.25, 0.0, -0.25, 0.0, 0.0],
             [0.0, -0.25, 0.0, 0.25, 0.0, 0.0, 0.25, 0.0, 0.0, 0.0, 0.25, 0.0]
         ];
 
-        var primitiveTemplate = {
+        const primitiveTemplate = {
             attributes: {
                 POSITION: 2,
                 NORMAL: 3
@@ -79,13 +79,13 @@ describe('splitPrimitives', function() {
             ]
         };
 
-        var primitive0 = clone(primitiveTemplate, true);
-        var primitive1 = clone(primitiveTemplate, true);
-        var primitive2 = clone(primitiveTemplate, true);
+        const primitive0 = clone(primitiveTemplate, true);
+        const primitive1 = clone(primitiveTemplate, true);
+        const primitive2 = clone(primitiveTemplate, true);
 
         primitive1.indices = 1;
 
-        var gltf = {
+        const gltf = {
             buffers: [
                 {
                     uri: dataUri
@@ -174,9 +174,9 @@ describe('splitPrimitives', function() {
 
         expect(readResources(gltf)
             .then(function(gltf) {
-                var primitive0 = gltf.meshes[0].primitives[0];
-                var primitive1 = gltf.meshes[0].primitives[1];
-                var primitive2 = gltf.meshes[1].primitives[0];
+                const primitive0 = gltf.meshes[0].primitives[0];
+                const primitive1 = gltf.meshes[0].primitives[1];
+                const primitive2 = gltf.meshes[1].primitives[0];
 
                 expect(primitive0.attributes).toEqual(primitive1.attributes);
                 expect(primitive0.targets).toEqual(primitive1.targets);

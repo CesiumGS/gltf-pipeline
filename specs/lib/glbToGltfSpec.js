@@ -1,14 +1,14 @@
 'use strict';
-var fsExtra = require('fs-extra');
-var glbToGltf = require('../../lib/glbToGltf');
+const fsExtra = require('fs-extra');
+const glbToGltf = require('../../lib/glbToGltf');
 
-var glbPath = 'specs/data/2.0/box-textured-binary/box-textured-binary.glb';
+const glbPath = 'specs/data/2.0/box-textured-binary/box-textured-binary.glb';
 
 describe('glbToGltf', function() {
     it('glbToGltf', function(done) {
         spyOn(console, 'log');
-        var glb = fsExtra.readFileSync(glbPath);
-        var options = {
+        const glb = fsExtra.readFileSync(glbPath);
+        const options = {
             separate: true,
             stats: true
         };

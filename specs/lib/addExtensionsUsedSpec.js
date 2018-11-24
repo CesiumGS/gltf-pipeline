@@ -1,9 +1,9 @@
 'use strict';
-var addExtensionsUsed = require('../../lib/addExtensionsUsed');
+const addExtensionsUsed = require('../../lib/addExtensionsUsed');
 
 describe('addExtensionsUsed', function() {
     it('adds an extension to extensionsUsed', function() {
-        var gltf = {};
+        const gltf = {};
         addExtensionsUsed(gltf, 'KHR_materials_pbrSpecularGlossiness');
         addExtensionsUsed(gltf, 'KHR_draco_mesh_compression');
         addExtensionsUsed(gltf, 'KHR_draco_mesh_compression'); // Test adding duplicate

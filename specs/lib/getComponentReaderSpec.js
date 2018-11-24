@@ -1,17 +1,17 @@
 'use strict';
-var Cesium = require('cesium');
-var getComponentReader = require('../../lib/getComponentReader');
+const Cesium = require('cesium');
+const getComponentReader = require('../../lib/getComponentReader');
 
-var ComponentDatatype = Cesium.ComponentDatatype;
+const ComponentDatatype = Cesium.ComponentDatatype;
 
 function testComponentReader(componentType) {
-    var typedArray = ComponentDatatype.createTypedArray(componentType, [0, 1, 2]);
-    var dataView = new DataView(typedArray.buffer);
-    var componentTypeByteLength = ComponentDatatype.getSizeInBytes(componentType);
-    var componentReader = getComponentReader(componentType);
-    var byteOffset = componentTypeByteLength;
-    var numberOfComponents = 2;
-    var result = new Array(numberOfComponents);
+    const typedArray = ComponentDatatype.createTypedArray(componentType, [0, 1, 2]);
+    const dataView = new DataView(typedArray.buffer);
+    const componentTypeByteLength = ComponentDatatype.getSizeInBytes(componentType);
+    const componentReader = getComponentReader(componentType);
+    const byteOffset = componentTypeByteLength;
+    const numberOfComponents = 2;
+    const result = new Array(numberOfComponents);
     componentReader(dataView, byteOffset, numberOfComponents, componentTypeByteLength, result);
     expect(result).toEqual([1, 2]);
 }

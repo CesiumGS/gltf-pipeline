@@ -1,13 +1,13 @@
 'use strict';
-var Cesium = require('cesium');
-var addPipelineExtras = require('../../lib/addPipelineExtras');
-var removePipelineExtras = require('../../lib/removePipelineExtras');
+const Cesium = require('cesium');
+const addPipelineExtras = require('../../lib/addPipelineExtras');
+const removePipelineExtras = require('../../lib/removePipelineExtras');
 
-var WebGLConstants = Cesium.WebGLConstants;
+const WebGLConstants = Cesium.WebGLConstants;
 
 describe('removePipelineExtras', function() {
     it('removes pipeline extras', function() {
-        var gltf = {
+        const gltf = {
             buffers: [
                 {
                     byteLength: 100
@@ -38,7 +38,7 @@ describe('removePipelineExtras', function() {
                 }
             ]
         };
-        var gltfWithExtrasRemoved = removePipelineExtras(addPipelineExtras(gltf));
+        const gltfWithExtrasRemoved = removePipelineExtras(addPipelineExtras(gltf));
         expect(gltfWithExtrasRemoved.buffers[0].extras).toBeUndefined();
         expect(gltfWithExtrasRemoved.extensions.KHR_techniques_webgl.shaders[0].extras).toBeUndefined();
         expect(gltfWithExtrasRemoved.images[0].extras._pipeline).toBeUndefined();

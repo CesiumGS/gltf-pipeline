@@ -1,7 +1,11 @@
 Change Log
 ==========
 
-### 2.0.1 - ????
+### 2.0.2 - ????-??-??
+
+* Fixed a bug where nodes containing extensions or extras where being removed in the glTF 1.0 to 2.0 upgrade stage. [#431](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/431)
+
+### 2.0.1 - 2018-09-19
 
 * Added ability to apply Draco compression to meshes without indices. [#424](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/424)
 * Fixed a bug where the buffer `byteOffset` was not set properly when updating 1.0 accessor types to 2.0 allowed values. [#418](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/418)
