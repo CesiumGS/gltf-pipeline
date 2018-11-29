@@ -55,7 +55,7 @@ var gltf = fsExtra.readJsonSync('model.gltf');
 gltfToGlb(gltf)
     .then(function(results) {
         fsExtra.writeFileSync('model.glb', results.glb);
-    }
+    });
 ```
 
 #### Converting a glb to glTF
@@ -68,7 +68,7 @@ var glb = fsExtra.readFileSync('model.glb');
 glbToGltf(glb)
     .then(function(results) {
         fsExtra.writeJsonSync('model.gltf', results.gltf);
-    }
+    });
 ```
 
 #### Converting a glTF to Draco glTF
@@ -76,16 +76,17 @@ glbToGltf(glb)
 ```javascript
 var gltfPipeline = require('gltf-pipeline');
 var fsExtra = require('fs-extra');
+var processGltf = gltfPipeline.processGltf;
 var gltf = fsExtra.readJsonSync('model.gltf');
 var options = {
     dracoOptions: {
         compressionLevel: 10
     }
-}
+};
 processGltf(gltf, options)
     .then(function(results) {
         fsExtra.writeJsonSync('model.gltf', results.gltf);
-    }
+    });
 ```
 
 #### Saving separate textures
@@ -93,6 +94,7 @@ processGltf(gltf, options)
 ```javascript
 var gltfPipeline = require('gltf-pipeline');
 var fsExtra = require('fs-extra');
+var processGltf = gltfPipeline.processGltf;
 var gltf = fsExtra.readJsonSync('model.gltf');
 var options = {
     separateTextures: true
@@ -105,10 +107,10 @@ processGltf(gltf, options)
         for (var relativePath in separateResources) {
             if (separateResources.hasOwnProperty(relativePath)) {
                 var resource = separateResources[relativePath];
-                fsExtra.writeFileSync(relativePath, resource));
+                fsExtra.writeFileSync(relativePath, resource);
             }
         }
-    }
+    });
 ```
 
 ### Command-Line Flags
