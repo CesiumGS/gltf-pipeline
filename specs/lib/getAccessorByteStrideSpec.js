@@ -1,12 +1,12 @@
 'use strict';
-var Cesium = require('cesium');
-var getAccessorByteStride = require('../../lib/getAccessorByteStride');
+const Cesium = require('cesium');
+const getAccessorByteStride = require('../../lib/getAccessorByteStride');
 
-var WebGLConstants = Cesium.WebGLConstants;
+const WebGLConstants = Cesium.WebGLConstants;
 
 describe('getAccessorByteStride', function() {
     it('gets accessor byte stride', function() {
-        var gltf = {
+        const gltf = {
             accessors: [
                 {
                     componentType: WebGLConstants.FLOAT,

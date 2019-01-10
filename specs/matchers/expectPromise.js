@@ -1,9 +1,9 @@
 'use strict';
 
-var Cesium = require('cesium');
+const Cesium = require('cesium');
 
-var defined = Cesium.defined;
-var defaultValue = Cesium.defaultValue;
+const defined = Cesium.defined;
+const defaultValue = Cesium.defaultValue;
 
 module.exports = function expectPrommise(promise, done) {
     return {
@@ -25,7 +25,7 @@ module.exports = function expectPrommise(promise, done) {
                 });
         },
         toRejectWith: function toRejectWith(ErrorType, errorMessage) {
-            var typeName = defaultValue(ErrorType.displayName, ErrorType.name);
+            const typeName = defaultValue(ErrorType.displayName, ErrorType.name);
 
             promise
                 .then(function () {

@@ -26,8 +26,8 @@ define([
                 return {
                     compare : function(actual, expected) {
                         // based on the built-in Jasmine toThrow matcher
-                        var result = false;
-                        var exception;
+                        let result = false;
+                        let exception;
 
                         if (typeof actual !== 'function') {
                             throw new Error('Actual is not a function');
@@ -43,7 +43,7 @@ define([
                             result = exception instanceof Type;
                         }
 
-                        var message;
+                        let message;
                         if (result) {
                             message = ['Expected function not to throw ' + name + ' , but it threw', exception.message || exception].join(' ');
                             if (defined(expected)) {
@@ -96,7 +96,7 @@ define([
                 return {
                     compare: function(actual, lower, upper) {
                         if (lower > upper) {
-                            var tmp = upper;
+                            const tmp = upper;
                             upper = lower;
                             lower = tmp;
                         }
@@ -133,7 +133,7 @@ define([
                 return {
                     compare: function(actual, expected, epsilon) {
                         function equalityTester(a, b) {
-                            var to_run;
+                            let to_run;
                             if (defined(a)) {
                                 if (typeof a.equalsEpsilon === 'function') {
                                     return a.equalsEpsilon(b, epsilon);
@@ -165,7 +165,7 @@ define([
                             return undefined;
                         }
 
-                        var result = equals(util, [equalityTester], actual, expected);
+                        const result = equals(util, [equalityTester], actual, expected);
 
                         return { pass : result };
                     }
@@ -176,10 +176,10 @@ define([
                 return {
                     compare : function(actual, expectedInterface) {
                         // All function properties on the prototype should also exist on the actual's prototype.
-                        var actualPrototype = actual.prototype;
-                        var expectedInterfacePrototype = expectedInterface.prototype;
+                        const actualPrototype = actual.prototype;
+                        const expectedInterfacePrototype = expectedInterface.prototype;
 
-                        for ( var item in expectedInterfacePrototype) {
+                        for ( const item in expectedInterfacePrototype) {
                             if (expectedInterfacePrototype.hasOwnProperty(item) && typeof expectedInterfacePrototype[item] === 'function' && !actualPrototype.hasOwnProperty(item)) {
                                 return { pass : false, message : createMissingFunctionMessageFunction(item, actualPrototype, expectedInterfacePrototype) };
                             }

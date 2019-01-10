@@ -1,9 +1,9 @@
 'use strict';
-var removeDefaults = require('../../lib/removeDefaults');
+const removeDefaults = require('../../lib/removeDefaults');
 
 describe('removeDefaults', function() {
     it('removeDefaults', function() {
-        var gltf = {
+        const gltf = {
             nodes: [
                 {
                     matrix: [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]
