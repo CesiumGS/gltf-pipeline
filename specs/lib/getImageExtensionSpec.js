@@ -8,6 +8,7 @@ const jpgData = dataUriToBuffer('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABI
 const bmpData = dataUriToBuffer('data:image/bmp;base64,Qk1mAAAAAAAAADYAAAAoAAAABAAAAAQAAAABABgAAAAAADAAAAATCwAAEwsAAAAAAAAAAAAA////////////////////////////////////////////////////////////////');
 const ktxData = dataUriToBuffer('data:image/ktx:base64,q0tUWCAxMbsNChoKAQIDBAEUAAABAAAACBkAAFiAAAAIGQAABAAAAAQAAAAAAAAAAAAAAAEAAAABAAAAIAAAABsAAABLVFhPcmllbnRhdGlvbgBTPXIsVD1kLFI9aQAAQAAAAP////////////////////////////////////////////////////////////////////////////////////8=');
 const crnData = dataUriToBuffer('data:image/crn:base64,SHgAUktGAAAAlds6AAQABAMBAAAAAAAAAAAAAAAAAAAAAABSAAAXAAEAAGkAAAwAAQAAAAAAAAAAAAAAAAAAAAAAHQAAdQAAAJIAAACTAAAAlACCYIAAAAAAABkwBAmCAAAAAAAAbRYAAGZggAAAAAAAGNAAAAZgAAAAAAAAEAAzAAAAAAAAAIABmAAAAAAAAAQAAAA=');
+const webpData = dataUriToBuffer('data:image/webp;base64,UklGRkgAAABXRUJQVlA4WAoAAAAQAAAACQAACQAAQUxQSAoAAAABB1CyiAhERP8DVlA4IBgAAAAwAQCdASoKAAoAAUAmJaQAA3AA/u4DAAA=');
 const textData = dataUriToBuffer('data:text/plain;charset=utf-8,randomtext');
 
 describe('getImageExtension', function() {
@@ -18,6 +19,7 @@ describe('getImageExtension', function() {
         expect(getImageExtension(bmpData)).toBe('.bmp');
         expect(getImageExtension(ktxData)).toBe('.ktx');
         expect(getImageExtension(crnData)).toBe('.crn');
+        expect(getImageExtension(webpData)).toBe('.webp');
     });
 
     it('throws error if buffer does not contain image data', function() {
