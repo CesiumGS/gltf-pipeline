@@ -1,5 +1,6 @@
 'use strict';
 const fsExtra = require('fs-extra');
+const path = require('path');
 const dataUriToBuffer = require('../../lib/dataUriToBuffer');
 const ForEach = require('../../lib/ForEach');
 const readResources = require('../../lib/readResources');
@@ -9,14 +10,26 @@ const Cesium = require('cesium');
 const CesiumMath = Cesium.Math;
 
 const gltfPath = 'specs/data/2.0/box-techniques-embedded/box-techniques-embedded.gltf';
+const gltfWebpPath = 'specs/data/2.0/extensions/box-textured-webp/box-textured-separate.gltf';
 let gltf;
+let gltfWebp;
 
 describe('writeResources', function() {
     beforeEach(function(done) {
         const gltfLoaded = fsExtra.readJsonSync(gltfPath);
+        const gltfWebpLoaded = fsExtra.readJsonSync(gltfWebpPath);
         return readResources(gltfLoaded)
             .then(function() {
                 gltf = gltfLoaded;
+            })
+            .then(function() {
+                const options = {
+                    resourceDirectory: path.dirname(gltfWebpPath)
+                };
+                return readResources(gltfWebpLoaded, options);
+            })
+            .then(function() {
+                gltfWebp = gltfWebpLoaded;
                 done();
             });
     });
@@ -158,5 +171,12 @@ describe('writeResources', function() {
 
         expect(gltf.bufferViews.length).toBe(originalBufferViewsLength);
         expect(CesiumMath.equalsEpsilon(buffer.byteLength, originalByteLength + bufferViewByteLength, 8)).toBe(true);
+    });
+
+    it('preserves bufferViews for WebP and fallback image', function() {
+        const originalBufferViewsLength = gltfWebp.bufferViews.length;
+        writeResources(gltfWebp);
+        // There should be a new bufferView for the WebP, and one for the fallback image.
+        expect(gltfWebp.bufferViews.length).toBe(originalBufferViewsLength + 2);
     });
 });
