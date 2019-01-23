@@ -154,9 +154,9 @@
   ],
   "textures": [
     {
+      "sampler": 0,
       "extensions": {
         "EXT_image_webp": {
-          "sampler": 0,
           "source": 0
         }
       }

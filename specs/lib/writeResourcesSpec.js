@@ -1,6 +1,7 @@
 'use strict';
 const fsExtra = require('fs-extra');
 const path = require('path');
+const Promise = require('bluebird');
 const dataUriToBuffer = require('../../lib/dataUriToBuffer');
 const ForEach = require('../../lib/ForEach');
 const readResources = require('../../lib/readResources');
@@ -10,26 +11,26 @@ const Cesium = require('cesium');
 const CesiumMath = Cesium.Math;
 
 const gltfPath = 'specs/data/2.0/box-techniques-embedded/box-techniques-embedded.gltf';
-const gltfWebpPath = 'specs/data/2.0/extensions/EXT_image_webp/box-textured-separate/box-textured-with-fallback.gltf';
+const gltfWebpPath = 'specs/data/2.0/extensions/EXT_image_webp/box-textured-embedded/box-textured-embedded.gltf';
+const gltfWebpSeparatePath = 'specs/data/2.0/extensions/EXT_image_webp/box-textured-separate/box-textured-with-fallback.gltf';
 let gltf;
 let gltfWebp;
+let gltfWebpSeparate;
 
 describe('writeResources', function() {
     beforeEach(function(done) {
-        const gltfLoaded = fsExtra.readJsonSync(gltfPath);
-        const gltfWebpLoaded = fsExtra.readJsonSync(gltfWebpPath);
-        return readResources(gltfLoaded)
-            .then(function() {
-                gltf = gltfLoaded;
+        gltf = fsExtra.readJsonSync(gltfPath);
+        gltfWebp = fsExtra.readJsonSync(gltfWebpPath);
+        gltfWebpSeparate = fsExtra.readJsonSync(gltfWebpSeparatePath);
+
+        Promise.all([
+            readResources(gltf),
+            readResources(gltfWebp),
+            readResources(gltfWebpSeparate, {
+                resourceDirectory: path.dirname(gltfWebpSeparatePath)
             })
+        ])
             .then(function() {
-                const options = {
-                    resourceDirectory: path.dirname(gltfWebpPath)
-                };
-                return readResources(gltfWebpLoaded, options);
-            })
-            .then(function() {
-                gltfWebp = gltfWebpLoaded;
                 done();
             });
     });
@@ -176,7 +177,14 @@ describe('writeResources', function() {
     it('preserves bufferViews for WebP and fallback image', function() {
         const originalBufferViewsLength = gltfWebp.bufferViews.length;
         writeResources(gltfWebp);
+        // This glTF has all the buffer views already defined for the extension, so no change is expected.
+        expect(gltfWebp.bufferViews.length).toBe(originalBufferViewsLength);
+    });
+
+    it('creates new bufferViews for WebP', function() {
+        const originalBufferViewsLength = gltfWebpSeparate.bufferViews.length;
+        writeResources(gltfWebpSeparate);
         // There should be a new bufferView for the WebP, and one for the fallback image.
-        expect(gltfWebp.bufferViews.length).toBe(originalBufferViewsLength + 2);
+        expect(gltfWebpSeparate.bufferViews.length).toBe(originalBufferViewsLength + 2);
     });
 });
