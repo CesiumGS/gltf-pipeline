@@ -11,8 +11,8 @@ const Cesium = require('cesium');
 const CesiumMath = Cesium.Math;
 
 const gltfPath = 'specs/data/2.0/box-techniques-embedded/box-techniques-embedded.gltf';
-const gltfWebpPath = 'specs/data/2.0/extensions/EXT_image_webp/box-textured-embedded/box-textured-embedded.gltf';
-const gltfWebpSeparatePath = 'specs/data/2.0/extensions/EXT_image_webp/box-textured-separate/box-textured-with-fallback.gltf';
+const gltfWebpPath = 'specs/data/2.0/extensions/EXT_texture_webp/box-textured-embedded/box-textured-embedded.gltf';
+const gltfWebpSeparatePath = 'specs/data/2.0/extensions/EXT_texture_webp/box-textured-separate/box-textured-with-fallback.gltf';
 let gltf;
 let gltfWebp;
 let gltfWebpSeparate;
