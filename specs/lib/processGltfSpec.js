@@ -9,6 +9,8 @@ const RuntimeError = Cesium.RuntimeError;
 
 const gltfPath = 'specs/data/2.0/box-techniques-embedded/box-techniques-embedded.gltf';
 const gltfSeparatePath = 'specs/data/2.0/box-techniques-separate/box-techniques-separate.gltf';
+const gltfWebpPath = 'specs/data/2.0/extensions/EXT_texture_webp/box-textured-embedded/box-textured-embedded.gltf';
+const gltfWebpSeparatePath = 'specs/data/2.0/extensions/EXT_texture_webp/box-textured-separate/box-textured-separate.gltf';
 
 describe('processGltf', function() {
     it('processes gltf with default options', function(done) {
@@ -147,6 +149,34 @@ describe('processGltf', function() {
         expect(processGltf(gltf, options)
             .then(function() {
                 expect(loggedMessages).toBe(2);
+            }), done).toResolve();
+    });
+
+    it('processes gltf with EXT_texture_webp extension.', function(done) {
+        const gltf = fsExtra.readJsonSync(gltfWebpSeparatePath);
+        const options = {
+            resourceDirectory: path.dirname(gltfWebpSeparatePath)
+        };
+        expect(processGltf(gltf, options)
+            .then(function(results) {
+                expect(results.gltf).toBeDefined();
+                expect(results.gltf.textures[0].extensions.EXT_texture_webp).toBeDefined();
+
+                const imageId = results.gltf.textures[0].extensions.EXT_texture_webp.source;
+                expect(results.gltf.images[imageId].mimeType).toBe('image/webp');
+            }), done).toResolve();
+    });
+
+    it('processes embedded gltf with EXT_texture_webp extension.', function(done) {
+        const gltf = fsExtra.readJsonSync(gltfWebpPath);
+
+        expect(processGltf(gltf)
+            .then(function(results) {
+                expect(results.gltf).toBeDefined();
+                expect(results.gltf.textures[0].extensions.EXT_texture_webp).toBeDefined();
+
+                const imageId = results.gltf.textures[0].extensions.EXT_texture_webp.source;
+                expect(results.gltf.images[imageId].mimeType).toBe('image/webp');
             }), done).toResolve();
     });
 });
