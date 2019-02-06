@@ -4,8 +4,8 @@ const addPipelineExtras = require('../../lib/addPipelineExtras');
 
 const WebGLConstants = Cesium.WebGLConstants;
 
-describe('addPipelineExtras', function() {
-    it('adds pipeline extras to glTF 1.0 assets', function() {
+describe('addPipelineExtras', () => {
+    it('adds pipeline extras to glTF 1.0 assets', () => {
         const gltf = {
             buffers: {
                 sampleBuffer0: {

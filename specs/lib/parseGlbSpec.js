@@ -1,39 +1,57 @@
 'use strict';
+
+const { RuntimeError } = require('cesium');
+
 const parseGlb = require('../../lib/parseGlb');
 const removePipelineExtras = require('../../lib/removePipelineExtras');
 
-describe('parseGlb', function() {
-    it('throws an error with invalid magic', function() {
+describe('parseGlb', () => {
+    it('throws an error with invalid magic', () => {
         const glb = Buffer.alloc(20);
         glb.write('NOPE', 0);
-        expect(function() {
+
+        let thrownError;
+        try {
             parseGlb(glb);
-        }).toThrowRuntimeError();
+        } catch (e) {
+            thrownError = e;
+        }
+        expect(thrownError).toEqual(new RuntimeError('File is not valid binary glTF'));
     });
 
-    it('throws an error if version is not 1 or 2', function() {
+    it('throws an error if version is not 1 or 2', () => {
         const glb = Buffer.alloc(20);
         glb.write('glTF', 0);
         glb.writeUInt32LE(3, 4);
-        expect(function() {
+
+        let thrownError;
+        try {
             parseGlb(glb);
-        }).toThrowRuntimeError();
+        } catch (e) {
+            thrownError = e;
+        }
+        expect(thrownError).toEqual(new RuntimeError('Binary glTF version is not 1 or 2'));
     });
 
-    describe('1.0', function() {
-        it('throws an error if content format is not JSON', function() {
+    describe('1.0', () => {
+        it('throws an error if content format is not JSON', () => {
             const glb = Buffer.alloc(20);
             glb.write('glTF', 0);
             glb.writeUInt32LE(1, 4);
             glb.writeUInt32LE(20, 8);
             glb.writeUInt32LE(0, 12);
             glb.writeUInt32LE(1, 16);
-            expect(function() {
+
+            let thrownError;
+            try {
                 parseGlb(glb);
-            }).toThrowRuntimeError();
+            } catch (e) {
+                thrownError = e;
+            }
+            expect(thrownError).toEqual(new RuntimeError('Binary glTF scene format is not JSON'));
         });
 
-        it('loads binary glTF', function() {
+        it('loads binary glTF', () => {
             const binaryData = Buffer.from([0, 1, 2, 3, 4, 5]);
             const gltf = {
                 bufferViews: {
@@ -100,8 +118,8 @@ describe('parseGlb', function() {
         });
     });
 
-    describe('2.0', function() {
-        it('loads binary glTF', function() {
+    describe('2.0', () => {
+        it('loads binary glTF', () => {
             let i;
             const binaryData = Buffer.from([0, 1, 2, 3, 4, 5]);
             const gltf = {

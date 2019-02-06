@@ -1,8 +1,8 @@
 'use strict';
 const addToArray = require('../../lib/addToArray');
 
-describe('addToArray', function() {
-    it('adds item to array and returns its index', function() {
+describe('addToArray', () => {
+    it('adds item to array and returns its index', () => {
         const gltf = {
             buffers: []
         };
@@ -17,7 +17,7 @@ describe('addToArray', function() {
         expect(gltf.buffers).toEqual([buffer0, buffer1]);
     });
 
-    it('returns index of duplicate element when checkDuplicates is true', function() {
+    it('returns index of duplicate element when checkDuplicates is true', () => {
         const gltf = {
             buffers: []
         };

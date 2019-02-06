@@ -7,8 +7,8 @@ const splitPrimitives = require('../../lib/splitPrimitives');
 const clone = Cesium.clone;
 const WebGLConstants = Cesium.WebGLConstants;
 
-describe('splitPrimitives', function() {
-    it('splits primitives that reference different indices within the same mesh', function(done) {
+describe('splitPrimitives', () => {
+    it('splits primitives that reference different indices within the same mesh', async () => {
         // A rectangle split into two quads.
         // A second mesh contains a primitive that is a duplicate of the first quad.
         const indices = [0, 1, 2, 0, 2, 3, 1, 4, 5, 1, 5, 2];
@@ -79,9 +79,9 @@ describe('splitPrimitives', function() {
             ]
         };
 
-        const primitive0 = clone(primitiveTemplate, true);
-        const primitive1 = clone(primitiveTemplate, true);
-        const primitive2 = clone(primitiveTemplate, true);
+        let primitive0 = clone(primitiveTemplate, true);
+        let primitive1 = clone(primitiveTemplate, true);
+        let primitive2 = clone(primitiveTemplate, true);
 
         primitive1.indices = 1;
 
@@ -172,39 +172,37 @@ describe('splitPrimitives', function() {
             ]
         };
 
-        expect(readResources(gltf)
-            .then(function(gltf) {
-                const primitive0 = gltf.meshes[0].primitives[0];
-                const primitive1 = gltf.meshes[0].primitives[1];
-                const primitive2 = gltf.meshes[1].primitives[0];
+        await readResources(gltf);
+        primitive0 = gltf.meshes[0].primitives[0];
+        primitive1 = gltf.meshes[0].primitives[1];
+        primitive2 = gltf.meshes[1].primitives[0];
 
-                expect(primitive0.attributes).toEqual(primitive1.attributes);
-                expect(primitive0.targets).toEqual(primitive1.targets);
-                expect(primitive0.indices).not.toBe(primitive1.indices);
-                expect(primitive0).toEqual(primitive2);
+        expect(primitive0.attributes).toEqual(primitive1.attributes);
+        expect(primitive0.targets).toEqual(primitive1.targets);
+        expect(primitive0.indices).not.toBe(primitive1.indices);
+        expect(primitive0).toEqual(primitive2);
 
-                splitPrimitives(gltf);
+        splitPrimitives(gltf);
 
-                expect(primitive0.attributes).not.toEqual(primitive1.attributes);
-                expect(primitive0.targets).not.toEqual(primitive1.targets);
-                expect(primitive0.indices).not.toBe(primitive1.indices);
-                expect(primitive0).toEqual(primitive2);
+        expect(primitive0.attributes).not.toEqual(primitive1.attributes);
+        expect(primitive0.targets).not.toEqual(primitive1.targets);
+        expect(primitive0.indices).not.toBe(primitive1.indices);
+        expect(primitive0).toEqual(primitive2);
 
-                expect(readAccessorPacked(gltf, gltf.accessors[primitive0.indices])).toEqual(expectedIndices[0]);
-                expect(readAccessorPacked(gltf, gltf.accessors[primitive0.attributes.POSITION])).toEqual(expectedPositions[0]);
-                expect(readAccessorPacked(gltf, gltf.accessors[primitive0.attributes.NORMAL])).toEqual(expectedNormals[0]);
-                expect(readAccessorPacked(gltf, gltf.accessors[primitive0.targets[0].POSITION])).toEqual(expectedTarget0Positions[0]);
-                expect(readAccessorPacked(gltf, gltf.accessors[primitive0.targets[0].NORMAL])).toEqual(expectedTarget0Normals[0]);
-                expect(readAccessorPacked(gltf, gltf.accessors[primitive0.targets[1].POSITION])).toEqual(expectedTarget1Positions[0]);
-                expect(readAccessorPacked(gltf, gltf.accessors[primitive0.targets[1].NORMAL])).toEqual(expectedTarget1Normals[0]);
+        expect(readAccessorPacked(gltf, gltf.accessors[primitive0.indices])).toEqual(expectedIndices[0]);
+        expect(readAccessorPacked(gltf, gltf.accessors[primitive0.attributes.POSITION])).toEqual(expectedPositions[0]);
+        expect(readAccessorPacked(gltf, gltf.accessors[primitive0.attributes.NORMAL])).toEqual(expectedNormals[0]);
+        expect(readAccessorPacked(gltf, gltf.accessors[primitive0.targets[0].POSITION])).toEqual(expectedTarget0Positions[0]);
+        expect(readAccessorPacked(gltf, gltf.accessors[primitive0.targets[0].NORMAL])).toEqual(expectedTarget0Normals[0]);
+        expect(readAccessorPacked(gltf, gltf.accessors[primitive0.targets[1].POSITION])).toEqual(expectedTarget1Positions[0]);
+        expect(readAccessorPacked(gltf, gltf.accessors[primitive0.targets[1].NORMAL])).toEqual(expectedTarget1Normals[0]);
 
-                expect(readAccessorPacked(gltf, gltf.accessors[primitive1.indices])).toEqual(expectedIndices[1]);
-                expect(readAccessorPacked(gltf, gltf.accessors[primitive1.attributes.POSITION])).toEqual(expectedPositions[1]);
-                expect(readAccessorPacked(gltf, gltf.accessors[primitive1.attributes.NORMAL])).toEqual(expectedNormals[1]);
-                expect(readAccessorPacked(gltf, gltf.accessors[primitive1.targets[0].POSITION])).toEqual(expectedTarget0Positions[1]);
-                expect(readAccessorPacked(gltf, gltf.accessors[primitive1.targets[0].NORMAL])).toEqual(expectedTarget0Normals[1]);
-                expect(readAccessorPacked(gltf, gltf.accessors[primitive1.targets[1].POSITION])).toEqual(expectedTarget1Positions[1]);
-                expect(readAccessorPacked(gltf, gltf.accessors[primitive1.targets[1].NORMAL])).toEqual(expectedTarget1Normals[1]);
-            }), done).toResolve();
+        expect(readAccessorPacked(gltf, gltf.accessors[primitive1.indices])).toEqual(expectedIndices[1]);
+        expect(readAccessorPacked(gltf, gltf.accessors[primitive1.attributes.POSITION])).toEqual(expectedPositions[1]);
+        expect(readAccessorPacked(gltf, gltf.accessors[primitive1.attributes.NORMAL])).toEqual(expectedNormals[1]);
+        expect(readAccessorPacked(gltf, gltf.accessors[primitive1.targets[0].POSITION])).toEqual(expectedTarget0Positions[1]);
+        expect(readAccessorPacked(gltf, gltf.accessors[primitive1.targets[0].NORMAL])).toEqual(expectedTarget0Normals[1]);
+        expect(readAccessorPacked(gltf, gltf.accessors[primitive1.targets[1].POSITION])).toEqual(expectedTarget1Positions[1]);
+        expect(readAccessorPacked(gltf, gltf.accessors[primitive1.targets[1].NORMAL])).toEqual(expectedTarget1Normals[1]);
     });
 });

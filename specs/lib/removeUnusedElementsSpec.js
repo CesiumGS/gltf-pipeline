@@ -271,8 +271,8 @@ const gltf = {
     ]
 };
 
-describe('removeUnusedElements', function() {
-    it('removes unused accessors, bufferViews, and buffers', function() {
+describe('removeUnusedElements', () => {
+    it('removes unused accessors, bufferViews, and buffers', () => {
         delete gltf.animations;
         delete gltf.skins;
         gltf.meshes[0].primitives[0].targets.splice(0, 1);
@@ -289,17 +289,17 @@ describe('removeUnusedElements', function() {
         expect(gltf.bufferViews.length).toBe(remainingBufferViewNames.length);
         expect(gltf.buffers.length).toBe(remainingBufferNames.length);
 
-        ForEach.accessor(gltf, function(accessor, index) {
+        ForEach.accessor(gltf, (accessor, index) => {
             expect(accessor.name).toBe(remainingAccessorNames[index]);
             expect(accessor.bufferView).toBe(remainingAcessorBufferViewIds[index]);
         });
 
-        ForEach.bufferView(gltf, function(bufferView, index) {
+        ForEach.bufferView(gltf, (bufferView, index) => {
             expect(bufferView.name).toBe(remainingBufferViewNames[index]);
             expect(bufferView.buffer).toBe(remainingBufferViewBufferIds[index]);
         });
 
-        ForEach.buffer(gltf, function(buffer, index) {
+        ForEach.buffer(gltf, (buffer, index) => {
             expect(buffer.name).toBe(remainingBufferNames[index]);
         });
     });

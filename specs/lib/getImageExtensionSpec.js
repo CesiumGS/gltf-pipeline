@@ -1,4 +1,7 @@
 'use strict';
+
+const { RuntimeError } = require('cesium');
+
 const dataUriToBuffer = require('../../lib/dataUriToBuffer');
 const getImageExtension = require('../../lib/getImageExtension');
 
@@ -10,8 +13,8 @@ const ktxData = dataUriToBuffer('data:image/ktx:base64,q0tUWCAxMbsNChoKAQIDBAEUA
 const crnData = dataUriToBuffer('data:image/crn:base64,SHgAUktGAAAAlds6AAQABAMBAAAAAAAAAAAAAAAAAAAAAABSAAAXAAEAAGkAAAwAAQAAAAAAAAAAAAAAAAAAAAAAHQAAdQAAAJIAAACTAAAAlACCYIAAAAAAABkwBAmCAAAAAAAAbRYAAGZggAAAAAAAGNAAAAZgAAAAAAAAEAAzAAAAAAAAAIABmAAAAAAAAAQAAAA=');
 const textData = dataUriToBuffer('data:text/plain;charset=utf-8,randomtext');
 
-describe('getImageExtension', function() {
-    it('gets image extension from buffer', function() {
+describe('getImageExtension', () => {
+    it('gets image extension from buffer', () => {
         expect(getImageExtension(pngData)).toBe('.png');
         expect(getImageExtension(gifData)).toBe('.gif');
         expect(getImageExtension(jpgData)).toBe('.jpg');
@@ -20,9 +23,13 @@ describe('getImageExtension', function() {
         expect(getImageExtension(crnData)).toBe('.crn');
     });
 
-    it('throws error if buffer does not contain image data', function() {
-        expect(function() {
+    it('throws error if buffer does not contain image data', () => {
+        let thrownError;
+        try {
             getImageExtension(textData);
-        }).toThrowRuntimeError();
+        } catch (e) {
+            thrownError = e;
+        }
+        expect(thrownError).toEqual(new RuntimeError('Image data does not have valid header'));
     });
 });

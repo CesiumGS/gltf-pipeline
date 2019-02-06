@@ -1,8 +1,8 @@
 'use strict';
 const addExtensionsRequired = require('../../lib/addExtensionsRequired');
 
-describe('addExtensionsRequired', function() {
-    it('adds an extension to extensionsRequired', function() {
+describe('addExtensionsRequired', () => {
+    it('adds an extension to extensionsRequired', () => {
         const gltf = {};
         addExtensionsRequired(gltf, 'KHR_materials_pbrSpecularGlossiness');
         addExtensionsRequired(gltf, 'KHR_draco_mesh_compression');

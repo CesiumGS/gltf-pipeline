@@ -16,8 +16,8 @@ function testComponentReader(componentType) {
     expect(result).toEqual([1, 2]);
 }
 
-describe('getComponentReader', function() {
-    it('reads values', function() {
+describe('getComponentReader', () => {
+    it('reads values', () => {
         testComponentReader(ComponentDatatype.BYTE);
         testComponentReader(ComponentDatatype.UNSIGNED_BYTE);
         testComponentReader(ComponentDatatype.SHORT);
