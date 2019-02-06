@@ -2,8 +2,8 @@
 const mergeBuffers = require('../../lib/mergeBuffers');
 const readResources = require('../../lib/readResources');
 
-describe('mergeBuffers', function() {
-    it('merges buffers', function(done) {
+describe('mergeBuffers', () => {
+    it('merges buffers', async () => {
         const nan = Number.NaN;
         const buffer0 = Buffer.from((new Uint8Array([1, 1, 1, 2, 2, nan, 3, 3, 3])));
         const buffer1 = Buffer.from((new Uint8Array([4, 4, 4, 4, 4, nan, nan, nan, nan, nan])));
@@ -48,15 +48,13 @@ describe('mergeBuffers', function() {
             ]
         };
 
-        expect(readResources(gltf)
-            .then(function(gltf) {
-                mergeBuffers(gltf);
-                expect(gltf.buffers.length).toBe(1);
-                expect(gltf.buffers[0].extras._pipeline.source).toEqual(expectedBuffer);
-            }), done).toResolve();
+        await readResources(gltf);
+        mergeBuffers(gltf);
+        expect(gltf.buffers.length).toBe(1);
+        expect(gltf.buffers[0].extras._pipeline.source).toEqual(expectedBuffer);
     });
 
-    it('merges buffers based on mergedBufferName', function(done) {
+    it('merges buffers based on mergedBufferName', async () => {
         const buffer0 = Buffer.from((new Uint8Array([1, 1, 1, 1])));
         const buffer1 = Buffer.from((new Uint8Array([2, 2, 2, 2])));
         const buffer2 = Buffer.from((new Uint8Array([3])));
@@ -142,23 +140,21 @@ describe('mergeBuffers', function() {
             ]
         };
 
-        expect(readResources(gltf)
-            .then(function(gltf) {
-                gltf.buffers[0].extras._pipeline.mergedBufferName = 'first';
-                gltf.buffers[1].extras._pipeline.mergedBufferName = 'first';
-                gltf.buffers[2].extras._pipeline.mergedBufferName = 'second';
-                gltf.buffers[3].extras._pipeline.mergedBufferName = undefined;
-                gltf.buffers[4].extras._pipeline.mergedBufferName = 'second';
-                gltf.buffers[5].extras._pipeline.mergedBufferName = undefined;
+        await readResources(gltf);
+        gltf.buffers[0].extras._pipeline.mergedBufferName = 'first';
+        gltf.buffers[1].extras._pipeline.mergedBufferName = 'first';
+        gltf.buffers[2].extras._pipeline.mergedBufferName = 'second';
+        gltf.buffers[3].extras._pipeline.mergedBufferName = undefined;
+        gltf.buffers[4].extras._pipeline.mergedBufferName = 'second';
+        gltf.buffers[5].extras._pipeline.mergedBufferName = undefined;
 
-                mergeBuffers(gltf);
-                expect(gltf.buffers.length).toBe(3);
-                expect(gltf.buffers[0].extras._pipeline.source).toEqual(expectedBuffer0);
-                expect(gltf.buffers[0].name).toEqual('buffer-first');
-                expect(gltf.buffers[1].extras._pipeline.source).toEqual(expectedBuffer1);
-                expect(gltf.buffers[1].name).toEqual('buffer-second');
-                expect(gltf.buffers[2].extras._pipeline.source).toEqual(expectedBuffer2);
-                expect(gltf.buffers[2].name).toBe('buffer');
-            }), done).toResolve();
+        mergeBuffers(gltf);
+        expect(gltf.buffers.length).toBe(3);
+        expect(gltf.buffers[0].extras._pipeline.source).toEqual(expectedBuffer0);
+        expect(gltf.buffers[0].name).toEqual('buffer-first');
+        expect(gltf.buffers[1].extras._pipeline.source).toEqual(expectedBuffer1);
+        expect(gltf.buffers[1].name).toEqual('buffer-second');
+        expect(gltf.buffers[2].extras._pipeline.source).toEqual(expectedBuffer2);
+        expect(gltf.buffers[2].name).toBe('buffer');
     });
 });

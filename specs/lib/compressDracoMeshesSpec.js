@@ -1,11 +1,8 @@
 'use strict';
-const Cesium = require('cesium');
+const { clone, DeveloperError} = require('cesium');
 const fsExtra = require('fs-extra');
-const Promise = require('bluebird');
 const readResources = require('../../lib/readResources');
 const compressDracoMeshes = require('../../lib/compressDracoMeshes');
-
-const clone = Cesium.clone;
 
 const boxPath = 'specs/data/2.0/box-textured-embedded/box-textured-embedded.gltf';
 const boxMorphPath = 'specs/data/2.0/box-morph/box-morph.gltf';
@@ -19,20 +16,19 @@ function expectOutOfRange(gltf, name, value) {
         dracoOptions: {}
     };
     options.dracoOptions[name] = value;
-    expect(function() {
+
+    let thrownError;
+    try {
         compressDracoMeshes(gltf, options);
-    }).toThrowDeveloperError();
+    } catch (e) {
+        thrownError = e;
+    }
+    expect(thrownError).toEqual(jasmine.any(DeveloperError));
 }
 
-function readGltf(gltfPath) {
+async function readGltf(gltfPath) {
     const gltf = fsExtra.readJsonSync(gltfPath);
     return readResources(gltf);
-}
-
-function readGltfs(paths) {
-    return Promise.map(paths, function(path) {
-        return readGltf(path);
-    });
 }
 
 function getDracoBuffer(gltf) {
@@ -41,17 +37,13 @@ function getDracoBuffer(gltf) {
     return source.slice(bufferView.byteOffset, bufferView.byteOffset + bufferView.byteLength);
 }
 
-describe('compressDracoMeshes', function() {
-    beforeEach(function(done) {
-        return readGltfs([boxPath, boxPath])
-            .then(function(gltfs) {
-                gltf = gltfs[0];
-                gltfOther = gltfs[1];
-                done();
-            });
+describe('compressDracoMeshes', () => {
+    beforeEach(async () => {
+        gltf = await readGltf(boxPath);
+        gltfOther = await readGltf(boxPath);
     });
 
-    it('compresses meshes with default options', function() {
+    it('compresses meshes with default options', () => {
         expect(gltf.accessors.length).toBe(4); // 3 attributes + indices
         expect(gltf.bufferViews.length).toBe(4); // position/normal + texcoord + indices + image
 
@@ -77,7 +69,7 @@ describe('compressDracoMeshes', function() {
         expect(texcoordAccessor.byteLength).toBeUndefined();
     });
 
-    it('throws if quantize bits is out of range', function() {
+    it('throws if quantize bits is out of range', () => {
         expectOutOfRange(gltf, 'compressionLevel', -1);
         expectOutOfRange(gltf, 'compressionLevel', 11);
         expectOutOfRange(gltf, 'quantizePositionBits', -1);
@@ -92,28 +84,25 @@ describe('compressDracoMeshes', function() {
         expectOutOfRange(gltf, 'quantizeGenericBits', 31);
     });
 
-    it('applies unified quantization', function(done) {
-        expect(readGltfs([multipleBoxesPath, multipleBoxesPath])
-            .then(function(gltfs) {
-                const gltfUnified = gltfs[0];
-                const gltfNonUnified = gltfs[1];
-                compressDracoMeshes(gltfUnified, {
-                    dracoOptions: {
-                        unifiedQuantization: true
-                    }
-                });
-                compressDracoMeshes(gltfNonUnified, {
-                    dracoOptions: {
-                        unifiedQuantization: false
-                    }
-                });
-                const dracoBufferUnified = getDracoBuffer(gltfUnified);
-                const dracoBufferNonUnified = getDracoBuffer(gltfNonUnified);
-                expect(dracoBufferNonUnified).not.toEqual(dracoBufferUnified);
-            }), done).toResolve();
+    it('applies unified quantization', async () => {
+        const gltfUnified = await readGltf(multipleBoxesPath);
+        const gltfNonUnified = await readGltf(multipleBoxesPath);
+        compressDracoMeshes(gltfUnified, {
+            dracoOptions: {
+                unifiedQuantization: true
+            }
+        });
+        compressDracoMeshes(gltfNonUnified, {
+            dracoOptions: {
+                unifiedQuantization: false
+            }
+        });
+        const dracoBufferUnified = getDracoBuffer(gltfUnified);
+        const dracoBufferNonUnified = getDracoBuffer(gltfNonUnified);
+        expect(dracoBufferNonUnified).not.toEqual(dracoBufferUnified);
     });
 
-    it('applies quantization bits', function() {
+    it('applies quantization bits', () => {
         compressDracoMeshes(gltf, {
             dracoOptions: {
                 quantizePositionBits: 8
@@ -130,7 +119,7 @@ describe('compressDracoMeshes', function() {
         expect(dracoBuffer8.length).toBeLessThan(dracoBuffer14.length);
     });
 
-    it('does not quantize when quantize bits is 0', function() {
+    it('does not quantize when quantize bits is 0', () => {
         compressDracoMeshes(gltf, {
             dracoOptions: {
                 quantizePositionBits: 0,
@@ -146,7 +135,7 @@ describe('compressDracoMeshes', function() {
         expect(dracoBufferCompressed.length).toBeLessThan(dracoBufferUncompressed.length);
     });
 
-    it('only compresses duplicate primitive once', function() {
+    it('only compresses duplicate primitive once', () => {
         const primitives = gltf.meshes[0].primitives;
         primitives.push(clone(primitives[0], true));
         compressDracoMeshes(gltf);
@@ -161,20 +150,18 @@ describe('compressDracoMeshes', function() {
         return gltf;
     }
 
-    it('applied sequential encoding when the primitive has morph targets', function(done) {
-        expect(readGltfs([boxMorphPath, boxMorphPath])
-            .then(function(gltfs) {
-                const gltfMorph = gltfs[0];
-                const gltfNoMorph = removeMorphTargets(gltfs[1]);
-                compressDracoMeshes(gltfMorph);
-                compressDracoMeshes(gltfNoMorph);
-                const dracoBufferMorph = getDracoBuffer(gltfMorph);
-                const dracoBufferNoMorph = getDracoBuffer(gltfNoMorph);
-                expect(dracoBufferMorph).not.toEqual(dracoBufferNoMorph);
-            }), done).toResolve();
+    it('applied sequential encoding when the primitive has morph targets', async () => {
+        const gltfMorph = await readGltf(boxMorphPath);
+        const gltfNoMorph = removeMorphTargets(await readGltf(boxMorphPath));
+
+        compressDracoMeshes(gltfMorph);
+        compressDracoMeshes(gltfNoMorph);
+        const dracoBufferMorph = getDracoBuffer(gltfMorph);
+        const dracoBufferNoMorph = getDracoBuffer(gltfNoMorph);
+        expect(dracoBufferMorph).not.toEqual(dracoBufferNoMorph);
     });
 
-    it('applies uncompressed fallback', function() {
+    it('applies uncompressed fallback', () => {
         compressDracoMeshes(gltf, {
             dracoOptions: {
                 uncompressedFallback: true

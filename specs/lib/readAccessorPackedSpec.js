@@ -56,22 +56,18 @@ function createGltf(elements, byteStride) {
     return readResources(gltf);
 }
 
-describe('readAccessorPacked', function() {
-    it('reads contiguous accessor', function(done) {
-        expect(createGltf(contiguousData, 12)
-            .then(function(gltf) {
-                expect(readAccessorPacked(gltf, gltf.accessors[0])).toEqual(contiguousData);
-            }), done).toResolve();
+describe('readAccessorPacked', () => {
+    it('reads contiguous accessor', async () => {
+        const gltf = await createGltf(contiguousData, 12);
+        expect(readAccessorPacked(gltf, gltf.accessors[0])).toEqual(contiguousData);
     });
 
-    it('reads non-contiguous accessor', function(done) {
-        expect(createGltf(nonContiguousData, 24)
-            .then(function(gltf) {
-                expect(readAccessorPacked(gltf, gltf.accessors[0])).toEqual(contiguousData);
-            }), done).toResolve();
+    it('reads non-contiguous accessor', async () => {
+        const gltf = await createGltf(nonContiguousData, 24);
+        expect(readAccessorPacked(gltf, gltf.accessors[0])).toEqual(contiguousData);
     });
 
-    it('reads accessor that does not have a buffer view', function() {
+    it('reads accessor that does not have a buffer view', () => {
         const gltf =  {
             accessors: [
                 {

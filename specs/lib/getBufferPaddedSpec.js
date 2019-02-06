@@ -1,8 +1,8 @@
 'use strict';
 const getBufferPadded = require('../../lib/getBufferPadded');
 
-describe('getBufferPadded', function() {
-    it('gets buffer padded to 4 bytes', function() {
+describe('getBufferPadded', () => {
+    it('gets buffer padded to 4 bytes', () => {
         let buffer = Buffer.alloc(0);
         let bufferPadded = getBufferPadded(buffer);
         expect(bufferPadded.length).toBe(0);

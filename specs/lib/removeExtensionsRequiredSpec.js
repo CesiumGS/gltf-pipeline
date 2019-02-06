@@ -1,8 +1,8 @@
 'use strict';
 const removeExtensionsRequired = require('../../lib/removeExtensionsRequired');
 
-describe('removeExtensionsRequired', function() {
-    it('removes extension from extensionsRequired', function() {
+describe('removeExtensionsRequired', () => {
+    it('removes extension from extensionsRequired', () => {
         const gltf = {
             extensionsRequired: [
                 'extension1',

@@ -8,8 +8,8 @@ const WebGLConstants = Cesium.WebGLConstants;
 
 let buffer;
 
-describe('updateAccessorComponentTypes', function() {
-    beforeAll(function() {
+describe('updateAccessorComponentTypes', () => {
+    beforeAll(() => {
         const byteBuffer = Buffer.from(arrayFill(new Int8Array(96), 0).buffer);
         const floatBuffer = Buffer.from(arrayFill(new Float32Array(96), 0.0).buffer);
         const unsignedShortBuffer = Buffer.from(arrayFill(new Uint16Array(96), 0).buffer);
@@ -22,7 +22,7 @@ describe('updateAccessorComponentTypes', function() {
         };
     });
 
-    it('converts joints accessor types', function() {
+    it('converts joints accessor types', async () => {
         const gltf = {
             meshes: [
                 {
@@ -80,30 +80,29 @@ describe('updateAccessorComponentTypes', function() {
             buffers: [buffer]
         };
 
-        return readResources(gltf).then(function(gltf) {
-            updateAccessorComponentTypes(gltf);
+        await readResources(gltf);
+        updateAccessorComponentTypes(gltf);
 
-            expect(gltf.accessors.length).toBe(3);
-            expect(gltf.bufferViews.length).toBe(5);
-            expect(gltf.buffers.length).toBe(3);
+        expect(gltf.accessors.length).toBe(3);
+        expect(gltf.bufferViews.length).toBe(5);
+        expect(gltf.buffers.length).toBe(3);
 
-            expect(gltf.accessors[0].componentType).toBe(WebGLConstants.UNSIGNED_BYTE);
-            expect(gltf.accessors[0].bufferView).toBe(3);
-            expect(gltf.bufferViews[3].buffer).toBe(1);
-            expect(gltf.bufferViews[3].byteLength).toBe(96);
+        expect(gltf.accessors[0].componentType).toBe(WebGLConstants.UNSIGNED_BYTE);
+        expect(gltf.accessors[0].bufferView).toBe(3);
+        expect(gltf.bufferViews[3].buffer).toBe(1);
+        expect(gltf.bufferViews[3].byteLength).toBe(96);
 
-            expect(gltf.accessors[1].componentType).toBe(WebGLConstants.UNSIGNED_SHORT);
-            expect(gltf.accessors[1].bufferView).toBe(4);
-            expect(gltf.accessors[1].byteOffset).toBe(0);
-            expect(gltf.bufferViews[4].buffer).toBe(2);
-            expect(gltf.bufferViews[4].byteLength).toBe(192);
+        expect(gltf.accessors[1].componentType).toBe(WebGLConstants.UNSIGNED_SHORT);
+        expect(gltf.accessors[1].bufferView).toBe(4);
+        expect(gltf.accessors[1].byteOffset).toBe(0);
+        expect(gltf.bufferViews[4].buffer).toBe(2);
+        expect(gltf.bufferViews[4].byteLength).toBe(192);
 
-            expect(gltf.accessors[2].componentType).toBe(WebGLConstants.UNSIGNED_SHORT);
-            expect(gltf.accessors[2].bufferView).toBe(2);
-        });
+        expect(gltf.accessors[2].componentType).toBe(WebGLConstants.UNSIGNED_SHORT);
+        expect(gltf.accessors[2].bufferView).toBe(2);
     });
 
-    it('converts weights accessor types', function() {
+    it('converts weights accessor types', async () => {
         const gltf = {
             meshes: [
                 {
@@ -159,26 +158,25 @@ describe('updateAccessorComponentTypes', function() {
             buffers: [buffer]
         };
 
-        return readResources(gltf).then(function(gltf) {
-            updateAccessorComponentTypes(gltf);
+        await readResources(gltf);
+        updateAccessorComponentTypes(gltf);
 
-            expect(gltf.accessors.length).toBe(3);
-            expect(gltf.bufferViews.length).toBe(5);
-            expect(gltf.buffers.length).toBe(3);
+        expect(gltf.accessors.length).toBe(3);
+        expect(gltf.bufferViews.length).toBe(5);
+        expect(gltf.buffers.length).toBe(3);
 
-            expect(gltf.accessors[0].componentType).toBe(WebGLConstants.FLOAT);
-            expect(gltf.accessors[0].bufferView).toBe(0);
+        expect(gltf.accessors[0].componentType).toBe(WebGLConstants.FLOAT);
+        expect(gltf.accessors[0].bufferView).toBe(0);
 
-            expect(gltf.accessors[1].componentType).toBe(WebGLConstants.UNSIGNED_BYTE);
-            expect(gltf.accessors[1].bufferView).toBe(3);
-            expect(gltf.accessors[1].byteOffset).toBe(0);
-            expect(gltf.bufferViews[3].buffer).toBe(1);
-            expect(gltf.bufferViews[3].byteLength).toBe(96);
+        expect(gltf.accessors[1].componentType).toBe(WebGLConstants.UNSIGNED_BYTE);
+        expect(gltf.accessors[1].bufferView).toBe(3);
+        expect(gltf.accessors[1].byteOffset).toBe(0);
+        expect(gltf.bufferViews[3].buffer).toBe(1);
+        expect(gltf.bufferViews[3].byteLength).toBe(96);
 
-            expect(gltf.accessors[2].componentType).toBe(WebGLConstants.UNSIGNED_SHORT);
-            expect(gltf.accessors[2].bufferView).toBe(4);
-            expect(gltf.bufferViews[4].buffer).toBe(2);
-            expect(gltf.bufferViews[4].byteLength).toBe(192);
-        });
+        expect(gltf.accessors[2].componentType).toBe(WebGLConstants.UNSIGNED_SHORT);
+        expect(gltf.accessors[2].bufferView).toBe(4);
+        expect(gltf.bufferViews[4].buffer).toBe(2);
+        expect(gltf.bufferViews[4].byteLength).toBe(192);
     });
 });

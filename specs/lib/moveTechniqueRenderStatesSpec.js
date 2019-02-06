@@ -44,7 +44,7 @@ const gltf = {
     ]
 };
 
-describe('moveTechniqueRenderStates', function() {
+describe('moveTechniqueRenderStates', () => {
     it('sets material.doubleSided property if CULL_FACE is not enabled', function () {
         const baseGltf = JSON.parse(JSON.stringify(gltf));
         let gltfWithUpdatedMaterials = moveTechniqueRenderStates(baseGltf);
@@ -64,7 +64,7 @@ describe('moveTechniqueRenderStates', function() {
         expect(material.doubleSided).toBe(true);
     });
 
-    it('sets alphaMode and moves technique render state blending functions to material KHR_blend extension', function() {
+    it('sets alphaMode and moves technique render state blending functions to material KHR_blend extension', () => {
         const gltfWithBlendFunctions = JSON.parse(JSON.stringify(gltf));
 
         gltfWithBlendFunctions.techniques.technique0.states = {

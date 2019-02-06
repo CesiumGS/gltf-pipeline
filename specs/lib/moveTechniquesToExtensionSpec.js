@@ -3,8 +3,8 @@ const Cesium = require('cesium');
 const moveTechniquesToExtension = require('../../lib/moveTechniquesToExtension');
 
 const WebGLConstants = Cesium.WebGLConstants;
-describe('moveTechniquesToExtension', function() {
-    it('moves techniques, shaders, and programs to extension', function() {
+describe('moveTechniquesToExtension', () => {
+    it('moves techniques, shaders, and programs to extension', () => {
         const gltf = {
             programs: {
                 program_0: {

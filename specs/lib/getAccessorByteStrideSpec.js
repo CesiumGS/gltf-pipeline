@@ -4,8 +4,8 @@ const getAccessorByteStride = require('../../lib/getAccessorByteStride');
 
 const WebGLConstants = Cesium.WebGLConstants;
 
-describe('getAccessorByteStride', function() {
-    it('gets accessor byte stride', function() {
+describe('getAccessorByteStride', () => {
+    it('gets accessor byte stride', () => {
         const gltf = {
             accessors: [
                 {

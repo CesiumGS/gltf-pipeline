@@ -1,7 +1,7 @@
 'use strict';
 const getStatistics = require('../../lib/getStatistics');
 
-describe('getStatistics', function() {
+describe('getStatistics', () => {
     const gltf = {
         accessors: [
             {
@@ -80,13 +80,13 @@ describe('getStatistics', function() {
         ],
         nodes: [
             {
-                "name": "rootNode",
-                "mesh": 0
+                name: 'rootNode',
+                mesh: 0
             }
         ]
     };
 
-    it('returns statistics for a gltf', function() {
+    it('returns statistics for a gltf', () => {
         const statistics = getStatistics(gltf);
         expect(statistics.buffersByteLength).toEqual(260);
         expect(statistics.numberOfImages).toEqual(3);
@@ -99,7 +99,7 @@ describe('getStatistics', function() {
         expect(statistics.numberOfAnimations).toEqual(3);
     });
 
-    it('returns draw call statistics for a gltf node', function() {
+    it('returns draw call statistics for a gltf node', () => {
         const statistics = getStatistics(gltf, 0);
         expect(statistics.numberOfDrawCalls).toEqual(3);
         expect(statistics.numberOfRenderedPrimitives).toEqual(4);

@@ -1,8 +1,8 @@
 'use strict';
 const addBuffer = require('../../lib/addBuffer');
 
-describe('addBuffer', function() {
-    it('adds Buffer to gltf and returns its bufferView id', function() {
+describe('addBuffer', () => {
+    it('adds buffer to gltf and returns its bufferView id', () => {
         const gltf = {
             buffers: [],
             bufferViews: []

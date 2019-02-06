@@ -5,8 +5,8 @@ const removePipelineExtras = require('../../lib/removePipelineExtras');
 
 const WebGLConstants = Cesium.WebGLConstants;
 
-describe('removePipelineExtras', function() {
-    it('removes pipeline extras', function() {
+describe('removePipelineExtras', () => {
+    it('removes pipeline extras', () => {
         const gltf = {
             buffers: [
                 {
