@@ -1,8 +1,8 @@
 'use strict';
 const getJsonBufferPadded = require('../../lib/getJsonBufferPadded');
 
-describe('getJsonBufferPadded', function() {
-    it('get json buffer padded to 4 bytes', function() {
+describe('getJsonBufferPadded', () => {
+    it('get json buffer padded to 4 bytes', () => {
         const gltf = {
             asset: {
                 version: '2.0'

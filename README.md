@@ -48,67 +48,69 @@ npm install -g gltf-pipeline
 #### Converting a glTF to glb:
 
 ```javascript
-var gltfPipeline = require('gltf-pipeline');
-var fsExtra = require('fs-extra');
-var gltfToGlb = gltfPipeline.gltfToGlb;
-var gltf = fsExtra.readJsonSync('model.gltf');
+const gltfPipeline = require('gltf-pipeline');
+const fsExtra = require('fs-extra');
+const gltfToGlb = gltfPipeline.gltfToGlb;
+const gltf = fsExtra.readJsonSync('model.gltf');
 gltfToGlb(gltf)
     .then(function(results) {
         fsExtra.writeFileSync('model.glb', results.glb);
-    }
+    });
 ```
 
 #### Converting a glb to glTF
 
 ```javascript
-var gltfPipeline = require('gltf-pipeline');
-var fsExtra = require('fs-extra');
-var glbToGltf = gltfPipeline.glbToGltf;
-var glb = fsExtra.readFileSync('model.glb');
+const gltfPipeline = require('gltf-pipeline');
+const fsExtra = require('fs-extra');
+const glbToGltf = gltfPipeline.glbToGltf;
+const glb = fsExtra.readFileSync('model.glb');
 glbToGltf(glb)
     .then(function(results) {
         fsExtra.writeJsonSync('model.gltf', results.gltf);
-    }
+    });
 ```
 
 #### Converting a glTF to Draco glTF
 
 ```javascript
-var gltfPipeline = require('gltf-pipeline');
-var fsExtra = require('fs-extra');
-var gltf = fsExtra.readJsonSync('model.gltf');
-var options = {
+const gltfPipeline = require('gltf-pipeline');
+const fsExtra = require('fs-extra');
+const processGltf = gltfPipeline.processGltf;
+const gltf = fsExtra.readJsonSync('model.gltf');
+const options = {
     dracoOptions: {
         compressionLevel: 10
     }
-}
+};
 processGltf(gltf, options)
     .then(function(results) {
-        fsExtra.writeJsonSync('model.gltf', results.gltf);
-    }
+        fsExtra.writeJsonSync('model-draco.gltf', results.gltf);
+    });
 ```
 
 #### Saving separate textures
 
 ```javascript
-var gltfPipeline = require('gltf-pipeline');
-var fsExtra = require('fs-extra');
-var gltf = fsExtra.readJsonSync('model.gltf');
-var options = {
+const gltfPipeline = require('gltf-pipeline');
+const fsExtra = require('fs-extra');
+const processGltf = gltfPipeline.processGltf;
+const gltf = fsExtra.readJsonSync('model.gltf');
+const options = {
     separateTextures: true
 };
 processGltf(gltf, options)
     .then(function(results) {
-        fsExtra.writeJsonSync('model.gltf', results.gltf);
+        fsExtra.writeJsonSync('model-separate.gltf', results.gltf);
         // Save separate resources
-        var separateResources = results.separateResources;
-        for (var relativePath in separateResources) {
+        const separateResources = results.separateResources;
+        for (const relativePath in separateResources) {
             if (separateResources.hasOwnProperty(relativePath)) {
-                var resource = separateResources[relativePath];
-                fsExtra.writeFileSync(relativePath, resource));
+                const resource = separateResources[relativePath];
+                fsExtra.writeFileSync(relativePath, resource);
             }
         }
-    }
+    });
 ```
 
 ### Command-Line Flags

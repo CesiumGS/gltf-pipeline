@@ -1,5 +1,6 @@
 'use strict';
 const fsExtra = require('fs-extra');
+const path = require('path');
 const dataUriToBuffer = require('../../lib/dataUriToBuffer');
 const ForEach = require('../../lib/ForEach');
 const readResources = require('../../lib/readResources');
@@ -9,21 +10,28 @@ const Cesium = require('cesium');
 const CesiumMath = Cesium.Math;
 
 const gltfPath = 'specs/data/2.0/box-techniques-embedded/box-techniques-embedded.gltf';
+const gltfWebpPath = 'specs/data/2.0/extensions/EXT_texture_webp/box-textured-embedded/box-textured-embedded.gltf';
+const gltfWebpSeparatePath = 'specs/data/2.0/extensions/EXT_texture_webp/box-textured-separate/box-textured-with-fallback.gltf';
 let gltf;
+let gltfWebp;
+let gltfWebpSeparate;
 
-describe('writeResources', function() {
-    beforeEach(function(done) {
-        const gltfLoaded = fsExtra.readJsonSync(gltfPath);
-        return readResources(gltfLoaded)
-            .then(function() {
-                gltf = gltfLoaded;
-                done();
-            });
+describe('writeResources', () => {
+    beforeEach(async () => {
+        gltf = fsExtra.readJsonSync(gltfPath);
+        gltfWebp = fsExtra.readJsonSync(gltfWebpPath);
+        gltfWebpSeparate = fsExtra.readJsonSync(gltfWebpSeparatePath);
+
+        await readResources(gltf);
+        await readResources(gltfWebp);
+        await readResources(gltfWebpSeparate, {
+            resourceDirectory: path.dirname(gltfWebpSeparatePath)
+        });
     });
 
-    it('writes embedded resources', function() {
+    it('writes embedded resources', () => {
         writeResources(gltf);
-        ForEach.image(gltf, function(image) {
+        ForEach.image(gltf, (image) => {
             expect(image.bufferView).toBeDefined();
             expect(image.uri).toBeUndefined();
         });
@@ -33,7 +41,7 @@ describe('writeResources', function() {
         expect(contents.byteLength).toBe(buffer.byteLength);
     });
 
-    it('writes resources as files', function() {
+    it('writes resources as files', () => {
         const separateResources = {};
         const options = {
             separateBuffers: true,
@@ -44,7 +52,7 @@ describe('writeResources', function() {
         const originalBufferViewsLength = gltf.bufferViews.length;
         const originalByteLength = gltf.buffers[0].byteLength;
         writeResources(gltf, options);
-        ForEach.image(gltf, function(image) {
+        ForEach.image(gltf, (image) => {
             expect(image.bufferView).toBeUndefined();
             expect(image.uri.indexOf('.png')).toBeGreaterThan(-1);
         });
@@ -64,7 +72,7 @@ describe('writeResources', function() {
         expect(buffer.byteLength).toBeLessThanOrEqual(originalByteLength);
     });
 
-    it('writes resources as files with object names', function() {
+    it('writes resources as files with object names', () => {
         const separateResources = {};
         const options = {
             separateBuffers: true,
@@ -81,7 +89,7 @@ describe('writeResources', function() {
         expect(gltf.extensions.KHR_techniques_webgl.shaders[0].uri).toBe('my-shader.glsl');
     });
 
-    it('writes resources as files with gltf name when resources aren\'t named', function() {
+    it('writes resources as files with gltf name when resources aren\'t named', () => {
         const separateResources = {};
         const options = {
             name: 'my-gltf',
@@ -102,7 +110,7 @@ describe('writeResources', function() {
         expect(gltf.extensions.KHR_techniques_webgl.shaders[0].uri).toBe('my-gltfFS0.glsl');
     });
 
-    it('writes resources as data uris', function() {
+    it('writes resources as data uris', () => {
         const options = {
             dataUris: true
         };
@@ -126,7 +134,7 @@ describe('writeResources', function() {
         expect(buffer.byteLength).toBeLessThanOrEqual(originalByteLength);
     });
 
-    it('writes resources as bufferViews', function() {
+    it('writes resources as bufferViews', () => {
         const originalBufferViewsLength = gltf.bufferViews.length;
         const originalByteLength = gltf.buffers[0].byteLength;
         writeResources(gltf);
@@ -158,5 +166,19 @@ describe('writeResources', function() {
 
         expect(gltf.bufferViews.length).toBe(originalBufferViewsLength);
         expect(CesiumMath.equalsEpsilon(buffer.byteLength, originalByteLength + bufferViewByteLength, 8)).toBe(true);
+    });
+
+    it('preserves bufferViews for WebP and fallback image', () => {
+        const originalBufferViewsLength = gltfWebp.bufferViews.length;
+        writeResources(gltfWebp);
+        // This glTF has all the buffer views already defined for the extension, so no change is expected.
+        expect(gltfWebp.bufferViews.length).toBe(originalBufferViewsLength);
+    });
+
+    it('creates new bufferViews for WebP', () => {
+        const originalBufferViewsLength = gltfWebpSeparate.bufferViews.length;
+        writeResources(gltfWebpSeparate);
+        // There should be a new bufferView for the WebP, and one for the fallback image.
+        expect(gltfWebpSeparate.bufferViews.length).toBe(originalBufferViewsLength + 2);
     });
 });

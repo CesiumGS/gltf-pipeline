@@ -9,58 +9,52 @@ const RuntimeError = Cesium.RuntimeError;
 
 const gltfPath = 'specs/data/2.0/box-techniques-embedded/box-techniques-embedded.gltf';
 const gltfSeparatePath = 'specs/data/2.0/box-techniques-separate/box-techniques-separate.gltf';
+const gltfWebpPath = 'specs/data/2.0/extensions/EXT_texture_webp/box-textured-embedded/box-textured-embedded.gltf';
+const gltfWebpSeparatePath = 'specs/data/2.0/extensions/EXT_texture_webp/box-textured-separate/box-textured-separate.gltf';
 
-describe('processGltf', function() {
-    it('processes gltf with default options', function(done) {
+describe('processGltf', () => {
+    it('processes gltf with default options', async () => {
         const gltf = fsExtra.readJsonSync(gltfPath);
-        expect(processGltf(gltf)
-            .then(function(results) {
-                expect(results.gltf).toBeDefined();
-            }), done).toResolve();
+        const results = await processGltf(gltf);
+        expect(results.gltf).toBeDefined();
     });
 
-    it('uses resource directory', function(done) {
+    it('uses resource directory', async () => {
         const gltf = fsExtra.readJsonSync(gltfSeparatePath);
         const options = {
             resourceDirectory: path.dirname(gltfSeparatePath)
         };
-        expect(processGltf(gltf, options)
-            .then(function(results) {
-                expect(results.gltf).toBeDefined();
-            }), done).toResolve();
+        const results = await processGltf(gltf, options);
+        expect(results.gltf).toBeDefined();
     });
 
-    it('saves separate resources', function(done) {
+    it('saves separate resources', async () => {
         const gltf = fsExtra.readJsonSync(gltfPath);
         const options = {
             separate: true
         };
-        expect(processGltf(gltf, options)
-            .then(function(results) {
-                expect(results.gltf).toBeDefined();
-                expect(Object.keys(results.separateResources).length).toBe(4);
-                expect(results.separateResources['Image0001.png']).toBeDefined();
-                expect(results.separateResources['CesiumTexturedBoxTest.bin']).toBeDefined();
-                expect(results.separateResources['CesiumTexturedBoxTest0FS.glsl']).toBeDefined();
-                expect(results.separateResources['CesiumTexturedBoxTest0VS.glsl']).toBeDefined();
-            }), done).toResolve();
+        const results = await processGltf(gltf, options);
+        expect(results.gltf).toBeDefined();
+        expect(Object.keys(results.separateResources).length).toBe(4);
+        expect(results.separateResources['Image0001.png']).toBeDefined();
+        expect(results.separateResources['CesiumTexturedBoxTest.bin']).toBeDefined();
+        expect(results.separateResources['CesiumTexturedBoxTest0FS.glsl']).toBeDefined();
+        expect(results.separateResources['CesiumTexturedBoxTest0VS.glsl']).toBeDefined();
     });
 
-    it('saves separate textures', function(done) {
+    it('saves separate textures', async () => {
         const gltf = fsExtra.readJsonSync(gltfPath);
         const options = {
             separateTextures: true
         };
-        expect(processGltf(gltf, options)
-            .then(function(results) {
-                expect(results.gltf).toBeDefined();
-                expect(Object.keys(results.separateResources).length).toBe(1);
-                expect(results.separateResources['Image0001.png']).toBeDefined();
-                expect(results.gltf.buffers[0].uri.indexOf('data') >= 0).toBe(true);
-            }), done).toResolve();
+        const results = await processGltf(gltf, options);
+        expect(results.gltf).toBeDefined();
+        expect(Object.keys(results.separateResources).length).toBe(1);
+        expect(results.separateResources['Image0001.png']).toBeDefined();
+        expect(results.gltf.buffers[0].uri.indexOf('data') >= 0).toBe(true);
     });
 
-    it('uses name to save separate resources', function(done) {
+    it('uses name to save separate resources', async () => {
         const gltf = fsExtra.readJsonSync(gltfPath);
         const options = {
             separate: true,
@@ -72,81 +66,102 @@ describe('processGltf', function() {
         delete gltf.extensions.KHR_techniques_webgl.programs[0].name;
         delete gltf.extensions.KHR_techniques_webgl.shaders[0].name;
 
-        expect(processGltf(gltf, options)
-            .then(function(results) {
-                expect(results.gltf).toBeDefined();
-                expect(results.separateResources['my-model0.png']).toBeDefined();
-                expect(results.separateResources['my-model.bin']).toBeDefined();
-                expect(results.separateResources['my-modelFS0.glsl']).toBeDefined();
-                expect(results.separateResources['my-modelFS0.glsl']).toBeDefined();
-            }), done).toResolve();
+        const results = await processGltf(gltf, options);
+        expect(results.gltf).toBeDefined();
+        expect(results.separateResources['my-model0.png']).toBeDefined();
+        expect(results.separateResources['my-model.bin']).toBeDefined();
+        expect(results.separateResources['my-modelFS0.glsl']).toBeDefined();
+        expect(results.separateResources['my-modelFS0.glsl']).toBeDefined();
     });
 
-    it('rejects when loading resource outside of the resource directory when secure is true', function(done) {
+    it('rejects when loading resource outside of the resource directory when secure is true', async () => {
         const gltf = fsExtra.readJsonSync(gltfSeparatePath);
         const options = {
             secure: true
         };
         gltf.images[0].uri = '../cesium.png';
-        expect(processGltf(gltf, options), done).toRejectWith(RuntimeError);
+
+        let thrownError;
+        try {
+            await processGltf(gltf, options);
+        } catch (e) {
+            thrownError = e;
+        }
+        expect(thrownError).toEqual(new RuntimeError('glTF model references separate files but no resourceDirectory is supplied'));
     });
 
-    it('prints stats', function(done) {
+    it('prints stats', async () => {
         spyOn(console, 'log');
         const gltf = fsExtra.readJsonSync(gltfPath);
         const options = {
             stats: true
         };
-        expect(processGltf(gltf, options)
-            .then(function() {
-                expect(console.log).toHaveBeenCalled();
-            }), done).toResolve();
+        await processGltf(gltf, options);
+        expect(console.log).toHaveBeenCalled();
     });
 
-    it('uses draco compression', function(done) {
+    it('uses draco compression', async () => {
         const gltf = fsExtra.readJsonSync(gltfPath);
         const options = {
             dracoOptions: {
                 compressionLevel: 7
             }
         };
-        expect(processGltf(gltf, options)
-            .then(function(results) {
-                expect(hasExtension(results.gltf, 'KHR_draco_mesh_compression')).toBe(true);
-            }), done).toResolve();
+        const results = await processGltf(gltf, options);
+        expect(hasExtension(results.gltf, 'KHR_draco_mesh_compression')).toBe(true);
     });
 
-    it('runs custom stages', function(done) {
+    it('runs custom stages', async () => {
         spyOn(console, 'log');
         const gltf = fsExtra.readJsonSync(gltfPath);
         const options = {
             customStages: [
-                function(gltf) {
+                (gltf) => {
                     gltf.meshes[0].name = 'new-name';
                 },
-                function(gltf) {
+                (gltf) => {
                     console.log(gltf.meshes[0].name);
                 }
             ]
         };
-        expect(processGltf(gltf, options)
-            .then(function() {
-                expect(console.log).toHaveBeenCalledWith('new-name');
-            }), done).toResolve();
+        await processGltf(gltf, options);
+        expect(console.log).toHaveBeenCalledWith('new-name');
     });
 
-    it('uses logger', function(done) {
+    it('uses logger', async () => {
         let loggedMessages = 0;
         const gltf = fsExtra.readJsonSync(gltfPath);
         const options = {
             stats: true,
-            logger: function() {
+            logger: () => {
                 loggedMessages++;
             }
         };
-        expect(processGltf(gltf, options)
-            .then(function() {
-                expect(loggedMessages).toBe(2);
-            }), done).toResolve();
+        await processGltf(gltf, options);
+        expect(loggedMessages).toBe(2);
+    });
+
+    it('processes gltf with EXT_texture_webp extension.', async () => {
+        const gltf = fsExtra.readJsonSync(gltfWebpSeparatePath);
+        const options = {
+            resourceDirectory: path.dirname(gltfWebpSeparatePath)
+        };
+        const results = await processGltf(gltf, options);
+        expect(results.gltf).toBeDefined();
+        expect(results.gltf.textures[0].extensions.EXT_texture_webp).toBeDefined();
+
+        const imageId = results.gltf.textures[0].extensions.EXT_texture_webp.source;
+        expect(results.gltf.images[imageId].mimeType).toBe('image/webp');
+    });
+
+    it('processes embedded gltf with EXT_texture_webp extension.', async () => {
+        const gltf = fsExtra.readJsonSync(gltfWebpPath);
+
+        const results = await processGltf(gltf);
+        expect(results.gltf).toBeDefined();
+        expect(results.gltf.textures[0].extensions.EXT_texture_webp).toBeDefined();
+
+        const imageId = results.gltf.textures[0].extensions.EXT_texture_webp.source;
+        expect(results.gltf.images[imageId].mimeType).toBe('image/webp');
     });
 });

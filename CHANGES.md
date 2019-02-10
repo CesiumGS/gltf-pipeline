@@ -1,9 +1,10 @@
 Change Log
 ==========
 
-### 2.0.2 - ????-??-??
+### 2.1.0 - 2019-01-28
 
 * Fixed a bug where nodes containing extensions or extras where being removed in the glTF 1.0 to 2.0 upgrade stage. [#431](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/431)
+* Added support for the `EXT_texture_webp` extension. [#450](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/450)
 
 ### 2.0.1 - 2018-09-19
 

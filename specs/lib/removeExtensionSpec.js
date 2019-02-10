@@ -4,8 +4,8 @@ const removeExtension = require('../../lib/removeExtension');
 
 const WebGLConstants = Cesium.WebGLConstants;
 
-describe('removeExtension', function() {
-    it('removes extension', function() {
+describe('removeExtension', () => {
+    it('removes extension', () => {
         const gltf = {
             extensionsRequired: [
                 'extension1',
@@ -90,7 +90,7 @@ describe('removeExtension', function() {
         expect(emptyGltf).toEqual({});
     });
 
-    it('removes CESIUM_RTC extension', function() {
+    it('removes CESIUM_RTC extension', () => {
         const gltf = {
             extensionsRequired: [
                 'CESIUM_RTC',

@@ -1,8 +1,8 @@
 'use strict';
 const numberOfComponentsForType = require('../../lib/numberOfComponentsForType');
 
-describe('numberOfComponentsForType', function() {
-    it('numberOfComponentsForType', function() {
+describe('numberOfComponentsForType', () => {
+    it('numberOfComponentsForType', () => {
         expect(numberOfComponentsForType('SCALAR')).toBe(1);
         expect(numberOfComponentsForType('VEC2')).toBe(2);
         expect(numberOfComponentsForType('VEC3')).toBe(3);

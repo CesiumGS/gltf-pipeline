@@ -1,8 +1,8 @@
 'use strict';
 const hasExtension = require('../../lib/hasExtension');
 
-describe('hasExtension', function() {
-    it('has extension', function() {
+describe('hasExtension', () => {
+    it('has extension', () => {
         const gltf = {
             extensionsUsed: [
                 'extension1',

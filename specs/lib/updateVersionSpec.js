@@ -10,8 +10,8 @@ const Cartesian3 = Cesium.Cartesian3;
 const Quaternion = Cesium.Quaternion;
 const WebGLConstants = Cesium.WebGLConstants;
 
-describe('updateVersion', function() {
-    it('defaults to 1.0 if gltf has no version', function() {
+describe('updateVersion', () => {
+    it('defaults to 1.0 if gltf has no version', () => {
         const gltf = {};
         updateVersion(gltf, {
             targetVersion: '1.0'
@@ -19,7 +19,7 @@ describe('updateVersion', function() {
         expect(gltf.asset.version).toEqual('1.0');
     });
 
-    it('updates empty glTF with version from 0.8 to 2.0', function() {
+    it('updates empty glTF with version from 0.8 to 2.0', () => {
         const gltf = {
             version: '0.8'
         };
@@ -28,7 +28,7 @@ describe('updateVersion', function() {
         expect(gltf.asset.version).toEqual('2.0');
     });
 
-    it('updates empty glTF with version 1.0 to 2.0', function() {
+    it('updates empty glTF with version 1.0 to 2.0', () => {
         const gltf = {
             asset: {
                 version: '1.0'
@@ -38,7 +38,7 @@ describe('updateVersion', function() {
         expect(gltf.asset.version).toEqual('2.0');
     });
 
-    it('updates a glTF with non-standard version to 2.0', function() {
+    it('updates a glTF with non-standard version to 2.0', () => {
         const gltf = {
             asset: {
                 version: '1.0.1'
@@ -48,7 +48,7 @@ describe('updateVersion', function() {
         expect(gltf.asset.version).toEqual('2.0');
     });
 
-    it('updates glTF from 0.8 to 1.0', function(done) {
+    it('updates glTF from 0.8 to 1.0', async () => {
         const times = [0.0, 1.0];
         const axisA = new Cartesian3(0.0, 0.0, 1.0);
         const axisB = new Cartesian3(0.0, 1.0, 0.0);
@@ -92,7 +92,7 @@ describe('updateVersion', function() {
             },
             accessors: {
                 accessorTime: {
-                    bufferView: "bufferViewTime",
+                    bufferView: 'bufferViewTime',
                     byteOffset: 0,
                     byteStride: 0,
                     componentType: WebGLConstants.FLOAT,
@@ -100,7 +100,7 @@ describe('updateVersion', function() {
                     type: 'SCALAR'
                 },
                 accessorRotation: {
-                    bufferView: "bufferViewRotation",
+                    bufferView: 'bufferViewRotation',
                     byteOffset: 0,
                     byteStride: 0,
                     componentType: WebGLConstants.FLOAT,
@@ -209,72 +209,70 @@ describe('updateVersion', function() {
             }
         };
 
-        expect(readResources(gltf)
-            .then(function(gltf) {
-                updateVersion(gltf, {
-                    targetVersion: '1.0'
-                });
+        await readResources(gltf);
+        updateVersion(gltf, {
+            targetVersion: '1.0'
+        });
 
-                // Asset updates: version set to 1.0, profile split into object
-                expect(gltf.asset.version).toEqual('1.0');
-                expect(gltf.asset.profile).toEqual({
-                    api: 'WebGL',
-                    version: '1.0'
-                });
+        // Asset updates: version set to 1.0, profile split into object
+        expect(gltf.asset.version).toEqual('1.0');
+        expect(gltf.asset.profile).toEqual({
+            api: 'WebGL',
+            version: '1.0'
+        });
 
-                // Top-level version removed
-                expect(gltf.version).toBeUndefined();
+        // Top-level version removed
+        expect(gltf.version).toBeUndefined();
 
-                // allExtensions renamed to extensionsUsed
-                // gltf.lights moved to KHR_materials_common extension
-                expect(gltf.extensionsUsed).toEqual(['extension', 'KHR_materials_common']);
-                expect(gltf.allExtensions).toBeUndefined();
-                expect(gltf.extensions.KHR_materials_common.lights).toEqual({
-                    someLight: true
-                });
+        // allExtensions renamed to extensionsUsed
+        // gltf.lights moved to KHR_materials_common extension
+        expect(gltf.extensionsUsed).toEqual(['extension', 'KHR_materials_common']);
+        expect(gltf.allExtensions).toBeUndefined();
+        expect(gltf.extensions.KHR_materials_common.lights).toEqual({
+            someLight: true
+        });
 
-                // material.instanceTechnique properties moved onto the material directly
-                const material = gltf.materials.material;
-                expect(material.technique).toEqual('technique');
-                expect(material.values).toEqual({
-                    ambient: [0.0, 0.0, 0.0, 1.0]
-                });
+        // material.instanceTechnique properties moved onto the material directly
+        const material = gltf.materials.material;
+        expect(material.technique).toEqual('technique');
+        expect(material.values).toEqual({
+            ambient: [0.0, 0.0, 0.0, 1.0]
+        });
 
-                // primitive.primitive renamed to primitive.mode
-                const primitive = gltf.meshes.mesh.primitives[0];
-                expect(primitive.primitive).toBeUndefined();
-                expect(primitive.mode).toEqual(WebGLConstants.TRIANGLES);
+        // primitive.primitive renamed to primitive.mode
+        const primitive = gltf.meshes.mesh.primitives[0];
+        expect(primitive.primitive).toBeUndefined();
+        expect(primitive.mode).toEqual(WebGLConstants.TRIANGLES);
 
-                // node.instanceSkin is split into node.skeletons, node.skin, and node.meshes
-                const node = gltf.nodes.node;
-                expect(node.skeletons).toEqual(['skeleton']);
-                expect(node.skin).toEqual('skin');
-                expect(node.meshes).toEqual(['mesh']);
+        // node.instanceSkin is split into node.skeletons, node.skin, and node.meshes
+        const node = gltf.nodes.node;
+        expect(node.skeletons).toEqual(['skeleton']);
+        expect(node.skin).toEqual('skin');
+        expect(node.meshes).toEqual(['mesh']);
 
-                // Node rotation converted from axis-angle to quaternion
-                expect(node.rotation).toEqual([0.0, 0.0, 0.0, 1.0]);
+        // Node rotation converted from axis-angle to quaternion
+        expect(node.rotation).toEqual([0.0, 0.0, 0.0, 1.0]);
 
-                // Technique pass and passes removed
-                const technique = gltf.techniques.technique;
-                expect(technique.pass).toBeUndefined();
-                expect(technique.passes).toBeUndefined();
-                expect(technique.attributes).toEqual({
-                    attribute: 'TEST_ATTRIBUTE'
-                });
-                expect(technique.program).toEqual('program');
-                expect(technique.uniforms).toEqual({
-                    uniform: 'TEST_UNIFORM'
-                });
-                expect(technique.states).toEqual(['TEST_STATE']);
+        // Technique pass and passes removed
+        const technique = gltf.techniques.technique;
+        expect(technique.pass).toBeUndefined();
+        expect(technique.passes).toBeUndefined();
+        expect(technique.attributes).toEqual({
+            attribute: 'TEST_ATTRIBUTE'
+        });
+        expect(technique.program).toEqual('program');
+        expect(technique.uniforms).toEqual({
+            uniform: 'TEST_UNIFORM'
+        });
+        expect(technique.states).toEqual(['TEST_STATE']);
 
-                // Animation rotations converted from axis-angle to quaternion
-                const buffer = gltf.buffers.buffer.extras._pipeline.source;
-                expect(buffer.equals(expectedBuffer)).toBe(true);
-            }), done).toResolve();
+        // Animation rotations converted from axis-angle to quaternion
+        const buffer = gltf.buffers.buffer.extras._pipeline.source;
+        expect(buffer.equals(expectedBuffer)).toBe(true);
     });
 
     function getNodeByName(gltf, name) {
-        return ForEach.node(gltf, function(node) {
+        return ForEach.node(gltf, (node) => {
             if (node.name === name) {
                 return node;
             }
@@ -282,14 +280,14 @@ describe('updateVersion', function() {
     }
 
     function getBufferViewByName(gltf, name) {
-        return ForEach.bufferView(gltf, function(bufferView) {
+        return ForEach.bufferView(gltf, (bufferView) => {
             if (bufferView.name === name) {
                 return bufferView;
             }
         });
     }
 
-    it('updates glTF from 1.0 to 2.0', function(done) {
+    it('updates glTF from 1.0 to 2.0', async () => {
         const applicationSpecificBuffer = Buffer.from((new Int16Array([-2, 1, 0, 1, 2, 3])).buffer);
         const positionBuffer = Buffer.from(arrayFill(new Float32Array(9), 1.0).buffer);
         const normalBuffer = Buffer.from(arrayFill(new Float32Array(9), 2.0).buffer);
@@ -611,153 +609,151 @@ describe('updateVersion', function() {
             glExtensionsUsed: ['OES_element_index_uint']
         };
 
-        expect(readResources(gltf)
-            .then(function(gltf) {
-                updateVersion(gltf);
+        await readResources(gltf);
+        updateVersion(gltf);
 
-                // Asset updates: version set to 2.0, profile removed
-                expect(gltf.asset.version).toEqual('2.0');
-                expect(gltf.asset.profile).toBeUndefined();
+        // Asset updates: version set to 2.0, profile removed
+        expect(gltf.asset.version).toEqual('2.0');
+        expect(gltf.asset.profile).toBeUndefined();
 
-                // Extensions used become extensions required
-                const extensionsUsed = gltf.extensionsUsed;
-                expect(extensionsUsed).toEqual([
-                    'KHR_materials_common',
-                    'WEB3D_quantized_attributes',
-                    'UNKOWN_EXTENSION',
-                    'KHR_blend',
-                    'KHR_techniques_webgl'
-                ]);
-                const extensionsRequired = gltf.extensionsRequired;
-                expect(extensionsRequired).toEqual([
-                    'KHR_materials_common',
-                    'WEB3D_quantized_attributes',
-                    'KHR_techniques_webgl'
-                ]);
+        // Extensions used become extensions required
+        const extensionsUsed = gltf.extensionsUsed;
+        expect(extensionsUsed).toEqual([
+            'KHR_materials_common',
+            'WEB3D_quantized_attributes',
+            'UNKOWN_EXTENSION',
+            'KHR_blend',
+            'KHR_techniques_webgl'
+        ]);
+        const extensionsRequired = gltf.extensionsRequired;
+        expect(extensionsRequired).toEqual([
+            'KHR_materials_common',
+            'WEB3D_quantized_attributes',
+            'KHR_techniques_webgl'
+        ]);
 
-                // animation.parameters removed
-                const animation = gltf.animations[0];
-                const sampler = animation.samplers[0];
-                expect(sampler.name).toBeUndefined();
-                expect(sampler.input).toEqual(2);
-                expect(sampler.output).toEqual(3);
-                expect(animation.parameters).toBeUndefined();
+        // animation.parameters removed
+        const animation = gltf.animations[0];
+        const sampler = animation.samplers[0];
+        expect(sampler.name).toBeUndefined();
+        expect(sampler.input).toEqual(2);
+        expect(sampler.output).toEqual(3);
+        expect(animation.parameters).toBeUndefined();
 
-                // Empty arrays removed
-                expect(gltf.samplers).toBeUndefined();
-                expect(getNodeByName(gltf, 'nodeWithoutChildren').children).toBeUndefined();
+        // Empty arrays removed
+        expect(gltf.samplers).toBeUndefined();
+        expect(getNodeByName(gltf, 'nodeWithoutChildren').children).toBeUndefined();
 
-                // Empty nodes removed
-                expect(getNodeByName(gltf, 'nonEmptyNodeParent')).toBeDefined();
-                expect(getNodeByName(gltf, 'emptyNodeParent')).toBeUndefined();
-                expect(getNodeByName(gltf, 'emptyNode')).toBeUndefined();
-                expect(getNodeByName(gltf, 'lightNode')).toBeDefined();
-                expect(gltf.scenes[0].nodes.length).toBe(2);
+        // Empty nodes removed
+        expect(getNodeByName(gltf, 'nonEmptyNodeParent')).toBeDefined();
+        expect(getNodeByName(gltf, 'emptyNodeParent')).toBeUndefined();
+        expect(getNodeByName(gltf, 'emptyNode')).toBeUndefined();
+        expect(getNodeByName(gltf, 'lightNode')).toBeDefined();
+        expect(gltf.scenes[0].nodes.length).toBe(2);
 
-                // Expect material values to be moved to material KHR_techniques_webgl extension
-                const material = gltf.materials[0];
-                expect(material.extensions.KHR_techniques_webgl.values.u_lightAttenuation).toEqual(2);
+        // Expect material values to be moved to material KHR_techniques_webgl extension
+        const material = gltf.materials[0];
+        expect(material.extensions.KHR_techniques_webgl.values.u_lightAttenuation).toEqual(2);
 
-                // Expect material paramters to be updated
-                expect(material.doubleSided).toBeUndefined();
-                expect(material.alphaMode).toBe('BLEND');
+        // Expect material paramters to be updated
+        expect(material.doubleSided).toBeUndefined();
+        expect(material.alphaMode).toBe('BLEND');
 
-                // Expect technique blending to be moved to material KHR_blend extension
-                const materialBlending = material.extensions.KHR_blend;
-                expect(materialBlending).toBeDefined();
-                expect(materialBlending.blendEquation).toEqual([
-                    WebGLConstants.FUNC_SUBTRACT,
-                    WebGLConstants.FUNC_SUBTRACT
-                ]);
-                expect(materialBlending.blendFactors).toEqual([
-                    WebGLConstants.ONE,
-                    WebGLConstants.ZERO,
-                    WebGLConstants.ONE,
-                    WebGLConstants.ZERO
-                ]);
+        // Expect technique blending to be moved to material KHR_blend extension
+        const materialBlending = material.extensions.KHR_blend;
+        expect(materialBlending).toBeDefined();
+        expect(materialBlending.blendEquation).toEqual([
+            WebGLConstants.FUNC_SUBTRACT,
+            WebGLConstants.FUNC_SUBTRACT
+        ]);
+        expect(materialBlending.blendFactors).toEqual([
+            WebGLConstants.ONE,
+            WebGLConstants.ZERO,
+            WebGLConstants.ONE,
+            WebGLConstants.ZERO
+        ]);
 
-                // Expect techniques to be moved to asset KHR_techniques_webgl extension
-                const technique = gltf.extensions.KHR_techniques_webgl.techniques[0];
-                expect(technique.uniforms.u_lightAttenuation.value).toEqual(1.0);
-                expect(technique.attributes.a_application.value).toBeUndefined();
+        // Expect techniques to be moved to asset KHR_techniques_webgl extension
+        const technique = gltf.extensions.KHR_techniques_webgl.techniques[0];
+        expect(technique.uniforms.u_lightAttenuation.value).toEqual(1.0);
+        expect(technique.attributes.a_application.value).toBeUndefined();
 
-                // TEXCOORD and COLOR are now TEXCOORD_0 and COLOR_0
-                const primitive = gltf.meshes[0].primitives[0];
-                expect(technique.uniforms.u_texcoord.semantic).toEqual('TEXCOORD_0');
-                expect(technique.uniforms.u_color.semantic).toEqual('COLOR_0');
-                expect(primitive.attributes.TEXCOORD).toBeUndefined();
-                expect(primitive.attributes.TEXCOORD_0).toEqual(6);
-                expect(primitive.attributes.COLOR).toBeUndefined();
-                expect(primitive.attributes.COLOR_0).toEqual(7);
+        // TEXCOORD and COLOR are now TEXCOORD_0 and COLOR_0
+        const primitive = gltf.meshes[0].primitives[0];
+        expect(technique.uniforms.u_texcoord.semantic).toEqual('TEXCOORD_0');
+        expect(technique.uniforms.u_color.semantic).toEqual('COLOR_0');
+        expect(primitive.attributes.TEXCOORD).toBeUndefined();
+        expect(primitive.attributes.TEXCOORD_0).toEqual(6);
+        expect(primitive.attributes.COLOR).toBeUndefined();
+        expect(primitive.attributes.COLOR_0).toEqual(7);
 
-                // JOINT is now JOINTS_0 and WEIGHT is not WEIGHTS_0
-                expect(technique.attributes.a_joints.semantic).toEqual('JOINTS_0');
-                expect(technique.attributes.a_weights.semantic).toEqual('WEIGHTS_0');
-                expect(primitive.attributes.JOINT).toBeUndefined();
-                expect(primitive.attributes.JOINTS_0).toEqual(8);
-                expect(primitive.attributes.WEIGHT).toBeUndefined();
-                expect(primitive.attributes.WEIGHTS_0).toEqual(9);
+        // JOINT is now JOINTS_0 and WEIGHT is not WEIGHTS_0
+        expect(technique.attributes.a_joints.semantic).toEqual('JOINTS_0');
+        expect(technique.attributes.a_weights.semantic).toEqual('WEIGHTS_0');
+        expect(primitive.attributes.JOINT).toBeUndefined();
+        expect(primitive.attributes.JOINTS_0).toEqual(8);
+        expect(primitive.attributes.WEIGHT).toBeUndefined();
+        expect(primitive.attributes.WEIGHTS_0).toEqual(9);
 
-                // Underscore added to application specific attributes
-                expect(technique.attributes.a_application.semantic).toEqual('_APPLICATIONSPECIFIC');
-                expect(primitive.attributes.APPLICATIONSPECIFIC).toBeUndefined();
-                expect(primitive.attributes._APPLICATIONSPECIFIC).toEqual(0);
-                expect(primitive.attributes._TEMPERATURE).toEqual(10);
+        // Underscore added to application specific attributes
+        expect(technique.attributes.a_application.semantic).toEqual('_APPLICATIONSPECIFIC');
+        expect(primitive.attributes.APPLICATIONSPECIFIC).toBeUndefined();
+        expect(primitive.attributes._APPLICATIONSPECIFIC).toEqual(0);
+        expect(primitive.attributes._TEMPERATURE).toEqual(10);
 
-                // JOINTS_0 has converted component type
-                expect(gltf.accessors[8].componentType).toBe(WebGLConstants.UNSIGNED_SHORT);
+        // JOINTS_0 has converted component type
+        expect(gltf.accessors[8].componentType).toBe(WebGLConstants.UNSIGNED_SHORT);
 
-                // Clamp camera parameters
-                const camera = gltf.cameras[0];
-                expect(camera.perspective.aspectRatio).toBeUndefined();
-                expect(camera.perspective.yfov).toEqual(1.0);
+        // Clamp camera parameters
+        const camera = gltf.cameras[0];
+        expect(camera.perspective.aspectRatio).toBeUndefined();
+        expect(camera.perspective.yfov).toEqual(1.0);
 
-                // Sets byteLength for buffers and bufferViews
-                const buffer = gltf.buffers[0];
-                expect(buffer.type).toBeUndefined();
-                expect(buffer.byteLength).toEqual(source.length);
+        // Sets byteLength for buffers and bufferViews
+        const buffer = gltf.buffers[0];
+        expect(buffer.type).toBeUndefined();
+        expect(buffer.byteLength).toEqual(source.length);
 
-                const bufferView = getBufferViewByName(gltf, 'bufferView');
-                expect(bufferView.byteLength).toEqual(12);
+        const bufferView = getBufferViewByName(gltf, 'bufferView');
+        expect(bufferView.byteLength).toEqual(12);
 
-                // Min and max are added to all POSITION accessors
-                ForEach.accessorWithSemantic(gltf, 'POSITION', function(accessorId) {
-                    const accessor = gltf.accessors[accessorId];
-                    expect(accessor.min.length).toEqual(numberOfComponentsForType(accessor.type));
-                    expect(accessor.max.length).toEqual(numberOfComponentsForType(accessor.type));
-                });
+        // Min and max are added to all POSITION accessors
+        ForEach.accessorWithSemantic(gltf, 'POSITION', (accessorId) => {
+            const accessor = gltf.accessors[accessorId];
+            expect(accessor.min.length).toEqual(numberOfComponentsForType(accessor.type));
+            expect(accessor.max.length).toEqual(numberOfComponentsForType(accessor.type));
+        });
 
-                // Min and max are added to all animation sampler input accessors
-                ForEach.animation(gltf, function(animation) {
-                    ForEach.animationSampler(animation, function(sampler) {
-                        const accessor = gltf.accessors[sampler.input];
-                        expect(accessor.min.length).toEqual(numberOfComponentsForType(accessor.type));
-                        expect(accessor.max.length).toEqual(numberOfComponentsForType(accessor.type));
-                    });
-                });
+        // Min and max are added to all animation sampler input accessors
+        ForEach.animation(gltf, (animation) => {
+            ForEach.animationSampler(animation, (sampler) => {
+                const accessor = gltf.accessors[sampler.input];
+                expect(accessor.min.length).toEqual(numberOfComponentsForType(accessor.type));
+                expect(accessor.max.length).toEqual(numberOfComponentsForType(accessor.type));
+            });
+        });
 
-                // byteStride moved from accessor to bufferView
-                const positionAccessor = gltf.accessors[primitive.attributes.POSITION];
-                const normalAccessor = gltf.accessors[primitive.attributes.NORMAL];
-                const texcoordAccessor = gltf.accessors[primitive.attributes.TEXCOORD_0];
-                const positionBufferView = gltf.bufferViews[positionAccessor.bufferView];
-                const texcoordBufferView = gltf.bufferViews[texcoordAccessor.bufferView];
-                expect(positionAccessor.bufferView).toBe(1);
-                expect(normalAccessor.bufferView).toBe(2);
-                expect(texcoordAccessor.bufferView).toBe(2);
-                expect(positionBufferView.byteLength).toBe(36);
-                expect(positionBufferView.byteOffset).toBe(12); // First unrelated buffer view is 12 bytes
-                expect(positionBufferView.byteStride).toBe(12);
-                expect(texcoordBufferView.byteLength).toBe(50 - 42 + 6); // Padding to next buffer view
-                expect(texcoordBufferView.byteOffset).toBe(42 + 12); // Byte offset of previous accessor plus byte length
-                expect(texcoordBufferView.byteStride).toBe(2);
-                expect(positionAccessor.byteStride).toBeUndefined();
-                expect(normalAccessor.byteStride).toBeUndefined();
-                expect(texcoordAccessor.byteStride).toBeUndefined();
+        // byteStride moved from accessor to bufferView
+        const positionAccessor = gltf.accessors[primitive.attributes.POSITION];
+        const normalAccessor = gltf.accessors[primitive.attributes.NORMAL];
+        const texcoordAccessor = gltf.accessors[primitive.attributes.TEXCOORD_0];
+        const positionBufferView = gltf.bufferViews[positionAccessor.bufferView];
+        const texcoordBufferView = gltf.bufferViews[texcoordAccessor.bufferView];
+        expect(positionAccessor.bufferView).toBe(1);
+        expect(normalAccessor.bufferView).toBe(2);
+        expect(texcoordAccessor.bufferView).toBe(2);
+        expect(positionBufferView.byteLength).toBe(36);
+        expect(positionBufferView.byteOffset).toBe(12); // First unrelated buffer view is 12 bytes
+        expect(positionBufferView.byteStride).toBe(12);
+        expect(texcoordBufferView.byteLength).toBe(50 - 42 + 6); // Padding to next buffer view
+        expect(texcoordBufferView.byteOffset).toBe(42 + 12); // Byte offset of previous accessor plus byte length
+        expect(texcoordBufferView.byteStride).toBe(2);
+        expect(positionAccessor.byteStride).toBeUndefined();
+        expect(normalAccessor.byteStride).toBeUndefined();
+        expect(texcoordAccessor.byteStride).toBeUndefined();
 
-                // glExtensionsUsed removed
-                expect(gltf.glExtensionsUsed).toBeUndefined();
-                expect(gltf.extensions.KHR_techniques_webgl.programs[0].glExtensions).toEqual(['OES_element_index_uint']);
-            }), done).toResolve();
+        // glExtensionsUsed removed
+        expect(gltf.glExtensionsUsed).toBeUndefined();
+        expect(gltf.extensions.KHR_techniques_webgl.programs[0].glExtensions).toEqual(['OES_element_index_uint']);
     });
 });

@@ -1,8 +1,8 @@
 'use strict';
 const removeExtensionsUsed = require('../../lib/removeExtensionsUsed');
 
-describe('removeExtensionsUsed', function() {
-    it('removes extension from extensionsUsed', function() {
+describe('removeExtensionsUsed', () => {
+    it('removes extension from extensionsUsed', () => {
         const gltf = {
             extensionsRequired: [
                 'extension1',
