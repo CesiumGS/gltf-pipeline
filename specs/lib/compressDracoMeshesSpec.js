@@ -7,6 +7,7 @@ const compressDracoMeshes = require('../../lib/compressDracoMeshes');
 const boxPath = 'specs/data/2.0/box-textured-embedded/box-textured-embedded.gltf';
 const boxMorphPath = 'specs/data/2.0/box-morph/box-morph.gltf';
 const multipleBoxesPath = 'specs/data/2.0/multiple-boxes/multiple-boxes.gltf';
+const triangleWithoutIndicesPath = 'specs/data/2.0/triangle-without-indices/triangle-without-indices.gltf';
 
 let gltf;
 let gltfOther;
@@ -67,6 +68,26 @@ describe('compressDracoMeshes', () => {
         expect(normalAccessor.byteLength).toBeUndefined();
         expect(texcoordAccessor.bufferView).toBeUndefined();
         expect(texcoordAccessor.byteLength).toBeUndefined();
+    });
+
+    it('compresses mesh without indices', async () => {
+        const gltf = await readGltf(triangleWithoutIndicesPath);
+        expect(gltf.accessors.length).toBe(1); // positions
+        expect(gltf.bufferViews.length).toBe(1); // positions
+
+        compressDracoMeshes(gltf);
+
+        expect(gltf.accessors.length).toBe(2); // positions + indices
+        expect(gltf.bufferViews.length).toBe(1); // draco
+
+        const dracoExtension = gltf.meshes[0].primitives[0].extensions.KHR_draco_mesh_compression;
+        expect(dracoExtension.bufferView).toBeDefined();
+        expect(gltf.extensionsUsed.indexOf('KHR_draco_mesh_compression') >= 0).toBe(true);
+        expect(gltf.extensionsRequired.indexOf('KHR_draco_mesh_compression') >= 0).toBe(true);
+
+        const positionAccessor = gltf.accessors[dracoExtension.attributes.POSITION];
+        expect(positionAccessor.bufferView).toBeUndefined();
+        expect(positionAccessor.byteLength).toBeUndefined();
     });
 
     it('throws if quantize bits is out of range', () => {
