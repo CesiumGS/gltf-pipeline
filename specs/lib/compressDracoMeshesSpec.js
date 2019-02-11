@@ -1,5 +1,5 @@
 'use strict';
-const { clone, DeveloperError} = require('cesium');
+const { AxisAlignedBoundingBox, Cartesian3, clone, DeveloperError} = require('cesium');
 const fsExtra = require('fs-extra');
 const readResources = require('../../lib/readResources');
 const compressDracoMeshes = require('../../lib/compressDracoMeshes');
@@ -121,6 +121,31 @@ describe('compressDracoMeshes', () => {
         const dracoBufferUnified = getDracoBuffer(gltfUnified);
         const dracoBufferNonUnified = getDracoBuffer(gltfNonUnified);
         expect(dracoBufferNonUnified).not.toEqual(dracoBufferUnified);
+    });
+
+    it('uses explicit quantization volume', async () => {
+        const gltfVolume = await readGltf(multipleBoxesPath);
+        const gltfUnified = await readGltf(multipleBoxesPath);
+        const gltfDefault = await readGltf(multipleBoxesPath);
+        const aabb = new AxisAlignedBoundingBox(new Cartesian3(-10.0, -10.0, -10.0), new Cartesian3(10.0, 10.0, 10.0));
+        compressDracoMeshes(gltfVolume, {
+            dracoOptions: {
+                quantizationVolume: aabb
+            }
+        });
+        compressDracoMeshes(gltfUnified, {
+            dracoOptions: {
+                unifiedQuantization: true
+            }
+        });
+        compressDracoMeshes(gltfDefault, {
+            dracoOptions: {}
+        });
+        const dracoBufferVolume = getDracoBuffer(gltfVolume);
+        const dracoBufferUnified = getDracoBuffer(gltfUnified);
+        const dracoBufferDefault = getDracoBuffer(gltfDefault);
+        expect(dracoBufferVolume).not.toEqual(dracoBufferDefault);
+        expect(dracoBufferVolume).not.toEqual(dracoBufferUnified);
     });
 
     it('applies quantization bits', () => {
