@@ -69,36 +69,36 @@ async function readsResources(gltfPath, binary, separate) {
 }
 
 describe('readResources', () => {
-    it('reads separate resources from 1.0 model', () => {
-        readsResources(boxTexturedSeparate1Path, false, true);
+    it('reads separate resources from 1.0 model', async () => {
+        await readsResources(boxTexturedSeparate1Path, false, true);
     });
 
-    it('reads separate resources from 1.0 glb', () => {
-        readsResources(boxTexturedBinarySeparate1Path, true, true);
+    it('reads separate resources from 1.0 glb', async () => {
+        await readsResources(boxTexturedBinarySeparate1Path, true, true);
     });
 
-    it('reads embedded resources from 1.0 model', () => {
-        readsResources(boxTexturedEmbedded1Path, false, false);
+    it('reads embedded resources from 1.0 model', async () => {
+        await readsResources(boxTexturedEmbedded1Path, false, false);
     });
 
-    it('reads resources from 1.0 glb', () => {
-        readsResources(boxTexturedBinary1Path, true, false);
+    it('reads resources from 1.0 glb', async () => {
+        await readsResources(boxTexturedBinary1Path, true, false);
     });
 
-    it('reads separate resources from model', () => {
-        readsResources(boxTexturedSeparate2Path, false, true);
+    it('reads separate resources from model', async () => {
+        await readsResources(boxTexturedSeparate2Path, false, true);
     });
 
-    it('reads separate resources from glb', () => {
-        readsResources(boxTexturedBinarySeparate2Path, true, true);
+    it('reads separate resources from glb', async () => {
+        await readsResources(boxTexturedBinarySeparate2Path, true, true);
     });
 
-    it('reads embedded resources from model', () => {
-        readsResources(boxTexturedEmbedded2Path, false, false);
+    it('reads embedded resources from model', async () => {
+        await readsResources(boxTexturedEmbedded2Path, false, false);
     });
 
-    it('reads resources from glb', () => {
-        readsResources(boxTexturedBinary2Path, true, false);
+    it('reads resources from glb', async () => {
+        await readsResources(boxTexturedBinary2Path, true, false);
     });
 
     it('rejects if gltf contains separate resources but no resource directory is supplied', async () => {

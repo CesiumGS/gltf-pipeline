@@ -45,7 +45,7 @@ const gltf = {
 };
 
 describe('moveTechniqueRenderStates', () => {
-    it('sets material.doubleSided property if CULL_FACE is not enabled', function () {
+    it('sets material.doubleSided property if CULL_FACE is not enabled', () => {
         const baseGltf = JSON.parse(JSON.stringify(gltf));
         let gltfWithUpdatedMaterials = moveTechniqueRenderStates(baseGltf);
         let material = gltfWithUpdatedMaterials.materials[0];
@@ -108,7 +108,7 @@ describe('moveTechniqueRenderStates', () => {
         ]);
     });
 
-    it('provides defaults for extension properties if not provided', function () {
+    it('provides defaults for extension properties if not provided', () => {
         const gltfWithBlendFunctions = JSON.parse(JSON.stringify(gltf));
         gltfWithBlendFunctions.techniques.technique0.states = {
             enable: [
@@ -169,7 +169,7 @@ describe('moveTechniqueRenderStates', () => {
         ]);
     });
 
-    it('falls back to default blending factors if unsupported factor is found', function () {
+    it('falls back to default blending factors if unsupported factor is found', () => {
         const gltfWithBlendFunctions = JSON.parse(JSON.stringify(gltf));
         gltfWithBlendFunctions.techniques.technique0.states = {
             enable: [
@@ -199,7 +199,7 @@ describe('moveTechniqueRenderStates', () => {
         ]);
     });
 
-    it('does not set alphaMode or add KHR_blend if no blending is found in render states', function () {
+    it('does not set alphaMode or add KHR_blend if no blending is found in render states', () => {
         const gltfWithoutBlending = JSON.parse(JSON.stringify(gltf));
         gltfWithoutBlending.techniques.technique0.states.enable = [
             WebGLConstants.DEPTH_TEST,

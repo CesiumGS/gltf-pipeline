@@ -27,7 +27,7 @@ function expectOutOfRange(gltf, name, value) {
     expect(thrownError).toEqual(jasmine.any(DeveloperError));
 }
 
-async function readGltf(gltfPath) {
+function readGltf(gltfPath) {
     const gltf = fsExtra.readJsonSync(gltfPath);
     return readResources(gltf);
 }
