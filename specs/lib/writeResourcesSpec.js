@@ -57,7 +57,7 @@ describe('writeResources', () => {
             expect(image.uri.indexOf('.png')).toBeGreaterThan(-1);
         });
 
-        ForEach.shader(gltf, function (shader) {
+        ForEach.shader(gltf, shader => {
             expect(shader.bufferView).toBeUndefined();
             expect(shader.uri.indexOf('.glsl')).toBeGreaterThan(-1);
         });
@@ -120,12 +120,12 @@ describe('writeResources', () => {
         const buffer = gltf.buffers[0];
         expect(Buffer.isBuffer(dataUriToBuffer(buffer.uri)));
 
-        ForEach.image(gltf, function (image) {
+        ForEach.image(gltf, image => {
             expect(image.bufferView).toBeUndefined();
             expect(Buffer.isBuffer(dataUriToBuffer(image.uri)));
         });
 
-        ForEach.shader(gltf, function (shader) {
+        ForEach.shader(gltf, shader => {
             expect(shader.bufferView).toBeUndefined();
             expect(Buffer.isBuffer(dataUriToBuffer(shader.uri)));
         });
@@ -144,7 +144,7 @@ describe('writeResources', () => {
         let bufferViewByteLength = 0;
         let bufferView;
         let sourceByteLength;
-        ForEach.image(gltf, function (image) {
+        ForEach.image(gltf, image => {
             expect(image.bufferView).toBeDefined();
             bufferView = gltf.bufferViews[image.bufferView];
             expect(bufferView).toBeDefined();
@@ -154,7 +154,7 @@ describe('writeResources', () => {
             bufferViewByteLength += bufferView.byteLength;
         });
 
-        ForEach.shader(gltf, function (shader) {
+        ForEach.shader(gltf, shader => {
             expect(shader.bufferView).toBeDefined();
             bufferView = gltf.bufferViews[shader.bufferView];
             expect(bufferView).toBeDefined();

@@ -41,7 +41,7 @@ describe('addPipelineExtras', () => {
         expect(gltfWithExtras.images['sampleImage0'].extras.compressedImage3DTiles.etc1.extras._pipeline).toBeDefined();
     });
 
-    it('adds pipeline extras to glTF 2.0 assets', function () {
+    it('adds pipeline extras to glTF 2.0 assets', () => {
         const gltf = {
             buffers: [
                 {

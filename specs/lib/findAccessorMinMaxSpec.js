@@ -21,7 +21,7 @@ const nonContiguousData = [
     nan, nan, nan
 ];
 
-async function createGltf(elements, byteStride) {
+function createGltf(elements, byteStride) {
     const buffer = Buffer.from((new Float32Array(elements)).buffer);
     const byteLength = buffer.length;
     const dataUri = 'data:application/octet-stream;base64,' + buffer.toString('base64');
@@ -53,8 +53,7 @@ async function createGltf(elements, byteStride) {
             }
         ]
     };
-    await readResources(gltf);
-    return gltf;
+    return readResources(gltf);
 }
 
 describe('findAccessorMinMax', () => {

@@ -441,7 +441,7 @@ describe('ForEach', () => {
         expect(returnValue).toBe(gltf.materials[1]);
     });
 
-    it('loops over material values', function () {
+    it('loops over material values', () => {
         const material = {
             name: 'Texture',
             extensions: {
@@ -464,7 +464,7 @@ describe('ForEach', () => {
         };
 
         let count = 0;
-        const returnValue = ForEach.materialValue(material, function (value, uniformName) {
+        const returnValue = ForEach.materialValue(material, (value, uniformName) => {
             expect(value).toBeDefined();
             expect(uniformName.indexOf('u_')).toBe(0);
             count++;
@@ -476,7 +476,7 @@ describe('ForEach', () => {
         expect(returnValue).toBe(material.extensions.KHR_techniques_webgl.values['u_specular']);
     });
 
-    it('loops over legacy material values', function () {
+    it('loops over legacy material values', () => {
         const material = {
             name: 'Texture',
             values: {
@@ -494,7 +494,7 @@ describe('ForEach', () => {
         };
 
         let count = 0;
-        const returnValue = ForEach.materialValue(material, function (value, materialId) {
+        const returnValue = ForEach.materialValue(material, (value, materialId) => {
             expect(value).toBeDefined();
             count++;
             if (materialId === 'specular') {
@@ -789,7 +789,7 @@ describe('ForEach', () => {
         expect(returnValue).toBe(gltf.shaders['frag']);
     });
 
-    it('loops over KHR_techniques_webgl shaders (gltf 2.0)', function () {
+    it('loops over KHR_techniques_webgl shaders (gltf 2.0)', () => {
         let gltf = {
             extensions: {
                 KHR_techniques_webgl: {
@@ -811,7 +811,7 @@ describe('ForEach', () => {
         };
 
         let count = 0;
-        const returnValue = ForEach.shader(gltf, function (shader) {
+        const returnValue = ForEach.shader(gltf, shader => {
             expect(shader.uri).toBe(shader.name + '.glsl');
             count++;
 
@@ -825,13 +825,13 @@ describe('ForEach', () => {
         gltf = {};
 
         count = 0;
-        ForEach.shader(gltf, function () {
+        ForEach.shader(gltf, () => {
             count++;
         });
         expect(count).toBe(0);
     });
 
-    it('loops over KHR_techniques_webgl programs (gltf 2.0)', function () {
+    it('loops over KHR_techniques_webgl programs (gltf 2.0)', () => {
         let gltf = {
             extensions: {
                 KHR_techniques_webgl: {
@@ -853,7 +853,7 @@ describe('ForEach', () => {
         };
 
         let count = 0;
-        const returnValue = ForEach.program(gltf, function (program) {
+        const returnValue = ForEach.program(gltf, program => {
             expect(program.fragmentShader).toBeDefined();
             expect(program.vertexShader).toBeDefined();
             count++;
@@ -868,13 +868,13 @@ describe('ForEach', () => {
         gltf = {};
 
         count = 0;
-        ForEach.program(gltf, function () {
+        ForEach.program(gltf, () => {
             count++;
         });
         expect(count).toBe(0);
     });
 
-    it('loops over legacy programs (gltf 1.0)', function () {
+    it('loops over legacy programs (gltf 1.0)', () => {
         const gltf = {
             programs: {
                 program_0: {
@@ -889,7 +889,7 @@ describe('ForEach', () => {
         };
 
         let count = 0;
-        const returnValue = ForEach.program(gltf, function (program) {
+        const returnValue = ForEach.program(gltf, program => {
             expect(program.fragmentShader).toBeDefined();
             expect(program.vertexShader).toBeDefined();
             count++;
@@ -902,7 +902,7 @@ describe('ForEach', () => {
         expect(returnValue).toBe(gltf.programs['program_1']);
     });
 
-    it('loops over KHR_techniques_webgl techniques (gltf 2.0)', function () {
+    it('loops over KHR_techniques_webgl techniques (gltf 2.0)', () => {
         let gltf = {
             extensions: {
                 KHR_techniques_webgl: {
@@ -926,7 +926,7 @@ describe('ForEach', () => {
         };
 
         let count = 0;
-        const returnValue = ForEach.technique(gltf, function (technique, index) {
+        const returnValue = ForEach.technique(gltf, (technique, index) => {
             expect(technique.name).toBe('technique' + index);
             count++;
 
@@ -940,13 +940,13 @@ describe('ForEach', () => {
         gltf = {};
 
         count = 0;
-        ForEach.technique(gltf, function () {
+        ForEach.technique(gltf, () => {
             count++;
         });
         expect(count).toBe(0);
     });
 
-    it('loops over legacy techniques (gltf 1.0)', function () {
+    it('loops over legacy techniques (gltf 1.0)', () => {
         const gltf = {
             techniques: {
                 technique0: {
@@ -963,7 +963,7 @@ describe('ForEach', () => {
         };
 
         let count = 0;
-        const returnValue = ForEach.technique(gltf, function (technique) {
+        const returnValue = ForEach.technique(gltf, technique => {
             expect(technique.program).toBeDefined();
             count++;
 
@@ -975,7 +975,7 @@ describe('ForEach', () => {
         expect(returnValue).toBe(gltf.techniques['technique1']);
     });
 
-    it('loops over technique attributes', function () {
+    it('loops over technique attributes', () => {
         const technique = {
             name: 'technique0',
             program: 0,
@@ -994,7 +994,7 @@ describe('ForEach', () => {
         };
 
         let count = 0;
-        const returnValue = ForEach.techniqueAttribute(technique, function (attribute, attributeName) {
+        const returnValue = ForEach.techniqueAttribute(technique, (attribute, attributeName) => {
             expect(attribute.semantic).toBeDefined();
             expect(attributeName.indexOf('a_')).toBe(0);
             count++;
@@ -1008,7 +1008,7 @@ describe('ForEach', () => {
         expect(returnValue).toBe(technique.attributes['a_texcoord0']);
     });
 
-    it('loops over legacy technique attributes', function () {
+    it('loops over legacy technique attributes', () => {
         const technique = {
             name: 'technique0',
             program: 0,
@@ -1022,7 +1022,7 @@ describe('ForEach', () => {
         };
 
         let count = 0;
-        const returnValue = ForEach.techniqueAttribute(technique, function (parameterName, attributeName) {
+        const returnValue = ForEach.techniqueAttribute(technique, (parameterName, attributeName) => {
             expect(parameterName).toBe(attributeName.substring(2));
             count++;
 
@@ -1035,7 +1035,7 @@ describe('ForEach', () => {
         expect(returnValue).toBe(technique.attributes['a_texcoord0']);
     });
 
-    it('loops over technique uniforms', function () {
+    it('loops over technique uniforms', () => {
         const technique = {
             name: 'technique0',
             program: 0,
@@ -1056,7 +1056,7 @@ describe('ForEach', () => {
         };
 
         let count = 0;
-        const returnValue = ForEach.techniqueUniform(technique, function (uniform, uniformName) {
+        const returnValue = ForEach.techniqueUniform(technique, (uniform, uniformName) => {
             expect(uniform.type).toBeDefined();
             expect(uniformName.indexOf('u_')).toBe(0);
             count++;
@@ -1070,7 +1070,7 @@ describe('ForEach', () => {
         expect(returnValue).toBe(technique.uniforms['u_normalMatrix']);
     });
 
-    it('loops over legacy technique uniforms', function () {
+    it('loops over legacy technique uniforms', () => {
         const technique = {
             name: 'technique0',
             program: 0,
@@ -1084,7 +1084,7 @@ describe('ForEach', () => {
         };
 
         let count = 0;
-        const returnValue = ForEach.techniqueUniform(technique, function (parameterName, uniformName) {
+        const returnValue = ForEach.techniqueUniform(technique, (parameterName, uniformName) => {
             expect(parameterName).toBe(uniformName.substring(2));
             count++;
 
@@ -1097,7 +1097,7 @@ describe('ForEach', () => {
         expect(returnValue).toBe(technique.uniforms['u_normalMatrix']);
     });
 
-    it('loops over legacy technique parameters', function () {
+    it('loops over legacy technique parameters', () => {
         const technique = {
             name: 'technique0',
             program: 0,
@@ -1119,7 +1119,7 @@ describe('ForEach', () => {
         };
 
         let count = 0;
-        const returnValue = ForEach.techniqueParameter(technique, function (parameter, parameterName) {
+        const returnValue = ForEach.techniqueParameter(technique, (parameter, parameterName) => {
             expect(parameter.type).toBeDefined();
             expect(parameterName).toBeDefined();
             count++;
