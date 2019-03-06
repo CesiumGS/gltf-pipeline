@@ -204,9 +204,9 @@ let textureCompressionOptions;
 if (defined(texcompOptions)) {
     textureCompressionOptions = [];
     delete texcompOptions['<format>'];
-    for (var format in texcompOptions) {
+    for (const format in texcompOptions) {
         if (texcompOptions.hasOwnProperty(format)) {
-            let formatOptions = texcompOptions[format];
+            const formatOptions = texcompOptions[format];
             delete formatOptions.enable;
             formatOptions.format = format;
             textureCompressionOptions.push(formatOptions);
