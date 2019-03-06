@@ -40,6 +40,9 @@ npm install -g gltf-pipeline
 #### Converting a glTF to Draco glTF
 `gltf-pipeline -i model.gltf -o modelDraco.gltf -d`
 
+#### Converting a glTF to Draco glTF and enable compressTexture
+`gltf-pipeline -i model.gltf -o modelDraco.gltf -d --texcomp.dxt1.enable --texcomp.dxt1.quality=10 --texcomp.etc1.enable --texcomp.pvrtc2.enable`
+
 ### Saving separate textures
 `gltf-pipeline -i model.gltf -t`
 
@@ -134,6 +137,11 @@ processGltf(gltf, options)
 |`--draco.quantizeColorBits`|Quantization bits for color attribute when using Draco compression.|No, default `8`|
 |`--draco.quantizeGenericBits`|Quantization bits for skinning attribute (joint indices and joint weights) and custom attributes when using Draco compression.|No, default `12`|
 |`--draco.unifiedQuantization`|Quantize positions of all primitives using the same quantization grid. If not set, quantization is applied separately.|No, default `false`|
+|`--texcomp.<format>.enable`|Whether to compress textures with the given compressed texture format. If other `texcomp.<format>` flags are enabled, this is implicitly true. Multiple formats may be supplied by repeating this flag. <format> Must be one of the following: `pvrtc1`, `pvrtc2`, `etc1`, `etc2`, `astc`, `dxt1`, `dxt3`, `dxt5`, `crunch-dxt1`, `crunch-dxt5`. Compressed textures are saved as Cesium and 3D Tiles specific metadata inside `image.extras.compressedImage3DTiles`. More details about texture compression in glTF here: https://github.com/KhronosGroup/glTF/issues/739|No, unless other texcomp options are set.|
+|`--texcomp.<format>.quality`|The compressed texture quality from 0 to 10.|No, default `5`|
+|`--texcomp.<format>.bitrate`|The bitrate when using the pvrtc or astc formats. For pvrtc formats this value must be `2.0` or `4.0`.|No, default `2.0`|
+|`--texcomp.<format>.blockSize`|The block size for astc compression. Smaller block sizes result in higher bitrates. This value is ignored if `options.bitrate` is also set. Must be one of the following: `4x4`, `5x4`, `5x5`, `6x5`, `6x6`, `8x5`, `8x6`, `8x8`, `10x5`, `10x6`, `10x8`, `10x10`, `12x10`, `12x12`|No, default `8x8`|
+|`--texcomp.<format>.alphaBit`|Store a single bit for alpha. Only supported for etc2.|No, default `false`|
 
 ## Build Instructions
 
