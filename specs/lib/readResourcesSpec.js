@@ -36,7 +36,7 @@ function checkPaths(object, resourceDirectory) {
 
 async function readsResources(gltfPath, binary, separate) {
     const gltf = readGltf(gltfPath, binary);
-    const resourceDirectory = path.dirname(gltfPath);
+    const resourceDirectory = path.resolve(path.dirname(gltfPath));
     const options = {
         resourceDirectory: resourceDirectory
     };
@@ -115,14 +115,27 @@ describe('readResources', () => {
 
     it('rejects when loading resource outside of the resource directory when secure is true', async () => {
         const gltf = readGltf(boxTexturedSeparate2Path);
-        gltf.images[0].uri = '../cesium.png';
+        gltf.images[0].uri = '../box-textured-binary-separate/cesium.png'; // Outside resourceDirectory
 
         let thrownError;
         try {
-            await readResources(gltf);
+            await readResources(gltf, {
+                resourceDirectory: path.resolve(path.dirname(boxTexturedSeparate2Path)),
+                secure: true
+            });
         } catch (e) {
             thrownError = e;
         }
-        expect(thrownError).toEqual(new RuntimeError('glTF model references separate files but no resourceDirectory is supplied'));
+        expect(thrownError).toEqual(new RuntimeError('../box-textured-binary-separate/cesium.png is outside of the resource directory and the secure flag is true.'));
+    });
+
+    it('resolves when loading resource outside of the resource directory when secure is false', async () => {
+        const gltf = readGltf(boxTexturedSeparate2Path);
+        gltf.images[0].uri = '../box-textured-binary-separate/cesium.png'; // Outside resourceDirectory
+
+        await readResources(gltf, {
+            resourceDirectory: path.resolve(path.dirname(boxTexturedSeparate2Path)),
+            secure: false
+        });
     });
 });
