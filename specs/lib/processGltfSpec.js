@@ -1,11 +1,8 @@
 'use strict';
-const Cesium = require('cesium');
 const fsExtra = require('fs-extra');
 const path = require('path');
 const hasExtension = require('../../lib/hasExtension');
 const processGltf = require('../../lib/processGltf');
-
-const RuntimeError = Cesium.RuntimeError;
 
 const gltfPath = 'specs/data/2.0/box-techniques-embedded/box-techniques-embedded.gltf';
 const gltfSeparatePath = 'specs/data/2.0/box-techniques-separate/box-techniques-separate.gltf';
@@ -72,22 +69,6 @@ describe('processGltf', () => {
         expect(results.separateResources['my-model.bin']).toBeDefined();
         expect(results.separateResources['my-modelFS0.glsl']).toBeDefined();
         expect(results.separateResources['my-modelFS0.glsl']).toBeDefined();
-    });
-
-    it('rejects when loading resource outside of the resource directory when secure is true', async () => {
-        const gltf = fsExtra.readJsonSync(gltfSeparatePath);
-        const options = {
-            secure: true
-        };
-        gltf.images[0].uri = '../cesium.png';
-
-        let thrownError;
-        try {
-            await processGltf(gltf, options);
-        } catch (e) {
-            thrownError = e;
-        }
-        expect(thrownError).toEqual(new RuntimeError('glTF model references separate files but no resourceDirectory is supplied'));
     });
 
     it('prints stats', async () => {

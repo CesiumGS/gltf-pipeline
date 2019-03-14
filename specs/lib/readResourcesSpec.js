@@ -36,7 +36,7 @@ function checkPaths(object, resourceDirectory) {
 
 async function readsResources(gltfPath, binary, separate) {
     const gltf = readGltf(gltfPath, binary);
-    const resourceDirectory = path.dirname(gltfPath);
+    const resourceDirectory = path.resolve(path.dirname(gltfPath));
     const options = {
         resourceDirectory: resourceDirectory
     };
@@ -103,19 +103,6 @@ describe('readResources', () => {
 
     it('rejects if gltf contains separate resources but no resource directory is supplied', async () => {
         const gltf = readGltf(boxTexturedSeparate2Path);
-
-        let thrownError;
-        try {
-            await readResources(gltf);
-        } catch (e) {
-            thrownError = e;
-        }
-        expect(thrownError).toEqual(new RuntimeError('glTF model references separate files but no resourceDirectory is supplied'));
-    });
-
-    it('rejects when loading resource outside of the resource directory when secure is true', async () => {
-        const gltf = readGltf(boxTexturedSeparate2Path);
-        gltf.images[0].uri = '../cesium.png';
 
         let thrownError;
         try {
