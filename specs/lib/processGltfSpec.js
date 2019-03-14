@@ -1,11 +1,8 @@
 'use strict';
-const Cesium = require('cesium');
 const fsExtra = require('fs-extra');
 const path = require('path');
 const hasExtension = require('../../lib/hasExtension');
 const processGltf = require('../../lib/processGltf');
-
-const RuntimeError = Cesium.RuntimeError;
 
 const gltfPath = 'specs/data/2.0/box-techniques-embedded/box-techniques-embedded.gltf';
 const gltfSeparatePath = 'specs/data/2.0/box-techniques-separate/box-techniques-separate.gltf';
