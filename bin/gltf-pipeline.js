@@ -64,11 +64,6 @@ const argv = yargs
             type: 'boolean',
             default: defaults.separateTextures
         },
-        secure: {
-            describe: 'Prevent the source model from referencing paths outside of its directory.',
-            type: 'boolean',
-            default: defaults.secure
-        },
         stats: {
             describe: 'Print statistics to console for output glTF file.',
             type: 'boolean',
@@ -167,7 +162,6 @@ const options = {
     resourceDirectory: inputDirectory,
     separate: argv.separate,
     separateTextures: argv.separateTextures,
-    secure: argv.secure,
     stats: argv.stats,
     name: outputName,
     dracoOptions: dracoOptions

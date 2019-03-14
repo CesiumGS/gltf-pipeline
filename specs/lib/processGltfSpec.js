@@ -74,22 +74,6 @@ describe('processGltf', () => {
         expect(results.separateResources['my-modelFS0.glsl']).toBeDefined();
     });
 
-    it('rejects when loading resource outside of the resource directory when secure is true', async () => {
-        const gltf = fsExtra.readJsonSync(gltfSeparatePath);
-        const options = {
-            secure: true
-        };
-        gltf.images[0].uri = '../cesium.png';
-
-        let thrownError;
-        try {
-            await processGltf(gltf, options);
-        } catch (e) {
-            thrownError = e;
-        }
-        expect(thrownError).toEqual(new RuntimeError('glTF model references separate files but no resourceDirectory is supplied'));
-    });
-
     it('prints stats', async () => {
         spyOn(console, 'log');
         const gltf = fsExtra.readJsonSync(gltfPath);
