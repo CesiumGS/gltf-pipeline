@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+### 2.1.2 - 2019-03-14
+
+* Fixed reading absolute uris. [#466](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/466)
+
 ### 2.1.1 - 2019-02-11
 
 * Added ability to apply Draco compression to meshes without indices. [#424](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/424)
