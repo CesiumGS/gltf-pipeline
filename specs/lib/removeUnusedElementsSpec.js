@@ -8,9 +8,38 @@ const WebGLConstants = Cesium.WebGLConstants;
 const gltf = {
     nodes: [
         {
+            name: 'skin',
             skin: 0,
             mesh: 0,
             translation: [0.0, 0.0, 0.0]
+        },
+        {
+            name: 'used',
+            mesh: 0,
+            children: [2, 5]
+        },
+        {
+            name: 'unused'
+        },
+        {
+            name: 'nodeWithEmptyMesh',
+            mesh: 1
+        },
+        {
+            name: 'unusedParent',
+            children: [2]
+        },
+        {
+            name: 'camera',
+            camera: 0
+        },
+        {
+            name: 'light',
+            extensions : {
+                KHR_lights_punctual : {
+                    light : 0
+                }
+            }
         }
     ],
     buffers: [
@@ -207,6 +236,7 @@ const gltf = {
     ],
     meshes: [
         {
+            name: 'mesh0',
             primitives: [
                 {
                     attributes: {
@@ -225,9 +255,20 @@ const gltf = {
                         }
                     ],
                     indices: 7,
-                    mode: WebGLConstants.TRIANGLES
+                    mode: WebGLConstants.TRIANGLES,
+                    material: 1
                 }
             ]
+        },
+        {
+            name: 'mesh1',
+            primitives: []
+        }
+    ],
+    cameras: [
+        {
+            name: 'cam',
+            type: 'perspective'
         }
     ],
     skins: [
@@ -268,39 +309,98 @@ const gltf = {
             bufferView: 11,
             mimeType: 'image/png'
         }
+    ],
+    extensions: {
+        KHR_lights_punctual : {
+            lights: [
+                {
+                    name: 'sun',
+                    type: 'directional'
+                }
+            ]
+        }
+    },
+    materials: [
+        {
+            name: 'unused'
+        },
+        {
+            name: 'used'
+        }
+    ],
+    scenes: [
+        {
+            nodes: [2, 3]
+        }
     ]
 };
 
 describe('removeUnusedElements', () => {
-    it('removes unused accessors, bufferViews, and buffers', () => {
-        delete gltf.animations;
-        delete gltf.skins;
-        gltf.meshes[0].primitives[0].targets.splice(0, 1);
-        gltf.images.splice(1, 2);
-        removeUnusedElements(gltf);
+    delete gltf.animations;
+    delete gltf.skins;
+    gltf.meshes[0].primitives[0].targets.splice(0, 1);
+    gltf.images.splice(1, 2);
+    removeUnusedElements(gltf);
 
-        const remainingAccessorNames = ['positions', 'normals', 'texcoords', 'positions-target1', 'normals-target1', 'indices'];
-        const remainingAcessorBufferViewIds = [0, 1, 2, 3, 4, 5];
-        const remainingBufferViewNames = ['positions', 'normals', 'texcoords', 'positions-target1', 'normals-target1', 'indices', 'image0'];
-        const remainingBufferViewBufferIds = [0, 0, 0, 0, 0, 0, 1];
-        const remainingBufferNames = ['mesh', 'image01'];
+    const remainingAccessorNames = ['positions', 'normals', 'texcoords', 'positions-target1', 'normals-target1', 'indices'];
+    const remainingAcessorBufferViewIds = [0, 1, 2, 3, 4, 5];
+    const remainingBufferViewNames = ['positions', 'normals', 'texcoords', 'positions-target1', 'normals-target1', 'indices', 'image0'];
+    const remainingBufferViewBufferIds = [0, 0, 0, 0, 0, 0, 1];
 
+    const remaining = {
+        nodes: ['skin', 'used', 'camera', 'light'],
+        cameras: ['cam'],
+        meshes: ['mesh0'],
+        buffers: ['mesh', 'image01'],
+        lights: ['sun'],
+        materials: ['used']
+    };
+
+    it('correctly removes/keeps accessors', () => {
         expect(gltf.accessors.length).toBe(remainingAccessorNames.length);
-        expect(gltf.bufferViews.length).toBe(remainingBufferViewNames.length);
-        expect(gltf.buffers.length).toBe(remainingBufferNames.length);
 
         ForEach.accessor(gltf, (accessor, index) => {
             expect(accessor.name).toBe(remainingAccessorNames[index]);
             expect(accessor.bufferView).toBe(remainingAcessorBufferViewIds[index]);
         });
+    });
+
+    it('correctly removes/keeps bufferViews', () => {
+        expect(gltf.bufferViews.length).toBe(remainingBufferViewNames.length);
 
         ForEach.bufferView(gltf, (bufferView, index) => {
             expect(bufferView.name).toBe(remainingBufferViewNames[index]);
             expect(bufferView.buffer).toBe(remainingBufferViewBufferIds[index]);
         });
+    });
 
-        ForEach.buffer(gltf, (buffer, index) => {
-            expect(buffer.name).toBe(remainingBufferNames[index]);
+    ['materials', 'nodes', 'cameras', 'meshes', 'buffers'].forEach(k => {
+        it('correctly removes/keeps ' + k, () => {
+            expect(Object.keys(gltf)).toContain(k);
+            expect(gltf[k].length).toBe(remaining[k].length);
+
+            /* Check that at least the remaining elements are present */
+            ForEach.topLevel(gltf, k, (element, index) => {
+                expect(remaining[k]).toContain(element.name);
+            });
+
+            /* Check that all the elements should actually remain */
+            remaining[k].forEach((name, index) => {
+                expect(gltf[k].map(x => x.name)).toContain(name);
+            });
+        });
+    });
+
+    it('correctly removes/keeps lights', () => {
+        expect(Object.keys(gltf)).toContain('extensions');
+        expect(Object.keys(gltf.extensions)).toContain('KHR_lights_punctual');
+        expect(Object.keys(gltf.extensions.KHR_lights_punctual)).toContain('lights');
+
+        expect(gltf.extensions.KHR_lights_punctual.lights.length)
+            .toBe(remaining.lights.length);
+
+        gltf.extensions.KHR_lights_punctual.lights.forEach((element, index) => {
+            expect(remaining['lights']).toContain(element.name);
         });
     });
 });
