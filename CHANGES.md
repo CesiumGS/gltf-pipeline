@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+### HEAD
+
+* Added removal of unused materials, nodes and meshes. [#465](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/465)
+* Added `keepUnusedElements` flag to keep unused materials, nodes and meshes. [#465](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/465)
+
 ### 2.1.3 - 2019-03-21
 
 * Fixed a crash when saving separate resources that would exceed the Node buffer size limit. [#468](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/468)
