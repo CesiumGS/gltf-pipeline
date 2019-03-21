@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+### 2.1.3 - 2019-03-??
+
+* Fixed a crash when saving separate resources that would exceed the Node buffer size limit. [#468](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/468)
+
 ### 2.1.2 - 2019-03-14
 
 * Fixed reading absolute uris. [#466](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/466)
