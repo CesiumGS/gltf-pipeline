@@ -46,7 +46,7 @@
     "jasmine-spec-reporter": "^4.2.1",
     "jsdoc": "^3.5.5",
     "nyc": "^13.3.0",
-    "open": "^0.0.5",
+    "open": "^6.0.0",
     "requirejs": "^2.3.6"
   },
   "scripts": {
