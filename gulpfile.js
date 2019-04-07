@@ -118,6 +118,8 @@ function amdify(source, subDependencyMapping) {
     let requirePath;
 
     source = source.replace(/\r\n/g, '\n');
+    source = source.replace(/\b(let|const)\b/g, 'var');
+
     let outputSource = source;
 
     // find module exports
