@@ -12,6 +12,7 @@ const CesiumMath = Cesium.Math;
 const gltfPath = 'specs/data/2.0/box-techniques-embedded/box-techniques-embedded.gltf';
 const gltfWebpPath = 'specs/data/2.0/extensions/EXT_texture_webp/box-textured-embedded/box-textured-embedded.gltf';
 const gltfWebpSeparatePath = 'specs/data/2.0/extensions/EXT_texture_webp/box-textured-separate/box-textured-with-fallback.gltf';
+const gltfMultiBufferViewRefPath = 'specs/data/2.0/multiple-references/box-multi-bufferview.gltf';
 let gltf;
 let gltfWebp;
 let gltfWebpSeparate;
@@ -180,5 +181,14 @@ describe('writeResources', () => {
         writeResources(gltfWebpSeparate);
         // There should be a new bufferView for the WebP, and one for the fallback image.
         expect(gltfWebpSeparate.bufferViews.length).toBe(originalBufferViewsLength + 2);
+    });
+
+    it('does not duplicate multiple references to the same buffer view', async () => {
+        const gltfMultiBufferViewRef = fsExtra.readJsonSync(gltfMultiBufferViewRefPath);
+        await readResources(gltfMultiBufferViewRef);
+        const originalBufferViewsLength = gltfMultiBufferViewRef.bufferViews.length;
+        writeResources(gltfMultiBufferViewRef);
+        expect(gltfMultiBufferViewRef.bufferViews.length).toBe(originalBufferViewsLength);
+        expect(gltfMultiBufferViewRef.images[0].bufferView).toBe(gltfMultiBufferViewRef.images[1].bufferView);
     });
 });
