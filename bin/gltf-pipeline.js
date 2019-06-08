@@ -69,6 +69,11 @@ const argv = yargs
             type: 'boolean',
             default: defaults.stats
         },
+        keepUnusedElements: {
+            describe: 'Keep unused materials, nodes and meshes.',
+            type: 'boolean',
+            default: defaults.keepUnusedElements
+        },
         'draco.compressMeshes': {
             alias: 'd',
             describe: 'Compress the meshes using Draco. Adds the KHR_draco_mesh_compression extension.',
