@@ -379,13 +379,13 @@ describe('removeUnusedElements', () => {
             expect(Object.keys(gltf)).toContain(k);
             expect(gltf[k].length).toBe(remaining[k].length);
 
-            /* Check that at least the remaining elements are present */
-            ForEach.topLevel(gltf, k, (element, index) => {
+            // Check that at least the remaining elements are present
+            ForEach.topLevel(gltf, k, (element) => {
                 expect(remaining[k]).toContain(element.name);
             });
 
-            /* Check that all the elements should actually remain */
-            remaining[k].forEach((name, index) => {
+            // Check that all the elements should actually remain
+            remaining[k].forEach((name) => {
                 expect(gltf[k].map(x => x.name)).toContain(name);
             });
         });
