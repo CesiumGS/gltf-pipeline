@@ -39,7 +39,7 @@
     "cloc": "^2.4.0",
     "coveralls": "^3.0.2",
     "dependency-tree": "^7.0.2",
-    "eslint": "^5.13.0",
+    "eslint": "^6.0.0",
     "eslint-config-cesium": "^7.0.0",
     "gulp": "^4.0.0",
     "jasmine": "^3.3.1",
