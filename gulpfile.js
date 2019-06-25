@@ -150,7 +150,7 @@ function amdify(source, subDependencyMapping) {
     const subdependencyMapping = {};
     const removeRequireMapping = [];
     for (requireVariable in requireMapping) {
-        if (requireMapping.hasOwnProperty(requireVariable)) {
+        if (Object.prototype.hasOwnProperty.call(requireMapping, requireVariable)) {
             requirePath = requireMapping[requireVariable];
             const findSubdependencyString = 'var\\s+(.+?)\\s*?=\\s*?' + requireVariable + '\\.(.+?);\n';
             const findSubdependencyRegex = new RegExp(findSubdependencyString, 'g');
@@ -178,7 +178,7 @@ function amdify(source, subDependencyMapping) {
     }
     // join sub-dependencies with requireMapping
     for (const subdependencyVariable in subdependencyMapping) {
-        if (subdependencyMapping.hasOwnProperty(subdependencyVariable)) {
+        if (Object.prototype.hasOwnProperty.call(subdependencyMapping, subdependencyVariable)) {
             requireMapping[subdependencyVariable] = subdependencyMapping[subdependencyVariable];
         }
     }
@@ -189,7 +189,7 @@ function amdify(source, subDependencyMapping) {
     const variables = [];
     const paths = [];
     for (const variable in requireMapping) {
-        if (requireMapping.hasOwnProperty(variable)) {
+        if (Object.prototype.hasOwnProperty.call(requireMapping, variable)) {
             variables.push(variable);
             paths.push(requireMapping[variable]);
         }
