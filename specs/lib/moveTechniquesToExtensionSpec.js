@@ -100,6 +100,17 @@ describe('moveTechniquesToExtension', () => {
                 },
                 technique1: {
                     program: 'program_1'
+                },
+                technique2: {
+                    parameters: {
+                        diffuse: {
+                            type: WebGLConstants.FLOAT_VEC4
+                        }
+                    },
+                    program: 'program_0',
+                    uniforms: {
+                        u_diffuse: 'diffuse'
+                    }
                 }
             },
             materials: [
@@ -116,6 +127,18 @@ describe('moveTechniquesToExtension', () => {
                             1
                         ]
                     }
+                },
+                {
+                    name: 'Color',
+                    technique: 'technique2',
+                    values: {
+                        diffuse: [
+                            0.2,
+                            0.2,
+                            0.2,
+                            1
+                        ]
+                    }
                 }
             ]
         };
@@ -124,7 +147,7 @@ describe('moveTechniquesToExtension', () => {
         expect(gltfWithTechniquesWebgl.extensions).toBeDefined();
         const techniques = gltfWithTechniquesWebgl.extensions.KHR_techniques_webgl;
         expect(techniques).toBeDefined();
-        expect(techniques.techniques.length).toBe(2);
+        expect(techniques.techniques.length).toBe(3);
 
         const technique = techniques.techniques[0];
         const attributes = technique.attributes;
@@ -158,6 +181,7 @@ describe('moveTechniquesToExtension', () => {
         expect(materialTechniques).toBeDefined();
         expect(materialTechniques.technique).toBe(0);
         expect(materialTechniques.values.u_shininess).toBe(256);
+        expect(materialTechniques.values.u_diffuse).toBe('texture_Image0001');
 
         expect(material.technique).toBeUndefined();
         expect(material.values).toBeUndefined();
@@ -166,5 +190,9 @@ describe('moveTechniquesToExtension', () => {
         const program2 = techniques.programs[technique2.program];
         expect(program2.vertexShader).toBe(program.vertexShader);
         expect(program2.fragmentShader).not.toBe(program.fragmentShader);
+
+        const technique3 = techniques.techniques[2];
+        expect(technique3.uniforms.u_diffuse.type).toBe(WebGLConstants.FLOAT_VEC4);
+        expect(gltf.materials[1].extensions.KHR_techniques_webgl.values.u_diffuse).toEqual([0.2, 0.2, 0.2, 1.0]);
     });
 });
