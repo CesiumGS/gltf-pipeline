@@ -183,8 +183,6 @@ function amdify(source, subDependencyMapping) {
         }
     }
     // amdify source
-    // indent
-    outputSource = outputSource.replace(/\n/g, '\n    ');
     outputSource = outputSource.replace(/'use strict';/g, '');
 
     // wrap define header
@@ -200,7 +198,7 @@ function amdify(source, subDependencyMapping) {
     }
     let defineFooter = '\n';
     if (defined(returnValue)) {
-        defineFooter = '\n    export default ' + returnValue + ';\n';
+        defineFooter = '\nexport default ' + returnValue + ';\n';
     }
     outputSource = defineHeader + outputSource + defineFooter;
     // remove repeat newlines
