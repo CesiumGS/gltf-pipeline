@@ -11,6 +11,7 @@ const jpgData = dataUriToBuffer('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABI
 const bmpData = dataUriToBuffer('data:image/bmp;base64,Qk1mAAAAAAAAADYAAAAoAAAABAAAAAQAAAABABgAAAAAADAAAAATCwAAEwsAAAAAAAAAAAAA////////////////////////////////////////////////////////////////');
 const ktxData = dataUriToBuffer('data:image/ktx:base64,q0tUWCAxMbsNChoKAQIDBAEUAAABAAAACBkAAFiAAAAIGQAABAAAAAQAAAAAAAAAAAAAAAEAAAABAAAAIAAAABsAAABLVFhPcmllbnRhdGlvbgBTPXIsVD1kLFI9aQAAQAAAAP////////////////////////////////////////////////////////////////////////////////////8=');
 const crnData = dataUriToBuffer('data:image/crn:base64,SHgAUktGAAAAlds6AAQABAMBAAAAAAAAAAAAAAAAAAAAAABSAAAXAAEAAGkAAAwAAQAAAAAAAAAAAAAAAAAAAAAAHQAAdQAAAJIAAACTAAAAlACCYIAAAAAAABkwBAmCAAAAAAAAbRYAAGZggAAAAAAAGNAAAAZgAAAAAAAAEAAzAAAAAAAAAIABmAAAAAAAAAQAAAA=');
+const basisData = dataUriToBuffer('data:image/basis;base64,c0ITAE0AAA9wAAAAqewBAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAAAQBkAAAAKAAAAQCMAAAABQAAkQAAACsAAABNAAAAAAAAAAAAAAAAAAAAAAEAAQABAAEAvAAAAAEAAACPUwHABAAAAAAAAAICmAgAAAAAAEASBAATAAAAAAAAiABgAgAAAAAAABFUVVVVBQDBRAAAAAAAAPJfLQCYAAAAAAAAQAgAEwACAAAAAIgBwAQAAAAAAAACCAAA');
 const textData = dataUriToBuffer('data:text/plain;charset=utf-8,randomtext');
 
 describe('getImageExtension', () => {
@@ -21,6 +22,7 @@ describe('getImageExtension', () => {
         expect(getImageExtension(bmpData)).toBe('.bmp');
         expect(getImageExtension(ktxData)).toBe('.ktx');
         expect(getImageExtension(crnData)).toBe('.crn');
+        expect(getImageExtension(basisData)).toBe('.basis');
     });
 
     it('throws error if buffer does not contain image data', () => {
