@@ -1,11 +1,14 @@
 Change Log
 ==========
 
-### 2.2.0 - 2019-??-??
+### 2.?.? - 2019-??-??
+
+* Fixed writing duplicate resource that are referenced multiple times. [#483](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/483)
+
+### 2.1.4 - 2019-10-04
 
 * Added removal of unused materials, nodes and meshes. [#465](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/465)
 * Added `keepUnusedElements` flag to keep unused materials, nodes and meshes. [#465](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/465)
-* Fixed writing duplicate resource that are referenced multiple times. [#483](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/483)
 
 ### 2.1.3 - 2019-03-21
 

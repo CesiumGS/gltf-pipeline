@@ -150,7 +150,7 @@ function amdify(source, subDependencyMapping) {
     const subdependencyMapping = {};
     const removeRequireMapping = [];
     for (requireVariable in requireMapping) {
-        if (requireMapping.hasOwnProperty(requireVariable)) {
+        if (Object.prototype.hasOwnProperty.call(requireMapping, requireVariable)) {
             requirePath = requireMapping[requireVariable];
             const findSubdependencyString = 'var\\s+(.+?)\\s*?=\\s*?' + requireVariable + '\\.(.+?);\n';
             const findSubdependencyRegex = new RegExp(findSubdependencyString, 'g');
@@ -178,35 +178,27 @@ function amdify(source, subDependencyMapping) {
     }
     // join sub-dependencies with requireMapping
     for (const subdependencyVariable in subdependencyMapping) {
-        if (subdependencyMapping.hasOwnProperty(subdependencyVariable)) {
+        if (Object.prototype.hasOwnProperty.call(subdependencyMapping, subdependencyVariable)) {
             requireMapping[subdependencyVariable] = subdependencyMapping[subdependencyVariable];
         }
     }
     // amdify source
-    // indent
-    outputSource = outputSource.replace(/\n/g, '\n    ');
+    outputSource = outputSource.replace(/'use strict';/g, '');
+
     // wrap define header
-    const variables = [];
-    const paths = [];
+    const lines = [];
     for (const variable in requireMapping) {
-        if (requireMapping.hasOwnProperty(variable)) {
-            variables.push(variable);
-            paths.push(requireMapping[variable]);
+        if (Object.prototype.hasOwnProperty.call(requireMapping, variable)) {
+            lines.push('import ' + variable + ' from \'' + requireMapping[variable] + '\'');
         }
     }
-    let defineHeader = 'define([], function() {\n    ';
-    if (paths.length > 0) {
-        const definePathsHeader = '\'' + paths.join('\',\n        \'') + '\'';
-        const defineVariablesHeader = variables.join(',\n        ');
-        defineHeader =
-            'define([\n' +
-            '        ' + definePathsHeader + '\n' +
-            '    ], function(\n' +
-            '        ' + defineVariablesHeader + ') {\n    ';
+    let defineHeader = '';
+    if (lines.length > 0) {
+        defineHeader = lines.join('\n') + '\n';
     }
-    let defineFooter = '\n});\n';
+    let defineFooter = '\n';
     if (defined(returnValue)) {
-        defineFooter = '\n    return ' + returnValue + ';' + defineFooter;
+        defineFooter = '\nexport default ' + returnValue + ';\n';
     }
     outputSource = defineHeader + outputSource + defineFooter;
     // remove repeat newlines

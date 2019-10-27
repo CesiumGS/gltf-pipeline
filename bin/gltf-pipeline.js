@@ -187,7 +187,7 @@ const run = inputIsBinary ? (outputIsBinary ? processGlb : glbToGltf) : (outputI
 function saveSeparateResources(separateResources) {
     const resourcePromises = [];
     for (const relativePath in separateResources) {
-        if (separateResources.hasOwnProperty(relativePath)) {
+        if (Object.prototype.hasOwnProperty.call(separateResources, relativePath)) {
             const resource = separateResources[relativePath];
             const resourcePath = path.join(outputDirectory, relativePath);
             resourcePromises.push(fsExtra.outputFile(resourcePath, resource));
