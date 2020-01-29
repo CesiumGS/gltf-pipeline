@@ -40,7 +40,7 @@
     "coveralls": "^3.0.4",
     "dependency-tree": "^7.0.2",
     "eslint": "^6.0.0",
-    "eslint-config-cesium": "^7.0.0",
+    "eslint-config-cesium": "^8.0.0",
     "gulp": "^4.0.2",
     "jasmine": "^3.4.0",
     "jasmine-spec-reporter": "^4.2.1",
