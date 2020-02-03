@@ -298,8 +298,12 @@ const gltf = {
     ],
     textures: [
         {
-            'sampler': 0,
-            'source': 1
+            name: 'texture',
+            sampler: 0,
+            source: 1
+        },
+        {
+            name: 'unusedTexture'
         }
     ],
     images: [
@@ -313,6 +317,11 @@ const gltf = {
         },
         {
             bufferView: 11,
+            mimeType: 'image/png'
+        },
+        {
+            name: 'image',
+            bufferView: 12,
             mimeType: 'image/png'
         }
     ],
@@ -328,6 +337,7 @@ const gltf = {
     },
     samplers: [
         {
+            name: 'sampler',
             magFilter: 9729,
             minFilter: 9987,
             wrapS: 33648,
@@ -378,7 +388,10 @@ describe('removeUnusedElements', () => {
         meshes: ['mesh0'],
         buffers: ['mesh', 'image01'],
         lights: ['sun'],
-        materials: ['used']
+        materials: ['used'],
+        textures: ['texture'],
+        images: ['image'],
+        samplers: ['sampler']
     };
 
     it('correctly removes/keeps accessors', () => {
@@ -399,7 +412,7 @@ describe('removeUnusedElements', () => {
         });
     });
 
-    ['materials', 'nodes', 'cameras', 'meshes', 'buffers'].forEach(k => {
+    ['materials', 'nodes', 'cameras', 'meshes', 'buffers', 'textures', 'images', 'samplers'].forEach(k => {
         it('correctly removes/keeps ' + k, () => {
             expect(Object.keys(gltf)).toContain(k);
             expect(gltf[k].length).toBe(remaining[k].length);
@@ -414,18 +427,6 @@ describe('removeUnusedElements', () => {
                 expect(gltf[k].map(x => x.name)).toContain(name);
             });
         });
-    });
-
-    it('correctly removes/keeps textures', () => {
-        expect(gltf.textures.length).toBe(1);
-    });
-
-    it('correctly removes/keeps samplers', () => {
-        expect(gltf.samplers.length).toBe(1);
-    });
-
-    it('correctly removes/keeps images', () => {
-        expect(gltf.samplers.length).toBe(1);
     });
 
     it('correctly removes/keeps lights', () => {
