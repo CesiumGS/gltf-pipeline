@@ -296,6 +296,12 @@ const gltf = {
             ]
         }
     ],
+    textures: [
+        {
+            'sampler': 0,
+            'source': 1
+        }
+    ],
     images: [
         {
             bufferView: 9,
@@ -320,12 +326,31 @@ const gltf = {
             ]
         }
     },
+    samplers: [
+        {
+            magFilter: 9729,
+            minFilter: 9987,
+            wrapS: 33648,
+            wrapt: 33648
+        },
+        {
+            magFilter: 9729,
+            minFilter: 9987,
+            wrapS: 33648,
+            wrapt: 33648
+        }
+    ],
     materials: [
         {
             name: 'unused'
         },
         {
-            name: 'used'
+            name: 'used',
+            pbrMetallicRoughness: {
+                baseColorTexture: {
+                    index: 0
+                }
+            }
         }
     ],
     scenes: [
@@ -389,6 +414,18 @@ describe('removeUnusedElements', () => {
                 expect(gltf[k].map(x => x.name)).toContain(name);
             });
         });
+    });
+
+    it('correctly removes/keeps textures', () => {
+        expect(gltf.textures.length).toBe(1);
+    });
+
+    it('correctly removes/keeps samplers', () => {
+        expect(gltf.samplers.length).toBe(1);
+    });
+
+    it('correctly removes/keeps images', () => {
+        expect(gltf.samplers.length).toBe(1);
     });
 
     it('correctly removes/keeps lights', () => {
