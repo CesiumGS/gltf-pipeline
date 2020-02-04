@@ -5,7 +5,7 @@ os:
 language: node_js
 
 node_js:
-  - "8"
+  - "10"
 
 script:
   - npm run eslint
@@ -14,4 +14,4 @@ script:
 after_success:
 ## We only need to run coveralls for one node version (doesn't matter which one).
 ## We also ignore publishing failures, since restarting an existing travis build would otherwise break.
-  - if node --version | grep -q ^v8 ; npm run coverage && npm run coveralls; fi
+  - npm run coverage && npm run coveralls;

@@ -158,7 +158,7 @@ Some functionality of gltf-pipeline is used by Cesium as a third party library. 
 npm run build-cesium
 ```
 
-This will output a portion of the gltf-pipeline code into the `dist/cesium` folder, reformatted into AMD style for use with RequireJS and Cesium in the browser.
+This will output a portion of the gltf-pipeline code into the `dist/cesium` folder for use with Cesium in the browser.
 
 ### Running Test Coverage
 
