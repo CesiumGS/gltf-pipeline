@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+### 2.1.6 - 2020-02-04
+
+* Fixed a mistake in the 2.1.5 release where the changes from [#516](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/516) were accidentally removed.
+
 ### 2.1.5 - 2020-02-04
 
 * Added removal of unused textures, samplers, and images. [#516](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/516)
