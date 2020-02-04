@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+### 2.1.5 - 2020-02-04
+
+* Added removal of unused textures, samplers, and images. [#516](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/516)
+
 ### 2.1.4 - 2019-10-04
 
 * Added removal of unused materials, nodes and meshes. [#465](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/465)
