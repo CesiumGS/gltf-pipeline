@@ -1,14 +1,14 @@
 # glTF Pipeline
 
-[![License](https://img.shields.io/:license-apache-blue.svg)](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/blob/master/LICENSE.md)
-[![Build Status](https://travis-ci.org/AnalyticalGraphicsInc/gltf-pipeline.svg?branch=master)](https://travis-ci.org/AnalyticalGraphicsInc/gltf-pipeline)
-[![Coverage Status](https://coveralls.io/repos/AnalyticalGraphicsInc/gltf-pipeline/badge.svg?branch=master)](https://coveralls.io/r/AnalyticalGraphicsInc/gltf-pipeline?branch=master) [![Greenkeeper badge](https://badges.greenkeeper.io/AnalyticalGraphicsInc/gltf-pipeline.svg)](https://greenkeeper.io/)
+[![License](https://img.shields.io/:license-apache-blue.svg)](https://github.com/CesiumGS/gltf-pipeline/blob/master/LICENSE.md)
+[![Build Status](https://travis-ci.org/CesiumGS/gltf-pipeline.svg?branch=master)](https://travis-ci.org/CesiumGS/gltf-pipeline)
+[![Coverage Status](https://coveralls.io/repos/CesiumGS/gltf-pipeline/badge.svg?branch=master)](https://coveralls.io/r/CesiumGS/gltf-pipeline?branch=master) [![Greenkeeper badge](https://badges.greenkeeper.io/CesiumGS/gltf-pipeline.svg)](https://greenkeeper.io/)
 
 <p align="center">
 <a href="https://www.khronos.org/gltf"><img src="doc/gltf.png" onerror="this.src='gltf.png'"/></a>
 </p>
 
-Content pipeline tools for optimizing [glTF](https://www.khronos.org/gltf) assets by [Richard Lee](http://leerichard.net/) and the [Cesium team](http://cesiumjs.org/).
+Content pipeline tools for optimizing [glTF](https://www.khronos.org/gltf) assets by [Richard Lee](http://leerichard.net/) and the [Cesium team](https://cesium.com/).
 
 Supports common operations including:
 * Converting glTF to glb (and reverse)
@@ -150,15 +150,15 @@ To run ESLint automatically when a file is saved, run the following and leave it
 npm run eslint-watch
 ```
 
-### Building for Cesium integration
+### Building for CesiumJS integration
 
-Some functionality of gltf-pipeline is used by Cesium as a third party library. The necessary files can be generated using:
+Some functionality of gltf-pipeline is used by CesiumJS as a third party library. The necessary files can be generated using:
 
 ```
 npm run build-cesium
 ```
 
-This will output a portion of the gltf-pipeline code into the `dist/cesium` folder for use with Cesium in the browser.
+This will output a portion of the gltf-pipeline code into the `dist/cesium` folder for use with CesiumJS in the browser.
 
 ### Running Test Coverage
 
@@ -181,4 +181,4 @@ The documentation will be placed in the `doc` folder.
 
 ## Contributions
 
-Pull requests are appreciated!  Please use the same [Contributor License Agreement (CLA)](https://github.com/AnalyticalGraphicsInc/cesium/blob/master/CONTRIBUTING.md) and [Coding Guide](https://github.com/AnalyticalGraphicsInc/cesium/blob/master/Documentation/Contributors/CodingGuide/README.md) used for [Cesium](http://cesiumjs.org/).
+Pull requests are appreciated!  Please use the same [Contributor License Agreement (CLA)](https://github.com/CesiumGS/cesium/blob/master/CONTRIBUTING.md) and [Coding Guide](https://github.com/CesiumGS/cesium/blob/master/Documentation/Contributors/CodingGuide/README.md) used for [Cesium](https://github.com/CesiumGS/cesium).

@@ -5,21 +5,21 @@
   "license": "Apache-2.0",
   "contributors": [
     {
-      "name": "Richard Lee, Analytical Graphics, Inc., and Contributors",
-      "url": "https://github.com/AnalyticalGraphicsInc/gltf-pipeline/graphs/contributors"
+      "name": "Richard Lee, Cesium GS, Inc., and Contributors",
+      "url": "https://github.com/CesiumGS/gltf-pipeline/graphs/contributors"
     }
   ],
   "keywords": [
     "glTF",
     "WebGL"
   ],
-  "homepage": "https://github.com/AnalyticalGraphicsInc/gltf-pipeline",
+  "homepage": "https://github.com/CesiumGS/gltf-pipeline",
   "repository": {
     "type": "git",
-    "url": "git@github.com:AnalyticalGraphicsInc/gltf-pipeline.git"
+    "url": "git@github.com:CesiumGS/gltf-pipeline.git"
   },
   "bugs": {
-    "url": "https://github.com/AnalyticalGraphicsInc/gltf-pipeline/issues"
+    "url": "https://github.com/CesiumGS/gltf-pipeline/issues"
   },
   "main": "index.js",
   "engines": {
