@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+### 2.1.7 - 2020-03-02
+
+* Removed usage of deprecated function `Cesium.isArray`. [#526](https://github.com/CesiumGS/gltf-pipeline/pull/526)
+
 ### 2.1.6 - 2020-02-04
 
 * Fixed a mistake in the 2.1.5 release where the changes from [#516](https://github.com/CesiumGS/gltf-pipeline/pull/516) were accidentally removed.
