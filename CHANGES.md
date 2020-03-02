@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-### 1.0.7 - 2018-11-02
+### 1.0.7 - 2020-03-02
 * Fixed a bug where primitives with different types of attributes where being assigned the same material when converting KHR_materials_common to shaders and techniques.
 
 ### 1.0.6 - 2018-08-14
