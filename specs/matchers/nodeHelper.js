@@ -10,7 +10,7 @@ var expectPromise = require('./expectPromise');
 requirejs.config({
     baseUrl: path.join(__dirname, '../..'),
     paths: {
-        'Cesium': 'node_modules/cesium/source'
+        'Cesium': 'node_modules/cesium/Source'
     },
     nodeRequire: require
 });
