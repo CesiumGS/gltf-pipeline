@@ -168,6 +168,7 @@ const options = {
     separate: argv.separate,
     separateTextures: argv.separateTextures,
     stats: argv.stats,
+    keepUnusedElements: argv.keepUnusedElements,
     name: outputName,
     dracoOptions: dracoOptions
 };

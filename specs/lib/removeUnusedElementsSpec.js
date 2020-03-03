@@ -296,6 +296,16 @@ const gltf = {
             ]
         }
     ],
+    textures: [
+        {
+            name: 'texture',
+            sampler: 0,
+            source: 1
+        },
+        {
+            name: 'unusedTexture'
+        }
+    ],
     images: [
         {
             bufferView: 9,
@@ -307,6 +317,11 @@ const gltf = {
         },
         {
             bufferView: 11,
+            mimeType: 'image/png'
+        },
+        {
+            name: 'image',
+            bufferView: 12,
             mimeType: 'image/png'
         }
     ],
@@ -320,12 +335,32 @@ const gltf = {
             ]
         }
     },
+    samplers: [
+        {
+            name: 'sampler',
+            magFilter: 9729,
+            minFilter: 9987,
+            wrapS: 33648,
+            wrapt: 33648
+        },
+        {
+            magFilter: 9729,
+            minFilter: 9987,
+            wrapS: 33648,
+            wrapt: 33648
+        }
+    ],
     materials: [
         {
             name: 'unused'
         },
         {
-            name: 'used'
+            name: 'used',
+            pbrMetallicRoughness: {
+                baseColorTexture: {
+                    index: 0
+                }
+            }
         }
     ],
     scenes: [
@@ -353,7 +388,10 @@ describe('removeUnusedElements', () => {
         meshes: ['mesh0'],
         buffers: ['mesh', 'image01'],
         lights: ['sun'],
-        materials: ['used']
+        materials: ['used'],
+        textures: ['texture'],
+        images: ['image'],
+        samplers: ['sampler']
     };
 
     it('correctly removes/keeps accessors', () => {
@@ -374,7 +412,7 @@ describe('removeUnusedElements', () => {
         });
     });
 
-    ['materials', 'nodes', 'cameras', 'meshes', 'buffers'].forEach(k => {
+    ['materials', 'nodes', 'cameras', 'meshes', 'buffers', 'textures', 'images', 'samplers'].forEach(k => {
         it('correctly removes/keeps ' + k, () => {
             expect(Object.keys(gltf)).toContain(k);
             expect(gltf[k].length).toBe(remaining[k].length);
@@ -402,5 +440,334 @@ describe('removeUnusedElements', () => {
         gltf.extensions.KHR_lights_punctual.lights.forEach((element, index) => {
             expect(remaining['lights']).toContain(element.name);
         });
+    });
+});
+
+describe('removes unused materials, textures, images, samplers', () => {
+    it('removes unused materials', () => {
+        const gltf = {
+            materials: [
+                {
+                    name: '0'
+                },
+                {
+                    name: '1'
+                },
+                {
+                    name: '2'
+                },
+                {
+                    name: '3'
+                },
+                {
+                    name: '4'
+                },
+                {
+                    name: '5'
+                }
+            ],
+            meshes: [
+                {
+                    primitives: [
+                        {
+                            material: 0
+                        }
+                    ]
+                },
+                {
+                    primitives: [
+                        {
+                            material: 2
+                        },
+                        {
+                            material: 3
+                        }
+                    ]
+                }
+            ]
+        };
+
+        removeUnusedElements(gltf, ['material', 'texture', 'sampler', 'image']);
+
+        expect(gltf.materials.length).toEqual(3);
+        expect(gltf.materials[0].name).toEqual('0');
+        expect(gltf.materials[1].name).toEqual('2');
+        expect(gltf.materials[2].name).toEqual('3');
+        expect(gltf.meshes[0].primitives[0].material).toEqual(0);
+        expect(gltf.meshes[1].primitives[0].material).toEqual(1);
+        expect(gltf.meshes[1].primitives[1].material).toEqual(2);
+    });
+
+    it('removes unused textures', () => {
+        const gltf = {
+            textures: [
+                {
+                    name: '0'
+                },
+                {
+                    name: '1'
+                },
+                {
+                    name: '2'
+                },
+                {
+                    name: '3'
+                },
+                {
+                    name: '4'
+                }
+            ],
+            materials: [
+                {
+                    occlusionTexture: {
+                        index: 0
+                    },
+                    normalTexture: {
+                        index: 2
+                    }
+                },
+                {
+                    extensions: {
+                        KHR_techniques_webgl: {
+                            values: {
+                                diffuse: {
+                                    index: 3
+                                }
+                            }
+                        }
+                    }
+                }
+            ],
+            meshes: [
+                {
+                    primitives: [
+                        {
+                            material: 0
+                        },
+                        {
+                            material: 1
+                        }
+                    ]
+                }
+            ]
+        };
+
+        removeUnusedElements(gltf, ['material', 'texture', 'sampler', 'image']);
+
+        expect(gltf.textures.length).toEqual(3);
+        expect(gltf.textures[0].name).toEqual('0');
+        expect(gltf.textures[1].name).toEqual('2');
+        expect(gltf.textures[2].name).toEqual('3');
+        expect(gltf.materials[0].occlusionTexture.index).toEqual(0);
+        expect(gltf.materials[0].normalTexture.index).toEqual(1);
+        expect(gltf.materials[1].extensions.KHR_techniques_webgl.values.diffuse.index).toEqual(2);
+    });
+
+    it('removes unused images', () => {
+        const gltf = {
+            images: [
+                {
+                    name: '0'
+                },
+                {
+                    name: '1'
+                },
+                {
+                    name: '2'
+                },
+                {
+                    name: '3'
+                },
+                {
+                    name: '4'
+                },
+                {
+                    name: '5'
+                }
+            ],
+            textures: [
+                {
+                    source: 1
+                },
+                {
+                    source: 3
+                },
+                {
+                    extensions: {
+                        EXT_texture_webp: {
+                            source: 5
+                        }
+                    }
+                }
+            ],
+            materials: [
+                {
+                    occlusionTexture: {
+                        index: 0
+                    },
+                    normalTexture: {
+                        index: 1
+                    },
+                    emissiveTexture: {
+                        index: 2
+                    }
+                }
+            ],
+            meshes: [
+                {
+                    primitives: [
+                        {
+                            material: 0
+                        }
+                    ]
+                }
+            ]
+        };
+
+        removeUnusedElements(gltf, ['material', 'texture', 'sampler', 'image']);
+
+        expect(gltf.images.length).toEqual(3);
+        expect(gltf.images[0].name).toEqual('1');
+        expect(gltf.images[1].name).toEqual('3');
+        expect(gltf.images[2].name).toEqual('5');
+        expect(gltf.textures[0].source).toEqual(0);
+        expect(gltf.textures[1].source).toEqual(1);
+        expect(gltf.textures[2].extensions.EXT_texture_webp.source).toEqual(2);
+    });
+
+    it('removes unused samplers', () => {
+        const gltf = {
+            samplers: [
+                {
+                    name: '0'
+                },
+                {
+                    name: '1'
+                },
+                {
+                    name: '2'
+                },
+                {
+                    name: '3'
+                },
+                {
+                    name: '4'
+                }
+            ],
+            textures: [
+                {
+                    sampler: 2
+                },
+                {
+                    sampler: 3
+                },
+                {
+                    // no sampler defined
+                }
+            ],
+            materials: [
+                {
+                    occlusionTexture: {
+                        index: 0
+                    },
+                    normalTexture: {
+                        index: 1
+                    },
+                    emissiveTexture: {
+                        index: 2
+                    }
+                }
+            ],
+            meshes: [
+                {
+                    primitives: [
+                        {
+                            material: 0
+                        }
+                    ]
+                }
+            ]
+        };
+
+        removeUnusedElements(gltf, ['material', 'texture', 'sampler', 'image']);
+
+        expect(gltf.samplers.length).toEqual(2);
+        expect(gltf.samplers[0].name).toEqual('2');
+        expect(gltf.samplers[1].name).toEqual('3');
+        expect(gltf.textures[0].sampler).toEqual(0);
+        expect(gltf.textures[1].sampler).toEqual(1);
+        expect(gltf.textures[2].sampler).toBeUndefined();
+    });
+
+    it('removed elements propagate', () => {
+        const gltf = {
+            samplers: [
+                {
+                    name: 'sampler0'
+                },
+                {
+                    name: 'sampler1'
+                }
+            ],
+            images: [
+                {
+                    name: 'image0'
+                },
+                {
+                    name: 'image1'
+                }
+            ],
+            textures: [
+                {
+                    name: 'texture0',
+                    source: 0,
+                    sampler: 0
+                },
+                {
+                    name: 'texture1',
+                    source: 1,
+                    sampler: 1
+                }
+            ],
+            materials: [
+                {
+                    name: 'material0',
+                    normalTexture: {
+                        index: 0
+                    }
+                },
+                {
+                    name: 'material1',
+                    normalTexture: {
+                        index: 1
+                    }
+                }
+            ],
+            meshes: [
+                {
+                    primitives: [
+                        {
+                            material: 1
+                        }
+                    ]
+                }
+            ]
+        };
+
+        removeUnusedElements(gltf, ['material', 'texture', 'sampler', 'image']);
+
+        expect(gltf.materials.length).toEqual(1);
+        expect(gltf.textures.length).toEqual(1);
+        expect(gltf.images.length).toEqual(1);
+        expect(gltf.samplers.length).toEqual(1);
+
+        expect(gltf.materials[0].name).toEqual('material1');
+        expect(gltf.textures[0].name).toEqual('texture1');
+        expect(gltf.images[0].name).toEqual('image1');
+        expect(gltf.samplers[0].name).toEqual('sampler1');
+
+        expect(gltf.materials[0].normalTexture.index).toEqual(0);
+        expect(gltf.textures[0].source).toEqual(0);
+        expect(gltf.textures[0].sampler).toEqual(0);
     });
 });
