@@ -5,6 +5,10 @@ Change Log
 
 * Fixed writing duplicate resource that are referenced multiple times. [#483](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/483)
 
+### 2.1.8 - 2020-03-04
+
+* Fixed a bug in `processGltf` and `gltfToGlb` where the user's `options` object was getting modified with internal options. [#528](https://github.com/CesiumGS/gltf-pipeline/pull/528)
+
 ### 2.1.7 - 2020-03-02
 
 * Removed usage of deprecated function `Cesium.isArray`. [#526](https://github.com/CesiumGS/gltf-pipeline/pull/526)
