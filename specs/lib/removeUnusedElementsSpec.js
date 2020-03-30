@@ -441,6 +441,106 @@ describe('removeUnusedElements', () => {
             expect(remaining['lights']).toContain(element.name);
         });
     });
+
+    it('keeps ancestor nodes of used nodes', () => {
+        const gltf = {
+            nodes: [
+                {
+                    name: 'skeleton-root',
+                    skin: 0,
+                    mesh: 0,
+                    translation: [0.0, 0.0, 0.0]
+                },
+                {
+                    name: 'joint-parent',
+                    translation: [0.0, 0.0, 0.0],
+                    children: [2]
+                },
+                {
+                    name: 'joint',
+                    translation: [0.0, 0.0, 0.0]
+                },
+                {
+                    name: 'unused'
+                }
+            ],
+            buffers: [
+                {
+                    name: 'mesh',
+                    byteLength: 246,
+                    uri: 'data0.bin'
+                },
+                {
+                    name: 'other',
+                    byteLength: 80,
+                    uri: 'data1.bin'
+                }
+            ],
+            bufferViews: [
+                {
+                    name: 'positions',
+                    buffer: 0,
+                    byteOffset: 0,
+                    byteLength: 36
+                },
+                {
+                    name: 'indices',
+                    buffer: 0,
+                    byteOffset: 240,
+                    byteLength: 6
+                }
+            ],
+            accessors: [
+                {
+                    name: 'positions',
+                    bufferView: 0,
+                    byteOffset: 0,
+                    componentType: WebGLConstants.FLOAT,
+                    count: 3,
+                    type: 'VEC3',
+                    min: [-1.0, -1.0, -1.0],
+                    max: [1.0, 1.0, 1.0]
+                },
+                {
+                    name: 'indices',
+                    bufferView: 7,
+                    byteOffset: 240,
+                    componentType: WebGLConstants.UNSIGNED_SHORT,
+                    count: 3,
+                    type: 'SCALAR'
+                }
+            ],
+            meshes: [
+                {
+                    name: 'mesh0',
+                    primitives: [
+                        {
+                            attributes: {
+                                POSITION: 0
+                            },
+                            indices: 1,
+                            mode: WebGLConstants.TRIANGLES
+                        }
+                    ]
+                }
+            ],
+            skins: [
+                {
+                    skeleton: 0,
+                    joints: [0, 2]
+                }
+            ],
+            scenes: [
+                {
+                    nodes: [0]
+                }
+            ]
+        };
+
+        removeUnusedElements(gltf);
+
+        expect(gltf.nodes.length).toEqual(3);
+    });
 });
 
 describe('removes unused materials, textures, images, samplers', () => {
