@@ -12,20 +12,30 @@ const CesiumMath = Cesium.Math;
 const gltfPath = 'specs/data/2.0/box-techniques-embedded/box-techniques-embedded.gltf';
 const gltfWebpPath = 'specs/data/2.0/extensions/EXT_texture_webp/box-textured-embedded/box-textured-embedded.gltf';
 const gltfWebpSeparatePath = 'specs/data/2.0/extensions/EXT_texture_webp/box-textured-separate/box-textured-with-fallback.gltf';
+const gltfSharedImageReferencesPath = 'specs/data/2.0/box-shared-image-references/box-shared-image-references.gltf';
+const gltfSharedImageReferencesSeparatePath = 'specs/data/2.0/box-shared-image-references-separate/box-shared-image-references-separate.gltf';
 let gltf;
 let gltfWebp;
 let gltfWebpSeparate;
+let gltfSharedImageReferences;
+let gltfSharedImageReferencesSeparate;
 
 describe('writeResources', () => {
     beforeEach(async () => {
         gltf = fsExtra.readJsonSync(gltfPath);
         gltfWebp = fsExtra.readJsonSync(gltfWebpPath);
         gltfWebpSeparate = fsExtra.readJsonSync(gltfWebpSeparatePath);
+        gltfSharedImageReferences = fsExtra.readJsonSync(gltfSharedImageReferencesPath);
+        gltfSharedImageReferencesSeparate = fsExtra.readJsonSync(gltfSharedImageReferencesSeparatePath);
 
         await readResources(gltf);
         await readResources(gltfWebp);
         await readResources(gltfWebpSeparate, {
             resourceDirectory: path.dirname(gltfWebpSeparatePath)
+        });
+        await readResources(gltfSharedImageReferences);
+        await readResources(gltfSharedImageReferencesSeparate, {
+            resourceDirectory: path.dirname(gltfSharedImageReferencesSeparatePath)
         });
     });
 
@@ -180,5 +190,44 @@ describe('writeResources', () => {
         writeResources(gltfWebpSeparate);
         // There should be a new bufferView for the WebP, and one for the fallback image.
         expect(gltfWebpSeparate.bufferViews.length).toBe(originalBufferViewsLength + 2);
+    });
+
+    it('does not duplicate multiple references to the same buffer view', async () => {
+        const originalBufferViewsLength = gltfSharedImageReferences.bufferViews.length;
+        writeResources(gltfSharedImageReferences);
+        expect(gltfSharedImageReferences.bufferViews.length).toBe(originalBufferViewsLength);
+        expect(gltfSharedImageReferences.images[0].bufferView).toBe(gltfSharedImageReferences.images[1].bufferView);
+    });
+
+    it('does not duplicate multiple references to the same buffer view when saving separate resources', async () => {
+        const separateResources = {};
+        const options = {
+            separateBuffers: true,
+            separateTextures: true,
+            separateShaders: true,
+            separateResources: separateResources
+        };
+        writeResources(gltfSharedImageReferences, options);
+        expect(gltfSharedImageReferences.images[0].uri).toBeDefined();
+        expect(gltfSharedImageReferences.images[0].uri).toBe(gltfSharedImageReferences.images[1].uri);
+    });
+
+    it('does not duplicate multiple references to the same uri', async () => {
+        writeResources(gltfSharedImageReferencesSeparate);
+        expect(gltfSharedImageReferencesSeparate.images[0].bufferView).toBeDefined();
+        expect(gltfSharedImageReferencesSeparate.images[0].bufferView).toBe(gltfSharedImageReferencesSeparate.images[1].bufferView);
+    });
+
+    it('does not duplicate multiple references to the same uri when saving separate resources', async () => {
+        const separateResources = {};
+        const options = {
+            separateBuffers: true,
+            separateTextures: true,
+            separateShaders: true,
+            separateResources: separateResources
+        };
+        writeResources(gltfSharedImageReferencesSeparate, options);
+        expect(gltfSharedImageReferencesSeparate.images[0].uri).toBeDefined();
+        expect(gltfSharedImageReferencesSeparate.images[0].uri).toBe(gltfSharedImageReferencesSeparate.images[1].uri);
     });
 });
