@@ -192,6 +192,7 @@ describe('moveTechniquesToExtension', () => {
         expect(program2.fragmentShader).not.toBe(program.fragmentShader);
 
         const technique3 = techniques.techniques[2];
+        expect(technique3.program).toBe(0);
         expect(technique3.uniforms.u_diffuse.type).toBe(WebGLConstants.FLOAT_VEC4);
         expect(gltf.materials[1].extensions.KHR_techniques_webgl.values.u_diffuse).toEqual([0.2, 0.2, 0.2, 1.0]);
     });
