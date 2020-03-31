@@ -1,8 +1,10 @@
 Change Log
 ==========
 
-### 2.?.? - 2020-??-??
+### 2.1.9 - 2020-03-31
 
+* Fixed a bug where unused nodes with used descendants would get deleted. [#533](https://github.com/CesiumGS/gltf-pipeline/pull/533)
+* Fixed processing glTF 1.0 models that have multiple techniques with the same uniform name but different parameters. [#490](https://github.com/CesiumGS/gltf-pipeline/pull/490)
 * Fixed writing duplicate resource that are referenced multiple times. [#483](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/483)
 
 ### 2.1.8 - 2020-03-04
