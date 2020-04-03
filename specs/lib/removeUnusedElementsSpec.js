@@ -870,4 +870,47 @@ describe('removes unused materials, textures, images, samplers', () => {
         expect(gltf.textures[0].source).toEqual(0);
         expect(gltf.textures[0].sampler).toEqual(0);
     });
+
+    it('does not remove EXT_gpu_mesh_instancing accessors', () => {
+        const gltf = {
+            accessors: [
+                {
+                    name: '0'
+                },
+                {
+                    name: 'T'
+                },
+                {
+                    name: 'R'
+                },
+                {
+                    name: 'S'
+                },
+                {
+                    name: '1'
+                }
+            ],
+            nodes: [
+                {
+                    extensions: {
+                        EXT_gpu_mesh_instancing: {
+                            attributes: {
+                                TRANSLATION: 1,
+                                ROTATION: 2,
+                                SCALE: 3
+                            }
+                        }
+                    }
+                }
+            ],
+            extensionsUsed: [ 'EXT_gpu_mesh_instancing' ]
+        };
+
+        removeUnusedElements(gltf, ['accessor']);
+
+        expect(gltf.accessors.length).toEqual(3);
+        expect(gltf.accessors[0].name).toEqual('T');
+        expect(gltf.accessors[1].name).toEqual('R');
+        expect(gltf.accessors[2].name).toEqual('S');
+    });
 });
