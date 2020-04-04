@@ -871,7 +871,7 @@ describe('removes unused materials, textures, images, samplers', () => {
         expect(gltf.textures[0].sampler).toEqual(0);
     });
 
-    it('does not remove EXT_gpu_mesh_instancing accessors', () => {
+    it('does not remove EXT_mesh_gpu_instancing accessors', () => {
         const gltf = {
             accessors: [
                 {
@@ -893,7 +893,7 @@ describe('removes unused materials, textures, images, samplers', () => {
             nodes: [
                 {
                     extensions: {
-                        EXT_gpu_mesh_instancing: {
+                        EXT_mesh_gpu_instancing: {
                             attributes: {
                                 TRANSLATION: 1,
                                 ROTATION: 2,
@@ -903,7 +903,7 @@ describe('removes unused materials, textures, images, samplers', () => {
                     }
                 }
             ],
-            extensionsUsed: [ 'EXT_gpu_mesh_instancing' ]
+            extensionsUsed: [ 'EXT_mesh_gpu_instancing' ]
         };
 
         removeUnusedElements(gltf, ['accessor']);
