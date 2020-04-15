@@ -1,84 +1,89 @@
 'use strict';
-var fs = require('fs');
-var addPipelineExtras = require('../../lib/addPipelineExtras');
-var gltfExtrasPath = './specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTestAddExtras.gltf';
+const Cesium = require('cesium');
+const addPipelineExtras = require('../../lib/addPipelineExtras');
 
-describe('addPipelineExtras', function() {
-    var gltf;
+const WebGLConstants = Cesium.WebGLConstants;
 
-    beforeAll(function(done) {
-        fs.readFile(gltfExtrasPath, function(err, data) {
-            if (err) {
-                throw err;
+describe('addPipelineExtras', () => {
+    it('adds pipeline extras to glTF 1.0 assets', () => {
+        const gltf = {
+            buffers: {
+                sampleBuffer0: {
+                    byteLength: 100
+                }
+            },
+            shaders: {
+                sample0VS: {
+                    type: WebGLConstants.VERTEX_SHADER,
+                    uri: 'data:,'
+                }
+            },
+            images: {
+                sampleImage0: {
+                    extras: {
+                        compressedImage3DTiles: {
+                            s3tc: {
+                                uri: 'data:,'
+                            },
+                            etc1: {
+                                uri: 'data:,'
+                            }
+                        }
+                    }
+                }
             }
-            gltf = JSON.parse(data);
-            addPipelineExtras(gltf);
-            done();
-        });
+        };
+        const gltfWithExtras = addPipelineExtras(gltf);
+        expect(gltfWithExtras.buffers['sampleBuffer0'].extras._pipeline).toBeDefined();
+        expect(gltfWithExtras.shaders['sample0VS'].extras._pipeline).toBeDefined();
+        expect(gltfWithExtras.images['sampleImage0'].extras._pipeline).toBeDefined();
+        expect(gltfWithExtras.images['sampleImage0'].extras.compressedImage3DTiles.s3tc.extras._pipeline).toBeDefined();
+        expect(gltfWithExtras.images['sampleImage0'].extras.compressedImage3DTiles.etc1.extras._pipeline).toBeDefined();
     });
 
-    it('added an extras object to objects without extras', function() {
-        expect(gltf.accessors.accessor_21.extras._pipeline).toBeDefined();
-        expect(gltf.animations.animation_0.extras._pipeline).toBeDefined();
-        expect(gltf.animations.animation_0.channels[0].extras._pipeline).toBeDefined();
-        expect(gltf.animations.animation_0.channels[0].target.extras._pipeline).toBeDefined();
-        expect(gltf.animations.animation_0.samplers.sampler.extras._pipeline).toBeDefined();
-        expect(gltf.asset.extras._pipeline).toBeDefined();
-        expect(gltf.asset.profile.extras._pipeline).toBeDefined();
-        expect(gltf.extras._pipeline).toBeDefined();
-        expect(gltf.buffers.CesiumTexturedBoxTest.extras._pipeline).toBeDefined();
-        expect(gltf.bufferViews.bufferView_29.extras._pipeline).toBeDefined();
-        expect(gltf.cameras.camera_0.extras._pipeline).toBeDefined();
-        expect(gltf.cameras.camera_0.orthographic.extras._pipeline).toBeDefined();
-        expect(gltf.cameras.camera_0.perspective.extras._pipeline).toBeDefined();
-        expect(gltf.images.Image0001.extras._pipeline).toBeDefined();
-    });
-
-    it('added a _pipeline object to existing extras', function() {
-        expect(gltf.materials.EffectTexture.extras._pipeline).toBeDefined();
-        expect(gltf.meshes.mesh002.extras._pipeline).toBeDefined();
-        expect(gltf.meshes.mesh002.primitives[0].extras._pipeline).toBeDefined();
-        expect(gltf.nodes.mesh002Node.extras._pipeline).toBeDefined();
-        expect(gltf.programs.program_0.extras._pipeline).toBeDefined();
-        expect(gltf.samplers.sampler_0.extras._pipeline).toBeDefined();
-        expect(gltf.scenes.defaultScene.extras._pipeline).toBeDefined();
-    });
-
-    it('did not overwrite existing extras objects', function() {
-        expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras._pipeline).toBeDefined();
-        expect(gltf.shaders.CesiumTexturedBoxTest0FS.extras.misc).toBeDefined();
-        expect(gltf.skins.Armature_Cylinder_skin.extras._pipeline).toBeDefined();
-        expect(gltf.skins.Armature_Cylinder_skin.extras.misc).toBeDefined();
-        expect(gltf.techniques.technique0.extras._pipeline).toBeDefined();
-        expect(gltf.techniques.technique0.extras.misc).toBeDefined();
-        expect(gltf.techniques.technique0.parameters.diffuse.extras.misc).toBeDefined();
-        expect(gltf.techniques.technique0.states.extras._pipeline).toBeDefined();
-        expect(gltf.techniques.technique0.states.extras.misc).toBeDefined();
-        expect(gltf.techniques.technique0.states.functions.extras._pipeline).toBeDefined();
-        expect(gltf.techniques.technique0.states.functions.extras.misc).toBeDefined();
-        expect(gltf.textures.texture_Image0001.extras._pipeline).toBeDefined();
-        expect(gltf.textures.texture_Image0001.extras.misc).toBeDefined();
-    });
-
-    it('does not attempt to add extras to null objects', function() {
-        gltf.accessors.accessor_25 = {
-            "bufferView": "bufferView_29",
-            "byteOffset": 0,
-            "componentType": 5123,
-            "count": 36,
-            "type": "SCALAR",
-            "min": [
-                null,
-                null,
-                null
+    it('adds pipeline extras to glTF 2.0 assets', () => {
+        const gltf = {
+            buffers: [
+                {
+                    byteLength: 100
+                }
             ],
-            "max": [
-                null,
-                null,
-                null
+            images: [
+                {
+                    extras: {
+                        compressedImage3DTiles: {
+                            s3tc: {
+                                uri: 'data:,'
+                            },
+                            etc1: {
+                                uri: 'data:,'
+                            }
+                        }
+                    }
+                }
+            ],
+            extensions: {
+                KHR_techniques_webgl: {
+                    shaders: [
+                        {
+                            type: WebGLConstants.VERTEX_SHADER,
+                            uri: 'data:,'
+                        }
+                    ]
+                }
+            },
+            extensionsRequired: [
+                'KHR_techniques_webgl'
+            ],
+            extensionsUsed: [
+                'KHR_techniques_webgl'
             ]
         };
-        addPipelineExtras(gltf);
-        expect(gltf.accessors.accessor_25).toBeDefined();
+        const gltfWithExtras = addPipelineExtras(gltf);
+        expect(gltfWithExtras.buffers[0].extras._pipeline).toBeDefined();
+        expect(gltfWithExtras.extensions.KHR_techniques_webgl.shaders[0].extras._pipeline).toBeDefined();
+        expect(gltfWithExtras.images[0].extras._pipeline).toBeDefined();
+        expect(gltfWithExtras.images[0].extras.compressedImage3DTiles.s3tc.extras._pipeline).toBeDefined();
+        expect(gltfWithExtras.images[0].extras.compressedImage3DTiles.etc1.extras._pipeline).toBeDefined();
     });
 });

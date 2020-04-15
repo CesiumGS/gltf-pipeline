@@ -1,44 +1,107 @@
 'use strict';
-var addDefaults = require('../../lib/addDefaults');
-var getStatistics = require('../../lib/getStatistics');
-var readGltf = require('../../lib/readGltf');
+const getStatistics = require('../../lib/getStatistics');
 
-describe('getStatistics', function() {
-    it('should return stats for simple box test', function(done){
-        expect(readGltf('specs/data/boxTexturedUnoptimized/CesiumTexturedBoxTest.gltf')
-            .then(function(gltf) {
-                var stats = getStatistics(gltf);
+describe('getStatistics', () => {
+    const gltf = {
+        accessors: [
+            {
+                componentType: 5123,
+                type: 'SCALAR',
+                count: 1
+            },
+            {
+                componentType: 5123,
+                type: 'SCALAR',
+                count: 2
+            },
+            {
+                componentType: 5123,
+                type: 'SCALAR',
+                count: 6
+            },
+            {
+                componentType: 5126,
+                type: 'VEC3',
+                count: 6
+            }
+        ],
+        buffers: [
+            {
+                byteLength: 140
+            },
+            {
+                byteLength: 120,
+                uri: 'buffer.bin'
+            }
+        ],
+        images: [
+            {
+                uri: 'image.png'
+            },
+            {
+                uri: 'data:image/png;'
+            },
+            {
+                uri: 'image2.png'
+            }
+        ],
+        meshes: [
+            {
+                primitives: [
+                    {
+                        indices: 0,
+                        mode: 0 // POINTS
+                    },
+                    {
+                        indices: 1,
+                        mode: 1 // LINES
+                    },
+                    {
+                        attributes: {
+                            POSITION: 3
+                        }
+                    }
+                ]
+            },
+            {
+                primitives: [
+                    {
+                        indices: 2,
+                        mode: 4 // TRIANGLES
+                    }
+                ]
+            }
+        ],
+        materials: [
+            {}, {}
+        ],
+        animations: [
+            {}, {} ,{}
+        ],
+        nodes: [
+            {
+                name: 'rootNode',
+                mesh: 0
+            }
+        ]
+    };
 
-                expect(stats.buffersSizeInBytes).toEqual(840);
-                expect(stats.numberOfImages).toEqual(1);
-                expect(stats.numberOfExternalRequests).toEqual(4);
-
-                expect(stats.numberOfDrawCalls).toEqual(1);
-                expect(stats.numberOfRenderedPrimitives).toEqual(12);
-
-                expect(stats.numberOfNodes).toEqual(4);
-                expect(stats.numberOfMeshes).toEqual(1);
-                expect(stats.numberOfMaterials).toEqual(1);
-                expect(stats.numberOfAnimations).toEqual(0);
-            }), done).toResolve();
+    it('returns statistics for a gltf', () => {
+        const statistics = getStatistics(gltf);
+        expect(statistics.buffersByteLength).toEqual(260);
+        expect(statistics.numberOfImages).toEqual(3);
+        expect(statistics.numberOfExternalRequests).toEqual(3);
+        expect(statistics.numberOfDrawCalls).toEqual(4);
+        expect(statistics.numberOfRenderedPrimitives).toEqual(6);
+        expect(statistics.numberOfNodes).toEqual(1);
+        expect(statistics.numberOfMeshes).toEqual(2);
+        expect(statistics.numberOfMaterials).toEqual(2);
+        expect(statistics.numberOfAnimations).toEqual(3);
     });
 
-    it('works with rigged test', function(done) {
-        expect(readGltf('specs/data/riggedSimpleUnoptimized/riggedSimple.gltf')
-            .then(function(gltf) {
-                var stats = getStatistics(addDefaults(gltf));
-
-                expect(stats.buffersSizeInBytes).toEqual(10468);
-                expect(stats.numberOfImages).toEqual(0);
-                expect(stats.numberOfExternalRequests).toEqual(3);
-
-                expect(stats.numberOfDrawCalls).toEqual(1);
-                expect(stats.numberOfRenderedPrimitives).toEqual(188);
-
-                expect(stats.numberOfNodes).toEqual(5);
-                expect(stats.numberOfMeshes).toEqual(1);
-                expect(stats.numberOfMaterials).toEqual(1);
-                expect(stats.numberOfAnimations).toEqual(2);
-            }), done).toResolve();
+    it('returns draw call statistics for a gltf node', () => {
+        const statistics = getStatistics(gltf, 0);
+        expect(statistics.numberOfDrawCalls).toEqual(3);
+        expect(statistics.numberOfRenderedPrimitives).toEqual(4);
     });
 });

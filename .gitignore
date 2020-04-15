@@ -13,7 +13,7 @@ coverage
 dist
 output
 test
-specs/data/boxTexturedUnoptimized/output
-doc
 *.tgz
 .nyc_output
+doc/*
+!doc/gltf.png

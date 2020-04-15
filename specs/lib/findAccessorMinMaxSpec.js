@@ -1,83 +1,77 @@
 'use strict';
-var clone = require('clone');
-var findAccessorMinMax = require('../../lib/findAccessorMinMax');
+const findAccessorMinMax = require('../../lib/findAccessorMinMax');
+const readResources = require('../../lib/readResources');
 
-var testGltf = {
-    accessors : {
-        accessor : {
-            bufferView : 'bufferView',
-            byteOffset : 0,
-            componentType : 5126,
-            count : 4,
-            type : 'VEC3'
-        }
-    },
-    bufferViews : {
-        bufferView : {
-            buffer : 'buffer',
-            byteOffset : 0
-        }
-    },
-    buffers : {
-        buffer : {
-            extras: {
-                _pipeline: {}
+const contiguousData = [
+    -1.0, -2.0, -3.0,
+    3.0, 2.0, 1.0,
+    0.0, 0.0, 0.0,
+    0.5, -0.5, 0.5
+];
+
+const nan = Number.NaN;
+const nonContiguousData = [
+    -1.0, 1.0, -1.0,
+    nan, nan, nan,
+    0.0, 0.0, 0.0,
+    nan, nan, nan,
+    3.0, 2.0, 1.0,
+    nan, nan, nan,
+    -1.0, -2.0, -3.0,
+    nan, nan, nan
+];
+
+function createGltf(elements, byteStride) {
+    const buffer = Buffer.from((new Float32Array(elements)).buffer);
+    const byteLength = buffer.length;
+    const dataUri = 'data:application/octet-stream;base64,' + buffer.toString('base64');
+    const gltf =  {
+        asset: {
+            version: '2.0'
+        },
+        accessors: [
+            {
+                bufferView: 0,
+                byteOffset: 0,
+                componentType: 5126,
+                count: 4,
+                type: 'VEC3'
             }
-        }
-    }
-};
+        ],
+        bufferViews: [
+            {
+                buffer: 0,
+                byteOffset: 0,
+                byteLength: byteLength,
+                byteStride: byteStride
+            }
+        ],
+        buffers: [
+            {
+                uri: dataUri,
+                byteLength: byteLength
+            }
+        ]
+    };
+    return readResources(gltf);
+}
 
-describe('findAccessorMinMax', function() {
-    it('finds the min and max of an accessor', function() {
-        var gltf = clone(testGltf);
-        var expectMin = [-1.0, -2.0, -3.0];
-        var expectMax = [3.0, 2.0, 1.0];
-        var bufferData = new Float32Array(
-            [-1.0, -2.0, -3.0,
-                3.0, 2.0, 1.0,
-                0.0, 0.0, 0.0,
-                0.5, -0.5, 0.5
-            ]);
-        var source = Buffer.from(bufferData.buffer);
-        var gltfBuffer = gltf.buffers.buffer;
-        gltfBuffer.extras._pipeline.source = source;
-        gltfBuffer.byteLength = source.length;
-        var gltfBufferView = gltf.bufferViews.bufferView;
-        gltfBufferView.byteLength = source.length;
-        var gltfAccessor = gltf.accessors.accessor;
-        gltfAccessor.byteStride = 0;
-
-        var minMax = findAccessorMinMax(gltf, gltfAccessor);
-        expect(minMax.min).toEqual(expectMin);
-        expect(minMax.max).toEqual(expectMax);
+describe('findAccessorMinMax', () => {
+    it('finds the min and max of an accessor', async () => {
+        const gltf = await createGltf(contiguousData, 12);
+        const expectedMin = [-1.0, -2.0, -3.0];
+        const expectedMax = [3.0, 2.0, 1.0];
+        const minMax = findAccessorMinMax(gltf, gltf.accessors[0]);
+        expect(minMax.min).toEqual(expectedMin);
+        expect(minMax.max).toEqual(expectedMax);
     });
 
-    it('finds the min and max in a non-contiguous accessor', function() {
-        var gltf = clone(testGltf);
-        var nan = Number.NaN;
-        var expectMin = [-1.0, -2.0, -3.0];
-        var expectMax = [3.0, 2.0, 1.0];
-        var bufferData = new Float32Array(
-            [-1.0, 1.0, -1.0,
-                nan, nan, nan,
-                0.0, 0.0, 0.0,
-                nan, nan, nan,
-                3.0, 2.0, 1.0,
-                nan, nan, nan,
-                -1.0, -2.0, -3.0,
-                nan, nan, nan
-            ]);
-        var source = Buffer.from(bufferData.buffer);
-        var gltfBuffer = gltf.buffers.buffer;
-        gltfBuffer.extras._pipeline.source = source;
-        gltfBuffer.byteLength = source.length;
-        var gltfBufferView = gltf.bufferViews.bufferView;
-        gltfBufferView.byteLength = source.length;
-        var gltfAccessor = gltf.accessors.accessor;
-        gltfAccessor.byteStride = 24;
-
-        var minMax = findAccessorMinMax(gltf, gltfAccessor);
-        expect(minMax.min).toEqual(expectMin);
-        expect(minMax.max).toEqual(expectMax);
+    it('finds the min and max in a non-contiguous accessor', async () => {
+        const gltf = await createGltf(nonContiguousData, 24);
+        const expectedMin = [-1.0, -2.0, -3.0];
+        const expectedMax = [3.0, 2.0, 1.0];
+        const minMax = findAccessorMinMax(gltf, gltf.accessors[0]);
+        expect(minMax.min).toEqual(expectedMin);
+        expect(minMax.max).toEqual(expectedMax);
     });
 });

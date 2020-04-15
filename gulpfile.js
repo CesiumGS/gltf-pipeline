@@ -1,64 +1,52 @@
 'use strict';
 
-var Cesium = require('cesium');
-var child_process = require('child_process');
-var fsExtra = require('fs-extra');
-var gulp = require('gulp');
-var Jasmine = require('jasmine');
-var jasmineSpecReporter = require('jasmine-spec-reporter');
-var open = require('open');
-var path = require('path');
-var Promise = require('bluebird');
-var yargs = require('yargs');
+const Cesium = require('cesium');
+const child_process = require('child_process');
+const dependencyTree = require('dependency-tree');
+const fsExtra = require('fs-extra');
+const gulp = require('gulp');
+const Jasmine = require('jasmine');
+const JasmineSpecReporter = require('jasmine-spec-reporter').SpecReporter;
+const open = require('open');
+const path = require('path');
+const Promise = require('bluebird');
+const yargs = require('yargs');
 
-var defined = Cesium.defined;
-var DeveloperError = Cesium.DeveloperError;
-var argv = yargs.argv;
+const defined = Cesium.defined;
+const argv = yargs.argv;
 
 // Add third-party node module binaries to the system path
 // since some tasks need to call them directly.
-var environmentSeparator = process.platform === 'win32' ? ';' : ':';
-var nodeBinaries = path.join(__dirname, 'node_modules', '.bin');
+const environmentSeparator = process.platform === 'win32' ? ';' : ':';
+const nodeBinaries = path.join(__dirname, 'node_modules', '.bin');
 process.env.PATH += environmentSeparator + nodeBinaries;
 
-var specFiles = ['**/*.js', '!node_modules/**', '!coverage/**', '!dist/**'];
+const specFiles = ['**/*.js', '!node_modules/**', '!coverage/**', '!doc/**', '!bin/**', '!dist/**'];
 
-function excludeCompressedTextures(jasmine) {
-    var excludedSpecs = ['compressTexturesSpec.js', 'compressTexturesMultipleFormatsSpec.js'];
-    var specFiles = jasmine.specFiles;
-    var specsLength = specFiles.length;
-    var excludedLength = excludedSpecs.length;
-    for (var i = specsLength - 1; i >= 0; --i) {
-        for (var j = 0; j < excludedLength; ++j) {
-            if (specFiles[i].indexOf(excludedSpecs[j]) > -1) {
-                specFiles.splice(i, 1);
-                break;
-            }
-        }
-    }
-}
+module.exports = {
+    'build-cesium': buildCesium,
+    test: test,
+    'test-watch': testWatch,
+    coverage: coverage,
+    cloc: cloc
+};
 
-gulp.task('test', function (done) {
-    var jasmine = new Jasmine();
+function test(done) {
+    const jasmine = new Jasmine();
     jasmine.loadConfigFile('specs/jasmine.json');
-    if (defined(argv.excludeCompressedTextures)) {
-        // Exclude compressTexturesSpec for Travis builds
-        // Travis runs Ubuntu 12.04.5 which has glibc 2.15, while crunch requires glibc 2.22 or higher
-        excludeCompressedTextures(jasmine);
-    }
-    jasmine.addReporter(new jasmineSpecReporter.SpecReporter({
+    jasmine.addReporter(new JasmineSpecReporter({
         displaySuccessfulSpec: !defined(argv.suppressPassed) || !argv.suppressPassed
     }));
     jasmine.execute();
     jasmine.onComplete(function (passed) {
         done(argv.failTaskOnError && !passed ? 1 : 0);
     });
-});
+}
 
-gulp.task('test-watch', function () {
-    gulp.watch(specFiles).on('change', function () {
-        //We can't simply depend on the test task because Jasmine
-        //does not like being run multiple times in the same process.
+function testWatch() {
+    return gulp.watch(specFiles).on('change', function () {
+        // We can't simply depend on the test task because Jasmine
+        // does not like being run multiple times in the same process.
         try {
             child_process.execSync('jasmine JASMINE_CONFIG_PATH=specs/jasmine.json', {
                 stdio: [process.stdin, process.stdout, process.stderr]
@@ -67,246 +55,32 @@ gulp.task('test-watch', function () {
             console.log('Tests failed to execute.');
         }
     });
-});
+}
 
-gulp.task('coverage', function () {
+function coverage() {
     fsExtra.removeSync('coverage/server');
-
-    // Exclude compressTexturesSpec from coverage for Travis builds
-    // Travis runs Ubuntu 12.04.5 which has glibc 2.15, while crunch requires glibc 2.22 or higher
-    var additionalExcludes = '';
-    if (defined(argv.excludeCompressedTextures)) {
-        additionalExcludes += '-x "specs/lib/compressTexturesSpec.js"';
-        additionalExcludes += '-x "specs/lib/compressTexturesMultipleFormatsSpec.js"';
-    }
-
     child_process.execSync('nyc' +
         ' --all' +
         ' --reporter=lcov' +
         ' --dir coverage' +
-        ' -x "specs/**" -x "bin/**" -x "coverage/**" -x "dist/**" -x "index.js" -x "gulpfile.js"' + additionalExcludes +
+        ' -x "specs/**" -x "bin/**" -x "coverage/**" -x "doc/**" -x "dist/**" -x "index.js" -x "gulpfile.js"' +
         ' node_modules/jasmine/bin/jasmine.js' +
         ' JASMINE_CONFIG_PATH=specs/jasmine.json', {
         stdio: [process.stdin, process.stdout, process.stderr]
     });
     open('coverage/lcov-report/index.html');
-});
 
-function amdify(source, subDependencyMapping) {
-    var fullMatch;
-    var variableName;
-    var requireVariable;
-    var requirePath;
-
-    source = source.replace(/\r\n/g, '\n');
-    var outputSource = source;
-
-    // find module exports
-    var returnValue;
-    var findModuleExportsRegex = /module.exports\s*=\s*(.*?);\n/;
-    var findModuleExports = findModuleExportsRegex.exec(source);
-    if (defined(findModuleExports && findModuleExports.length > 0)) {
-        fullMatch = findModuleExports[0];
-        returnValue = findModuleExports[1];
-        // remove module.exports from output source
-        outputSource = outputSource.replace(fullMatch, '');
-    }
-
-    // create require mapping for dependencies
-    var findRequireRegex = /var\s+(.+?)\s*=\s*require\('(.+?)'\);\n/g;
-    var findRequire = findRequireRegex.exec(source);
-    var requireMapping = {};
-    while (defined(findRequire) && findRequire.length > 0) {
-        fullMatch = findRequire[0];
-        variableName = findRequire[1];
-        requirePath = findRequire[2];
-        requireMapping[variableName] = requirePath;
-        // remove requires from output source
-        outputSource = outputSource.replace(fullMatch, '');
-        findRequire = findRequireRegex.exec(source);
-    }
-    // find places where sub-dependencies are pulled from a require
-    var subdependencyMapping = {};
-    var removeRequireMapping = [];
-    for (requireVariable in requireMapping) {
-        if (requireMapping.hasOwnProperty(requireVariable)) {
-            requirePath = requireMapping[requireVariable];
-            var findSubdependencyString = 'var\\s+(.+?)\\s*?=\\s*?' + requireVariable + '\\.(.+?);\n';
-            var findSubdependencyRegex = new RegExp(findSubdependencyString, 'g');
-            var findSubdependency = findSubdependencyRegex.exec(source);
-            while (defined(findSubdependency) && findSubdependency.length > 0) {
-                var mapping = subDependencyMapping[requirePath];
-                if (!defined(mapping)) {
-                    throw new DeveloperError('Build Failed: Module sub-dependency found for ' + requirePath + ' with no defined mapping behavior.');
-                }
-                removeRequireMapping.push(requireVariable);
-                fullMatch = findSubdependency[0];
-                variableName = findSubdependency[1];
-                var subdependencyPath = findSubdependency[2];
-                subdependencyMapping[variableName] = mapping.prefix + subdependencyPath;
-                // remove sub-dependency declarations from output source
-                outputSource = outputSource.replace(fullMatch, '');
-                findSubdependency = findSubdependencyRegex.exec(source);
-            }
-        }
-    }
-    // Top-level modules can be removed if mapped
-    while (removeRequireMapping.length > 0) {
-        var removeVariableName = removeRequireMapping.pop();
-        delete requireMapping[removeVariableName];
-    }
-    // join sub-dependencies with requireMapping
-    for (var subdependencyVariable in subdependencyMapping) {
-        if (subdependencyMapping.hasOwnProperty(subdependencyVariable)) {
-            requireMapping[subdependencyVariable] = subdependencyMapping[subdependencyVariable];
-        }
-    }
-    // amdify source
-    // indent
-    outputSource = outputSource.replace(/\n/g, '\n    ');
-    // wrap define header
-    var variables = [];
-    var paths = [];
-    for (var variable in requireMapping) {
-        if (requireMapping.hasOwnProperty(variable)) {
-            variables.push(variable);
-            paths.push(requireMapping[variable]);
-        }
-    }
-    var definePathsHeader = '\'' + paths.join('\',\n        \'') + '\'';
-    var defineVariablesHeader = variables.join(',\n        ');
-    var defineHeader = '/*global define*/\n' +
-        'define([\n' +
-        '        ' + definePathsHeader + '\n' +
-        '    ], function(\n' +
-        '        ' + defineVariablesHeader + ') {\n    ';
-    var defineFooter = '\n});\n';
-    if (defined(returnValue)) {
-        defineFooter = '\n    return ' + returnValue + ';' + defineFooter;
-    }
-    outputSource = defineHeader + outputSource + defineFooter;
-    // remove repeat newlines
-    outputSource = outputSource.replace(/\n\s*\n/g, '\n\n');
-    return outputSource;
+    return Promise.resolve();
 }
 
-function combine(source) {
-    var fullMatch;
-    var variableName;
-    var requirePath;
+function cloc() {
+    let cmdLine;
+    const clocPath = path.join('node_modules', 'cloc', 'lib', 'cloc');
 
-    source = source.replace(/\r\n/g, '\n');
-    var outputSource = source;
-
-    // find module exports
-    var returnValue;
-    var findModuleExportsRegex = /module.exports\s*=\s*(.*?);\n/;
-    var findModuleExports = findModuleExportsRegex.exec(source);
-    if (defined(findModuleExports && findModuleExports.length > 0)) {
-        fullMatch = findModuleExports[0];
-        returnValue = findModuleExports[1];
-        // remove module.exports from output source
-        outputSource = outputSource.replace(fullMatch, '');
-    }
-
-    // create require mapping for dependencies
-    var findRequireRegex = /var\s+(.+?)\s*=\s*require\('(.+?)'\);\n/g;
-    var findRequire = findRequireRegex.exec(source);
-    var requireMapping = {};
-    while (defined(findRequire) && findRequire.length > 0) {
-        fullMatch = findRequire[0];
-        variableName = findRequire[1];
-        requirePath = findRequire[2];
-        requireMapping[variableName] = requirePath;
-        // remove requires from output source
-        outputSource = outputSource.replace(fullMatch, '');
-        findRequire = findRequireRegex.exec(source);
-    }
-
-    // combine source
-    // indent
-    outputSource = outputSource.replace(/\n/g, '\n    ');
-    // wrap define header
-    var variables = [];
-    var paths = [];
-    for (var variable in requireMapping) {
-        if (requireMapping.hasOwnProperty(variable)) {
-            variables.push(variable);
-            paths.push(requireMapping[variable]);
-        }
-    }
-    var defineHeader = '/*global define*/\n' +
-        'var ' + returnValue + ' = (function() {\n    ';
-    var defineFooter = '\n}());\n';
-    if (defined(returnValue)) {
-        defineFooter = '\n    return ' + returnValue + ';' + defineFooter;
-    }
-    outputSource = defineHeader + outputSource + defineFooter;
-    // remove repeat newlines
-    outputSource = outputSource.replace(/\n\s*\n/g, '\n\n');
-    return outputSource;
-}
-
-gulp.task('build-cesium', function () {
-    var basePath = 'lib';
-    var outputDir = 'dist/cesium';
-    var files = [
-        'addDefaults.js',
-        'addExtensionsUsed.js',
-        'addPipelineExtras.js',
-        'byteLengthForComponentType.js',
-        'findAccessorMinMax.js',
-        'getAccessorByteStride.js',
-        'getStatistics.js',
-        'getUniqueId.js',
-        'numberOfComponentsForType.js',
-        'parseBinaryGltf.js',
-        'processModelMaterialsCommon.js',
-        'techniqueParameterForSemantic.js'
-    ];
-    var subDependencyMapping = {
-        cesium : {
-            prefix : '../../Core/'
-        }
-    };
-    Promise.map(files, function(fileName) {
-        var filePath = path.join(basePath, fileName);
-        return fsExtra.readFile(filePath)
-            .then(function(buffer) {
-                var source = buffer.toString();
-                source = amdify(source, subDependencyMapping);
-                var outputPath = path.join(outputDir, fileName);
-                return fsExtra.outputFile(outputPath, source);
-            });
-    });
-});
-
-gulp.task('build-cesium-combine', function () {
-    var basePath = 'lib';
-    var outputDir = 'dist/cesium-combined';
-    var files = [
-        'getStatistics.js'
-    ];
-    Promise.map(files, function(fileName) {
-        var filePath = path.join(basePath, fileName);
-        return fsExtra.readFile(filePath)
-            .then(function(buffer) {
-                var source = buffer.toString();
-                source = combine(source);
-                var outputPath = path.join(outputDir, fileName);
-                return fsExtra.outputFile(outputPath, source);
-            });
-    });
-});
-
-gulp.task('cloc', function() {
-    var cmdLine;
-    var clocPath = path.join('node_modules', 'cloc', 'lib', 'cloc');
-
-    //Run cloc on primary Source files only
-    var source = new Promise(function(resolve, reject) {
+    // Run cloc on primary Source files only
+    const source = new Promise(function(resolve, reject) {
         cmdLine = 'perl ' + clocPath + ' --quiet --progress-rate=0' +
-            ' lib/';
+            ' lib/ bin/';
 
         child_process.exec(cmdLine, function(error, stdout, stderr) {
             if (error) {
@@ -319,7 +93,7 @@ gulp.task('cloc', function() {
         });
     });
 
-    //If running cloc on source succeeded, also run it on the tests.
+    // If running cloc on source succeeded, also run it on the tests.
     return source.then(function() {
         return new Promise(function(resolve, reject) {
             cmdLine = 'perl ' + clocPath + ' --quiet --progress-rate=0' +
@@ -335,4 +109,146 @@ gulp.task('cloc', function() {
             });
         });
     });
-});
+}
+
+function amdify(source, subDependencyMapping) {
+    let fullMatch;
+    let variableName;
+    let requireVariable;
+    let requirePath;
+
+    source = source.replace(/\r\n/g, '\n');
+    source = source.replace(/\b(let|const)\b/g, 'var');
+
+    let outputSource = source;
+
+    // find module exports
+    let returnValue;
+    const findModuleExportsRegex = /module.exports\s*=\s*(.*?);\n/;
+    const findModuleExports = findModuleExportsRegex.exec(source);
+    if (defined(findModuleExports && findModuleExports.length > 0)) {
+        fullMatch = findModuleExports[0];
+        returnValue = findModuleExports[1];
+        // remove module.exports from output source
+        outputSource = outputSource.replace(fullMatch, '');
+    }
+
+    // create require mapping for dependencies
+    const findRequireRegex = /var\s+(.+?)\s*=\s*require\('(.+?)'\);\n/g;
+    let findRequire = findRequireRegex.exec(source);
+    const requireMapping = {};
+    while (defined(findRequire) && findRequire.length > 0) {
+        fullMatch = findRequire[0];
+        variableName = findRequire[1];
+        requirePath = findRequire[2];
+        requireMapping[variableName] = requirePath;
+        // remove requires from output source
+        outputSource = outputSource.replace(fullMatch, '');
+        findRequire = findRequireRegex.exec(source);
+    }
+    // find places where sub-dependencies are pulled from a require
+    const subdependencyMapping = {};
+    const removeRequireMapping = [];
+    for (requireVariable in requireMapping) {
+        if (Object.prototype.hasOwnProperty.call(requireMapping, requireVariable)) {
+            requirePath = requireMapping[requireVariable];
+            const findSubdependencyString = 'var\\s+(.+?)\\s*?=\\s*?' + requireVariable + '\\.(.+?);\n';
+            const findSubdependencyRegex = new RegExp(findSubdependencyString, 'g');
+            let findSubdependency = findSubdependencyRegex.exec(source);
+            while (defined(findSubdependency) && findSubdependency.length > 0) {
+                const mapping = subDependencyMapping[requirePath];
+                if (!defined(mapping)) {
+                    throw new Error('Build Failed: Module sub-dependency found for ' + requirePath + ' with no defined mapping behavior.');
+                }
+                removeRequireMapping.push(requireVariable);
+                fullMatch = findSubdependency[0];
+                variableName = findSubdependency[1];
+                const subdependencyPath = findSubdependency[2];
+                subdependencyMapping[variableName] = mapping.prefix + subdependencyPath;
+                // remove sub-dependency declarations from output source
+                outputSource = outputSource.replace(fullMatch, '');
+                findSubdependency = findSubdependencyRegex.exec(source);
+            }
+        }
+    }
+    // Top-level modules can be removed if mapped
+    while (removeRequireMapping.length > 0) {
+        const removeVariableName = removeRequireMapping.pop();
+        delete requireMapping[removeVariableName];
+    }
+    // join sub-dependencies with requireMapping
+    for (const subdependencyVariable in subdependencyMapping) {
+        if (Object.prototype.hasOwnProperty.call(subdependencyMapping, subdependencyVariable)) {
+            requireMapping[subdependencyVariable] = subdependencyMapping[subdependencyVariable];
+        }
+    }
+    // amdify source
+    outputSource = outputSource.replace(/'use strict';/g, '');
+
+    // wrap define header
+    const lines = [];
+    for (const variable in requireMapping) {
+        if (Object.prototype.hasOwnProperty.call(requireMapping, variable)) {
+            lines.push('import ' + variable + ' from \'' + requireMapping[variable] + '\'');
+        }
+    }
+    let defineHeader = '';
+    if (lines.length > 0) {
+        defineHeader = lines.join('\n') + '\n';
+    }
+    let defineFooter = '\n';
+    if (defined(returnValue)) {
+        defineFooter = '\nexport default ' + returnValue + ';\n';
+    }
+    outputSource = defineHeader + outputSource + defineFooter;
+    // remove repeat newlines
+    outputSource = outputSource.replace(/\n\s*\n/g, '\n\n');
+    return outputSource;
+}
+
+function buildCesium() {
+    const basePath = 'lib';
+    const outputDir = 'dist/cesium';
+    const files = [
+        'addDefaults.js',
+        'addPipelineExtras.js',
+        'ForEach.js',
+        'parseGlb.js',
+        'removePipelineExtras.js',
+        'updateVersion.js'
+    ];
+
+    const subDependencyMapping = {
+        cesium : {
+            prefix : '../../Core/'
+        }
+    };
+
+    const filesToAmdify = {};
+    return Promise.map(files, function (fileName) {
+        const filePath = path.join(basePath, fileName);
+
+        // Get list of dependant files
+        filesToAmdify[filePath] = true;
+        return dependencyTree.toList({
+            filename : filePath,
+            directory : basePath,
+            filter: function(path) {
+                return path.indexOf('node_modules') === -1;
+            }
+        }).forEach(function (dependency) {
+            filesToAmdify[path.relative(__dirname, dependency)] = true;
+        });
+    }).then(function () {
+        return Promise.map(Object.keys(filesToAmdify), function(filePath) {
+            const fileName = path.relative(basePath, filePath);
+            return fsExtra.readFile(filePath)
+                .then(function (buffer) {
+                    let source = buffer.toString();
+                    source = amdify(source, subDependencyMapping);
+                    const outputPath = path.join(outputDir, fileName);
+                    return fsExtra.outputFile(outputPath, source);
+                });
+        });
+    });
+}
