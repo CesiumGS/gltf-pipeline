@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+### 2.1.10 - 2020-05-11
+
+* Improved accessor min/max for Draco attributes. [#540](https://github.com/CesiumGS/gltf-pipeline/pull/540)
+* Updated to new Draco encode settings. [#538](https://github.com/CesiumGS/gltf-pipeline/pull/538)
+* Fixed a bug where accessors used by `EXT_mesh_gpu_instancing` were being removed. [#535](https://github.com/CesiumGS/gltf-pipeline/pull/535)
+
 ### 2.1.9 - 2020-03-31
 
 * Fixed a bug where unused nodes with used descendants would get deleted. [#533](https://github.com/CesiumGS/gltf-pipeline/pull/533)
