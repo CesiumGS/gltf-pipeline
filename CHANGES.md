@@ -3,7 +3,7 @@ Change Log
 
 ### 2.1.11 - 2020-07-09
 
-* Added support for KTX2 textures in GLTF's, dropped support for CRN and KTX. [#54X](Link to PR)
+* Added support for KTX2 textures in GLTF's, dropped support for CRN and KTX. [#550](https://github.com/CesiumGS/gltf-pipeline/pull/550)
 
 ### 2.1.10 - 2020-05-11
 
