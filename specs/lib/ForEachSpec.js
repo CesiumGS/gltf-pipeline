@@ -402,10 +402,10 @@ describe('ForEach', () => {
                     extras: {
                         compressedImage3DTiles: {
                             s3tc: {
-                                uri: 's3tc.ktx'
+                                uri: 's3tc.ktx2'
                             },
                             etc1: {
-                                uri: 'etc1.ktx'
+                                uri: 'etc1.ktx2'
                             }
                         }
                     }
@@ -413,7 +413,7 @@ describe('ForEach', () => {
             ]
         };
         const returnValue = ForEach.compressedImage(gltf.images[0], (compressedImage, type) => {
-            expect(compressedImage.uri).toBe(type + '.ktx');
+            expect(compressedImage.uri).toBe(type + '.ktx2');
             if (type === 'etc1') {
                 return compressedImage;
             }
