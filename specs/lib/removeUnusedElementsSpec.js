@@ -740,7 +740,6 @@ describe('removes unused materials, textures, images, samplers', () => {
         expect(gltf.textures[0].source).toEqual(0);
         expect(gltf.textures[1].extensions.EXT_texture_webp.source).toEqual(1);
         expect(gltf.textures[2].extensions.KHR_texture_basisu.source).toEqual(2);
-        console.log(gltf.textures);
     });
 
     it('removes unused samplers', () => {
