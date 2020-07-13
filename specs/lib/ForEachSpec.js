@@ -395,32 +395,6 @@ describe('ForEach', () => {
         expect(returnValue).toBe(gltf.images['image1']);
     });
 
-    it('loops over compressed images', () => {
-        const gltf = {
-            images: [
-                {
-                    extras: {
-                        compressedImage3DTiles: {
-                            s3tc: {
-                                uri: 's3tc.ktx'
-                            },
-                            etc1: {
-                                uri: 'etc1.ktx'
-                            }
-                        }
-                    }
-                }
-            ]
-        };
-        const returnValue = ForEach.compressedImage(gltf.images[0], (compressedImage, type) => {
-            expect(compressedImage.uri).toBe(type + '.ktx');
-            if (type === 'etc1') {
-                return compressedImage;
-            }
-        });
-        expect(returnValue).toBe(gltf.images[0].extras.compressedImage3DTiles['etc1']);
-    });
-
     it('loops over materials', () => {
         const gltf = {
             materials: [

@@ -683,6 +683,9 @@ describe('removes unused materials, textures, images, samplers', () => {
                 },
                 {
                     name: '5'
+                },
+                {
+                    name: '6'
                 }
             ],
             textures: [
@@ -690,12 +693,16 @@ describe('removes unused materials, textures, images, samplers', () => {
                     source: 1
                 },
                 {
-                    source: 3
-                },
-                {
                     extensions: {
                         EXT_texture_webp: {
                             source: 5
+                        }
+                    }
+                },
+                {
+                    extensions: {
+                        KHR_texture_basisu: {
+                            source: 6
                         }
                     }
                 }
@@ -728,11 +735,11 @@ describe('removes unused materials, textures, images, samplers', () => {
 
         expect(gltf.images.length).toEqual(3);
         expect(gltf.images[0].name).toEqual('1');
-        expect(gltf.images[1].name).toEqual('3');
-        expect(gltf.images[2].name).toEqual('5');
+        expect(gltf.images[1].name).toEqual('5');
+        expect(gltf.images[2].name).toEqual('6');
         expect(gltf.textures[0].source).toEqual(0);
-        expect(gltf.textures[1].source).toEqual(1);
-        expect(gltf.textures[2].extensions.EXT_texture_webp.source).toEqual(2);
+        expect(gltf.textures[1].extensions.EXT_texture_webp.source).toEqual(1);
+        expect(gltf.textures[2].extensions.KHR_texture_basisu.source).toEqual(2);
     });
 
     it('removes unused samplers', () => {

@@ -22,28 +22,10 @@ describe('removePipelineExtras', () => {
                         }
                     ]
                 }
-            },
-            images: [
-                {
-                    extras: {
-                        compressedImage3DTiles: {
-                            s3tc: {
-                                uri: 'data:,'
-                            },
-                            etc1: {
-                                uri: 'data:,'
-                            }
-                        }
-                    }
-                }
-            ]
+            }
         };
         const gltfWithExtrasRemoved = removePipelineExtras(addPipelineExtras(gltf));
         expect(gltfWithExtrasRemoved.buffers[0].extras).toBeUndefined();
         expect(gltfWithExtrasRemoved.extensions.KHR_techniques_webgl.shaders[0].extras).toBeUndefined();
-        expect(gltfWithExtrasRemoved.images[0].extras._pipeline).toBeUndefined();
-        expect(gltfWithExtrasRemoved.images[0].extras.compressedImage3DTiles.s3tc.extras).toBeUndefined();
-        expect(gltfWithExtrasRemoved.images[0].extras.compressedImage3DTiles.etc1.extras).toBeUndefined();
-        expect(gltfWithExtrasRemoved.extras).toBeUndefined();
     });
 });
