@@ -157,7 +157,7 @@ Some functionality of gltf-pipeline is used by CesiumJS as a third party library
 npm run build-cesium
 ```
 
-This will output a portion of the gltf-pipeline code into the `dist/cesium` folder for use with CesiumJS in the browser.
+This will output a portion of the gltf-pipeline code into the `/dist/cesium` folder for use with CesiumJS in the browser.
 
 ### Running Test Coverage
 
@@ -165,7 +165,7 @@ Coverage uses [nyc](https://github.com/istanbuljs/nyc).  Run:
 ```
 npm run coverage
 ```
-For complete coverage details, open `coverage/lcov-report/index.html`.
+For complete coverage details, open `/coverage/lcov-report/index.html`.
 
 The tests and coverage covers the Node.js module; it does not cover the command-line interface, which is tiny.
 
@@ -176,7 +176,7 @@ To generate the documentation:
 npm run jsdoc
 ```
 
-The documentation will be placed in the `doc` folder.
+The documentation will be placed in the `/doc` folder.
 
 ## Contributions
 
