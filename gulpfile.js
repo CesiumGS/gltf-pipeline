@@ -189,7 +189,7 @@ function amdify(source, subDependencyMapping) {
     const lines = [];
     for (const variable in requireMapping) {
         if (Object.prototype.hasOwnProperty.call(requireMapping, variable)) {
-            lines.push('import ' + variable + ' from \'' + requireMapping[variable] + '\'');
+            lines.push('import ' + variable + ' from "' + requireMapping[variable] + '.js"');
         }
     }
     let defineHeader = '';
