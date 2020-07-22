@@ -1,11 +1,11 @@
 Change Log
 ==========
 
-### 3.0.0 - 2020-??-??
+### 3.0.0 - 2020-07-22
 
 * Breaking changes
     * Dropped support for CRN and KTX textures. [#550](https://github.com/CesiumGS/gltf-pipeline/pull/550)
-    * Dropped support for `image.extras.compressedImage3DTiles`'s [#550](https://github.com/CesiumGS/gltf-pipeline/pull/550)
+    * Dropped support for `image.extras.compressedImage3DTiles`. [#550](https://github.com/CesiumGS/gltf-pipeline/pull/550)
 * Added support for KTX2 textures. [#550](https://github.com/CesiumGS/gltf-pipeline/pull/550)
 
 ### 2.1.10 - 2020-05-11
