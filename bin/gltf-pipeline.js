@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 const Cesium = require('cesium');
+const draco3d = require('draco3d');
 const fsExtra = require('fs-extra');
 const path = require('path');
 const Promise = require('bluebird');
@@ -199,22 +200,38 @@ function saveSeparateResources(separateResources) {
 
 console.time('Total');
 
-read(inputPath)
-    .then(function(gltf) {
-        return run(gltf, options);
-    })
-    .then(function(results) {
-        const gltf = defaultValue(results.gltf, results.glb);
-        const separateResources = results.separateResources;
-        return Promise.all([
-            write(outputPath, gltf, writeOptions),
-            saveSeparateResources(separateResources)
-        ]);
-    })
-    .then(function() {
-        console.timeEnd('Total');
-    })
-    .catch(function(error) {
-        console.log(error);
-        process.exit(1);
-    });
+// The creation of the Draco modules are asynchronous. The module parameter
+// returned in the callbacks will be ready to use.
+draco3d.createEncoderModule({}).then(function(module) {
+    options.dracoOptions.encoderModule = module;
+    if (options.dracoOptions.uncompressedFallback) {
+        draco3d.createDecoderModule({}).then(function(Module) {
+            options.dracoOptions.decoderModule = Module;
+            runPipeline(inputPath);
+        });
+    } else {
+        runPipeline(inputPath);
+    }
+});
+
+function runPipeline(inputPath) {
+    read(inputPath)
+        .then(function(gltf) {
+            return run(gltf, options);
+        })
+        .then(function(results) {
+            const gltf = defaultValue(results.gltf, results.glb);
+            const separateResources = results.separateResources;
+            return Promise.all([
+                write(outputPath, gltf, writeOptions),
+                saveSeparateResources(separateResources)
+            ]);
+        })
+        .then(function() {
+            console.timeEnd('Total');
+        })
+        .catch(function(error) {
+            console.log(error);
+            process.exit(1);
+        });
+}
