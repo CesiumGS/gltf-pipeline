@@ -39,6 +39,14 @@ function getDracoBuffer(gltf) {
     return source.slice(bufferView.byteOffset, bufferView.byteOffset + bufferView.byteLength);
 }
 
+function removeMorphTargets(gltf) {
+    const mesh = gltf.meshes[0];
+    const primitive = mesh.primitives[0];
+    delete primitive.targets;
+    delete mesh.weights;
+    return gltf;
+}
+
 describe('compressDracoMeshes', () => function() {
     draco3d.createEncoderModule({}).then(function(module) {
         {
@@ -190,14 +198,6 @@ describe('compressDracoMeshes', () => function() {
                 compressDracoMeshes(gltf);
                 expect(primitives[0]).toEqual(primitives[1]);
             });
-
-            function removeMorphTargets(gltf) {
-                const mesh = gltf.meshes[0];
-                const primitive = mesh.primitives[0];
-                delete primitive.targets;
-                delete mesh.weights;
-                return gltf;
-            }
 
             it('applied sequential encoding when the primitive has morph targets', async () => {
                 const gltfMorph = await readGltf(boxMorphPath);
