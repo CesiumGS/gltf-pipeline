@@ -12,7 +12,7 @@ const triangleWithoutIndicesPath = 'specs/data/2.0/triangle-without-indices/tria
 let gltf;
 let gltfOther;
 
-function expectOutOfRange(gltf, name, value) {
+async function expectOutOfRange(gltf, name, value) {
     const options = {
         dracoOptions: {}
     };
@@ -20,7 +20,7 @@ function expectOutOfRange(gltf, name, value) {
 
     let thrownError;
     try {
-        compressDracoMeshes(gltf, options);
+        await compressDracoMeshes(gltf, options);
     } catch (e) {
         thrownError = e;
     }
@@ -44,11 +44,11 @@ describe('compressDracoMeshes', () => {
         gltfOther = await readGltf(boxPath);
     });
 
-    it('compresses meshes with default options', () => {
+    it('compresses meshes with default options', async () => {
         expect(gltf.accessors.length).toBe(4); // 3 attributes + indices
         expect(gltf.bufferViews.length).toBe(4); // position/normal + texcoord + indices + image
 
-        compressDracoMeshes(gltf);
+        await compressDracoMeshes(gltf);
 
         expect(gltf.accessors.length).toBe(4); // accessors are not removed
         expect(gltf.bufferViews.length).toBe(2); // draco + image
@@ -75,7 +75,7 @@ describe('compressDracoMeshes', () => {
         expect(gltf.accessors.length).toBe(1); // positions
         expect(gltf.bufferViews.length).toBe(1); // positions
 
-        compressDracoMeshes(gltf);
+        await compressDracoMeshes(gltf);
 
         expect(gltf.accessors.length).toBe(2); // positions + indices
         expect(gltf.bufferViews.length).toBe(1); // draco
@@ -90,30 +90,30 @@ describe('compressDracoMeshes', () => {
         expect(positionAccessor.byteLength).toBeUndefined();
     });
 
-    it('throws if quantize bits is out of range', () => {
-        expectOutOfRange(gltf, 'compressionLevel', -1);
-        expectOutOfRange(gltf, 'compressionLevel', 11);
-        expectOutOfRange(gltf, 'quantizePositionBits', -1);
-        expectOutOfRange(gltf, 'quantizePositionBits', 31);
-        expectOutOfRange(gltf, 'quantizeNormalBits', -1);
-        expectOutOfRange(gltf, 'quantizeNormalBits', 31);
-        expectOutOfRange(gltf, 'quantizeTexcoordBits', -1);
-        expectOutOfRange(gltf, 'quantizeTexcoordBits', 31);
-        expectOutOfRange(gltf, 'quantizeColorBits', -1);
-        expectOutOfRange(gltf, 'quantizeColorBits', 31);
-        expectOutOfRange(gltf, 'quantizeGenericBits', -1);
-        expectOutOfRange(gltf, 'quantizeGenericBits', 31);
+    it('throws if quantize bits is out of range', async () => {
+        await expectOutOfRange(gltf, 'compressionLevel', -1);
+        await expectOutOfRange(gltf, 'compressionLevel', 11);
+        await expectOutOfRange(gltf, 'quantizePositionBits', -1);
+        await expectOutOfRange(gltf, 'quantizePositionBits', 31);
+        await expectOutOfRange(gltf, 'quantizeNormalBits', -1);
+        await expectOutOfRange(gltf, 'quantizeNormalBits', 31);
+        await expectOutOfRange(gltf, 'quantizeTexcoordBits', -1);
+        await expectOutOfRange(gltf, 'quantizeTexcoordBits', 31);
+        await expectOutOfRange(gltf, 'quantizeColorBits', -1);
+        await expectOutOfRange(gltf, 'quantizeColorBits', 31);
+        await expectOutOfRange(gltf, 'quantizeGenericBits', -1);
+        await expectOutOfRange(gltf, 'quantizeGenericBits', 31);
     });
 
     it('applies unified quantization', async () => {
         const gltfUnified = await readGltf(multipleBoxesPath);
         const gltfNonUnified = await readGltf(multipleBoxesPath);
-        compressDracoMeshes(gltfUnified, {
+        await compressDracoMeshes(gltfUnified, {
             dracoOptions: {
                 unifiedQuantization: true
             }
         });
-        compressDracoMeshes(gltfNonUnified, {
+        await compressDracoMeshes(gltfNonUnified, {
             dracoOptions: {
                 unifiedQuantization: false
             }
@@ -128,17 +128,17 @@ describe('compressDracoMeshes', () => {
         const gltfUnified = await readGltf(multipleBoxesPath);
         const gltfDefault = await readGltf(multipleBoxesPath);
         const aabb = new AxisAlignedBoundingBox(new Cartesian3(-10.0, -10.0, -10.0), new Cartesian3(10.0, 10.0, 10.0));
-        compressDracoMeshes(gltfVolume, {
+        await compressDracoMeshes(gltfVolume, {
             dracoOptions: {
                 quantizationVolume: aabb
             }
         });
-        compressDracoMeshes(gltfUnified, {
+        await compressDracoMeshes(gltfUnified, {
             dracoOptions: {
                 unifiedQuantization: true
             }
         });
-        compressDracoMeshes(gltfDefault, {
+        await compressDracoMeshes(gltfDefault, {
             dracoOptions: {}
         });
         const dracoBufferVolume = getDracoBuffer(gltfVolume);
@@ -148,13 +148,13 @@ describe('compressDracoMeshes', () => {
         expect(dracoBufferVolume).not.toEqual(dracoBufferUnified);
     });
 
-    it('applies quantization bits', () => {
-        compressDracoMeshes(gltf, {
+    it('applies quantization bits', async () => {
+        await compressDracoMeshes(gltf, {
             dracoOptions: {
                 quantizePositionBits: 8
             }
         });
-        compressDracoMeshes(gltfOther, {
+        await compressDracoMeshes(gltfOther, {
             dracoOptions: {
                 quantizePositionBits: 25
             }
@@ -165,8 +165,8 @@ describe('compressDracoMeshes', () => {
         expect(dracoBuffer8.length).toBeLessThan(dracoBuffer14.length);
     });
 
-    it('does not quantize when quantize bits is 0', () => {
-        compressDracoMeshes(gltf, {
+    it('does not quantize when quantize bits is 0', async () => {
+        await compressDracoMeshes(gltf, {
             dracoOptions: {
                 quantizePositionBits: 0,
                 quantizeNormalBits: 0,
@@ -175,16 +175,16 @@ describe('compressDracoMeshes', () => {
                 quantizeGenericBits: 0
             }
         });
-        compressDracoMeshes(gltfOther);
+        await compressDracoMeshes(gltfOther);
         const dracoBufferUncompressed = getDracoBuffer(gltf);
         const dracoBufferCompressed = getDracoBuffer(gltfOther);
         expect(dracoBufferCompressed.length).toBeLessThan(dracoBufferUncompressed.length);
     });
 
-    it('only compresses duplicate primitive once', () => {
+    it('only compresses duplicate primitive once', async () => {
         const primitives = gltf.meshes[0].primitives;
         primitives.push(clone(primitives[0], true));
-        compressDracoMeshes(gltf);
+        await compressDracoMeshes(gltf);
         expect(primitives[0]).toEqual(primitives[1]);
     });
 
@@ -200,20 +200,20 @@ describe('compressDracoMeshes', () => {
         const gltfMorph = await readGltf(boxMorphPath);
         const gltfNoMorph = removeMorphTargets(await readGltf(boxMorphPath));
 
-        compressDracoMeshes(gltfMorph);
-        compressDracoMeshes(gltfNoMorph);
+        await compressDracoMeshes(gltfMorph);
+        await compressDracoMeshes(gltfNoMorph);
         const dracoBufferMorph = getDracoBuffer(gltfMorph);
         const dracoBufferNoMorph = getDracoBuffer(gltfNoMorph);
         expect(dracoBufferMorph).not.toEqual(dracoBufferNoMorph);
     });
 
-    it('applies uncompressed fallback', () => {
-        compressDracoMeshes(gltf, {
+    it('applies uncompressed fallback', async () => {
+        await compressDracoMeshes(gltf, {
             dracoOptions: {
                 uncompressedFallback: true
             }
         });
-        compressDracoMeshes(gltfOther, {
+        await compressDracoMeshes(gltfOther, {
             dracoOptions: {
                 uncompressedFallback: false
             }
