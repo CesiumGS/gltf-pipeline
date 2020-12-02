@@ -7,6 +7,9 @@ package-lock.json
 .idea/workspace.xml
 .idea/tasks.xml
 
+# VS Code user-specific
+.vscode
+
 # Generate data
 .eslintcache
 coverage

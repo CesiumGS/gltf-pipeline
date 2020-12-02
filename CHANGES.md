@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+### 3.0.1 - 2020-11-14
+
+* Locked Draco npm dependency to version 1.3.6 to avoid module initialization errors in 1.4.0. [#563](https://github.com/CesiumGS/gltf-pipeline/pull/563)
+
 ### 3.0.0 - 2020-07-22
 
 * Breaking changes
