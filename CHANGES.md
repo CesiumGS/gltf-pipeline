@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+### 3.0.2 - 2020-12-07
+
+* Added support for Draco 1.4.0. [#562](https://github.com/CesiumGS/gltf-pipeline/pull/562)
+
 ### 3.0.1 - 2020-11-14
 
 * Locked Draco npm dependency to version 1.3.6 to avoid module initialization errors in 1.4.0. [#563](https://github.com/CesiumGS/gltf-pipeline/pull/563)
@@ -22,7 +26,7 @@ Change Log
 
 * Fixed a bug where unused nodes with used descendants would get deleted. [#533](https://github.com/CesiumGS/gltf-pipeline/pull/533)
 * Fixed processing glTF 1.0 models that have multiple techniques with the same uniform name but different parameters. [#490](https://github.com/CesiumGS/gltf-pipeline/pull/490)
-* Fixed writing duplicate resource that are referenced multiple times. [#483](https://github.com/AnalyticalGraphicsInc/gltf-pipeline/pull/483)
+* Fixed writing duplicate resource that are referenced multiple times. [#483](https://github.com/CesiumGS/gltf-pipeline/pull/483)
 
 ### 2.1.8 - 2020-03-04
 
