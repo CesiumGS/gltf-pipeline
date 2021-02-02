@@ -106,7 +106,7 @@ describe('processGltf', () => {
           dracoOptions: {
                decompress : true
           }
-        }
+        };
         results = await processGltf(results.gltf, options);
         expect(hasExtension(results.gltf, 'KHR_draco_mesh_compression')).toBe(false);
     });
