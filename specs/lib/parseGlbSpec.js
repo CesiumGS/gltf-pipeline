@@ -64,7 +64,8 @@ describe('parseGlb', () => {
                 },
                 buffers: {
                     binary_glTF: {
-                        byteLength: binaryData.length
+                        byteLength: binaryData.length,
+                        uri: 'data:,'
                     }
                 },
                 images: {
@@ -106,6 +107,7 @@ describe('parseGlb', () => {
             const buffer = parsedGltf.buffers.binary_glTF;
             for (let i = 0; i < binaryData.length; i++) {
                 expect(buffer.extras._pipeline.source[i]).toEqual(binaryData[i]);
+                expect(buffer.uri).toBeUndefined();
             }
 
             const image = parsedGltf.images.image;
