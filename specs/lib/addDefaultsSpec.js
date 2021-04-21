@@ -189,7 +189,7 @@ describe('addDefaults', () => {
             materials: [
                 {
                     extensions: {
-                        pbrSpecularGlossiness: {
+                        KHR_materials_pbrSpecularGlossiness: {
                             specularGlossinessTexture: {
                                 index: 0
                             }
@@ -199,7 +199,7 @@ describe('addDefaults', () => {
             ]
         };
         const gltfWithDefaults = addDefaults(gltf);
-        const pbrSpecularGlossiness = gltfWithDefaults.materials[0].extensions.pbrSpecularGlossiness;
+        const pbrSpecularGlossiness = gltfWithDefaults.materials[0].extensions.KHR_materials_pbrSpecularGlossiness;
 
         expect(pbrSpecularGlossiness.diffuseFactor).toEqual([1.0, 1.0, 1.0, 1.0]);
         expect(pbrSpecularGlossiness.specularFactor).toEqual([1.0, 1.0, 1.0]);
