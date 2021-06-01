@@ -6,7 +6,8 @@ const ForEach = require("../../lib/ForEach");
 const readResources = require("../../lib/readResources");
 const writeResources = require("../../lib/writeResources");
 
-const Cesium = require("cesium");
+const Cesium = require("@propelleraero/cesium");
+
 const CesiumMath = Cesium.Math;
 
 const gltfPath =

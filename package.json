@@ -1,5 +1,5 @@
 {
-  "name": "gltf-pipeline",
+  "name": "@propelleraero/gltf-pipeline",
   "version": "3.0.4",
   "description": "Content pipeline tools for optimizing glTF assets.",
   "license": "Apache-2.0",
@@ -26,8 +26,9 @@
     "node": ">=6.0.0"
   },
   "dependencies": {
+    "@babel/runtime": "^7.15.3",
+    "@propelleraero/cesium": "^1.x",
     "bluebird": "^3.7.2",
-    "cesium": "^1.83.0",
     "draco3d": "^1.4.1",
     "fs-extra": "^10.0.0",
     "mime": "^2.5.2",

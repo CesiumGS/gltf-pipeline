@@ -1,6 +1,6 @@
 "use strict";
 
-const Cesium = require("cesium");
+const Cesium = require("@propelleraero/cesium");
 const child_process = require("child_process");
 const dependencyTree = require("dependency-tree");
 const fsExtra = require("fs-extra");
