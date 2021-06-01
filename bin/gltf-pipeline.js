@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 'use strict';
-const Cesium = require('cesium');
+const Cesium = require('@propelleraero/cesium');
 const fsExtra = require('fs-extra');
 const path = require('path');
 const Promise = require('bluebird');

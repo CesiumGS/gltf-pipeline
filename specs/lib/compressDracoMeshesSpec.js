@@ -1,5 +1,5 @@
 'use strict';
-const { AxisAlignedBoundingBox, Cartesian3, clone, DeveloperError} = require('cesium');
+const { AxisAlignedBoundingBox, Cartesian3, clone, DeveloperError} = require('@propelleraero/cesium');
 const fsExtra = require('fs-extra');
 const readResources = require('../../lib/readResources');
 const compressDracoMeshes = require('../../lib/compressDracoMeshes');
