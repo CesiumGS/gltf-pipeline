@@ -1,5 +1,5 @@
 'use strict';
-const Cesium = require('cesium');
+const Cesium = require('@propelleraero/cesium');
 const readAccessorPacked = require('../../lib/readAccessorPacked');
 const readResources = require('../../lib/readResources');
 const splitPrimitives = require('../../lib/splitPrimitives');
