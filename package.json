@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "bluebird": "^3.7.2",
-    "@propelleraero/cesium": "^1.80.0",
+    "@propelleraero/cesium": "^1.x",
     "draco3d": "^1.4.0",
     "fs-extra": "^9.0.0",
     "mime": "^2.4.5",
