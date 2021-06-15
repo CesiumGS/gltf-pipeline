@@ -2,7 +2,7 @@
 const usesExtension = require('../../lib/usesExtension');
 
 describe('usesExtension', () => {
-    it('has extension', () => {
+    it('uses extension', () => {
         const gltf = {
             extensionsUsed: [
                 'extension1',
