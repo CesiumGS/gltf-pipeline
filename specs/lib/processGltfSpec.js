@@ -1,7 +1,7 @@
 'use strict';
 const fsExtra = require('fs-extra');
 const path = require('path');
-const hasExtension = require('../../lib/hasExtension');
+const usesExtension = require('../../lib/usesExtension');
 const processGltf = require('../../lib/processGltf');
 
 const gltfPath = 'specs/data/2.0/box-techniques-embedded/box-techniques-embedded.gltf';
@@ -89,7 +89,7 @@ describe('processGltf', () => {
             }
         };
         const results = await processGltf(gltf, options);
-        expect(hasExtension(results.gltf, 'KHR_draco_mesh_compression')).toBe(true);
+        expect(usesExtension(results.gltf, 'KHR_draco_mesh_compression')).toBe(true);
     });
 
     it('runs custom stages', async () => {
