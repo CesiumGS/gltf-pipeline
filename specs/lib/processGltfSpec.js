@@ -8,6 +8,8 @@ const gltfPath = 'specs/data/2.0/box-techniques-embedded/box-techniques-embedded
 const gltfSeparatePath = 'specs/data/2.0/box-techniques-separate/box-techniques-separate.gltf';
 const gltfWebpPath = 'specs/data/2.0/extensions/EXT_texture_webp/box-textured-embedded/box-textured-embedded.gltf';
 const gltfWebpSeparatePath = 'specs/data/2.0/extensions/EXT_texture_webp/box-textured-separate/box-textured-separate.gltf';
+const gltfMeshoptFallbackPath = 'specs/data/2.0/extensions/EXT_meshopt_compression/meshopt-fallback/meshopt-fallback.gltf';
+const gltfMeshoptNoFallbackPath = 'specs/data/2.0/extensions/EXT_meshopt_compression/meshopt-no-fallback/meshopt-no-fallback.gltf';
 
 describe('processGltf', () => {
     it('processes gltf with default options', async () => {
@@ -144,5 +146,103 @@ describe('processGltf', () => {
 
         const imageId = results.gltf.textures[0].extensions.EXT_texture_webp.source;
         expect(results.gltf.images[imageId].mimeType).toBe('image/webp');
+    });
+
+    it('processes gltf with EXT_meshopt_compression extension that has fallback buffer.', async () => {
+        const gltf = fsExtra.readJsonSync(gltfMeshoptFallbackPath);
+        const options = {
+            resourceDirectory: path.dirname(gltfMeshoptFallbackPath)
+        };
+        const results = await processGltf(gltf, options);
+        const processedGltf = results.gltf;
+
+        expect(processedGltf).toBeDefined();
+        expect(processedGltf.buffers.length).toBe(2);
+
+        const buffer0 = processedGltf.buffers[0];
+        const buffer1 = processedGltf.buffers[1];
+
+        const bufferView0 = processedGltf.bufferViews[0];
+        const bufferView1 = processedGltf.bufferViews[1];
+        const bufferView2 = processedGltf.bufferViews[2];
+
+        const meshoptObject0 = bufferView0.extensions.EXT_meshopt_compression;
+        const meshoptObject1 = bufferView1.extensions.EXT_meshopt_compression;
+        const meshoptObject2 = bufferView2.extensions.EXT_meshopt_compression;
+
+        expect(buffer0.byteLength).toBe(960);
+        expect(buffer0.uri).toBeDefined();
+        expect(buffer1.byteLength).toBe(468);
+        expect(buffer1.uri).toBeDefined();
+
+        expect(bufferView0.buffer).toBe(0);
+        expect(bufferView0.byteOffset).toBe(0);
+        expect(bufferView0.byteLength).toBe(400);
+        expect(meshoptObject0.buffer).toBe(1);
+        expect(meshoptObject0.byteOffset).toBe(0);
+        expect(meshoptObject0.byteLength).toBe(265);
+
+        expect(bufferView1.buffer).toBe(0);
+        expect(bufferView1.byteOffset).toBe(400);
+        expect(bufferView1.byteLength).toBe(200);
+        expect(meshoptObject1.buffer).toBe(1);
+        expect(meshoptObject1.byteOffset).toBe(268);
+        expect(meshoptObject1.byteLength).toBe(117);
+
+        expect(bufferView2.buffer).toBe(0);
+        expect(bufferView2.byteOffset).toBe(600);
+        expect(bufferView2.byteLength).toBe(360);
+        expect(meshoptObject2.buffer).toBe(1);
+        expect(meshoptObject2.byteOffset).toBe(388);
+        expect(meshoptObject2.byteLength).toBe(78);
+    });
+
+    it('processes gltf with EXT_meshopt_compression extension that doesn\'t have fallback buffer.', async () => {
+        const gltf = fsExtra.readJsonSync(gltfMeshoptNoFallbackPath);
+        const options = {
+            resourceDirectory: path.dirname(gltfMeshoptNoFallbackPath)
+        };
+        const results = await processGltf(gltf, options);
+        const processedGltf = results.gltf;
+
+        expect(processedGltf).toBeDefined();
+        expect(processedGltf.buffers.length).toBe(2);
+
+        const buffer0 = processedGltf.buffers[0];
+        const buffer1 = processedGltf.buffers[1];
+
+        const bufferView0 = processedGltf.bufferViews[0];
+        const bufferView1 = processedGltf.bufferViews[1];
+        const bufferView2 = processedGltf.bufferViews[2];
+
+        const meshoptObject0 = bufferView0.extensions.EXT_meshopt_compression;
+        const meshoptObject1 = bufferView1.extensions.EXT_meshopt_compression;
+        const meshoptObject2 = bufferView2.extensions.EXT_meshopt_compression;
+
+        expect(buffer0.byteLength).toBe(468);
+        expect(buffer0.uri).toBeDefined();
+        expect(buffer1.byteLength).toBe(960);
+        expect(buffer1.uri).not.toBeDefined();
+
+        expect(bufferView0.buffer).toBe(1);
+        expect(bufferView0.byteOffset).toBe(0);
+        expect(bufferView0.byteLength).toBe(400);
+        expect(meshoptObject0.buffer).toBe(0);
+        expect(meshoptObject0.byteOffset).toBe(0);
+        expect(meshoptObject0.byteLength).toBe(265);
+
+        expect(bufferView1.buffer).toBe(1);
+        expect(bufferView1.byteOffset).toBe(400);
+        expect(bufferView1.byteLength).toBe(200);
+        expect(meshoptObject1.buffer).toBe(0);
+        expect(meshoptObject1.byteOffset).toBe(268);
+        expect(meshoptObject1.byteLength).toBe(117);
+
+        expect(bufferView2.buffer).toBe(1);
+        expect(bufferView2.byteOffset).toBe(600);
+        expect(bufferView2.byteLength).toBe(360);
+        expect(meshoptObject2.buffer).toBe(0);
+        expect(meshoptObject2.byteOffset).toBe(388);
+        expect(meshoptObject2.byteLength).toBe(78);
     });
 });
