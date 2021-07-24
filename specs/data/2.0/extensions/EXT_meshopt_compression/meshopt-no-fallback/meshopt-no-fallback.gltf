@@ -5,12 +5,7 @@
       "byteLength": 468
     },
     {
-      "byteLength": 960,
-      "extensions": {
-        "EXT_meshopt_compression": {
-          "fallback": true
-        }
-      }
+      "byteLength": 960
     }
   ],
   "asset": {
