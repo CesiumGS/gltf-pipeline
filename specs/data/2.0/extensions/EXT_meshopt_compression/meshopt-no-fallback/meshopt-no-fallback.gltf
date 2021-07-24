@@ -1,0 +1,255 @@
+{
+  "buffers": [
+    {
+      "uri": "meshopt-no-fallback.bin",
+      "byteLength": 468
+    },
+    {
+      "byteLength": 960
+    }
+  ],
+  "asset": {
+    "version": "2.0",
+    "generator": "gltfpack 0.16"
+  },
+  "extensionsUsed": [
+    "KHR_mesh_quantization",
+    "EXT_meshopt_compression"
+  ],
+  "extensionsRequired": [
+    "KHR_mesh_quantization",
+    "EXT_meshopt_compression"
+  ],
+  "bufferViews": [
+    {
+      "buffer": 1,
+      "byteOffset": 0,
+      "byteLength": 400,
+      "byteStride": 8,
+      "target": 34962,
+      "extensions": {
+        "EXT_meshopt_compression": {
+          "buffer": 0,
+          "byteOffset": 0,
+          "byteLength": 265,
+          "byteStride": 8,
+          "mode": "ATTRIBUTES",
+          "count": 50
+        }
+      }
+    },
+    {
+      "buffer": 1,
+      "byteOffset": 400,
+      "byteLength": 200,
+      "byteStride": 4,
+      "target": 34962,
+      "extensions": {
+        "EXT_meshopt_compression": {
+          "buffer": 0,
+          "byteOffset": 268,
+          "byteLength": 117,
+          "byteStride": 4,
+          "mode": "ATTRIBUTES",
+          "filter": "OCTAHEDRAL",
+          "count": 50
+        }
+      }
+    },
+    {
+      "buffer": 1,
+      "byteOffset": 600,
+      "byteLength": 360,
+      "target": 34963,
+      "extensions": {
+        "EXT_meshopt_compression": {
+          "buffer": 0,
+          "byteOffset": 388,
+          "byteLength": 78,
+          "byteStride": 2,
+          "mode": "TRIANGLES",
+          "count": 180
+        }
+      }
+    }
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "byteOffset": 0,
+      "componentType": 5123,
+      "count": 24,
+      "type": "VEC3",
+      "min": [
+        0,
+        0,
+        0
+      ],
+      "max": [
+        16383,
+        16383,
+        16383
+      ]
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 0,
+      "componentType": 5120,
+      "count": 24,
+      "type": "VEC3",
+      "normalized": true
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 0,
+      "componentType": 5123,
+      "count": 36,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 192,
+      "componentType": 5123,
+      "count": 26,
+      "type": "VEC3",
+      "min": [
+        1315,
+        1315,
+        1315
+      ],
+      "max": [
+        15068,
+        15068,
+        15068
+      ]
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 96,
+      "componentType": 5120,
+      "count": 26,
+      "type": "VEC3",
+      "normalized": true
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 72,
+      "componentType": 5123,
+      "count": 144,
+      "type": "SCALAR"
+    }
+  ],
+  "materials": [
+    {
+      "name": "Material.002",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.800000072,
+          0.00122899958,
+          0,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0.5
+      },
+      "doubleSided": true
+    },
+    {
+      "name": "Material.001",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.800000012,
+          0.800000012,
+          0.800000012,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0.5
+      },
+      "doubleSided": true
+    }
+  ],
+  "meshes": [
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1
+          },
+          "mode": 4,
+          "indices": 2,
+          "material": 0
+        }
+      ]
+    },
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 3,
+            "NORMAL": 4
+          },
+          "mode": 4,
+          "indices": 5,
+          "material": 1
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "mesh": 0,
+      "translation": [
+        -1,
+        -1,
+        -1
+      ],
+      "scale": [
+        0.000122077763,
+        0.000122077763,
+        0.000122077763
+      ]
+    },
+    {
+      "mesh": 1,
+      "translation": [
+        -1,
+        -1,
+        -1
+      ],
+      "scale": [
+        0.000122077763,
+        0.000122077763,
+        0.000122077763
+      ]
+    },
+    {
+      "name": "Cube",
+      "children": [
+        0
+      ]
+    },
+    {
+      "name": "Cube.001",
+      "translation": [
+        0,
+        2.87217259,
+        0
+      ],
+      "children": [
+        1
+      ]
+    }
+  ],
+  "scenes": [
+    {
+      "name": "Scene",
+      "nodes": [
+        2,
+        3
+      ]
+    }
+  ],
+  "scene": 0
+}
