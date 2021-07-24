@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-### 3.0.3 - ????-??-??
+### 3.0.3 - 2021-07-24
 
 * Fixed name of `KHR_materials_pbrSpecularGlossiness` extension in `addDefaults`. [#580](https://github.com/CesiumGS/gltf-pipeline/pull/580)
 * Fixed glTF 1.0 to 2.0 conversion for buffers containing a placeholder data uri. [#578](https://github.com/CesiumGS/gltf-pipeline/pull/578)
