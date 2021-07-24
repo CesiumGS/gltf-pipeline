@@ -1,7 +1,7 @@
 # glTF Pipeline
 
-[![License](https://img.shields.io/:license-apache-blue.svg)](https://github.com/CesiumGS/gltf-pipeline/blob/master/LICENSE.md)
-[![Build Status](https://travis-ci.org/CesiumGS/gltf-pipeline.svg?branch=master)](https://travis-ci.org/CesiumGS/gltf-pipeline)
+[![License](https://img.shields.io/:license-apache-blue.svg)](https://github.com/CesiumGS/gltf-pipeline/blob/main/LICENSE.md)
+[![Build Status](https://travis-ci.org/CesiumGS/gltf-pipeline.svg?branch=main)](https://travis-ci.org/CesiumGS/gltf-pipeline)
 
 <p align="center">
 <a href="https://www.khronos.org/gltf"><img src="doc/gltf.png" onerror="this.src='gltf.png'"/></a>
@@ -180,4 +180,4 @@ The documentation will be placed in the `doc` folder.
 
 ## Contributions
 
-Pull requests are appreciated!  Please use the same [Contributor License Agreement (CLA)](https://github.com/CesiumGS/cesium/blob/master/CONTRIBUTING.md) and [Coding Guide](https://github.com/CesiumGS/cesium/blob/master/Documentation/Contributors/CodingGuide/README.md) used for [Cesium](https://github.com/CesiumGS/cesium).
+Pull requests are appreciated!  Please use the same [Contributor License Agreement (CLA)](https://github.com/CesiumGS/cesium/blob/main/CONTRIBUTING.md) and [Coding Guide](https://github.com/CesiumGS/cesium/blob/main/Documentation/Contributors/CodingGuide/README.md) used for [Cesium](https://github.com/CesiumGS/cesium).
