@@ -94,6 +94,25 @@ describe('processGltf', () => {
         expect(usesExtension(results.gltf, 'KHR_draco_mesh_compression')).toBe(true);
     });
 
+    it('uses draco decompression', async () => {
+        const gltf = fsExtra.readJsonSync(gltfPath);
+        let options = {
+            dracoOptions: {
+                compressionLevel: 7
+            }
+        };
+        let results = await processGltf(gltf, options);
+        expect(hasExtension(results.gltf, 'KHR_draco_mesh_compression')).toBe(true);
+
+        options = {
+          dracoOptions: {
+               decompress : true
+          }
+        };
+        results = await processGltf(results.gltf, options);
+        expect(hasExtension(results.gltf, 'KHR_draco_mesh_compression')).toBe(false);
+    });
+
     it('runs custom stages', async () => {
         spyOn(console, 'log');
         const gltf = fsExtra.readJsonSync(gltfPath);
