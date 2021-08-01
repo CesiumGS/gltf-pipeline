@@ -172,7 +172,7 @@ describe('processGltf', () => {
 
         expect(buffer0.byteLength).toBe(960);
         expect(buffer0.uri).toBeDefined();
-        expect(buffer1.byteLength).toBe(468);
+        expect(buffer1.byteLength).toBe(472);
         expect(buffer1.uri).toBeDefined();
 
         expect(bufferView0.buffer).toBe(0);
@@ -186,14 +186,14 @@ describe('processGltf', () => {
         expect(bufferView1.byteOffset).toBe(400);
         expect(bufferView1.byteLength).toBe(200);
         expect(meshoptObject1.buffer).toBe(1);
-        expect(meshoptObject1.byteOffset).toBe(268);
+        expect(meshoptObject1.byteOffset).toBe(272);
         expect(meshoptObject1.byteLength).toBe(117);
 
         expect(bufferView2.buffer).toBe(0);
         expect(bufferView2.byteOffset).toBe(600);
         expect(bufferView2.byteLength).toBe(360);
         expect(meshoptObject2.buffer).toBe(1);
-        expect(meshoptObject2.byteOffset).toBe(388);
+        expect(meshoptObject2.byteOffset).toBe(392);
         expect(meshoptObject2.byteLength).toBe(78);
     });
 
@@ -219,7 +219,7 @@ describe('processGltf', () => {
         const meshoptObject1 = bufferView1.extensions.EXT_meshopt_compression;
         const meshoptObject2 = bufferView2.extensions.EXT_meshopt_compression;
 
-        expect(buffer0.byteLength).toBe(468);
+        expect(buffer0.byteLength).toBe(472);
         expect(buffer0.uri).toBeDefined();
         expect(buffer1.byteLength).toBe(960);
         expect(buffer1.uri).not.toBeDefined();
@@ -235,14 +235,14 @@ describe('processGltf', () => {
         expect(bufferView1.byteOffset).toBe(400);
         expect(bufferView1.byteLength).toBe(200);
         expect(meshoptObject1.buffer).toBe(0);
-        expect(meshoptObject1.byteOffset).toBe(268);
+        expect(meshoptObject1.byteOffset).toBe(272);
         expect(meshoptObject1.byteLength).toBe(117);
 
         expect(bufferView2.buffer).toBe(1);
         expect(bufferView2.byteOffset).toBe(600);
         expect(bufferView2.byteLength).toBe(360);
         expect(meshoptObject2.buffer).toBe(0);
-        expect(meshoptObject2.byteOffset).toBe(388);
+        expect(meshoptObject2.byteOffset).toBe(392);
         expect(meshoptObject2.byteLength).toBe(78);
     });
 });

@@ -77,7 +77,7 @@ describe('gltfToGlb', () => {
         const meshoptObject1 = bufferView1.extensions.EXT_meshopt_compression;
         const meshoptObject2 = bufferView2.extensions.EXT_meshopt_compression;
 
-        expect(buffer0.byteLength).toBe(1428);
+        expect(buffer0.byteLength).toBe(1432);
         expect(buffer0.uri).not.toBeDefined();
 
         expect(bufferView0.buffer).toBe(0);
@@ -88,17 +88,17 @@ describe('gltfToGlb', () => {
         expect(meshoptObject0.byteLength).toBe(265);
 
         expect(bufferView1.buffer).toBe(0);
-        expect(bufferView1.byteOffset).toBe(668);
+        expect(bufferView1.byteOffset).toBe(672);
         expect(bufferView1.byteLength).toBe(200);
         expect(meshoptObject1.buffer).toBe(0);
-        expect(meshoptObject1.byteOffset).toBe(868);
+        expect(meshoptObject1.byteOffset).toBe(872);
         expect(meshoptObject1.byteLength).toBe(117);
 
         expect(bufferView2.buffer).toBe(0);
-        expect(bufferView2.byteOffset).toBe(988);
+        expect(bufferView2.byteOffset).toBe(992);
         expect(bufferView2.byteLength).toBe(360);
         expect(meshoptObject2.buffer).toBe(0);
-        expect(meshoptObject2.byteOffset).toBe(1348);
+        expect(meshoptObject2.byteOffset).toBe(1352);
         expect(meshoptObject2.byteLength).toBe(78);
     });
 
@@ -129,7 +129,7 @@ describe('gltfToGlb', () => {
 
         expect(buffer0.byteLength).toBe(960);
         expect(buffer0.uri).toBe('meshopt-fallback-meshopt-fallback-1.bin');
-        expect(buffer1.byteLength).toBe(468);
+        expect(buffer1.byteLength).toBe(472);
         expect(buffer1.uri).toBe('meshopt-fallback.bin');
 
         expect(bufferView0.buffer).toBe(0);
@@ -143,14 +143,14 @@ describe('gltfToGlb', () => {
         expect(bufferView1.byteOffset).toBe(400);
         expect(bufferView1.byteLength).toBe(200);
         expect(meshoptObject1.buffer).toBe(1);
-        expect(meshoptObject1.byteOffset).toBe(268);
+        expect(meshoptObject1.byteOffset).toBe(272);
         expect(meshoptObject1.byteLength).toBe(117);
 
         expect(bufferView2.buffer).toBe(0);
         expect(bufferView2.byteOffset).toBe(600);
         expect(bufferView2.byteLength).toBe(360);
         expect(meshoptObject2.buffer).toBe(1);
-        expect(meshoptObject2.byteOffset).toBe(388);
+        expect(meshoptObject2.byteOffset).toBe(392);
         expect(meshoptObject2.byteLength).toBe(78);
     });
 });
