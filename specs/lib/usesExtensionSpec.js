@@ -1,19 +1,16 @@
-'use strict';
-const usesExtension = require('../../lib/usesExtension');
+"use strict";
+const usesExtension = require("../../lib/usesExtension");
 
-describe('usesExtension', () => {
-    it('uses extension', () => {
-        const gltf = {
-            extensionsUsed: [
-                'extension1',
-                'extension2'
-            ]
-        };
-        expect(usesExtension(gltf, 'extension1')).toBe(true);
-        expect(usesExtension(gltf, 'extension2')).toBe(true);
-        expect(usesExtension(gltf, 'extension3')).toBe(false);
+describe("usesExtension", () => {
+  it("uses extension", () => {
+    const gltf = {
+      extensionsUsed: ["extension1", "extension2"],
+    };
+    expect(usesExtension(gltf, "extension1")).toBe(true);
+    expect(usesExtension(gltf, "extension2")).toBe(true);
+    expect(usesExtension(gltf, "extension3")).toBe(false);
 
-        const emptyGltf = {};
-        expect(usesExtension(emptyGltf, 'extension1')).toBe(false);
-    });
+    const emptyGltf = {};
+    expect(usesExtension(emptyGltf, "extension1")).toBe(false);
+  });
 });
