@@ -1,5 +1,5 @@
 {
-  "extends": "cesium/node",
+  "extends": ["cesium/node", "prettier"],
   "rules": {
     "no-unused-vars": ["error", {"args": "none"}]
   }
