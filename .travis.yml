@@ -9,7 +9,6 @@ node_js:
 
 script:
   - npm run eslint
-  - npm run prettier-check
   - npm run test -- --failTaskOnError --suppressPassed;
 
 after_success:
