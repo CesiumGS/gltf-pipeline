@@ -38,14 +38,18 @@
     "cloc": "^2.8.0",
     "coveralls": "^3.1.1",
     "dependency-tree": "^8.1.1",
-    "eslint": "^7.31.0",
+    "eslint": "^7.32.0",
     "eslint-config-cesium": "^8.0.1",
+    "eslint-config-prettier": "^8.3.0",
     "gulp": "^4.0.2",
+    "husky": "^4.3.8",
     "jasmine": "^3.8.0",
     "jasmine-spec-reporter": "^7.0.0",
     "jsdoc": "^3.6.7",
     "nyc": "^15.1.0",
-    "open": "^8.2.1"
+    "open": "^8.2.1",
+    "prettier": "2.3.2",
+    "pretty-quick": "^3.1.1"
   },
   "scripts": {
     "jsdoc": "jsdoc ./lib -R ./README.md -d doc",
@@ -56,6 +60,9 @@
     "coverage": "gulp coverage",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
     "cloc": "gulp cloc",
+    "prettier": "prettier --write \"**/*\"",
+    "prettier-check": "prettier --check \"**/*\"",
+    "pretty-quick": "pretty-quick",
     "build-cesium": "gulp build-cesium"
   },
   "bin": {
