@@ -1,5 +1,9 @@
 # Change Log
 
+### 3.0.4 - 2021-08-02
+
+- Fixed buffer view alignment for `EXT_feature_metadata` extension. [#595](https://github.com/CesiumGS/gltf-pipeline/pull/595)
+
 ### 3.0.3 - 2021-07-24
 
 - Fixed name of `KHR_materials_pbrSpecularGlossiness` extension in `addDefaults`. [#580](https://github.com/CesiumGS/gltf-pipeline/pull/580)
