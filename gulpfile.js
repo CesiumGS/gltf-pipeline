@@ -130,7 +130,6 @@ function amdify(source, subDependencyMapping) {
   let requirePath;
 
   source = source.replace(/\r\n/g, "\n");
-  source = source.replace(/\b(let|const)\b/g, "var");
 
   let outputSource = source;
 
@@ -146,7 +145,7 @@ function amdify(source, subDependencyMapping) {
   }
 
   // create require mapping for dependencies
-  const findRequireRegex = /var\s+(.+?)\s*=\s*require\('(.+?)'\);\n/g;
+  const findRequireRegex = /const\s+(.+?)\s*=\s*require\("(.+?)"\);\n/g;
   let findRequire = findRequireRegex.exec(source);
   const requireMapping = {};
   while (defined(findRequire) && findRequire.length > 0) {
@@ -165,7 +164,7 @@ function amdify(source, subDependencyMapping) {
     if (Object.prototype.hasOwnProperty.call(requireMapping, requireVariable)) {
       requirePath = requireMapping[requireVariable];
       const findSubdependencyString =
-        "var\\s+(.+?)\\s*?=\\s*?" + requireVariable + "\\.(.+?);\n";
+        "const\\s+(.+?)\\s*?=\\s*?" + requireVariable + "\\.(.+?);\n";
       const findSubdependencyRegex = new RegExp(findSubdependencyString, "g");
       let findSubdependency = findSubdependencyRegex.exec(source);
       while (defined(findSubdependency) && findSubdependency.length > 0) {
@@ -206,14 +205,14 @@ function amdify(source, subDependencyMapping) {
     }
   }
   // amdify source
-  outputSource = outputSource.replace(/'use strict';/g, "");
+  outputSource = outputSource.replace(/"use strict";/g, "");
 
   // wrap define header
   const lines = [];
   for (const variable in requireMapping) {
     if (Object.prototype.hasOwnProperty.call(requireMapping, variable)) {
       lines.push(
-        "import " + variable + ' from "' + requireMapping[variable] + '.js"'
+        "import " + variable + ' from "' + requireMapping[variable] + '.js";'
       );
     }
   }
