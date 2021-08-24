@@ -1,3 +1,4 @@
+/.vscode
 /.idea
 /dist
 /coverage
@@ -12,9 +13,9 @@
 .gitattributes
 .nyc_output
 .npmignore
+.prettierignore
 .travis.yml
 .appveyor.yml
 gulpfile.js
 *.tgz
 !doc/gltf.png
-.vscode

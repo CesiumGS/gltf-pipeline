@@ -5,10 +5,11 @@ os:
 language: node_js
 
 node_js:
-  - "10"
+  - "12"
 
 script:
   - npm run eslint
+  - npm run prettier-check
   - npm run test -- --failTaskOnError --suppressPassed;
 
 after_success:
