@@ -5,7 +5,7 @@ os:
 language: node_js
 
 node_js:
-  - "12"
+  - "16"
 
 script:
   - npm run eslint
