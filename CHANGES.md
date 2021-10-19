@@ -1,5 +1,9 @@
 # Change Log
 
+### Next release
+
+- Fixed handling of glTF models with the [`EXT_mesh_features`](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_mesh_features) extension.
+
 ### 3.0.4 - 2021-08-02
 
 - Fixed buffer view alignment for `EXT_feature_metadata` extension. [#595](https://github.com/CesiumGS/gltf-pipeline/pull/595)
@@ -9,7 +13,7 @@
 - Fixed name of `KHR_materials_pbrSpecularGlossiness` extension in `addDefaults`. [#580](https://github.com/CesiumGS/gltf-pipeline/pull/580)
 - Fixed glTF 1.0 to 2.0 conversion for buffers containing a placeholder data uri. [#578](https://github.com/CesiumGS/gltf-pipeline/pull/578)
 - Fixed handling of glTF models with the [`EXT_meshopt_compression`](https://github.com/KhronosGroup/glTF/tree/master/extensions/2.0/Vendor/EXT_meshopt_compression) extension. [#593](https://github.com/CesiumGS/gltf-pipeline/pull/593)
-- Fixed handling of glTF models with the [`EXT_feature_metadata`](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_feature_metadata/1.0.0) extension. [#585](https://github.com/CesiumGS/gltf-pipeline/pull/585)
+- Fixed handling of glTF models with the [`EXT_feature_metadata`](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_feature_metadata) extension. [#585](https://github.com/CesiumGS/gltf-pipeline/pull/585)
 
 ### 3.0.2 - 2020-12-07
 
