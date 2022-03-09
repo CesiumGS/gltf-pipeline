@@ -20,5 +20,5 @@ updates:
     # cause issues.
     schedule:
       interval: "weekly"
-      day: "monday"
+      day: "sunday"
       time: "19:00"
