@@ -68,7 +68,8 @@
     "prettier": "prettier --write \"**/*\"",
     "prettier-check": "prettier --check \"**/*\"",
     "pretty-quick": "pretty-quick",
-    "build-cesium": "gulp build-cesium"
+    "build-cesium": "gulp build-cesium",
+    "generate-third-party": "gulp generate-third-party"
   },
   "bin": {
     "gltf-pipeline": "./bin/gltf-pipeline.js"

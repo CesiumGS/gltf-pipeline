@@ -1,0 +1,58 @@
+[
+  {
+    "name": "bluebird",
+    "license": [
+      "MIT"
+    ],
+    "version": "3.7.2",
+    "url": "https://www.npmjs.com/package/bluebird"
+  },
+  {
+    "name": "cesium",
+    "license": [
+      "Apache-2.0"
+    ],
+    "version": "1.93.0",
+    "url": "https://www.npmjs.com/package/cesium"
+  },
+  {
+    "name": "draco3d",
+    "license": [
+      "Apache-2.0"
+    ],
+    "version": "1.5.2",
+    "url": "https://www.npmjs.com/package/draco3d"
+  },
+  {
+    "name": "fs-extra",
+    "license": [
+      "MIT"
+    ],
+    "version": "10.1.0",
+    "url": "https://www.npmjs.com/package/fs-extra"
+  },
+  {
+    "name": "mime",
+    "license": [
+      "MIT"
+    ],
+    "version": "2.6.0",
+    "url": "https://www.npmjs.com/package/mime"
+  },
+  {
+    "name": "object-hash",
+    "license": [
+      "MIT"
+    ],
+    "version": "2.2.0",
+    "url": "https://www.npmjs.com/package/object-hash"
+  },
+  {
+    "name": "yargs",
+    "license": [
+      "MIT"
+    ],
+    "version": "17.4.1",
+    "url": "https://www.npmjs.com/package/yargs"
+  }
+]
