@@ -297,7 +297,7 @@ describe("ForEach", () => {
       ],
     };
     const returnValue = ForEach.buffer(gltf, (buffer, index) => {
-      expect(buffer.uri).toBe(index + ".bin");
+      expect(buffer.uri).toBe(`${index}.bin`);
       if (index === 1) {
         return buffer;
       }
@@ -317,7 +317,7 @@ describe("ForEach", () => {
       },
     };
     const returnValue = ForEach.buffer(gltf, (buffer, name) => {
-      expect(buffer.uri).toBe(name + ".bin");
+      expect(buffer.uri).toBe(`${name}.bin`);
       if (name === "1.bin") {
         return buffer;
       }
@@ -406,7 +406,7 @@ describe("ForEach", () => {
       },
     };
     const returnValue = ForEach.image(gltf, (image, name) => {
-      expect(image.uri).toBe(name + ".png");
+      expect(image.uri).toBe(`${name}.png`);
       if (name === "image1") {
         return image;
       }
@@ -806,7 +806,7 @@ describe("ForEach", () => {
       },
     };
     const returnValue = ForEach.shader(gltf, (shader, name) => {
-      expect(shader.uri).toBe(name + ".glsl");
+      expect(shader.uri).toBe(`${name}.glsl`);
 
       if (name === "frag") {
         return shader;
@@ -839,7 +839,7 @@ describe("ForEach", () => {
 
     let count = 0;
     const returnValue = ForEach.shader(gltf, (shader) => {
-      expect(shader.uri).toBe(shader.name + ".glsl");
+      expect(shader.uri).toBe(`${shader.name}.glsl`);
       count++;
 
       if (count === 2) {
@@ -954,7 +954,7 @@ describe("ForEach", () => {
 
     let count = 0;
     const returnValue = ForEach.technique(gltf, (technique, index) => {
-      expect(technique.name).toBe("technique" + index);
+      expect(technique.name).toBe(`technique${index}`);
       count++;
 
       if (count === 2) {

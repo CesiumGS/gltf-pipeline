@@ -140,7 +140,7 @@ const inputDirectory = path.dirname(inputPath);
 const inputName = path.basename(inputPath, path.extname(inputPath));
 const inputExtension = path.extname(inputPath).toLowerCase();
 if (inputExtension !== ".gltf" && inputExtension !== ".glb") {
-  console.log('Error: unrecognized file extension "' + inputExtension + '".');
+  console.log(`Error: unrecognized file extension "${inputExtension}".`);
   return;
 }
 
@@ -155,7 +155,7 @@ if (!defined(outputPath)) {
   }
   outputPath = path.join(
     inputDirectory,
-    inputName + "-processed" + outputExtension
+    `${inputName}-processed${outputExtension}`
   );
 }
 
@@ -163,7 +163,7 @@ const outputDirectory = path.dirname(outputPath);
 const outputName = path.basename(outputPath, path.extname(outputPath));
 outputExtension = path.extname(outputPath).toLowerCase();
 if (outputExtension !== ".gltf" && outputExtension !== ".glb") {
-  console.log('Error: unrecognized file extension "' + outputExtension + '".');
+  console.log(`Error: unrecognized file extension "${outputExtension}".`);
   return;
 }
 

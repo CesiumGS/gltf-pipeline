@@ -437,7 +437,7 @@ describe("removeUnusedElements", () => {
     "images",
     "samplers",
   ].forEach((k) => {
-    it("correctly removes/keeps " + k, () => {
+    it(`correctly removes/keeps ${k}`, () => {
       expect(Object.keys(gltf)).toContain(k);
       expect(gltf[k].length).toBe(remaining[k].length);
 

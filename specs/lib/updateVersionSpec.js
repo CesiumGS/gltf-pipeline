@@ -86,9 +86,9 @@ describe("updateVersion", () => {
       ]).buffer
     );
 
-    const dataUri =
-      "data:application/octet-stream;base64," +
-      originalBuffer.toString("base64");
+    const dataUri = `data:application/octet-stream;base64,${originalBuffer.toString(
+      "base64"
+    )}`;
 
     const gltf = {
       version: "0.8",
@@ -333,8 +333,9 @@ describe("updateVersion", () => {
       texcoordBuffer,
     ]);
 
-    const dataUri =
-      "data:application/octet-stream;base64," + source.toString("base64");
+    const dataUri = `data:application/octet-stream;base64,${source.toString(
+      "base64"
+    )}`;
 
     const gltf = {
       asset: {
