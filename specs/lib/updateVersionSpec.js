@@ -5,7 +5,6 @@ const numberOfComponentsForType = require("../../lib/numberOfComponentsForType")
 const readResources = require("../../lib/readResources");
 const updateVersion = require("../../lib/updateVersion");
 
-const arrayFill = Cesium.arrayFill;
 const Cartesian3 = Cesium.Cartesian3;
 const Quaternion = Cesium.Quaternion;
 const WebGLConstants = Cesium.WebGLConstants;
@@ -317,15 +316,9 @@ describe("updateVersion", () => {
     const applicationSpecificBuffer = Buffer.from(
       new Int16Array([-2, 1, 0, 1, 2, 3]).buffer
     );
-    const positionBuffer = Buffer.from(
-      arrayFill(new Float32Array(9), 1.0).buffer
-    );
-    const normalBuffer = Buffer.from(
-      arrayFill(new Float32Array(9), 2.0).buffer
-    );
-    const texcoordBuffer = Buffer.from(
-      arrayFill(new Float32Array(6), 3.0).buffer
-    );
+    const positionBuffer = Buffer.from(new Float32Array(9).fill(1.0).buffer);
+    const normalBuffer = Buffer.from(new Float32Array(9).fill(2.0).buffer);
+    const texcoordBuffer = Buffer.from(new Float32Array(6).fill(3.0).buffer);
     const source = Buffer.concat([
       applicationSpecificBuffer,
       positionBuffer,
