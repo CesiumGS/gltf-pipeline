@@ -1,5 +1,4 @@
 "use strict";
-const Cesium = require("cesium");
 const readAccessorPacked = require("../../lib/readAccessorPacked");
 const readResources = require("../../lib/readResources");
 
