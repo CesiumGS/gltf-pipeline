@@ -1205,19 +1205,20 @@ describe("removes unused materials, textures, images, samplers", () => {
     expect(gltf.images.length).toBe(2);
   });
 
-  it("does not remove EXT_mesh_features buffer views and textures", () => {
+  it("does not remove EXT_mesh_features and EXT_structural_metadata buffer views and textures", () => {
     const gltf = {
       asset: {
         version: "2.0",
       },
-      extensionsUsed: ["EXT_mesh_features"],
+      extensionsUsed: ["EXT_mesh_features", "EXT_structural_metadata"],
       extensions: {
-        EXT_mesh_features: {
+        EXT_structural_metadata: {
           schema: {
             classes: {
               vegetation: {
                 properties: {
                   vegetationDensity: {
+                    type: "SCALAR",
                     componentType: "UINT8",
                     normalized: true,
                   },
@@ -1226,11 +1227,12 @@ describe("removes unused materials, textures, images, samplers", () => {
               landCover: {
                 properties: {
                   name: {
-                    componentType: "STRING",
+                    type: "STRING",
                   },
                   color: {
-                    type: "ARRAY",
+                    type: "SCALAR",
                     componentType: "UINT8",
+                    array: true,
                   },
                 },
               },
@@ -1242,12 +1244,12 @@ describe("removes unused materials, textures, images, samplers", () => {
               count: 256,
               properties: {
                 name: {
-                  bufferView: 4,
-                  stringOffsetBufferView: 5,
+                  values: 4,
+                  stringOffsets: 5,
                 },
                 color: {
-                  bufferView: 6,
-                  arrayOffsetBufferView: 7,
+                  values: 6,
+                  arrayOffsets: 7,
                 },
               },
             },
@@ -1255,10 +1257,12 @@ describe("removes unused materials, textures, images, samplers", () => {
           propertyTextures: [
             {
               class: "vegetation",
-              index: 1,
-              texCoord: 0,
               properties: {
-                vegetationDensity: [0],
+                vegetationDensity: {
+                  index: 1,
+                  texCoord: 0,
+                  channels: [0],
+                },
               },
             },
           ],
@@ -1304,12 +1308,17 @@ describe("removes unused materials, textures, images, samplers", () => {
                 EXT_mesh_features: {
                   featureIds: [
                     {
-                      texCoord: 0,
-                      index: 2,
-                      channel: 0,
+                      featureCount: 10,
+                      texture: {
+                        index: 2,
+                        texCoord: 0,
+                        channels: [0],
+                      },
+                      propertyTable: 0,
                     },
                   ],
-                  propertyTables: [0],
+                },
+                EXT_structural_metadata: {
                   propertyTextures: [0],
                 },
               },
@@ -1441,7 +1450,7 @@ describe("removes unused materials, textures, images, samplers", () => {
       ],
     };
 
-    // Delete parts of the glTF that are not related to EXT_mesh_features
+    // Delete parts of the glTF that are not related to EXT_mesh_features and EXT_structural_metadata
     delete gltf.meshes[0].primitives[0].attributes.POSITION;
     delete gltf.materials[0].pbrMetallicRoughness.baseColorTexture;
 

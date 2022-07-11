@@ -1,9 +1,6 @@
 "use strict";
-const Cesium = require("cesium");
 const readAccessorPacked = require("../../lib/readAccessorPacked");
 const readResources = require("../../lib/readResources");
-
-const arrayFill = Cesium.arrayFill;
 
 const contiguousData = [
   -1.0, 1.0, -1.0, 0.0, 0.0, 0.0, 3.0, 2.0, 1.0, -1.0, -2.0, -3.0,
@@ -92,7 +89,7 @@ describe("readAccessorPacked", () => {
         },
       ],
     };
-    const expected = arrayFill(new Array(12), 0); // All zeroes
+    const expected = new Array(12).fill(0);
     expect(readAccessorPacked(gltf, gltf.accessors[0])).toEqual(expected);
   });
 });
