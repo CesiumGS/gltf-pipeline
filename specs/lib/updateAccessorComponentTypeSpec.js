@@ -19,8 +19,9 @@ describe("updateAccessorComponentTypes", () => {
       unsignedShortBuffer,
     ]);
     const byteLength = source.length;
-    const dataUri =
-      "data:application/octet-stream;base64," + source.toString("base64");
+    const dataUri = `data:application/octet-stream;base64,${source.toString(
+      "base64"
+    )}`;
     buffer = {
       uri: dataUri,
       byteLength: byteLength,

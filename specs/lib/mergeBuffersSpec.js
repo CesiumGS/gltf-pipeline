@@ -9,10 +9,12 @@ describe("mergeBuffers", () => {
     const buffer1 = Buffer.from(
       new Uint8Array([4, 4, 4, 4, 4, nan, nan, nan, nan, nan])
     );
-    const dataUri0 =
-      "data:application/octet-stream;base64," + buffer0.toString("base64");
-    const dataUri1 =
-      "data:application/octet-stream;base64," + buffer1.toString("base64");
+    const dataUri0 = `data:application/octet-stream;base64,${buffer0.toString(
+      "base64"
+    )}`;
+    const dataUri1 = `data:application/octet-stream;base64,${buffer1.toString(
+      "base64"
+    )}`;
 
     // All buffer views start on 8-byte alignment, the buffer ends on a 8-byte alignment, and extraneous buffer data is removed
     const expectedBuffer = Buffer.from(
@@ -71,18 +73,24 @@ describe("mergeBuffers", () => {
     const buffer4 = Buffer.from(new Uint8Array([4, 4, 4]));
     const buffer5 = Buffer.from(new Uint8Array([6, 7]));
 
-    const dataUri0 =
-      "data:application/octet-stream;base64," + buffer0.toString("base64");
-    const dataUri1 =
-      "data:application/octet-stream;base64," + buffer1.toString("base64");
-    const dataUri2 =
-      "data:application/octet-stream;base64," + buffer2.toString("base64");
-    const dataUri3 =
-      "data:application/octet-stream;base64," + buffer3.toString("base64");
-    const dataUri4 =
-      "data:application/octet-stream;base64," + buffer4.toString("base64");
-    const dataUri5 =
-      "data:application/octet-stream;base64," + buffer5.toString("base64");
+    const dataUri0 = `data:application/octet-stream;base64,${buffer0.toString(
+      "base64"
+    )}`;
+    const dataUri1 = `data:application/octet-stream;base64,${buffer1.toString(
+      "base64"
+    )}`;
+    const dataUri2 = `data:application/octet-stream;base64,${buffer2.toString(
+      "base64"
+    )}`;
+    const dataUri3 = `data:application/octet-stream;base64,${buffer3.toString(
+      "base64"
+    )}`;
+    const dataUri4 = `data:application/octet-stream;base64,${buffer4.toString(
+      "base64"
+    )}`;
+    const dataUri5 = `data:application/octet-stream;base64,${buffer5.toString(
+      "base64"
+    )}`;
 
     // All buffer views start on 8-byte alignment, the buffer ends on a 8-byte alignment, and extraneous buffer data is removed
     const expectedBuffer0 = Buffer.from(
@@ -189,18 +197,24 @@ describe("mergeBuffers", () => {
     const buffer4 = Buffer.from(new Uint8Array([4, 4, 4]));
     const buffer5 = Buffer.from(new Uint8Array([6, 7]));
 
-    const dataUri0 =
-      "data:application/octet-stream;base64," + buffer0.toString("base64");
-    const dataUri1 =
-      "data:application/octet-stream;base64," + buffer1.toString("base64");
-    const dataUri2 =
-      "data:application/octet-stream;base64," + buffer2.toString("base64");
-    const dataUri3 =
-      "data:application/octet-stream;base64," + buffer3.toString("base64");
-    const dataUri4 =
-      "data:application/octet-stream;base64," + buffer4.toString("base64");
-    const dataUri5 =
-      "data:application/octet-stream;base64," + buffer5.toString("base64");
+    const dataUri0 = `data:application/octet-stream;base64,${buffer0.toString(
+      "base64"
+    )}`;
+    const dataUri1 = `data:application/octet-stream;base64,${buffer1.toString(
+      "base64"
+    )}`;
+    const dataUri2 = `data:application/octet-stream;base64,${buffer2.toString(
+      "base64"
+    )}`;
+    const dataUri3 = `data:application/octet-stream;base64,${buffer3.toString(
+      "base64"
+    )}`;
+    const dataUri4 = `data:application/octet-stream;base64,${buffer4.toString(
+      "base64"
+    )}`;
+    const dataUri5 = `data:application/octet-stream;base64,${buffer5.toString(
+      "base64"
+    )}`;
 
     // All buffer views start on 8-byte alignment, the buffer ends on a 8-byte alignment, and extraneous buffer data is removed
     const expectedBuffer0 = Buffer.from(

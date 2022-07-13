@@ -94,7 +94,7 @@ function cloc() {
 
   // Run cloc on primary Source files only
   const source = new Promise(function (resolve, reject) {
-    cmdLine = "perl " + clocPath + " --quiet --progress-rate=0" + " lib/ bin/";
+    cmdLine = `perl ${clocPath} --quiet --progress-rate=0` + ` lib/ bin/`;
 
     child_process.exec(cmdLine, function (error, stdout, stderr) {
       if (error) {
@@ -110,8 +110,7 @@ function cloc() {
   // If running cloc on source succeeded, also run it on the tests.
   return source.then(function () {
     return new Promise(function (resolve, reject) {
-      cmdLine =
-        "perl " + clocPath + " --quiet --progress-rate=0" + " specs/lib/";
+      cmdLine = `perl ${clocPath} --quiet --progress-rate=0` + ` specs/lib/`;
       child_process.exec(cmdLine, function (error, stdout, stderr) {
         if (error) {
           console.log(stderr);
@@ -165,17 +164,14 @@ function amdify(source, subDependencyMapping) {
   for (requireVariable in requireMapping) {
     if (Object.prototype.hasOwnProperty.call(requireMapping, requireVariable)) {
       requirePath = requireMapping[requireVariable];
-      const findSubdependencyString =
-        "const\\s+(.+?)\\s*?=\\s*?" + requireVariable + "\\.(.+?);\n";
+      const findSubdependencyString = `const\\s+(.+?)\\s*?=\\s*?${requireVariable}\\.(.+?);\n`;
       const findSubdependencyRegex = new RegExp(findSubdependencyString, "g");
       let findSubdependency = findSubdependencyRegex.exec(source);
       while (defined(findSubdependency) && findSubdependency.length > 0) {
         const mapping = subDependencyMapping[requirePath];
         if (!defined(mapping)) {
           throw new Error(
-            "Build Failed: Module sub-dependency found for " +
-              requirePath +
-              " with no defined mapping behavior."
+            `Build Failed: Module sub-dependency found for ${requirePath} with no defined mapping behavior.`
           );
         }
         removeRequireMapping.push(requireVariable);
@@ -213,18 +209,16 @@ function amdify(source, subDependencyMapping) {
   const lines = [];
   for (const variable in requireMapping) {
     if (Object.prototype.hasOwnProperty.call(requireMapping, variable)) {
-      lines.push(
-        "import " + variable + ' from "' + requireMapping[variable] + '.js";'
-      );
+      lines.push(`import ${variable} from "${requireMapping[variable]}.js";`);
     }
   }
   let defineHeader = "";
   if (lines.length > 0) {
-    defineHeader = lines.join("\n") + "\n";
+    defineHeader = `${lines.join("\n")}\n`;
   }
   let defineFooter = "\n";
   if (defined(returnValue)) {
-    defineFooter = "\nexport default " + returnValue + ";\n";
+    defineFooter = `\nexport default ${returnValue};\n`;
   }
   outputSource = defineHeader + outputSource + defineFooter;
   // remove repeat newlines

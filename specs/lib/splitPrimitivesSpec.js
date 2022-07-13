@@ -47,8 +47,9 @@ describe("splitPrimitives", () => {
       Buffer.from(new Float32Array(target1Normals).buffer),
     ]);
 
-    const dataUri =
-      "data:application/octet-stream;base64," + source.toString("base64");
+    const dataUri = `data:application/octet-stream;base64,${source.toString(
+      "base64"
+    )}`;
 
     const expectedIndices = [
       [0, 1, 2, 0, 2, 3],
