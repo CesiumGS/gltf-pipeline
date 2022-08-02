@@ -13,7 +13,7 @@ Supports common operations including:
 
 - Converting glTF to glb (and reverse)
 - Saving buffers/textures as embedded or separate files
-- Converting glTF 1.0 models to glTF 2.0 (using the [KHR_techniques_webgl](https://github.com/KhronosGroup/glTF/tree/master/extensions/2.0/Khronos/KHR_techniques_webgl) and [KHR_blend](https://github.com/KhronosGroup/glTF/pull/1302) extensions)
+- Converting glTF 1.0 models to glTF 2.0
 - Applying [Draco](https://github.com/google/draco) mesh compression
 
 `gltf-pipeline` can be used as a command-line tool or Node.js module.
@@ -127,6 +127,7 @@ processGltf(gltf, options).then(function (results) {
 | `--separateTextures`, `-t`     | Write out separate textures only.                                                                                              | No, default `false`    |
 | `--stats`                      | Print statistics to console for output glTF file.                                                                              | No, default `false`    |
 | `--keepUnusedElements`         | Keep unused materials, nodes and meshes.                                                                                       | No, default `false`    |
+| `--keepLegacyExtensions`       | When false, materials with `KHR_techniques_webgl`, `KHR_blend`, or `KHR_materials_common` will be converted to PBR.            | No, default `false`    |
 | `--draco.compressMeshes`, `-d` | Compress the meshes using Draco. Adds the KHR_draco_mesh_compression extension.                                                | No, default `false`    |
 | `--draco.compressionLevel`     | Draco compression level [0-10], most is 10, least is 0. A value of 0 will apply sequential encoding and preserve face order.   | No, default `7`        |
 | `--draco.quantizePositionBits` | Quantization bits for position attribute when using Draco compression.                                                         | No, default `14`       |
