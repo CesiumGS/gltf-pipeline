@@ -237,6 +237,7 @@ describe("updateVersion", () => {
     await readResources(gltf);
     updateVersion(gltf, {
       targetVersion: "1.0",
+      keepLegacyExtensions: true,
     });
 
     // Asset updates: version set to 1.0, profile split into object
@@ -617,7 +618,9 @@ describe("updateVersion", () => {
     };
 
     await readResources(gltf);
-    updateVersion(gltf);
+    updateVersion(gltf, {
+      keepLegacyExtensions: true,
+    });
 
     // Asset updates: version set to 2.0, profile removed
     expect(gltf.asset.version).toEqual("2.0");
@@ -664,7 +667,7 @@ describe("updateVersion", () => {
       material.extensions.KHR_techniques_webgl.values.u_lightAttenuation
     ).toEqual(2);
 
-    // Expect material paramters to be updated
+    // Expect material parameters to be updated
     expect(material.doubleSided).toBeUndefined();
     expect(material.alphaMode).toBe("BLEND");
 

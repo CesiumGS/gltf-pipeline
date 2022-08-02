@@ -240,27 +240,27 @@ describe("addDefaults", () => {
 
     const gltfWithDefaults = addDefaults(gltf);
     const materialsCommonBlinn =
-      gltfWithDefaults.materials[0].extensions.KHR_materials_common.values;
+      gltfWithDefaults.materials[0].extensions.KHR_materials_common;
     const materialsCommonConstant =
-      gltfWithDefaults.materials[1].extensions.KHR_materials_common.values;
+      gltfWithDefaults.materials[1].extensions.KHR_materials_common;
     const materialsCommonLambert =
-      gltfWithDefaults.materials[2].extensions.KHR_materials_common.values;
+      gltfWithDefaults.materials[2].extensions.KHR_materials_common;
 
-    expect(materialsCommonBlinn.ambient).toEqual([0.0, 0.0, 0.0, 1.0]);
-    expect(materialsCommonBlinn.diffuse).toEqual([0.0, 0.0, 0.0, 1.0]);
-    expect(materialsCommonBlinn.emission).toEqual([0.0, 0.0, 0.0, 1.0]);
-    expect(materialsCommonBlinn.specular).toEqual([0.0, 0.0, 0.0, 1.0]);
-    expect(materialsCommonBlinn.shininess).toBe(0.0);
-    expect(materialsCommonBlinn.transparency).toBe(1.0);
+    expect(materialsCommonBlinn.values.ambient).toEqual([0.0, 0.0, 0.0, 1.0]);
+    expect(materialsCommonBlinn.values.diffuse).toEqual([0.0, 0.0, 0.0, 1.0]);
+    expect(materialsCommonBlinn.values.emission).toEqual([0.0, 0.0, 0.0, 1.0]);
+    expect(materialsCommonBlinn.values.specular).toEqual([0.0, 0.0, 0.0, 1.0]);
+    expect(materialsCommonBlinn.values.shininess).toBe(0.0);
+    expect(materialsCommonBlinn.values.transparency).toBe(1.0);
     expect(materialsCommonBlinn.transparent).toBe(false);
     expect(materialsCommonBlinn.doubleSided).toBe(false);
 
-    expect(materialsCommonConstant.diffuse).toBeUndefined();
-    expect(materialsCommonConstant.specular).toBeUndefined();
-    expect(materialsCommonConstant.shininess).toBeUndefined();
+    expect(materialsCommonConstant.values.diffuse).toBeUndefined();
+    expect(materialsCommonConstant.values.specular).toBeUndefined();
+    expect(materialsCommonConstant.values.shininess).toBeUndefined();
 
-    expect(materialsCommonLambert.specular).toBeUndefined();
-    expect(materialsCommonLambert.shininess).toBeUndefined();
+    expect(materialsCommonLambert.values.specular).toBeUndefined();
+    expect(materialsCommonLambert.values.shininess).toBeUndefined();
   });
 
   it("adds sampler defaults", () => {
