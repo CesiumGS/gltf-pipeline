@@ -76,6 +76,12 @@ const argv = yargs
       type: "boolean",
       default: defaults.keepUnusedElements,
     },
+    keepLegacyExtensions: {
+      describe:
+        "When false, materials with KHR_techniques_webgl, KHR_blend, or KHR_materials_common will be converted to PBR.",
+      type: "boolean",
+      default: defaults.keepLegacyExtensions,
+    },
     "draco.compressMeshes": {
       alias: "d",
       describe:
@@ -183,6 +189,7 @@ const options = {
   separateTextures: argv.separateTextures,
   stats: argv.stats,
   keepUnusedElements: argv.keepUnusedElements,
+  keepLegacyExtensions: argv.keepLegacyExtensions,
   name: outputName,
   dracoOptions: dracoOptions,
 };

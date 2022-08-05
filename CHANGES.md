@@ -1,5 +1,10 @@
 # Change Log
 
+### 4.0.0 - 2022-08-01
+
+- Breaking changes
+  - glTF 1.0 or glTF 2.0 with the `KHR_techniques_webgl`, `KHR_blend`, or `KHR_materials_common` extensions will be converted to glTF 2.0 with PBR materials by default. For the previous behavior pass in `--keepLegacyExtensions`.
+
 ### 3.0.5 - 2022-06-30
 
 - Fixed handling of glTF models with the [`EXT_mesh_features`](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_mesh_features) and [`EXT_structural_metadata`](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata) extensions.
