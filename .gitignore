@@ -20,4 +20,3 @@ test
 .nyc_output
 doc/*
 !doc/gltf.png
-.github/*
