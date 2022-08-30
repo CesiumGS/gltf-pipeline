@@ -3,6 +3,8 @@
 [![License](https://img.shields.io/:license-apache-blue.svg)](https://github.com/CesiumGS/gltf-pipeline/blob/main/LICENSE.md)
 [![Build Status](https://travis-ci.org/CesiumGS/gltf-pipeline.svg?branch=main)](https://travis-ci.org/CesiumGS/gltf-pipeline)
 
+uses @propelleraero/cesium
+
 <p align="center">
 <a href="https://www.khronos.org/gltf"><img src="doc/gltf.png" onerror="this.src='gltf.png'"/></a>
 </p>

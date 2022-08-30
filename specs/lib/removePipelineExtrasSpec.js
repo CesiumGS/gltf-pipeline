@@ -1,5 +1,5 @@
 "use strict";
-const Cesium = require("cesium");
+const Cesium = require("@propelleraero/cesium");
 const addPipelineExtras = require("../../lib/addPipelineExtras");
 const removePipelineExtras = require("../../lib/removePipelineExtras");
 
