@@ -12,6 +12,7 @@ const path = require("path");
 const Promise = require("bluebird");
 const yargs = require("yargs");
 
+const defaultValue = Cesium.defaultValue;
 const defined = Cesium.defined;
 const argv = yargs.argv;
 
@@ -36,6 +37,7 @@ module.exports = {
   "test-watch": testWatch,
   coverage: coverage,
   cloc: cloc,
+  "generate-third-party": generateThirdParty,
 };
 
 function test(done) {
@@ -130,7 +132,6 @@ function amdify(source, subDependencyMapping) {
   let requirePath;
 
   source = source.replace(/\r\n/g, "\n");
-  source = source.replace(/\b(let|const)\b/g, "var");
 
   let outputSource = source;
 
@@ -146,7 +147,7 @@ function amdify(source, subDependencyMapping) {
   }
 
   // create require mapping for dependencies
-  const findRequireRegex = /var\s+(.+?)\s*=\s*require\('(.+?)'\);\n/g;
+  const findRequireRegex = /const\s+(.+?)\s*=\s*require\("(.+?)"\);\n/g;
   let findRequire = findRequireRegex.exec(source);
   const requireMapping = {};
   while (defined(findRequire) && findRequire.length > 0) {
@@ -165,7 +166,7 @@ function amdify(source, subDependencyMapping) {
     if (Object.prototype.hasOwnProperty.call(requireMapping, requireVariable)) {
       requirePath = requireMapping[requireVariable];
       const findSubdependencyString =
-        "var\\s+(.+?)\\s*?=\\s*?" + requireVariable + "\\.(.+?);\n";
+        "const\\s+(.+?)\\s*?=\\s*?" + requireVariable + "\\.(.+?);\n";
       const findSubdependencyRegex = new RegExp(findSubdependencyString, "g");
       let findSubdependency = findSubdependencyRegex.exec(source);
       while (defined(findSubdependency) && findSubdependency.length > 0) {
@@ -206,14 +207,14 @@ function amdify(source, subDependencyMapping) {
     }
   }
   // amdify source
-  outputSource = outputSource.replace(/'use strict';/g, "");
+  outputSource = outputSource.replace(/"use strict";/g, "");
 
   // wrap define header
   const lines = [];
   for (const variable in requireMapping) {
     if (Object.prototype.hasOwnProperty.call(requireMapping, variable)) {
       lines.push(
-        "import " + variable + ' from "' + requireMapping[variable] + '.js"'
+        "import " + variable + ' from "' + requireMapping[variable] + '.js";'
       );
     }
   }
@@ -277,4 +278,88 @@ function buildCesium() {
       });
     });
   });
+}
+
+function getLicenseDataFromPackage(packageName, override) {
+  override = defaultValue(override, defaultValue.EMPTY_OBJECT);
+  const packagePath = path.join("node_modules", packageName, "package.json");
+
+  if (!fsExtra.existsSync(packagePath)) {
+    throw new Error(`Unable to find ${packageName} license information`);
+  }
+
+  const contents = fsExtra.readFileSync(packagePath);
+  const packageJson = JSON.parse(contents);
+
+  let licenseField = override.license;
+
+  if (!licenseField) {
+    licenseField = [packageJson.license];
+  }
+
+  if (!licenseField && packageJson.licenses) {
+    licenseField = packageJson.licenses;
+  }
+
+  if (!licenseField) {
+    console.log(`No license found for ${packageName}`);
+    licenseField = ["NONE"];
+  }
+
+  let version = packageJson.version;
+  if (!packageJson.version) {
+    console.log(`No version information found for ${packageName}`);
+    version = "NONE";
+  }
+
+  return {
+    name: packageName,
+    license: licenseField,
+    version: version,
+    url: `https://www.npmjs.com/package/${packageName}`,
+    notes: override.notes,
+  };
+}
+
+function readThirdPartyExtraJson() {
+  const path = "ThirdParty.extra.json";
+  if (fsExtra.existsSync(path)) {
+    const contents = fsExtra.readFileSync(path);
+    return JSON.parse(contents);
+  }
+  return [];
+}
+
+async function generateThirdParty() {
+  const packageJson = JSON.parse(fsExtra.readFileSync("package.json"));
+  const thirdPartyExtraJson = readThirdPartyExtraJson();
+
+  const thirdPartyJson = [];
+
+  const dependencies = packageJson.dependencies;
+  for (const packageName in dependencies) {
+    if (dependencies.hasOwnProperty(packageName)) {
+      const override = thirdPartyExtraJson.find(
+        (entry) => entry.name === packageName
+      );
+      thirdPartyJson.push(getLicenseDataFromPackage(packageName, override));
+    }
+  }
+
+  thirdPartyJson.sort(function (a, b) {
+    const nameA = a.name.toLowerCase();
+    const nameB = b.name.toLowerCase();
+    if (nameA < nameB) {
+      return -1;
+    }
+    if (nameA > nameB) {
+      return 1;
+    }
+    return 0;
+  });
+
+  fsExtra.writeFileSync(
+    "ThirdParty.json",
+    JSON.stringify(thirdPartyJson, null, 2)
+  );
 }

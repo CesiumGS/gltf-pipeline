@@ -1,6 +1,6 @@
 {
   "name": "@propelleraero/gltf-pipeline",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "description": "Content pipeline tools for optimizing glTF assets.",
   "license": "Apache-2.0",
   "contributors": [
@@ -29,26 +29,26 @@
     "@babel/runtime": "^7.15.3",
     "@propelleraero/cesium": "^1.x",
     "bluebird": "^3.7.2",
-    "draco3d": "^1.4.1",
+    "draco3d": "^1.4.3",
     "fs-extra": "^10.0.0",
     "mime": "^2.5.2",
     "object-hash": "^2.2.0",
-    "yargs": "^17.0.1"
+    "yargs": "^17.2.1"
   },
   "devDependencies": {
     "cloc": "^2.8.0",
     "coveralls": "^3.1.1",
-    "dependency-tree": "^8.1.1",
-    "eslint": "^7.32.0",
+    "dependency-tree": "^8.1.2",
+    "eslint": "^8.0.1",
     "eslint-config-cesium": "^8.0.1",
     "eslint-config-prettier": "^8.3.0",
     "gulp": "^4.0.2",
     "husky": "^4.3.8",
-    "jasmine": "^3.8.0",
+    "jasmine": "^3.10.0",
     "jasmine-spec-reporter": "^7.0.0",
     "jsdoc": "^3.6.7",
     "nyc": "^15.1.0",
-    "open": "^8.2.1",
+    "open": "^8.3.0",
     "prettier": "2.3.2",
     "pretty-quick": "^3.1.1"
   },
@@ -69,7 +69,8 @@
     "prettier": "prettier --write \"**/*\"",
     "prettier-check": "prettier --check \"**/*\"",
     "pretty-quick": "pretty-quick",
-    "build-cesium": "gulp build-cesium"
+    "build-cesium": "gulp build-cesium",
+    "generate-third-party": "gulp generate-third-party"
   },
   "bin": {
     "gltf-pipeline": "./bin/gltf-pipeline.js"

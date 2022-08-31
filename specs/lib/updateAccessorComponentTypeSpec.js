@@ -3,20 +3,16 @@ const Cesium = require("@propelleraero/cesium");
 const readResources = require("../../lib/readResources");
 const updateAccessorComponentTypes = require("../../lib/updateAccessorComponentTypes");
 
-const arrayFill = Cesium.arrayFill;
 const WebGLConstants = Cesium.WebGLConstants;
 
 let buffer;
 
 describe("updateAccessorComponentTypes", () => {
   beforeAll(() => {
-    const byteBuffer = Buffer.from(arrayFill(new Int8Array(96), 0).buffer);
-    const floatBuffer = Buffer.from(
-      arrayFill(new Float32Array(96), 0.0).buffer
-    );
-    const unsignedShortBuffer = Buffer.from(
-      arrayFill(new Uint16Array(96), 0).buffer
-    );
+    // Note: TypedArray constructors initialize all elements to zero
+    const byteBuffer = Buffer.from(new Int8Array(96).buffer);
+    const floatBuffer = Buffer.from(new Float32Array(96).buffer);
+    const unsignedShortBuffer = Buffer.from(new Uint16Array(96).buffer);
     const source = Buffer.concat([
       byteBuffer,
       floatBuffer,
