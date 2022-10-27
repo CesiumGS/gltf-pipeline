@@ -49,8 +49,8 @@ function test(done) {
         !defined(argv.suppressPassed) || !argv.suppressPassed,
     })
   );
-  jasmine.execute();
-  jasmine.onComplete(function (passed) {
+  jasmine.exitOnCompletion = false;
+  jasmine.execute().then(function (passed) {
     done(argv.failTaskOnError && !passed ? 1 : 0);
   });
 }
