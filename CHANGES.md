@@ -1,6 +1,6 @@
 # Change Log
 
-### 4.0.1 - ????-??-??
+### 4.0.1 - 2023-01-25
 
 - Fixed crash when writing GLB files above 2GB. [#627](https://github.com/CesiumGS/gltf-pipeline/pull/627)
 
