@@ -1,11 +1,11 @@
-os:
-  - linux
-  - osx
-
 language: node_js
 
 node_js:
-  - "16"
+  - "18"
+
+# Node 18 doesn't work in Ubuntu 18.04 or lower. Set to Ubuntu 22.04.
+# See https://github.com/nodejs/node/issues/42351#issuecomment-1068424442
+dist: jammy
 
 script:
   - npm run eslint

@@ -50,6 +50,8 @@ async function test() {
         !defined(argv.suppressPassed) || !argv.suppressPassed,
     })
   );
+
+  jasmine.exitOnCompletion = false;
   const results = await jasmine.execute();
   if (argv.failTaskOnError && results.overallStatus === "failed") {
     process.exitCode = 1;
