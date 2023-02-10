@@ -1,5 +1,9 @@
 # Change Log
 
+### 4.0.2 - 2023-02-10
+
+- Update npm module dependencies.
+
 ### 4.0.1 - 2023-01-25
 
 - Fixed crash when writing GLB files above 2GB. [#627](https://github.com/CesiumGS/gltf-pipeline/pull/627)
