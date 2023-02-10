@@ -44,7 +44,7 @@
     "eslint-plugin-node": "^11.1.0",
     "gulp": "^4.0.2",
     "husky": "^4.3.8",
-    "jasmine": "^3.10.0",
+    "jasmine": "^4.0.0",
     "jasmine-spec-reporter": "^7.0.0",
     "jsdoc": "^3.6.7",
     "nyc": "^15.1.0",
