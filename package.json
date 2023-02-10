@@ -31,7 +31,7 @@
     "draco3d": "^1.4.3",
     "fs-extra": "^11.0.0",
     "mime": "^3.0.0",
-    "object-hash": "^2.2.0",
+    "object-hash": "^3.0.0",
     "yargs": "^17.2.1"
   },
   "devDependencies": {
