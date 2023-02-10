@@ -46,7 +46,7 @@
     "husky": "^4.3.8",
     "jasmine": "^4.0.0",
     "jasmine-spec-reporter": "^7.0.0",
-    "jsdoc": "^3.6.7",
+    "jsdoc": "^4.0.0",
     "nyc": "^15.1.0",
     "open": "^8.3.0",
     "prettier": "2.3.2",
