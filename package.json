@@ -37,7 +37,7 @@
   "devDependencies": {
     "cloc": "^2.8.0",
     "coveralls": "^3.1.1",
-    "dependency-tree": "^8.1.2",
+    "dependency-tree": "^9.0.0",
     "eslint": "^8.0.1",
     "eslint-config-cesium": "^9.0.0",
     "eslint-config-prettier": "^8.3.0",
