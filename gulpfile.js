@@ -40,19 +40,20 @@ module.exports = {
   "generate-third-party": generateThirdParty,
 };
 
-function test(done) {
+async function test() {
   const jasmine = new Jasmine();
   jasmine.loadConfigFile("specs/jasmine.json");
+  jasmine.exitOnCompletion = false;
   jasmine.addReporter(
     new JasmineSpecReporter({
       displaySuccessfulSpec:
         !defined(argv.suppressPassed) || !argv.suppressPassed,
     })
   );
-  jasmine.execute();
-  jasmine.onComplete(function (passed) {
-    done(argv.failTaskOnError && !passed ? 1 : 0);
-  });
+  const results = await jasmine.execute();
+  if (argv.failTaskOnError && results.overallStatus === "failed") {
+    process.exitCode = 1;
+  }
 }
 
 function testWatch() {
