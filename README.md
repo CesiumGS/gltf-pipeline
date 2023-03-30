@@ -56,13 +56,14 @@ npm install -g gltf-pipeline
 const gltfPipeline = require("gltf-pipeline");
 const fsExtra = require("fs-extra");
 const gltfToGlb = gltfPipeline.gltfToGlb;
-const gltf = fsExtra.readJsonSync("model.gltf");
-gltfToGlb(gltf).then(function (results) {
+const gltf = fsExtra.readJsonSync("./input/model.gltf");
+const options = { resourceDirectory: "./input/" }
+gltfToGlb(gltf, options).then(function (results) {
   fsExtra.writeFileSync("model.glb", results.glb);
 });
 ```
 
-#### Converting a glb to glTF
+#### Converting a glb to embedded glTF
 
 ```javascript
 const gltfPipeline = require("gltf-pipeline");
