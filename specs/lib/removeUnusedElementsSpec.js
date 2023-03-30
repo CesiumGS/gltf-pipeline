@@ -950,6 +950,67 @@ describe("removes unused materials, textures, images, samplers", () => {
     expect(gltf.accessors[2].name).toEqual("S");
   });
 
+  it("does not remove CESIUM_primitive_outline accessors", () => {
+    const gltf = {
+      accessors: [
+        {
+          name: "unused",
+        },
+        {
+          name: "position",
+        },
+        {
+          name: "outlineIndices",
+        },
+        {
+          name: "normal",
+        },
+        {
+          name: "indices",
+        },
+        {
+          name: "unused",
+        },
+      ],
+      meshes: [
+        {
+          primitives: [
+            {
+              attributes: {
+                POSITION: 1,
+                NORMAL: 3,
+              },
+              indices: 4,
+              extensions: {
+                CESIUM_primitive_outline: {
+                  indices: 2,
+                },
+              },
+            },
+          ],
+        },
+      ],
+      nodes: [
+        {
+          mesh: 0,
+        },
+      ],
+      extensionsUsed: ["CESIUM_primitive_outline"],
+    };
+
+    removeUnusedElements(gltf, ["accessor"]);
+
+    expect(gltf.accessors.length).toEqual(4);
+    expect(gltf.accessors[0].name).toEqual("position");
+    expect(gltf.accessors[1].name).toEqual("outlineIndices");
+    expect(gltf.accessors[2].name).toEqual("normal");
+    expect(gltf.accessors[3].name).toEqual("indices");
+
+    expect(
+      gltf.meshes[0].primitives[0].extensions.CESIUM_primitive_outline.indices
+    ).toEqual(1);
+  });
+
   it("does not remove EXT_feature_metadata buffer views and textures", () => {
     const gltf = {
       asset: {
