@@ -1,6 +1,6 @@
 {
   "name": "@propelleraero/gltf-pipeline",
-  "version": "3.0.6",
+  "version": "3.0.7",
   "description": "Content pipeline tools for optimizing glTF assets.",
   "license": "Apache-2.0",
   "contributors": [
