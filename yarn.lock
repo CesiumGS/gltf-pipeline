@@ -297,7 +297,7 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@propelleraero/cesium@^1.99":
+"@propelleraero/cesium@1.x":
   version "1.99.0"
   resolved "https://registry.yarnpkg.com/@propelleraero/cesium/-/cesium-1.99.0.tgz#9d70542ecb4725d050e341d46b7332f5f35d5b68"
   integrity sha512-M4D2NTBDbRxuU+xK2Hv2FMJl8Pq2x2HYgrrCnulOT/zwhQL5wcxYUNwWoXUCeBTPnRHYZEePiOIWyR1nw7cw0A==

@@ -25,9 +25,11 @@
   "engines": {
     "node": ">=6.0.0"
   },
+  "peerDependencies": {
+    "@propelleraero/cesium": "1.x"
+  },
   "dependencies": {
     "@babel/runtime": "^7.15.3",
-    "@propelleraero/cesium": "^1.99",
     "bluebird": "^3.7.2",
     "draco3d": "^1.4.3",
     "fs-extra": "^10.0.0",
@@ -36,6 +38,7 @@
     "yargs": "^17.2.1"
   },
   "devDependencies": {
+    "@propelleraero/cesium": "1.x",
     "cloc": "^2.8.0",
     "coveralls": "^3.1.1",
     "dependency-tree": "^8.1.2",
