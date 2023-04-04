@@ -57,7 +57,7 @@ const gltfPipeline = require("gltf-pipeline");
 const fsExtra = require("fs-extra");
 const gltfToGlb = gltfPipeline.gltfToGlb;
 const gltf = fsExtra.readJsonSync("./input/model.gltf");
-const options = { resourceDirectory: "./input/" }
+const options = { resourceDirectory: "./input/" };
 gltfToGlb(gltf, options).then(function (results) {
   fsExtra.writeFileSync("model.glb", results.glb);
 });
