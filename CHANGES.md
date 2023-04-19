@@ -1,5 +1,9 @@
 # Change Log
 
+### 4.0.3 - yyyy-mm-dd
+
+- Add `baseColorTextureNames` and `baseColorFactorNames` to the options that can be given at the command line and passed to `processGltf` and `updateVersion`, to specify the uniform names in a `KHR_techniques_webgl` extension that indicate that a certain texture or color should be used as the base color texture or base color factor of a PBR material.
+
 ### 4.0.2 - 2023-02-10
 
 - Update npm module dependencies.
