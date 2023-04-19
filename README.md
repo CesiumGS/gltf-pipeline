@@ -117,27 +117,29 @@ processGltf(gltf, options).then(function (results) {
 
 ### Command-Line Flags
 
-| Flag                           | Description                                                                                                                    | Required               |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------ | ---------------------- |
-| `--help`, `-h`                 | Display help                                                                                                                   | No                     |
-| `--input`, `-i`                | Path to the glTF or glb file.                                                                                                  | :white_check_mark: Yes |
-| `--output`, `-o`               | Output path of the glTF or glb file. Separate resources will be saved to the same directory.                                   | No                     |
-| `--binary`, `-b`               | Convert the input glTF to glb.                                                                                                 | No, default `false`    |
-| `--json`, `-j`                 | Convert the input glb to glTF.                                                                                                 | No, default `false`    |
-| `--separate`, `-s`             | Write separate buffers, shaders, and textures instead of embedding them in the glTF.                                           | No, default `false`    |
-| `--separateTextures`, `-t`     | Write out separate textures only.                                                                                              | No, default `false`    |
-| `--stats`                      | Print statistics to console for output glTF file.                                                                              | No, default `false`    |
-| `--keepUnusedElements`         | Keep unused materials, nodes and meshes.                                                                                       | No, default `false`    |
-| `--keepLegacyExtensions`       | When false, materials with `KHR_techniques_webgl`, `KHR_blend`, or `KHR_materials_common` will be converted to PBR.            | No, default `false`    |
-| `--draco.compressMeshes`, `-d` | Compress the meshes using Draco. Adds the `KHR_draco_mesh_compression` extension.                                              | No, default `false`    |
-| `--draco.compressionLevel`     | Draco compression level [0-10], most is 10, least is 0. A value of 0 will apply sequential encoding and preserve face order.   | No, default `7`        |
-| `--draco.quantizePositionBits` | Quantization bits for position attribute when using Draco compression.                                                         | No, default `11`       |
-| `--draco.quantizeNormalBits`   | Quantization bits for normal attribute when using Draco compression.                                                           | No, default `8`        |
-| `--draco.quantizeTexcoordBits` | Quantization bits for texture coordinate attribute when using Draco compression.                                               | No, default `10`       |
-| `--draco.quantizeColorBits`    | Quantization bits for color attribute when using Draco compression.                                                            | No, default `8`        |
-| `--draco.quantizeGenericBits`  | Quantization bits for skinning attribute (joint indices and joint weights) and custom attributes when using Draco compression. | No, default `8`        |
-| `--draco.unifiedQuantization`  | Quantize positions of all primitives using the same quantization grid. If not set, quantization is applied separately.         | No, default `false`    |
-| `--draco.uncompressedFallback` | Adds uncompressed fallback versions of the compressed meshes.                                                                  | No, default `false`    |
+| Flag                           | Description                                                                                                                                                  | Required                                  |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------- |
+| `--help`, `-h`                 | Display help                                                                                                                                                 | No                                        |
+| `--input`, `-i`                | Path to the glTF or glb file.                                                                                                                                | :white_check_mark: Yes                    |
+| `--output`, `-o`               | Output path of the glTF or glb file. Separate resources will be saved to the same directory.                                                                 | No                                        |
+| `--binary`, `-b`               | Convert the input glTF to glb.                                                                                                                               | No, default `false`                       |
+| `--json`, `-j`                 | Convert the input glb to glTF.                                                                                                                               | No, default `false`                       |
+| `--separate`, `-s`             | Write separate buffers, shaders, and textures instead of embedding them in the glTF.                                                                         | No, default `false`                       |
+| `--separateTextures`, `-t`     | Write out separate textures only.                                                                                                                            | No, default `false`                       |
+| `--stats`                      | Print statistics to console for output glTF file.                                                                                                            | No, default `false`                       |
+| `--keepUnusedElements`         | Keep unused materials, nodes and meshes.                                                                                                                     | No, default `false`                       |
+| `--keepLegacyExtensions`       | When false, materials with `KHR_techniques_webgl`, `KHR_blend`, or `KHR_materials_common` will be converted to PBR.                                          | No, default `false`                       |
+| `--draco.compressMeshes`, `-d` | Compress the meshes using Draco. Adds the `KHR_draco_mesh_compression` extension.                                                                            | No, default `false`                       |
+| `--draco.compressionLevel`     | Draco compression level [0-10], most is 10, least is 0. A value of 0 will apply sequential encoding and preserve face order.                                 | No, default `7`                           |
+| `--draco.quantizePositionBits` | Quantization bits for position attribute when using Draco compression.                                                                                       | No, default `11`                          |
+| `--draco.quantizeNormalBits`   | Quantization bits for normal attribute when using Draco compression.                                                                                         | No, default `8`                           |
+| `--draco.quantizeTexcoordBits` | Quantization bits for texture coordinate attribute when using Draco compression.                                                                             | No, default `10`                          |
+| `--draco.quantizeColorBits`    | Quantization bits for color attribute when using Draco compression.                                                                                          | No, default `8`                           |
+| `--draco.quantizeGenericBits`  | Quantization bits for skinning attribute (joint indices and joint weights) and custom attributes when using Draco compression.                               | No, default `8`                           |
+| `--draco.unifiedQuantization`  | Quantize positions of all primitives using the same quantization grid. If not set, quantization is applied separately.                                       | No, default `false`                       |
+| `--draco.uncompressedFallback` | Adds uncompressed fallback versions of the compressed meshes.                                                                                                | No, default `false`                       |
+| `--baseColorTextureNames`      | Names of uniforms that should be considered to refer to base color textures <br /> when updating from the `KHR_techniques_webgl` extension to PBR materials. | No. (The defaults are not specified here) |
+| `--baseColorFactorNames`       | Names of uniforms that should be considered to refer to base color factors <br /> when updating from the `KHR_techniques_webgl` extension to PBR materials.  | No. (The defaults are not specified here) |
 
 ## Build Instructions
 
