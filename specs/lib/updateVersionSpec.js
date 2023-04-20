@@ -926,4 +926,43 @@ describe("updateVersion", () => {
     expect(gltf.extensionsUsed).toBeUndefined();
     expect(material.extensions).toBeUndefined();
   });
+
+  it("creates a PBR material from KHR_techniques_webgl with a custom diffuse texture name", async () => {
+    const gltf = fsExtra.readJsonSync(gltf2TechniquesTextured);
+    await readResources(gltf);
+
+    const options = {
+      baseColorTextureNames: ["u_diffuse"],
+    };
+    updateVersion(gltf, options);
+
+    expect(gltf.materials.length).toBe(1);
+
+    const material = gltf.materials[0];
+    expect(material.pbrMetallicRoughness.roughnessFactor).toBe(1.0);
+    expect(material.pbrMetallicRoughness.metallicFactor).toBe(0.0);
+    expect(material.pbrMetallicRoughness.baseColorTexture.index).toBe(0);
+
+    expect(gltf.extensionsRequired).toBeUndefined();
+    expect(gltf.extensionsUsed).toBeUndefined();
+  });
+
+  it("does not create a PBR material from KHR_techniques_webgl when the diffuse texture name is unknown", async () => {
+    const gltf = fsExtra.readJsonSync(gltf2TechniquesTextured);
+    await readResources(gltf);
+
+    const options = {
+      baseColorTextureNames: ["NOT_u_diffuse"],
+    };
+    updateVersion(gltf, options);
+
+    expect(gltf.materials.length).toBe(1);
+
+    const material = gltf.materials[0];
+    expect(material.pbrMetallicRoughness).toBeUndefined();
+    expect(material.extensions).toBeUndefined();
+
+    expect(gltf.extensionsRequired).toBeUndefined();
+    expect(gltf.extensionsUsed).toBeUndefined();
+  });
 });
