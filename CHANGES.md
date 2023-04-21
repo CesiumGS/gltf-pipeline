@@ -1,8 +1,9 @@
 # Change Log
 
-### 4.0.3 - yyyy-mm-dd
+### 4.1.0 - 2023-04-21
 
-- Add `baseColorTextureNames` and `baseColorFactorNames` to the options that can be given at the command line and passed to `processGltf` and `updateVersion`, to specify the uniform names in a `KHR_techniques_webgl` extension that indicate that a certain texture or color should be used as the base color texture or base color factor of a PBR material.
+- Add `baseColorTextureNames` and `baseColorFactorNames` to the options that can be given at the command line and passed to `processGltf` and `updateVersion`, to specify the uniform names in a `KHR_techniques_webgl` extension that indicate that a certain texture or color should be used as the base color texture or base color factor of a PBR material. [#637](https://github.com/CesiumGS/gltf-pipeline/pull/637)
+- Fixed handling of glTF models with the [`CESIUM_primitive_outline`](https://github.com/KhronosGroup/glTF/blob/main/extensions/2.0/Vendor/CESIUM_primitive_outline/README.md) extension. [#632](https://github.com/CesiumGS/gltf-pipeline/pull/631)
 
 ### 4.0.2 - 2023-02-10
 
