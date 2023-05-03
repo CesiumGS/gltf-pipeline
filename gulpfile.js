@@ -7,7 +7,6 @@ const fsExtra = require("fs-extra");
 const gulp = require("gulp");
 const Jasmine = require("jasmine");
 const JasmineSpecReporter = require("jasmine-spec-reporter").SpecReporter;
-const open = require("open");
 const path = require("path");
 const Promise = require("bluebird");
 const yargs = require("yargs");
@@ -86,7 +85,6 @@ function coverage() {
       stdio: [process.stdin, process.stdout, process.stderr],
     }
   );
-  open("coverage/lcov-report/index.html");
 
   return Promise.resolve();
 }
