@@ -1,6 +1,6 @@
 "use strict";
 
-const { RuntimeError } = require("cesium");
+const { RuntimeError } = require("@propelleraero/cesium");
 
 const dataUriToBuffer = require("../../lib/dataUriToBuffer");
 const getImageExtension = require("../../lib/getImageExtension");

@@ -1,6 +1,6 @@
 "use strict";
 
-const { RuntimeError } = require("cesium");
+const { RuntimeError } = require("@propelleraero/cesium");
 
 const parseGlb = require("../../lib/parseGlb");
 const removePipelineExtras = require("../../lib/removePipelineExtras");

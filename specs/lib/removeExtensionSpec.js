@@ -1,5 +1,5 @@
 "use strict";
-const Cesium = require("cesium");
+const Cesium = require("@propelleraero/cesium");
 const removeExtension = require("../../lib/removeExtension");
 
 const WebGLConstants = Cesium.WebGLConstants;

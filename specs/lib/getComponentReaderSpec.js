@@ -1,5 +1,5 @@
 "use strict";
-const Cesium = require("cesium");
+const Cesium = require("@propelleraero/cesium");
 const getComponentReader = require("../../lib/getComponentReader");
 
 const ComponentDatatype = Cesium.ComponentDatatype;
