@@ -1,7 +1,7 @@
 "use strict";
 const fsExtra = require("fs-extra");
-const Cesium = require("@propelleraero/cesium");
 const path = require("path");
+const Cesium = require("@propelleraero/cesium");
 const ForEach = require("../../lib/ForEach");
 const numberOfComponentsForType = require("../../lib/numberOfComponentsForType");
 const readResources = require("../../lib/readResources");
