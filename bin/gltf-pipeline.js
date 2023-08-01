@@ -76,6 +76,12 @@ const argv = yargs
       type: "boolean",
       default: defaults.keepUnusedElements,
     },
+    keepLegacyExtensions: {
+      describe:
+        "When false, materials with KHR_techniques_webgl, KHR_blend, or KHR_materials_common will be converted to PBR.",
+      type: "boolean",
+      default: defaults.keepLegacyExtensions,
+    },
     "draco.compressMeshes": {
       alias: "d",
       describe:
@@ -130,6 +136,16 @@ const argv = yargs
       type: "boolean",
       default: dracoDefaults.unifiedQuantization,
     },
+    baseColorTextureNames: {
+      describe:
+        "Names of uniforms that should be considered to refer to base color textures when updating from the KHR_techniques_webgl extension to PBR materials.",
+      type: "array",
+    },
+    baseColorFactorNames: {
+      describe:
+        "Names of uniforms that should be considered to refer to base color factors when updating from the KHR_techniques_webgl extension to PBR materials.",
+      type: "array",
+    },
   })
   .parse(args);
 
@@ -140,7 +156,7 @@ const inputDirectory = path.dirname(inputPath);
 const inputName = path.basename(inputPath, path.extname(inputPath));
 const inputExtension = path.extname(inputPath).toLowerCase();
 if (inputExtension !== ".gltf" && inputExtension !== ".glb") {
-  console.log('Error: unrecognized file extension "' + inputExtension + '".');
+  console.log(`Error: unrecognized file extension "${inputExtension}".`);
   return;
 }
 
@@ -155,7 +171,7 @@ if (!defined(outputPath)) {
   }
   outputPath = path.join(
     inputDirectory,
-    inputName + "-processed" + outputExtension
+    `${inputName}-processed${outputExtension}`
   );
 }
 
@@ -163,7 +179,7 @@ const outputDirectory = path.dirname(outputPath);
 const outputName = path.basename(outputPath, path.extname(outputPath));
 outputExtension = path.extname(outputPath).toLowerCase();
 if (outputExtension !== ".gltf" && outputExtension !== ".glb") {
-  console.log('Error: unrecognized file extension "' + outputExtension + '".');
+  console.log(`Error: unrecognized file extension "${outputExtension}".`);
   return;
 }
 
@@ -183,8 +199,11 @@ const options = {
   separateTextures: argv.separateTextures,
   stats: argv.stats,
   keepUnusedElements: argv.keepUnusedElements,
+  keepLegacyExtensions: argv.keepLegacyExtensions,
   name: outputName,
   dracoOptions: dracoOptions,
+  baseColorTextureNames: argv.baseColorTextureNames,
+  baseColorFactorNames: argv.baseColorFactorNames,
 };
 
 const inputIsBinary = inputExtension === ".glb";

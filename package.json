@@ -1,6 +1,6 @@
 {
   "name": "@propelleraero/gltf-pipeline",
-  "version": "3.0.7",
+  "version": "4.1.0",
   "description": "Content pipeline tools for optimizing glTF assets.",
   "license": "Apache-2.0",
   "contributors": [
@@ -23,7 +23,7 @@
   },
   "main": "index.js",
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=14.0.0"
   },
   "peerDependencies": {
     "@propelleraero/cesium": "1.x"
@@ -32,36 +32,35 @@
     "@babel/runtime": "^7.15.3",
     "bluebird": "^3.7.2",
     "draco3d": "^1.4.3",
-    "fs-extra": "^10.0.0",
-    "mime": "^2.5.2",
-    "object-hash": "^2.2.0",
+    "fs-extra": "^11.0.0",
+    "mime": "^3.0.0",
+    "object-hash": "^3.0.0",
     "yargs": "^17.2.1"
   },
   "devDependencies": {
     "@propelleraero/cesium": "1.x",
     "cloc": "^2.8.0",
     "coveralls": "^3.1.1",
-    "dependency-tree": "^8.1.2",
+    "dependency-tree": "^9.0.0",
     "eslint": "^8.0.1",
-    "eslint-config-cesium": "^8.0.1",
+    "eslint-config-cesium": "^9.0.0",
     "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-node": "^11.1.0",
     "gulp": "^4.0.2",
-    "husky": "^4.3.8",
-    "jasmine": "^3.10.0",
+    "husky": "^8.0.3",
+    "jasmine": "^4.0.0",
     "jasmine-spec-reporter": "^7.0.0",
-    "jsdoc": "^3.6.7",
+    "jsdoc": "^4.0.0",
     "nyc": "^15.1.0",
     "open": "^8.3.0",
-    "prettier": "2.3.2",
+    "prettier": "2.8.4",
     "pretty-quick": "^3.1.1"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "eslint && pretty-quick --staged"
-    }
-  },
   "scripts": {
+    "prepare": "husky install",
+    "pre-commit": "eslint && pretty-quick --staged",
     "jsdoc": "jsdoc ./lib -R ./README.md -d doc",
+    "eslint-fix": "eslint \"./**/*.js\" --fix",
     "eslint": "eslint \"./**/*.js\" --cache --quiet",
     "eslint-watch": "gulp eslint-watch",
     "test": "gulp test",

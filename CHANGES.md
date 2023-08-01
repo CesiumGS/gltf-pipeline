@@ -1,5 +1,23 @@
 # Change Log
 
+### 4.1.0 - 2023-04-21
+
+- Add `baseColorTextureNames` and `baseColorFactorNames` to the options that can be given at the command line and passed to `processGltf` and `updateVersion`, to specify the uniform names in a `KHR_techniques_webgl` extension that indicate that a certain texture or color should be used as the base color texture or base color factor of a PBR material. [#637](https://github.com/CesiumGS/gltf-pipeline/pull/637)
+- Fixed handling of glTF models with the [`CESIUM_primitive_outline`](https://github.com/KhronosGroup/glTF/blob/main/extensions/2.0/Vendor/CESIUM_primitive_outline/README.md) extension. [#632](https://github.com/CesiumGS/gltf-pipeline/pull/631)
+
+### 4.0.2 - 2023-02-10
+
+- Update npm module dependencies.
+
+### 4.0.1 - 2023-01-25
+
+- Fixed crash when writing GLB files above 2GB. [#627](https://github.com/CesiumGS/gltf-pipeline/pull/627)
+
+### 4.0.0 - 2022-08-01
+
+- Breaking changes
+  - glTF 1.0 or glTF 2.0 with the `KHR_techniques_webgl`, `KHR_blend`, or `KHR_materials_common` extensions will be converted to glTF 2.0 with PBR materials by default. For the previous behavior pass in `--keepLegacyExtensions`.
+
 ### 3.0.5 - 2022-06-30
 
 - Fixed handling of glTF models with the [`EXT_mesh_features`](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_mesh_features) and [`EXT_structural_metadata`](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_structural_metadata) extensions.

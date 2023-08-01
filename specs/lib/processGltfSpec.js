@@ -37,6 +37,7 @@ describe("processGltf", () => {
     const gltf = fsExtra.readJsonSync(gltfPath);
     const options = {
       separate: true,
+      keepLegacyExtensions: true,
     };
     const results = await processGltf(gltf, options);
     expect(results.gltf).toBeDefined();
@@ -69,6 +70,7 @@ describe("processGltf", () => {
     const gltf = fsExtra.readJsonSync(gltfPath);
     const options = {
       separate: true,
+      keepLegacyExtensions: true,
       name: "my-model",
     };
 

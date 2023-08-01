@@ -181,11 +181,13 @@ describe("compressDracoMeshes", () => {
     await compressDracoMeshes(gltf, {
       dracoOptions: {
         quantizePositionBits: 8,
+        quantizeTexcoordBits: 8,
       },
     });
     await compressDracoMeshes(gltfOther, {
       dracoOptions: {
-        quantizePositionBits: 25,
+        quantizePositionBits: 30,
+        quantizedTexcoordBits: 30,
       },
     });
 

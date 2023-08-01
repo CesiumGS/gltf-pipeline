@@ -39,8 +39,9 @@ const nonContiguousData = [
 function createGltf(elements, byteStride) {
   const buffer = Buffer.from(new Float32Array(elements).buffer);
   const byteLength = buffer.length;
-  const dataUri =
-    "data:application/octet-stream;base64," + buffer.toString("base64");
+  const dataUri = `data:application/octet-stream;base64,${buffer.toString(
+    "base64"
+  )}`;
   const gltf = {
     accessors: [
       {

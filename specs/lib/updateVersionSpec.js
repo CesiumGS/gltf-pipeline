@@ -1,4 +1,6 @@
 "use strict";
+const fsExtra = require("fs-extra");
+const path = require("path");
 const Cesium = require("@propelleraero/cesium");
 const ForEach = require("../../lib/ForEach");
 const numberOfComponentsForType = require("../../lib/numberOfComponentsForType");
@@ -6,8 +8,19 @@ const readResources = require("../../lib/readResources");
 const updateVersion = require("../../lib/updateVersion");
 
 const Cartesian3 = Cesium.Cartesian3;
+const CesiumMath = Cesium.Math;
 const Quaternion = Cesium.Quaternion;
 const WebGLConstants = Cesium.WebGLConstants;
+
+const gltf1Techniques = "specs/data/1.0/box/box.gltf";
+const gltf1TechniquesTextured =
+  "specs/data/1.0/box-textured-embedded/box-textured-embedded.gltf";
+const gltf1MaterialsCommon =
+  "specs/data/1.0/box-materials-common/box-materials-common.gltf";
+const gltf1MaterialsCommonTextured =
+  "specs/data/1.0/box-textured-materials-common/box-textured-materials-common.gltf";
+const gltf2TechniquesTextured =
+  "specs/data/2.0/box-techniques-embedded/box-techniques-embedded.gltf";
 
 describe("updateVersion", () => {
   it("defaults to 1.0 if gltf has no version", () => {
@@ -85,9 +98,9 @@ describe("updateVersion", () => {
       ]).buffer
     );
 
-    const dataUri =
-      "data:application/octet-stream;base64," +
-      originalBuffer.toString("base64");
+    const dataUri = `data:application/octet-stream;base64,${originalBuffer.toString(
+      "base64"
+    )}`;
 
     const gltf = {
       version: "0.8",
@@ -237,6 +250,7 @@ describe("updateVersion", () => {
     await readResources(gltf);
     updateVersion(gltf, {
       targetVersion: "1.0",
+      keepLegacyExtensions: true,
     });
 
     // Asset updates: version set to 1.0, profile split into object
@@ -326,8 +340,9 @@ describe("updateVersion", () => {
       texcoordBuffer,
     ]);
 
-    const dataUri =
-      "data:application/octet-stream;base64," + source.toString("base64");
+    const dataUri = `data:application/octet-stream;base64,${source.toString(
+      "base64"
+    )}`;
 
     const gltf = {
       asset: {
@@ -616,7 +631,9 @@ describe("updateVersion", () => {
     };
 
     await readResources(gltf);
-    updateVersion(gltf);
+    updateVersion(gltf, {
+      keepLegacyExtensions: true,
+    });
 
     // Asset updates: version set to 2.0, profile removed
     expect(gltf.asset.version).toEqual("2.0");
@@ -663,7 +680,7 @@ describe("updateVersion", () => {
       material.extensions.KHR_techniques_webgl.values.u_lightAttenuation
     ).toEqual(2);
 
-    // Expect material paramters to be updated
+    // Expect material parameters to be updated
     expect(material.doubleSided).toBeUndefined();
     expect(material.alphaMode).toBe("BLEND");
 
@@ -775,5 +792,177 @@ describe("updateVersion", () => {
     expect(
       gltf.extensions.KHR_techniques_webgl.programs[0].glExtensions
     ).toEqual(["OES_element_index_uint"]);
+  });
+
+  it("updates glTF 1.0 techniques to PBR materials", async () => {
+    const gltf = fsExtra.readJsonSync(gltf1Techniques);
+    await readResources(gltf);
+    updateVersion(gltf);
+
+    const material = gltf.materials[0];
+    expect(material.pbrMetallicRoughness.roughnessFactor).toBe(1.0);
+    expect(material.pbrMetallicRoughness.metallicFactor).toBe(0.0);
+    expect(
+      CesiumMath.equalsEpsilon(
+        material.pbrMetallicRoughness.baseColorFactor[0],
+        0.6038273388553378, // Original 0.8 before srgb -> linear conversion
+        Cesium.Math.EPSILON9
+      )
+    ).toBe(true);
+    expect(material.pbrMetallicRoughness.baseColorFactor[1]).toBe(0.0);
+    expect(material.pbrMetallicRoughness.baseColorFactor[2]).toBe(0.0);
+    expect(material.pbrMetallicRoughness.baseColorFactor[3]).toBe(1.0);
+
+    expect(gltf.extensionsRequired).toBeUndefined();
+    expect(gltf.extensionsUsed).toBeUndefined();
+    expect(material.extensions).toBeUndefined();
+  });
+
+  it("updates glTF 1.0 techniques with textures to PBR materials", async () => {
+    const gltf = fsExtra.readJsonSync(gltf1TechniquesTextured);
+    await readResources(gltf);
+    updateVersion(gltf);
+
+    const material = gltf.materials[0];
+    expect(material.pbrMetallicRoughness.roughnessFactor).toBe(1.0);
+    expect(material.pbrMetallicRoughness.metallicFactor).toBe(0.0);
+    expect(material.pbrMetallicRoughness.baseColorTexture.index).toBe(0);
+  });
+
+  it("updates glTF 1.0 with KHR_materials_common to PBR materials", async () => {
+    const gltf = fsExtra.readJsonSync(gltf1MaterialsCommon);
+    await readResources(gltf, {
+      resourceDirectory: path.dirname(gltf1MaterialsCommon),
+    });
+    updateVersion(gltf);
+
+    const material = gltf.materials[0];
+    expect(material.pbrMetallicRoughness.roughnessFactor).toBe(1.0);
+    expect(material.pbrMetallicRoughness.metallicFactor).toBe(0.0);
+    expect(
+      CesiumMath.equalsEpsilon(
+        material.pbrMetallicRoughness.baseColorFactor[0],
+        0.6038273388553378, // Original 0.8 before srgb -> linear conversion
+        Cesium.Math.EPSILON9
+      )
+    ).toBe(true);
+    expect(material.pbrMetallicRoughness.baseColorFactor[1]).toBe(0.0);
+    expect(material.pbrMetallicRoughness.baseColorFactor[2]).toBe(0.0);
+    expect(material.pbrMetallicRoughness.baseColorFactor[3]).toBe(1.0);
+    expect(material.doubleSided).toBe(false);
+    expect(material.alphaMode).toBe("OPAQUE");
+
+    expect(gltf.extensionsRequired).toBeUndefined();
+    expect(gltf.extensionsUsed).toBeUndefined();
+    expect(material.extensions).toBeUndefined();
+  });
+
+  it("updates glTF 1.0 with KHR_materials_common with textures to PBR materials", async () => {
+    const gltf = fsExtra.readJsonSync(gltf1MaterialsCommonTextured);
+    await readResources(gltf, {
+      resourceDirectory: path.dirname(gltf1MaterialsCommonTextured),
+    });
+    updateVersion(gltf);
+
+    const material = gltf.materials[0];
+    expect(material.pbrMetallicRoughness.roughnessFactor).toBe(1.0);
+    expect(material.pbrMetallicRoughness.metallicFactor).toBe(0.0);
+    expect(material.pbrMetallicRoughness.baseColorTexture.index).toBe(0);
+    expect(material.doubleSided).toBe(false);
+    expect(material.alphaMode).toBe("OPAQUE");
+  });
+
+  it("updates glTF 1.0 with KHR_materials_common with CONSTANT technique to PBR materials", async () => {
+    const gltf = fsExtra.readJsonSync(gltf1MaterialsCommon);
+    await readResources(gltf, {
+      resourceDirectory: path.dirname(gltf1MaterialsCommon),
+    });
+
+    const materialsCommon =
+      gltf.materials["Effect-Red"].extensions.KHR_materials_common;
+    materialsCommon.technique = "CONSTANT";
+    updateVersion(gltf);
+
+    const material = gltf.materials[0];
+    expect(material.extensions.KHR_materials_unlit).toBeDefined();
+    expect(gltf.extensionsUsed.indexOf("KHR_materials_unlit") !== -1);
+  });
+
+  it("updates glTF 1.0 with KHR_materials_common with other values to PBR materials", async () => {
+    const gltf = fsExtra.readJsonSync(gltf1MaterialsCommon);
+    await readResources(gltf, {
+      resourceDirectory: path.dirname(gltf1MaterialsCommon),
+    });
+
+    const materialsCommon =
+      gltf.materials["Effect-Red"].extensions.KHR_materials_common;
+
+    materialsCommon.doubleSided = true;
+    materialsCommon.transparent = true;
+    materialsCommon.values.ambient = [0.2, 0.2, 0.2, 1.0];
+    materialsCommon.values.emission = [0.2, 0.2, 0.2, 1.0];
+    materialsCommon.values.transparency = 0.5;
+
+    updateVersion(gltf);
+
+    const material = gltf.materials[0];
+    expect(material.emissiveFactor).toEqual([0.2, 0.2, 0.2]);
+    expect(material.doubleSided).toBe(true);
+    expect(material.alphaMode).toBe("BLEND");
+    expect(material.pbrMetallicRoughness.baseColorFactor[3]).toBe(0.5);
+  });
+
+  it("updates glTF 2.0 with KHR_techniques_webgl to PBR materials", async () => {
+    const gltf = fsExtra.readJsonSync(gltf2TechniquesTextured);
+    await readResources(gltf);
+    updateVersion(gltf);
+
+    const material = gltf.materials[0];
+    expect(material.pbrMetallicRoughness.roughnessFactor).toBe(1.0);
+    expect(material.pbrMetallicRoughness.metallicFactor).toBe(0.0);
+    expect(material.pbrMetallicRoughness.baseColorTexture.index).toBe(0);
+
+    expect(gltf.extensionsRequired).toBeUndefined();
+    expect(gltf.extensionsUsed).toBeUndefined();
+    expect(material.extensions).toBeUndefined();
+  });
+
+  it("creates a PBR material from KHR_techniques_webgl with a custom diffuse texture name", async () => {
+    const gltf = fsExtra.readJsonSync(gltf2TechniquesTextured);
+    await readResources(gltf);
+
+    const options = {
+      baseColorTextureNames: ["u_diffuse"],
+    };
+    updateVersion(gltf, options);
+
+    expect(gltf.materials.length).toBe(1);
+
+    const material = gltf.materials[0];
+    expect(material.pbrMetallicRoughness.roughnessFactor).toBe(1.0);
+    expect(material.pbrMetallicRoughness.metallicFactor).toBe(0.0);
+    expect(material.pbrMetallicRoughness.baseColorTexture.index).toBe(0);
+
+    expect(gltf.extensionsRequired).toBeUndefined();
+    expect(gltf.extensionsUsed).toBeUndefined();
+  });
+
+  it("does not create a PBR material from KHR_techniques_webgl when the diffuse texture name is unknown", async () => {
+    const gltf = fsExtra.readJsonSync(gltf2TechniquesTextured);
+    await readResources(gltf);
+
+    const options = {
+      baseColorTextureNames: ["NOT_u_diffuse"],
+    };
+    updateVersion(gltf, options);
+
+    expect(gltf.materials.length).toBe(1);
+
+    const material = gltf.materials[0];
+    expect(material.pbrMetallicRoughness).toBeUndefined();
+    expect(material.extensions).toBeUndefined();
+
+    expect(gltf.extensionsRequired).toBeUndefined();
+    expect(gltf.extensionsUsed).toBeUndefined();
   });
 });
