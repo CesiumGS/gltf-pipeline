@@ -36,7 +36,6 @@
   },
   "devDependencies": {
     "cloc": "^2.8.0",
-    "coveralls": "^3.1.1",
     "dependency-tree": "^10.0.9",
     "eslint": "^8.0.1",
     "eslint-config-cesium": "^9.0.0",
@@ -61,7 +60,6 @@
     "test": "gulp test",
     "test-watch": "gulp test-watch",
     "coverage": "gulp coverage",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
     "cloc": "gulp cloc",
     "prettier": "prettier --write \"**/*\"",
     "prettier-check": "prettier --check \"**/*\"",
