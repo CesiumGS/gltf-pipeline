@@ -148,10 +148,10 @@ describe("moveTechniquesToExtension", () => {
 
     expect(techniques.shaders.length).toBe(3);
     expect(techniques.shaders[program.fragmentShader].type).toBe(
-      WebGLConstants.FRAGMENT_SHADER
+      WebGLConstants.FRAGMENT_SHADER,
     );
     expect(techniques.shaders[program.vertexShader].type).toBe(
-      WebGLConstants.VERTEX_SHADER
+      WebGLConstants.VERTEX_SHADER,
     );
 
     expect(gltfWithTechniquesWebgl.techniques).toBeUndefined();
@@ -178,7 +178,7 @@ describe("moveTechniquesToExtension", () => {
     expect(technique3.program).toBe(0);
     expect(technique3.uniforms.u_diffuse.type).toBe(WebGLConstants.FLOAT_VEC4);
     expect(
-      gltf.materials[1].extensions.KHR_techniques_webgl.values.u_diffuse
+      gltf.materials[1].extensions.KHR_techniques_webgl.values.u_diffuse,
     ).toEqual([0.2, 0.2, 0.2, 1.0]);
   });
 });

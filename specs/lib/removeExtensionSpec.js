@@ -112,7 +112,7 @@ describe("removeExtension", () => {
     expect(gltf.extensionsUsed).toEqual(["KHR_techniques_webgl"]);
     expect(
       gltf.extensions.KHR_techniques_webgl.techniques[0].uniforms
-        .u_modelViewMatrix.semantic
+        .u_modelViewMatrix.semantic,
     ).toBe("MODELVIEW");
   });
 });

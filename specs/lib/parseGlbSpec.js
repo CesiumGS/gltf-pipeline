@@ -17,7 +17,7 @@ describe("parseGlb", () => {
       thrownError = e;
     }
     expect(thrownError).toEqual(
-      new RuntimeError("File is not valid binary glTF")
+      new RuntimeError("File is not valid binary glTF"),
     );
   });
 
@@ -33,7 +33,7 @@ describe("parseGlb", () => {
       thrownError = e;
     }
     expect(thrownError).toEqual(
-      new RuntimeError("Binary glTF version is not 1 or 2")
+      new RuntimeError("Binary glTF version is not 1 or 2"),
     );
   });
 
@@ -53,7 +53,7 @@ describe("parseGlb", () => {
         thrownError = e;
       }
       expect(thrownError).toEqual(
-        new RuntimeError("Binary glTF scene format is not JSON")
+        new RuntimeError("Binary glTF scene format is not JSON"),
       );
     });
 
@@ -119,13 +119,13 @@ describe("parseGlb", () => {
       const image = parsedGltf.images.image;
       expect(image.extensions.KHR_binary_glTF).toBeDefined();
       expect(image.extensions.KHR_binary_glTF.bufferView).toBe(
-        "imageBufferView"
+        "imageBufferView",
       );
       expect(image.extensions.KHR_binary_glTF.mimeType).toBe("image/jpg");
       const shader = parsedGltf.shaders.shader;
       expect(shader.extensions.KHR_binary_glTF).toBeDefined();
       expect(shader.extensions.KHR_binary_glTF.bufferView).toBe(
-        "shaderBufferView"
+        "shaderBufferView",
       );
     });
   });

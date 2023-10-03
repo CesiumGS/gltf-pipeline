@@ -40,7 +40,7 @@ function checkPaths(object, resourceDirectory) {
   expect(path.basename(relativePath)).toBe(relativePath);
   expect(absolutePath).toBe(path.join(resourceDirectory, relativePath));
   expect(object.name).toBe(
-    path.basename(relativePath, path.extname(relativePath))
+    path.basename(relativePath, path.extname(relativePath)),
   );
 }
 
@@ -122,8 +122,8 @@ describe("readResources", () => {
     }
     expect(thrownError).toEqual(
       new RuntimeError(
-        "glTF model references separate files but no resourceDirectory is supplied"
-      )
+        "glTF model references separate files but no resourceDirectory is supplied",
+      ),
     );
   });
 });

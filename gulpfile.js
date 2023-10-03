@@ -47,7 +47,7 @@ async function test() {
     new JasmineSpecReporter({
       displaySuccessfulSpec:
         !defined(argv.suppressPassed) || !argv.suppressPassed,
-    })
+    }),
   );
 
   jasmine.exitOnCompletion = false;
@@ -83,7 +83,7 @@ function coverage() {
       " JASMINE_CONFIG_PATH=specs/jasmine.json",
     {
       stdio: [process.stdin, process.stdout, process.stderr],
-    }
+    },
   );
 
   return Promise.resolve();
@@ -172,7 +172,7 @@ function amdify(source, subDependencyMapping) {
         const mapping = subDependencyMapping[requirePath];
         if (!defined(mapping)) {
           throw new Error(
-            `Build Failed: Module sub-dependency found for ${requirePath} with no defined mapping behavior.`
+            `Build Failed: Module sub-dependency found for ${requirePath} with no defined mapping behavior.`,
           );
         }
         removeRequireMapping.push(requireVariable);
@@ -196,7 +196,7 @@ function amdify(source, subDependencyMapping) {
     if (
       Object.prototype.hasOwnProperty.call(
         subdependencyMapping,
-        subdependencyVariable
+        subdependencyVariable,
       )
     ) {
       requireMapping[subdependencyVariable] =
@@ -335,7 +335,7 @@ async function generateThirdParty() {
   for (const packageName in dependencies) {
     if (dependencies.hasOwnProperty(packageName)) {
       const override = thirdPartyExtraJson.find(
-        (entry) => entry.name === packageName
+        (entry) => entry.name === packageName,
       );
       thirdPartyJson.push(getLicenseDataFromPackage(packageName, override));
     }
@@ -355,6 +355,6 @@ async function generateThirdParty() {
 
   fsExtra.writeFileSync(
     "ThirdParty.json",
-    JSON.stringify(thirdPartyJson, null, 2)
+    JSON.stringify(thirdPartyJson, null, 2),
   );
 }

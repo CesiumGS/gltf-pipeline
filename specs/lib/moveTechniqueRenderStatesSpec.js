@@ -81,10 +81,10 @@ describe("moveTechniqueRenderStates", () => {
     };
 
     const gltfWithBlendExtension = moveTechniqueRenderStates(
-      gltfWithBlendFunctions
+      gltfWithBlendFunctions,
     );
     expect(
-      gltfWithBlendExtension.extensionsUsed.indexOf("KHR_blend")
+      gltfWithBlendExtension.extensionsUsed.indexOf("KHR_blend"),
     ).toBeGreaterThan(-1);
     expect(gltfWithBlendExtension.extensionsRequired).toBeUndefined();
 
@@ -124,7 +124,7 @@ describe("moveTechniqueRenderStates", () => {
     };
 
     let gltfWithBlendExtension = moveTechniqueRenderStates(
-      gltfWithBlendFunctions
+      gltfWithBlendFunctions,
     );
     let materialBlending =
       gltfWithBlendExtension.materials[0].extensions.KHR_blend;
@@ -188,7 +188,7 @@ describe("moveTechniqueRenderStates", () => {
     };
 
     const gltfWithBlendExtension = moveTechniqueRenderStates(
-      gltfWithBlendFunctions
+      gltfWithBlendFunctions,
     );
 
     const materialBlending =

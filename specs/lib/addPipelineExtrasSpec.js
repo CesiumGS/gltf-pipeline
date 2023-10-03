@@ -21,7 +21,7 @@ describe("addPipelineExtras", () => {
     };
     const gltfWithExtras = addPipelineExtras(gltf);
     expect(
-      gltfWithExtras.buffers["sampleBuffer0"].extras._pipeline
+      gltfWithExtras.buffers["sampleBuffer0"].extras._pipeline,
     ).toBeDefined();
     expect(gltfWithExtras.shaders["sample0VS"].extras._pipeline).toBeDefined();
   });
@@ -49,7 +49,8 @@ describe("addPipelineExtras", () => {
     const gltfWithExtras = addPipelineExtras(gltf);
     expect(gltfWithExtras.buffers[0].extras._pipeline).toBeDefined();
     expect(
-      gltfWithExtras.extensions.KHR_techniques_webgl.shaders[0].extras._pipeline
+      gltfWithExtras.extensions.KHR_techniques_webgl.shaders[0].extras
+        ._pipeline,
     ).toBeDefined();
   });
 });
