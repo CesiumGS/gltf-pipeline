@@ -31,10 +31,10 @@ describe("writeResources", () => {
     gltfWebp = fsExtra.readJsonSync(gltfWebpPath);
     gltfWebpSeparate = fsExtra.readJsonSync(gltfWebpSeparatePath);
     gltfSharedImageReferences = fsExtra.readJsonSync(
-      gltfSharedImageReferencesPath
+      gltfSharedImageReferencesPath,
     );
     gltfSharedImageReferencesSeparate = fsExtra.readJsonSync(
-      gltfSharedImageReferencesSeparatePath
+      gltfSharedImageReferencesSeparatePath,
     );
 
     await readResources(gltf);
@@ -106,7 +106,7 @@ describe("writeResources", () => {
     expect(gltf.buffers[0].uri).toBe("my-buffer.bin");
     expect(gltf.images[0].uri).toBe("my-image.png");
     expect(gltf.extensions.KHR_techniques_webgl.shaders[0].uri).toBe(
-      "my-shader.glsl"
+      "my-shader.glsl",
     );
   });
 
@@ -129,7 +129,7 @@ describe("writeResources", () => {
     expect(gltf.buffers[0].uri).toBe("my-gltf.bin");
     expect(gltf.images[0].uri).toBe("my-gltf0.png");
     expect(gltf.extensions.KHR_techniques_webgl.shaders[0].uri).toBe(
-      "my-gltfFS0.glsl"
+      "my-gltfFS0.glsl",
     );
   });
 
@@ -192,8 +192,8 @@ describe("writeResources", () => {
       CesiumMath.equalsEpsilon(
         buffer.byteLength,
         originalByteLength + bufferViewByteLength,
-        8
-      )
+        8,
+      ),
     ).toBe(true);
   });
 
@@ -209,7 +209,7 @@ describe("writeResources", () => {
     writeResources(gltfWebpSeparate);
     // There should be a new bufferView for the WebP, and one for the fallback image.
     expect(gltfWebpSeparate.bufferViews.length).toBe(
-      originalBufferViewsLength + 2
+      originalBufferViewsLength + 2,
     );
   });
 
@@ -218,10 +218,10 @@ describe("writeResources", () => {
       gltfSharedImageReferences.bufferViews.length;
     writeResources(gltfSharedImageReferences);
     expect(gltfSharedImageReferences.bufferViews.length).toBe(
-      originalBufferViewsLength
+      originalBufferViewsLength,
     );
     expect(gltfSharedImageReferences.images[0].bufferView).toBe(
-      gltfSharedImageReferences.images[1].bufferView
+      gltfSharedImageReferences.images[1].bufferView,
     );
   });
 
@@ -236,17 +236,17 @@ describe("writeResources", () => {
     writeResources(gltfSharedImageReferences, options);
     expect(gltfSharedImageReferences.images[0].uri).toBeDefined();
     expect(gltfSharedImageReferences.images[0].uri).toBe(
-      gltfSharedImageReferences.images[1].uri
+      gltfSharedImageReferences.images[1].uri,
     );
   });
 
   it("does not duplicate multiple references to the same uri", async () => {
     writeResources(gltfSharedImageReferencesSeparate);
     expect(
-      gltfSharedImageReferencesSeparate.images[0].bufferView
+      gltfSharedImageReferencesSeparate.images[0].bufferView,
     ).toBeDefined();
     expect(gltfSharedImageReferencesSeparate.images[0].bufferView).toBe(
-      gltfSharedImageReferencesSeparate.images[1].bufferView
+      gltfSharedImageReferencesSeparate.images[1].bufferView,
     );
   });
 
@@ -261,7 +261,7 @@ describe("writeResources", () => {
     writeResources(gltfSharedImageReferencesSeparate, options);
     expect(gltfSharedImageReferencesSeparate.images[0].uri).toBeDefined();
     expect(gltfSharedImageReferencesSeparate.images[0].uri).toBe(
-      gltfSharedImageReferencesSeparate.images[1].uri
+      gltfSharedImageReferencesSeparate.images[1].uri,
     );
   });
 });

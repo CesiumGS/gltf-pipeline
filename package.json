@@ -38,21 +38,28 @@
     "cloc": "^2.8.0",
     "dependency-tree": "^10.0.9",
     "eslint": "^8.0.1",
-    "eslint-config-cesium": "^9.0.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-node": "^11.1.0",
+    "eslint-config-cesium": "^10.0.1",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-n": "^16.1.0",
     "gulp": "^4.0.2",
     "husky": "^8.0.3",
     "jasmine": "^5.0.0",
     "jasmine-spec-reporter": "^7.0.0",
     "jsdoc": "^4.0.0",
     "nyc": "^15.1.0",
-    "prettier": "2.8.8",
-    "pretty-quick": "^3.1.1"
+    "prettier": "3.0.3",
+    "lint-staged": "^14.0.1"
   },
+  "lint-staged": {
+    "*.(js|ts)": [
+      "eslint --cache --quiet --fix",
+      "prettier --write"
+    ],
+    "*.!(js|ts)": "prettier --write"
+  },  
   "scripts": {
     "prepare": "husky install",
-    "pre-commit": "eslint && pretty-quick --staged",
+    "pre-commit": "lint-staged",
     "jsdoc": "jsdoc ./lib -R ./README.md -d doc",
     "eslint-fix": "eslint \"./**/*.js\" --fix",
     "eslint": "eslint \"./**/*.js\" --cache --quiet",
@@ -63,7 +70,6 @@
     "cloc": "gulp cloc",
     "prettier": "prettier --write \"**/*\"",
     "prettier-check": "prettier --check \"**/*\"",
-    "pretty-quick": "pretty-quick",
     "build-cesium": "gulp build-cesium",
     "generate-third-party": "gulp generate-third-party"
   },

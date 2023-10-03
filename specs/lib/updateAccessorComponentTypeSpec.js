@@ -20,7 +20,7 @@ describe("updateAccessorComponentTypes", () => {
     ]);
     const byteLength = source.length;
     const dataUri = `data:application/octet-stream;base64,${source.toString(
-      "base64"
+      "base64",
     )}`;
     buffer = {
       uri: dataUri,

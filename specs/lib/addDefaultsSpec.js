@@ -319,7 +319,7 @@ describe("addDefaults", () => {
     const staticNode2 = gltfWithDefaults.nodes[2];
 
     expect(gltfWithDefaults.animations[0].samplers[0].interpolation).toBe(
-      "LINEAR"
+      "LINEAR",
     );
 
     expect(animatedNode.matrix).toBeUndefined();

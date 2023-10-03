@@ -81,7 +81,7 @@ describe("updateVersion", () => {
         axisB.y,
         axisB.z,
         angleB,
-      ]).buffer
+      ]).buffer,
     );
     const expectedBuffer = Buffer.from(
       new Float32Array([
@@ -95,11 +95,11 @@ describe("updateVersion", () => {
         quatB.y,
         quatB.z,
         quatB.w,
-      ]).buffer
+      ]).buffer,
     );
 
     const dataUri = `data:application/octet-stream;base64,${originalBuffer.toString(
-      "base64"
+      "base64",
     )}`;
 
     const gltf = {
@@ -328,7 +328,7 @@ describe("updateVersion", () => {
 
   it("updates glTF from 1.0 to 2.0", async () => {
     const applicationSpecificBuffer = Buffer.from(
-      new Int16Array([-2, 1, 0, 1, 2, 3]).buffer
+      new Int16Array([-2, 1, 0, 1, 2, 3]).buffer,
     );
     const positionBuffer = Buffer.from(new Float32Array(9).fill(1.0).buffer);
     const normalBuffer = Buffer.from(new Float32Array(9).fill(2.0).buffer);
@@ -341,7 +341,7 @@ describe("updateVersion", () => {
     ]);
 
     const dataUri = `data:application/octet-stream;base64,${source.toString(
-      "base64"
+      "base64",
     )}`;
 
     const gltf = {
@@ -677,7 +677,7 @@ describe("updateVersion", () => {
     // Expect material values to be moved to material KHR_techniques_webgl extension
     const material = gltf.materials[0];
     expect(
-      material.extensions.KHR_techniques_webgl.values.u_lightAttenuation
+      material.extensions.KHR_techniques_webgl.values.u_lightAttenuation,
     ).toEqual(2);
 
     // Expect material parameters to be updated
@@ -722,7 +722,7 @@ describe("updateVersion", () => {
 
     // Underscore added to application specific attributes
     expect(technique.attributes.a_application.semantic).toEqual(
-      "_APPLICATIONSPECIFIC"
+      "_APPLICATIONSPECIFIC",
     );
     expect(primitive.attributes.APPLICATIONSPECIFIC).toBeUndefined();
     expect(primitive.attributes._APPLICATIONSPECIFIC).toEqual(0);
@@ -748,10 +748,10 @@ describe("updateVersion", () => {
     ForEach.accessorWithSemantic(gltf, "POSITION", (accessorId) => {
       const accessor = gltf.accessors[accessorId];
       expect(accessor.min.length).toEqual(
-        numberOfComponentsForType(accessor.type)
+        numberOfComponentsForType(accessor.type),
       );
       expect(accessor.max.length).toEqual(
-        numberOfComponentsForType(accessor.type)
+        numberOfComponentsForType(accessor.type),
       );
     });
 
@@ -760,10 +760,10 @@ describe("updateVersion", () => {
       ForEach.animationSampler(animation, (sampler) => {
         const accessor = gltf.accessors[sampler.input];
         expect(accessor.min.length).toEqual(
-          numberOfComponentsForType(accessor.type)
+          numberOfComponentsForType(accessor.type),
         );
         expect(accessor.max.length).toEqual(
-          numberOfComponentsForType(accessor.type)
+          numberOfComponentsForType(accessor.type),
         );
       });
     });
@@ -790,7 +790,7 @@ describe("updateVersion", () => {
     // glExtensionsUsed removed
     expect(gltf.glExtensionsUsed).toBeUndefined();
     expect(
-      gltf.extensions.KHR_techniques_webgl.programs[0].glExtensions
+      gltf.extensions.KHR_techniques_webgl.programs[0].glExtensions,
     ).toEqual(["OES_element_index_uint"]);
   });
 
@@ -806,8 +806,8 @@ describe("updateVersion", () => {
       CesiumMath.equalsEpsilon(
         material.pbrMetallicRoughness.baseColorFactor[0],
         0.6038273388553378, // Original 0.8 before srgb -> linear conversion
-        Cesium.Math.EPSILON9
-      )
+        Cesium.Math.EPSILON9,
+      ),
     ).toBe(true);
     expect(material.pbrMetallicRoughness.baseColorFactor[1]).toBe(0.0);
     expect(material.pbrMetallicRoughness.baseColorFactor[2]).toBe(0.0);
@@ -843,8 +843,8 @@ describe("updateVersion", () => {
       CesiumMath.equalsEpsilon(
         material.pbrMetallicRoughness.baseColorFactor[0],
         0.6038273388553378, // Original 0.8 before srgb -> linear conversion
-        Cesium.Math.EPSILON9
-      )
+        Cesium.Math.EPSILON9,
+      ),
     ).toBe(true);
     expect(material.pbrMetallicRoughness.baseColorFactor[1]).toBe(0.0);
     expect(material.pbrMetallicRoughness.baseColorFactor[2]).toBe(0.0);

@@ -44,13 +44,13 @@ describe("processGltf", () => {
     expect(Object.keys(results.separateResources).length).toBe(4);
     expect(results.separateResources["Image0001.png"]).toBeDefined();
     expect(
-      results.separateResources["CesiumTexturedBoxTest.bin"]
+      results.separateResources["CesiumTexturedBoxTest.bin"],
     ).toBeDefined();
     expect(
-      results.separateResources["CesiumTexturedBoxTest0FS.glsl"]
+      results.separateResources["CesiumTexturedBoxTest0FS.glsl"],
     ).toBeDefined();
     expect(
-      results.separateResources["CesiumTexturedBoxTest0VS.glsl"]
+      results.separateResources["CesiumTexturedBoxTest0VS.glsl"],
     ).toBeDefined();
   });
 
@@ -106,7 +106,7 @@ describe("processGltf", () => {
     };
     const results = await processGltf(gltf, options);
     expect(usesExtension(results.gltf, "KHR_draco_mesh_compression")).toBe(
-      true
+      true,
     );
   });
 

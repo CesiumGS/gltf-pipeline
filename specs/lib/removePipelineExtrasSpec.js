@@ -27,7 +27,7 @@ describe("removePipelineExtras", () => {
     const gltfWithExtrasRemoved = removePipelineExtras(addPipelineExtras(gltf));
     expect(gltfWithExtrasRemoved.buffers[0].extras).toBeUndefined();
     expect(
-      gltfWithExtrasRemoved.extensions.KHR_techniques_webgl.shaders[0].extras
+      gltfWithExtrasRemoved.extensions.KHR_techniques_webgl.shaders[0].extras,
     ).toBeUndefined();
   });
 });

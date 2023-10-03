@@ -7,7 +7,7 @@ const ComponentDatatype = Cesium.ComponentDatatype;
 function testComponentReader(componentType) {
   const typedArray = ComponentDatatype.createTypedArray(
     componentType,
-    [0, 1, 2]
+    [0, 1, 2],
   );
   const dataView = new DataView(typedArray.buffer);
   const componentTypeByteLength =
@@ -21,7 +21,7 @@ function testComponentReader(componentType) {
     byteOffset,
     numberOfComponents,
     componentTypeByteLength,
-    result
+    result,
   );
   expect(result).toEqual([1, 2]);
 }

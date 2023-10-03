@@ -48,7 +48,7 @@ function getDracoBuffer(gltf) {
   const source = gltf.buffers[0].extras._pipeline.source;
   return source.slice(
     bufferView.byteOffset,
-    bufferView.byteOffset + bufferView.byteLength
+    bufferView.byteOffset + bufferView.byteLength,
   );
 }
 
@@ -71,10 +71,10 @@ describe("compressDracoMeshes", () => {
       gltf.meshes[0].primitives[0].extensions.KHR_draco_mesh_compression;
     expect(dracoExtension.bufferView).toBeDefined();
     expect(gltf.extensionsUsed.indexOf("KHR_draco_mesh_compression") >= 0).toBe(
-      true
+      true,
     );
     expect(
-      gltf.extensionsRequired.indexOf("KHR_draco_mesh_compression") >= 0
+      gltf.extensionsRequired.indexOf("KHR_draco_mesh_compression") >= 0,
     ).toBe(true);
 
     const positionAccessor = gltf.accessors[dracoExtension.attributes.POSITION];
@@ -104,10 +104,10 @@ describe("compressDracoMeshes", () => {
       gltf.meshes[0].primitives[0].extensions.KHR_draco_mesh_compression;
     expect(dracoExtension.bufferView).toBeDefined();
     expect(gltf.extensionsUsed.indexOf("KHR_draco_mesh_compression") >= 0).toBe(
-      true
+      true,
     );
     expect(
-      gltf.extensionsRequired.indexOf("KHR_draco_mesh_compression") >= 0
+      gltf.extensionsRequired.indexOf("KHR_draco_mesh_compression") >= 0,
     ).toBe(true);
 
     const positionAccessor = gltf.accessors[dracoExtension.attributes.POSITION];
@@ -154,7 +154,7 @@ describe("compressDracoMeshes", () => {
     const gltfDefault = await readGltf(multipleBoxesPath);
     const aabb = new AxisAlignedBoundingBox(
       new Cartesian3(-10.0, -10.0, -10.0),
-      new Cartesian3(10.0, 10.0, 10.0)
+      new Cartesian3(10.0, 10.0, 10.0),
     );
     await compressDracoMeshes(gltfVolume, {
       dracoOptions: {
@@ -209,7 +209,7 @@ describe("compressDracoMeshes", () => {
     const dracoBufferUncompressed = getDracoBuffer(gltf);
     const dracoBufferCompressed = getDracoBuffer(gltfOther);
     expect(dracoBufferCompressed.length).toBeLessThan(
-      dracoBufferUncompressed.length
+      dracoBufferUncompressed.length,
     );
   });
 
@@ -252,14 +252,14 @@ describe("compressDracoMeshes", () => {
     });
 
     expect(gltf.extensionsUsed.indexOf("KHR_draco_mesh_compression") >= 0).toBe(
-      true
+      true,
     );
     expect(gltf.extensionsRequired).toBeUndefined();
     expect(
-      gltfOther.extensionsUsed.indexOf("KHR_draco_mesh_compression") >= 0
+      gltfOther.extensionsUsed.indexOf("KHR_draco_mesh_compression") >= 0,
     ).toBe(true);
     expect(
-      gltfOther.extensionsRequired.indexOf("KHR_draco_mesh_compression") >= 0
+      gltfOther.extensionsRequired.indexOf("KHR_draco_mesh_compression") >= 0,
     ).toBe(true);
     expect(gltf.buffers.length).toBe(6); // draco + image + 4 uncompressed attributes
     expect(gltfOther.buffers.length).toBe(2); // draco + image
@@ -267,23 +267,23 @@ describe("compressDracoMeshes", () => {
     expect(gltf.buffers[0].extras._pipeline.mergedBufferName).toBeUndefined();
     expect(gltf.buffers[1].extras._pipeline.mergedBufferName).toBe("draco");
     expect(gltf.buffers[2].extras._pipeline.mergedBufferName).toBe(
-      "uncompressed"
+      "uncompressed",
     );
     expect(gltf.buffers[3].extras._pipeline.mergedBufferName).toBe(
-      "uncompressed"
+      "uncompressed",
     );
     expect(gltf.buffers[4].extras._pipeline.mergedBufferName).toBe(
-      "uncompressed"
+      "uncompressed",
     );
     expect(gltf.buffers[5].extras._pipeline.mergedBufferName).toBe(
-      "uncompressed"
+      "uncompressed",
     );
 
     expect(
-      gltfOther.buffers[0].extras._pipeline.mergedBufferName
+      gltfOther.buffers[0].extras._pipeline.mergedBufferName,
     ).toBeUndefined();
     expect(
-      gltfOther.buffers[1].extras._pipeline.mergedBufferName
+      gltfOther.buffers[1].extras._pipeline.mergedBufferName,
     ).toBeUndefined();
   });
 });

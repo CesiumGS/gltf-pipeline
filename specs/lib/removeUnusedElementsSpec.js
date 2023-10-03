@@ -457,11 +457,11 @@ describe("removeUnusedElements", () => {
     expect(Object.keys(gltf)).toContain("extensions");
     expect(Object.keys(gltf.extensions)).toContain("KHR_lights_punctual");
     expect(Object.keys(gltf.extensions.KHR_lights_punctual)).toContain(
-      "lights"
+      "lights",
     );
 
     expect(gltf.extensions.KHR_lights_punctual.lights.length).toBe(
-      remaining.lights.length
+      remaining.lights.length,
     );
 
     gltf.extensions.KHR_lights_punctual.lights.forEach((element, index) => {
@@ -688,7 +688,7 @@ describe("removes unused materials, textures, images, samplers", () => {
     expect(gltf.materials[0].occlusionTexture.index).toEqual(0);
     expect(gltf.materials[0].normalTexture.index).toEqual(1);
     expect(
-      gltf.materials[1].extensions.KHR_techniques_webgl.values.diffuse.index
+      gltf.materials[1].extensions.KHR_techniques_webgl.values.diffuse.index,
     ).toEqual(2);
   });
 
@@ -1007,7 +1007,7 @@ describe("removes unused materials, textures, images, samplers", () => {
     expect(gltf.accessors[3].name).toEqual("indices");
 
     expect(
-      gltf.meshes[0].primitives[0].extensions.CESIUM_primitive_outline.indices
+      gltf.meshes[0].primitives[0].extensions.CESIUM_primitive_outline.indices,
     ).toEqual(1);
   });
 

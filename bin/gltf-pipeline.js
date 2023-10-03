@@ -171,7 +171,7 @@ if (!defined(outputPath)) {
   }
   outputPath = path.join(
     inputDirectory,
-    `${inputName}-processed${outputExtension}`
+    `${inputName}-processed${outputExtension}`,
   );
 }
 
@@ -255,5 +255,5 @@ read(inputPath)
   })
   .catch(function (error) {
     console.log(error);
-    process.exit(1);
+    process.exitCode = 1;
   });

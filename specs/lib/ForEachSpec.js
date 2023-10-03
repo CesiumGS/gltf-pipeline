@@ -148,7 +148,7 @@ describe("ForEach", () => {
         if (positionAccessorLength === 5) {
           return accessorId;
         }
-      }
+      },
     );
     expect(positionAccessorLength).toBe(5);
     expect(returnValue).toBe(10);
@@ -165,7 +165,7 @@ describe("ForEach", () => {
         if (vertexAccessorsLength === 10) {
           return accessorId;
         }
-      }
+      },
     );
     expect(vertexAccessorsLength).toBe(10);
     expect(returnValue).toBe(11);
@@ -182,7 +182,7 @@ describe("ForEach", () => {
         if (indicesAccessorsLength === 2) {
           return accessorId;
         }
-      }
+      },
     );
     expect(indicesAccessorsLength).toBe(2);
     expect(returnValue).toBe(1);
@@ -247,7 +247,7 @@ describe("ForEach", () => {
         if (index === 1) {
           return animation;
         }
-      }
+      },
     );
 
     expect(returnValue).toBe(gltfAnimations.animations[1]);
@@ -262,7 +262,7 @@ describe("ForEach", () => {
         if (index === 1) {
           return channel;
         }
-      }
+      },
     );
 
     expect(returnValue).toBe(gltfAnimations.animations[0].channels[1]);
@@ -277,7 +277,7 @@ describe("ForEach", () => {
         if (index === 1) {
           return sampler;
         }
-      }
+      },
     );
 
     expect(returnValue).toBe(gltfAnimations.animations[0].samplers[1]);
@@ -461,11 +461,11 @@ describe("ForEach", () => {
         if (uniformName === "u_specular") {
           return value;
         }
-      }
+      },
     );
     expect(count).toBe(3);
     expect(returnValue).toBe(
-      material.extensions.KHR_techniques_webgl.values["u_specular"]
+      material.extensions.KHR_techniques_webgl.values["u_specular"],
     );
   });
 
@@ -569,10 +569,10 @@ describe("ForEach", () => {
         if (semantic === "NORMAL") {
           return accessorId;
         }
-      }
+      },
     );
     expect(returnValue).toBe(
-      gltfPrimitives.meshes[0].primitives[0].attributes["NORMAL"]
+      gltfPrimitives.meshes[0].primitives[0].attributes["NORMAL"],
     );
   });
 
@@ -610,7 +610,7 @@ describe("ForEach", () => {
         if (index === 1) {
           return target;
         }
-      }
+      },
     );
     expect(returnValue).toBe(gltfTargets.meshes[0].primitives[0].targets[1]);
   });
@@ -624,10 +624,10 @@ describe("ForEach", () => {
         if (semantic === "NORMAL") {
           return accessorId;
         }
-      }
+      },
     );
     expect(returnValue).toBe(
-      gltfTargets.meshes[0].primitives[0].targets[0]["NORMAL"]
+      gltfTargets.meshes[0].primitives[0].targets[0]["NORMAL"],
     );
   });
 
@@ -710,7 +710,7 @@ describe("ForEach", () => {
         if (nodesInTree === 5) {
           return node;
         }
-      }
+      },
     );
 
     expect(nodesInTree).toBe(5);
@@ -735,7 +735,7 @@ describe("ForEach", () => {
         if (nodesInScene1 === 1) {
           return node;
         }
-      }
+      },
     );
 
     expect(nodesInScene0).toBe(5);
@@ -963,7 +963,7 @@ describe("ForEach", () => {
     });
     expect(count).toBe(2);
     expect(returnValue).toBe(
-      gltf.extensions.KHR_techniques_webgl.techniques[1]
+      gltf.extensions.KHR_techniques_webgl.techniques[1],
     );
 
     gltf = {};
@@ -1033,7 +1033,7 @@ describe("ForEach", () => {
         if (count === 3) {
           return attribute;
         }
-      }
+      },
     );
 
     expect(count).toBe(3);
@@ -1063,7 +1063,7 @@ describe("ForEach", () => {
         if (count === 3) {
           return parameterName;
         }
-      }
+      },
     );
 
     expect(count).toBe(3);
@@ -1101,7 +1101,7 @@ describe("ForEach", () => {
         if (count === 3) {
           return uniform;
         }
-      }
+      },
     );
 
     expect(count).toBe(3);
@@ -1131,7 +1131,7 @@ describe("ForEach", () => {
         if (count === 3) {
           return parameterName;
         }
-      }
+      },
     );
 
     expect(count).toBe(3);
@@ -1170,7 +1170,7 @@ describe("ForEach", () => {
         if (count === 3) {
           return parameter;
         }
-      }
+      },
     );
 
     expect(count).toBe(3);
