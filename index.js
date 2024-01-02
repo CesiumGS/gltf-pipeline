@@ -1,4 +1,4 @@
-/*eslint-disable global-require*/
+/*eslint-disable n/global-require*/
 "use strict";
 module.exports = {
   getStatistics: require("./lib/getStatistics"),
