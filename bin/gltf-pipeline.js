@@ -221,8 +221,8 @@ const run = inputIsBinary
     ? processGlb
     : glbToGltf
   : outputIsBinary
-  ? gltfToGlb
-  : processGltf;
+    ? gltfToGlb
+    : processGltf;
 
 function saveSeparateResources(separateResources) {
   const resourcePromises = [];
