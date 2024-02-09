@@ -888,6 +888,27 @@ describe("updateVersion", () => {
     expect(gltf.extensionsUsed.indexOf("KHR_materials_unlit") !== -1);
   });
 
+  it("updates glTF 1.0 with KHR_materials_common with CONSTANT technique to PBR materials using emissive as the base color texture when diffuse is not present", async () => {
+    const gltf = fsExtra.readJsonSync(gltf1MaterialsCommonTextured);
+    await readResources(gltf, {
+      resourceDirectory: path.dirname(gltf1MaterialsCommonTextured),
+    });
+
+    const materialsCommon =
+      gltf.materials["Effect-Texture"].extensions.KHR_materials_common;
+    // Move the 'diffuse' texture definition into 'emission', and expect
+    // this to show up as the base color texture after the update
+    materialsCommon.values.emission = materialsCommon.values.diffuse;
+    delete materialsCommon.values.diffuse;
+    materialsCommon.technique = "CONSTANT";
+    updateVersion(gltf);
+
+    const material = gltf.materials[0];
+    expect(material.pbrMetallicRoughness.baseColorTexture).toBeDefined();
+    expect(material.extensions.KHR_materials_unlit).toBeDefined();
+    expect(gltf.extensionsUsed.indexOf("KHR_materials_unlit") !== -1);
+  });
+
   it("updates glTF 1.0 with KHR_materials_common with other values to PBR materials", async () => {
     const gltf = fsExtra.readJsonSync(gltf1MaterialsCommon);
     await readResources(gltf, {
