@@ -1,5 +1,5 @@
 "use strict";
-const dataUriToBuffer = require("../../lib/dataUriToBuffer");
+const { dataUriToBuffer } = require("@gltf-pipeline/lib");
 
 describe("dataUriToBuffer", () => {
   it("converts base64 data uri to buffer", () => {

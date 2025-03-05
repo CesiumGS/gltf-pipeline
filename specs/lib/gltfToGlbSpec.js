@@ -2,8 +2,8 @@
 const fsExtra = require("fs-extra");
 const path = require("path");
 
-const gltfToGlb = require("../../lib/gltfToGlb");
-const parseGlb = require("../../lib/parseGlb");
+const { gltfToGlb } = require("@gltf-pipeline/lib");
+const { parseGlb } = require("@gltf-pipeline/core");
 
 const gltfPath =
   "specs/data/2.0/box-textured-embedded/box-textured-embedded.gltf";

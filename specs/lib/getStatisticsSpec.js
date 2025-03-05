@@ -1,5 +1,5 @@
 "use strict";
-const getStatistics = require("../../lib/getStatistics");
+const { getStatistics } = require("@gltf-pipeline/lib");
 
 describe("getStatistics", () => {
   const gltf = {

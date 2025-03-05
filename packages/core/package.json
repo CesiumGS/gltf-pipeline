@@ -1,0 +1,31 @@
+{
+  "name": "@gltf-pipeline/core",
+  "version": "1.0.0",
+  "description": "Core files for gltf-pipeline",
+  "license": "Apache-2.0",
+  "contributors": [
+    {
+      "name": "Richard Lee, Cesium GS, Inc., and Contributors",
+      "url": "https://github.com/CesiumGS/gltf-pipeline/graphs/contributors"
+    }
+  ],
+  "keywords": [
+    "glTF",
+    "WebGL"
+  ],
+  "homepage": "https://github.com/CesiumGS/gltf-pipeline",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:CesiumGS/gltf-pipeline.git"
+  },
+  "bugs": {
+    "url": "https://github.com/CesiumGS/gltf-pipeline/issues"
+  },
+  "main": "index.js",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "dependencies": {
+    "cesium": "^1.86.1"
+  }
+}

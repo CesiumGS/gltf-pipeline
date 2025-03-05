@@ -1,8 +1,7 @@
 "use strict";
 const Cesium = require("cesium");
-const readAccessorPacked = require("../../lib/readAccessorPacked");
-const readResources = require("../../lib/readResources");
-const splitPrimitives = require("../../lib/splitPrimitives");
+const { readResources, splitPrimitives } = require("@gltf-pipeline/lib");
+const { readAccessorPacked } = require("@gltf-pipeline/core");
 
 const clone = Cesium.clone;
 const WebGLConstants = Cesium.WebGLConstants;

@@ -1,0 +1,28 @@
+/*eslint-disable n/global-require*/
+"use strict";
+module.exports = {
+  addBuffer: require("./src/addBuffer"),
+  addDefaults: require("./src/addDefaults"),
+  addExtensionsRequired: require("./src/addExtensionsRequired"),
+  addExtensionsUsed: require("./src/addExtensionsUsed"),
+  addPipelineExtras: require("./src/addPipelineExtras"),
+  addToArray: require("./src/addToArray"),
+  findAccessorMinMax: require("./src/findAccessorMinMax"),
+  ForEach: require("./src/ForEach"),
+  forEachTextureInMaterial: require("./src/forEachTextureInMaterial"),
+  getAccessorByteStride: require("./src/getAccessorByteStride"),
+  getComponentReader: require("./src/getComponentReader"),
+  moveTechniqueRenderStates: require("./src/moveTechniqueRenderStates"),
+  moveTechniquesToExtension: require("./src/moveTechniquesToExtension"),
+  numberOfComponentsForType: require("./src/numberOfComponentsForType"),
+  parseGlb: require("./src/parseGlb"),
+  readAccessorPacked: require("./src/readAccessorPacked"),
+  removeExtension: require("./src/removeExtension"),
+  removeExtensionsRequired: require("./src/removeExtensionsRequired"),
+  removeExtensionsUsed: require("./src/removeExtensionsUsed"),
+  removePipelineExtras: require("./src/removePipelineExtras"),
+  removeUnusedElements: require("./src/removeUnusedElements"),
+  updateAccessorComponentTypes: require("./src/updateAccessorComponentTypes"),
+  updateVersion: require("./src/updateVersion"),
+  usesExtension: require("./src/usesExtension"),
+};

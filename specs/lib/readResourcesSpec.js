@@ -2,9 +2,8 @@
 const Cesium = require("cesium");
 const fsExtra = require("fs-extra");
 const path = require("path");
-const ForEach = require("../../lib/ForEach");
-const parseGlb = require("../../lib/parseGlb");
-const readResources = require("../../lib/readResources");
+const { readResources } = require("@gltf-pipeline/lib");
+const { ForEach, parseGlb } = require("@gltf-pipeline/core");
 
 const RuntimeError = Cesium.RuntimeError;
 

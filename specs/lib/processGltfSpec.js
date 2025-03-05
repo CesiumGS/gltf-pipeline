@@ -1,8 +1,8 @@
 "use strict";
 const fsExtra = require("fs-extra");
 const path = require("path");
-const usesExtension = require("../../lib/usesExtension");
-const processGltf = require("../../lib/processGltf");
+const { processGltf } = require("@gltf-pipeline/lib");
+const { usesExtension } = require("@gltf-pipeline/core");
 
 const gltfPath =
   "specs/data/2.0/box-techniques-embedded/box-techniques-embedded.gltf";

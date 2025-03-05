@@ -1,6 +1,6 @@
 "use strict";
 const fsExtra = require("fs-extra");
-const processGlb = require("../../lib/processGlb");
+const { processGlb } = require("@gltf-pipeline/lib");
 
 const glbPath = "specs/data/2.0/box-textured-binary/box-textured-binary.glb";
 
