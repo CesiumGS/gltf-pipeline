@@ -5,11 +5,13 @@ const fsExtra = require("fs-extra");
 const path = require("path");
 const Promise = require("bluebird");
 const yargs = require("yargs");
-const compressDracoMeshes = require("../lib/compressDracoMeshes");
-const glbToGltf = require("../lib/glbToGltf");
-const gltfToGlb = require("../lib/gltfToGlb");
-const processGlb = require("../lib/processGlb");
-const processGltf = require("../lib/processGltf");
+const {
+  compressDracoMeshes,
+  glbToGltf,
+  gltfToGlb,
+  processGlb,
+  processGltf,
+} = require("@gltf-pipeline/lib");
 
 const defaultValue = Cesium.defaultValue;
 const defined = Cesium.defined;

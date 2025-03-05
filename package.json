@@ -26,12 +26,11 @@
     "node": ">=16.0.0"
   },
   "dependencies": {
+    "@gltf-pipeline/lib": "^1.0.0",
+    "@gltf-pipeline/core": "^1.0.0",
     "bluebird": "^3.7.2",
     "cesium": "^1.86.1",
-    "draco3d": "^1.4.3",
     "fs-extra": "^11.0.0",
-    "mime": "^3.0.0",
-    "object-hash": "^3.0.0",
     "yargs": "^17.2.1"
   },
   "devDependencies": {
@@ -60,7 +59,7 @@
   "scripts": {
     "prepare": "husky install",
     "pre-commit": "lint-staged",
-    "jsdoc": "jsdoc ./lib -R ./README.md -d doc",
+    "jsdoc": "jsdoc ./packages/core/src ./packages/lib/src -R ./README.md -d doc",
     "eslint-fix": "eslint \"./**/*.js\" --fix",
     "eslint": "eslint \"./**/*.js\" --cache --quiet",
     "eslint-watch": "gulp eslint-watch",
@@ -75,5 +74,9 @@
   },
   "bin": {
     "gltf-pipeline": "./bin/gltf-pipeline.js"
-  }
+  },
+  "workspaces": [
+    "packages/core",
+    "packages/lib"
+  ]
 }

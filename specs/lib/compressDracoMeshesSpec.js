@@ -6,8 +6,7 @@ const {
   DeveloperError,
 } = require("cesium");
 const fsExtra = require("fs-extra");
-const readResources = require("../../lib/readResources");
-const compressDracoMeshes = require("../../lib/compressDracoMeshes");
+const { compressDracoMeshes, readResources } = require("@gltf-pipeline/lib");
 
 const boxPath =
   "specs/data/2.0/box-textured-embedded/box-textured-embedded.gltf";

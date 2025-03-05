@@ -1,0 +1,38 @@
+{
+  "name": "@gltf-pipeline/lib",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Lib files for gltf-pipeline",
+  "license": "Apache-2.0",
+  "contributors": [
+    {
+      "name": "Richard Lee, Cesium GS, Inc., and Contributors",
+      "url": "https://github.com/CesiumGS/gltf-pipeline/graphs/contributors"
+    }
+  ],
+  "keywords": [
+    "glTF",
+    "WebGL"
+  ],
+  "homepage": "https://github.com/CesiumGS/gltf-pipeline",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:CesiumGS/gltf-pipeline.git"
+  },
+  "bugs": {
+    "url": "https://github.com/CesiumGS/gltf-pipeline/issues"
+  },
+  "main": "index.js",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "dependencies": {
+    "@gltf-pipeline/core": "^1.0.0",
+    "bluebird": "^3.7.2",
+    "cesium": "^1.86.1",
+    "draco3d": "^1.4.3",
+    "fs-extra": "^11.0.0",
+    "mime": "^3.0.0",
+    "object-hash": "^3.0.0"
+  }
+}

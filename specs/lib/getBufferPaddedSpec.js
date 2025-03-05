@@ -1,5 +1,5 @@
 "use strict";
-const getBufferPadded = require("../../lib/getBufferPadded");
+const { getBufferPadded } = require("@gltf-pipeline/lib");
 
 describe("getBufferPadded", () => {
   it("gets buffer padded to 8 bytes", () => {

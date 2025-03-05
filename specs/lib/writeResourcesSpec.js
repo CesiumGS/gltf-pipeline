@@ -1,10 +1,12 @@
 "use strict";
 const fsExtra = require("fs-extra");
 const path = require("path");
-const dataUriToBuffer = require("../../lib/dataUriToBuffer");
-const ForEach = require("../../lib/ForEach");
-const readResources = require("../../lib/readResources");
-const writeResources = require("../../lib/writeResources");
+const {
+  dataUriToBuffer,
+  readResources,
+  writeResources,
+} = require("@gltf-pipeline/lib");
+const { ForEach } = require("@gltf-pipeline/core");
 
 const Cesium = require("cesium");
 const CesiumMath = Cesium.Math;
