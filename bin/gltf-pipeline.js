@@ -11,7 +11,6 @@ const gltfToGlb = require("../lib/gltfToGlb");
 const processGlb = require("../lib/processGlb");
 const processGltf = require("../lib/processGltf");
 
-const defaultValue = Cesium.defaultValue;
 const defined = Cesium.defined;
 
 const defaults = processGltf.defaults;
@@ -189,7 +188,7 @@ const length = args.length;
 for (i = 0; i < length; ++i) {
   const arg = args[i];
   if (arg.indexOf("--draco.") === 0 || arg === "-d") {
-    dracoOptions = defaultValue(argv.draco, {});
+    dracoOptions = argv.draco ?? {};
   }
 }
 
@@ -243,7 +242,7 @@ read(inputPath)
     return run(gltf, options);
   })
   .then(function (results) {
-    const gltf = defaultValue(results.gltf, results.glb);
+    const gltf = results.gltf ?? results.glb;
     const separateResources = results.separateResources;
     return Promise.all([
       write(outputPath, gltf, writeOptions),

@@ -11,7 +11,6 @@ const path = require("path");
 const Promise = require("bluebird");
 const yargs = require("yargs");
 
-const defaultValue = Cesium.defaultValue;
 const defined = Cesium.defined;
 const argv = yargs.argv;
 
@@ -276,7 +275,7 @@ function buildCesium() {
 }
 
 function getLicenseDataFromPackage(packageName, override) {
-  override = defaultValue(override, defaultValue.EMPTY_OBJECT);
+  override = override ?? {};
   const packagePath = path.join("node_modules", packageName, "package.json");
 
   if (!fsExtra.existsSync(packagePath)) {
