@@ -47,6 +47,13 @@ const argv = yargs
       type: "boolean",
       default: false,
     },
+    "allow-absolute": {
+      alias: "a",
+      describe:
+        "Allow gltf files to refer to file URLs outside of their source path",
+      type: "boolean",
+      default: false,
+    },
     json: {
       alias: "j",
       describe: "Convert the input glb to glTF.",
@@ -204,7 +211,14 @@ const options = {
   dracoOptions: dracoOptions,
   baseColorTextureNames: argv.baseColorTextureNames,
   baseColorFactorNames: argv.baseColorFactorNames,
+  allowAbsolute: argv.allowAbsolute,
 };
+
+if (options.allowAbsolute) {
+  console.warn(
+    "Warning: Allowing absolute buffer URIs; please double-check your gltf for potentially dangerous buffer URIs.",
+  );
+}
 
 const inputIsBinary = inputExtension === ".glb";
 const outputIsBinary = outputExtension === ".glb";
