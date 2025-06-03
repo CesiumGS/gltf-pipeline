@@ -132,7 +132,7 @@ describe("readResources", () => {
     const gltf = readGltf(boxTexturedSeparate2Path);
     const localUri = gltf.buffers[0].uri;
     const errMsg =
-      "Absolute paths are not permitted; use the allowAbsolute option to disable this error.";
+      "Absolute paths are not permitted; use the 'allowAbsolute' option to disable this error.";
 
     // uri = file:///...
     gltf.buffers[0].uri = new URL(
