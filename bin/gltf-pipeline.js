@@ -47,7 +47,7 @@ const argv = yargs
       type: "boolean",
       default: false,
     },
-    "allow-absolute": {
+    allowAbsolute: {
       alias: "a",
       describe:
         "Allow gltf files to refer to file URLs outside of their source path",
