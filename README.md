@@ -117,8 +117,7 @@ processGltf(gltf, options).then(function (results) {
 
 #### A Note on `resourceDirectory` and `allowAbsolute`
 
-If a `resourceDirectory` is not specified, the only possible paths in a glTF object are absolute. In the event `processGltf` is called without a `resourceDirectory` and the glTF references absolute paths, it will behave as if `allowAbsolute` is true, but also emit a
-warning if it's not. To get rid of this warning, add `allowAbsolute: true` to your options, e.g.,:
+If a `resourceDirectory` is not specified, the only possible paths in a glTF object are absolute. In the event `processGltf` is called without a `resourceDirectory` and the glTF references absolute paths, it will behave as if `allowAbsolute` is true, but also emit a warning if it's not. To get rid of this warning, add `allowAbsolute: true` to your options, e.g.,:
 
 ```javascript
 const options = {
