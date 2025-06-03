@@ -149,9 +149,11 @@ describe("readResources", () => {
   it("reads absolute resource paths when allowAbsolute there is no resourceDirectory", async () => {
     const gltf = readGltf(boxTexturedSeparate2Path);
     const toAbs = (uri) =>
-      new URL(uri, pathToFileURL(boxTexturedSeparate2Path)).toString();
+      fileURLToPath(
+        new URL(uri, pathToFileURL(boxTexturedSeparate2Path)).toString(),
+      );
     spyOn(process.stderr, "write");
-    // uri = file:///...
+    // uri = /...
     gltf.buffers[0].uri = toAbs(gltf.buffers[0].uri);
     gltf.images[0].uri = toAbs(gltf.images[0].uri);
 
@@ -167,11 +169,9 @@ describe("readResources", () => {
   it("reads absolute resource paths when allowAbsolute is true", async () => {
     const gltf = readGltf(boxTexturedSeparate2Path);
     const toAbs = (uri) =>
-      fileURLToPath(
-        new URL(uri, pathToFileURL(boxTexturedSeparate2Path)).toString(),
-      );
+      new URL(uri, pathToFileURL(boxTexturedSeparate2Path)).toString();
     spyOn(process.stderr, "write");
-    // uri = /...
+    // uri = file:///...
     gltf.buffers[0].uri = toAbs(gltf.buffers[0].uri);
     gltf.images[0].uri = toAbs(gltf.images[0].uri);
 
