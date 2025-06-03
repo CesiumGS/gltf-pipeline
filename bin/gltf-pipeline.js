@@ -216,7 +216,7 @@ const options = {
 
 if (options.allowAbsolute) {
   console.warn(
-    "Warning: Allowing absolute buffer URIs; please double-check your gltf for potentially dangerous buffer URIs.",
+    "Warning: Allowing absolute buffer URIs; please double-check your glTF for potentially dangerous buffer URIs.",
   );
 }
 
