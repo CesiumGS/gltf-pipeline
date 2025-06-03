@@ -117,7 +117,7 @@ processGltf(gltf, options).then(function (results) {
 
 #### A Note on `resourceDirectory` and `allowAbsolute`
 
-If a `resourceDirectory` is not specified, the only possible paths in a gltf object are absolute. In the event `processGltf` is called without a `resourceDirectory` and the gltf references absolute paths, it will behave as if `allowAbsolute` is true, but also emit a
+If a `resourceDirectory` is not specified, the only possible paths in a glTF object are absolute. In the event `processGltf` is called without a `resourceDirectory` and the glTF references absolute paths, it will behave as if `allowAbsolute` is true, but also emit a
 warning if it's not. To get rid of this warning, add `allowAbsolute: true` to your options, e.g.,:
 
 ```javascript
@@ -145,7 +145,7 @@ const results = await processGltf(gltf, options);
 | `--input`, `-i`                | Path to the glTF or glb file.                                                                                                                                | :white_check_mark: Yes                    |
 | `--output`, `-o`               | Output path of the glTF or glb file. Separate resources will be saved to the same directory.                                                                 | No                                        |
 | `--binary`, `-b`               | Convert the input glTF to glb.                                                                                                                               | No, default `false`                       |
-| `--allowAbsolute`, `-a`        | Allow gltf files to refer to file URLs outside of their source path                                                                                          | No, default `false`                       |
+| `--allowAbsolute`, `-a`        | Allow glTF files to refer to file URLs outside of their source path                                                                                          | No, default `false`                       |
 | `--json`, `-j`                 | Convert the input glb to glTF.                                                                                                                               | No, default `false`                       |
 | `--separate`, `-s`             | Write separate buffers, shaders, and textures instead of embedding them in the glTF.                                                                         | No, default `false`                       |
 | `--separateTextures`, `-t`     | Write out separate textures only.                                                                                                                            | No, default `false`                       |
