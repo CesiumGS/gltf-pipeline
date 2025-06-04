@@ -5,7 +5,7 @@ const path = require("path");
 const ForEach = require("../../lib/ForEach");
 const parseGlb = require("../../lib/parseGlb");
 const readResources = require("../../lib/readResources");
-const { pathToFileURL, fileURLToPath } = require("url");
+const { pathToFileURL } = require("url");
 
 const RuntimeError = Cesium.RuntimeError;
 
@@ -149,9 +149,10 @@ describe("readResources", () => {
   it("reads absolute resource paths when allowAbsolute there is no resourceDirectory", async () => {
     const gltf = readGltf(boxTexturedSeparate2Path);
     const toAbs = (uri) =>
-      fileURLToPath(
-        new URL(uri, pathToFileURL(boxTexturedSeparate2Path)).toString(),
-      );
+      new URL(uri, pathToFileURL(boxTexturedSeparate2Path))
+        .toString()
+        .slice("file://".length); // clip off the scheme so we have "absolute path" URIs
+
     spyOn(process.stderr, "write");
     // uri = /...
     gltf.buffers[0].uri = toAbs(gltf.buffers[0].uri);
@@ -168,8 +169,9 @@ describe("readResources", () => {
 
   it("reads absolute resource paths when allowAbsolute is true", async () => {
     const gltf = readGltf(boxTexturedSeparate2Path);
-    const toAbs = (uri) =>
-      new URL(uri, pathToFileURL(boxTexturedSeparate2Path)).toString();
+    const toAbs = (
+      uri, // Generate absolute URIs
+    ) => new URL(uri, pathToFileURL(boxTexturedSeparate2Path)).toString();
     spyOn(process.stderr, "write");
     // uri = file:///...
     gltf.buffers[0].uri = toAbs(gltf.buffers[0].uri);
