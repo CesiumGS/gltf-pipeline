@@ -1,5 +1,13 @@
 # Change Log
 
+### 4.2.0 - 2025-07-09
+
+- Restrict file access to the scope of the directory of the input file by default [#674](https://github.com/CesiumGS/gltf-pipeline/pull/674)
+- Remove the use of `defaultValue` for compatibility with future CesiumJS versions [#672](https://github.com/CesiumGS/gltf-pipeline/pull/672)
+- Use fallback textures for base color when upgrading `KHR_materials_common` [#655](https://github.com/CesiumGS/gltf-pipeline/pull/655)
+- Minor documentation updates [#640](https://github.com/CesiumGS/gltf-pipeline/pull/640)
+- Updated dependencies
+
 ### 4.1.0 - 2023-04-21
 
 - Add `baseColorTextureNames` and `baseColorFactorNames` to the options that can be given at the command line and passed to `processGltf` and `updateVersion`, to specify the uniform names in a `KHR_techniques_webgl` extension that indicate that a certain texture or color should be used as the base color texture or base color factor of a PBR material. [#637](https://github.com/CesiumGS/gltf-pipeline/pull/637)
