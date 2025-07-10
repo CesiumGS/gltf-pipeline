@@ -1,5 +1,9 @@
 # Change Log
 
+### 4.3.0 - 2025-07-10
+
+- Backported support for `KHR_materials_specular` from CesiumJS [#676](https://github.com/CesiumGS/gltf-pipeline/pull/676)
+
 ### 4.2.0 - 2025-07-09
 
 - Restrict file access to the scope of the directory of the input file by default [#674](https://github.com/CesiumGS/gltf-pipeline/pull/674)
