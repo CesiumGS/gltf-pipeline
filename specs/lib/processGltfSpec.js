@@ -16,6 +16,8 @@ const gltfMeshoptFallbackPath =
   "specs/data/2.0/extensions/EXT_meshopt_compression/meshopt-fallback/meshopt-fallback.gltf";
 const gltfMeshoptNoFallbackPath =
   "specs/data/2.0/extensions/EXT_meshopt_compression/meshopt-no-fallback/meshopt-no-fallback.gltf";
+const gltfTransmissionPath =
+  "specs/data/2.0/extensions/KHR_materials_transmission/KHR_materials_transmission.gltf";
 
 describe("processGltf", () => {
   it("processes gltf with default options", async () => {
@@ -260,5 +262,24 @@ describe("processGltf", () => {
     expect(meshoptObject2.buffer).toBe(0);
     expect(meshoptObject2.byteOffset).toBe(392);
     expect(meshoptObject2.byteLength).toBe(78);
+  });
+
+  it("keeps images from KHR_materials_transmission glTF", async () => {
+    const gltf = fsExtra.readJsonSync(gltfTransmissionPath);
+    const options = {
+      resourceDirectory: path.dirname(gltfTransmissionPath),
+    };
+
+    const results = await processGltf(gltf, options);
+    expect(results.gltf).toBeDefined();
+
+    expect(results.gltf.images).toBeDefined();
+    expect(results.gltf.images.length).toBe(4);
+
+    const imageNames = results.gltf.images.map((img) => img.name);
+    expect(imageNames).toContain("KelchTransparency512");
+    expect(imageNames).toContain("KelchCzaszaColor512");
+    expect(imageNames).toContain("KelchPostawaColor512");
+    expect(imageNames).toContain("KelchUchwytColor512");
   });
 });
