@@ -1521,4 +1521,106 @@ describe("removes unused materials, textures, images, samplers", () => {
     expect(gltf.textures.length).toBe(2);
     expect(gltf.images.length).toBe(2);
   });
+
+  it("keeps KHR_materials_transmission.transmissionTexture", function () {
+    const gltf = {
+      materials: [
+        {
+          extensions: {
+            KHR_materials_transmission: {
+              transmissionTexture: { index: 1 },
+            },
+          },
+        },
+      ],
+      textures: [
+        { source: 0, sampler: 0 },
+        { source: 1, sampler: 0 },
+      ],
+      images: [{ name: "img0" }, { name: "img1" }],
+      samplers: [{}],
+      meshes: [
+        {
+          primitives: [
+            {
+              material: 0,
+            },
+          ],
+        },
+      ],
+    };
+
+    const origTransmissionImageName = gltf.images[gltf.textures[1].source].name;
+
+    removeUnusedElements(gltf, ["texture", "sampler", "image"]);
+
+    expect(gltf.textures.length).toBe(1);
+
+    const newIdx =
+      gltf.materials[0].extensions.KHR_materials_transmission
+        .transmissionTexture.index;
+    expect(gltf.images[gltf.textures[newIdx].source].name).toBe(
+      origTransmissionImageName,
+    );
+  });
+
+  it("keeps pbr baseColor and KHR_materials_transmission textures", function () {
+    const gltf = {
+      materials: [
+        {
+          pbrMetallicRoughness: {
+            baseColorTexture: { index: 3 },
+          },
+          extensions: {
+            KHR_materials_transmission: {
+              transmissionTexture: { index: 2 },
+            },
+          },
+        },
+      ],
+      textures: [
+        { source: 0, sampler: 0 },
+        { source: 1, sampler: 0 },
+        { source: 2, sampler: 0 },
+        { source: 3, sampler: 0 },
+      ],
+      images: [
+        { name: "img0" },
+        { name: "img1" },
+        { name: "img2" },
+        { name: "img3" },
+      ],
+      samplers: [{}],
+      meshes: [
+        {
+          primitives: [
+            {
+              material: 0,
+            },
+          ],
+        },
+      ],
+    };
+
+    const origTransmissionImageName = gltf.images[gltf.textures[2].source].name;
+    const origBaseColorImageName = gltf.images[gltf.textures[3].source].name;
+
+    removeUnusedElements(gltf, ["texture", "sampler", "image"]);
+
+    expect(gltf.textures.length).toBe(2);
+
+    const mat = gltf.materials[0];
+    const newTransmissionIdx =
+      mat.extensions.KHR_materials_transmission.transmissionTexture.index;
+    const newBaseColorIdx = mat.pbrMetallicRoughness.baseColorTexture.index;
+
+    expect(gltf.images[gltf.textures[newTransmissionIdx].source].name).toBe(
+      origTransmissionImageName,
+    );
+    expect(gltf.images[gltf.textures[newBaseColorIdx].source].name).toBe(
+      origBaseColorImageName,
+    );
+
+    expect(newTransmissionIdx).not.toBe(newBaseColorIdx);
+  });
 });
