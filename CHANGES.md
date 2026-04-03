@@ -1,5 +1,9 @@
 # Change Log
 
+### 4.3.1 - 2026-04-03
+
+- Fixed handling of glTF models with the [`KHR_materials_transmission`](https://github.com/KhronosGroup/glTF/blob/main/extensions/2.0/Khronos/KHR_materials_transmission/README.md) extension. [#678](https://github.com/CesiumGS/gltf-pipeline/pull/678)
+
 ### 4.3.0 - 2025-07-10
 
 - Backported support for `KHR_materials_specular` from CesiumJS [#676](https://github.com/CesiumGS/gltf-pipeline/pull/676)
