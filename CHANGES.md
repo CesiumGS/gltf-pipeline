@@ -1,5 +1,9 @@
 # Change Log
 
+### Next release
+
+- Account for textures defined by the `KHR_materials_clearcoat`, `KHR_materials_anisotropy`, `KHR_materials_sheen`, `KHR_materials_iridescence`, and `KHR_materials_volume` extensions in `forEachTextureInMaterial`. [#660](https://github.com/CesiumGS/gltf-pipeline/issues/660)
+
 ### 4.3.1 - 2026-04-03
 
 - Fixed handling of glTF models with the [`KHR_materials_transmission`](https://github.com/KhronosGroup/glTF/blob/main/extensions/2.0/Khronos/KHR_materials_transmission/README.md) extension. [#678](https://github.com/CesiumGS/gltf-pipeline/pull/678)
