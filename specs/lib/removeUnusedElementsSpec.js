@@ -568,6 +568,45 @@ describe("removeUnusedElements", () => {
 
     expect(gltf.nodes.length).toEqual(3);
   });
+
+  it("does not decrement a meshopt buffer index below the removed buffer", () => {
+    const gltf = {
+      buffers: [
+        { name: "compressed", byteLength: 100 },
+        { name: "fallback", byteLength: 100 },
+        { name: "unused", byteLength: 100 },
+      ],
+      bufferViews: [
+        {
+          name: "meshopt",
+          buffer: 1,
+          byteOffset: 0,
+          byteLength: 100,
+          extensions: {
+            KHR_meshopt_compression: {
+              buffer: 0,
+              byteOffset: 0,
+              byteLength: 50,
+              byteStride: 4,
+              mode: "ATTRIBUTES",
+              count: 25,
+            },
+          },
+        },
+      ],
+      extensionsUsed: ["KHR_meshopt_compression"],
+    };
+
+    removeUnusedElements(gltf, ["buffer"]);
+
+    // The unused buffer (index 2) is removed. The compressed buffer (index 0)
+    // is below the removed index, so its reference must not be decremented.
+    expect(gltf.buffers.length).toBe(2);
+    expect(gltf.bufferViews[0].extensions.KHR_meshopt_compression.buffer).toBe(
+      0,
+    );
+    expect(gltf.bufferViews[0].buffer).toBe(1);
+  });
 });
 
 describe("removes unused materials, textures, images, samplers", () => {
