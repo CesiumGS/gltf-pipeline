@@ -2,7 +2,7 @@
 
 ### 4.4.0 - 2026-06-22
 
-- Added support for the [`KHR_meshopt_compression`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_meshopt_compression) extension. [#PR](https://github.com/CesiumGS/gltf-pipeline/pull/PR)
+- Added support for the [`KHR_meshopt_compression`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_meshopt_compression) extension. [#680](https://github.com/CesiumGS/gltf-pipeline/pull/680)
 
 ### 4.3.1 - 2026-04-03
 
