@@ -4,7 +4,6 @@ const ForEach = require("./ForEach");
 const forEachTextureInMaterial = require("./forEachTextureInMaterial");
 const usesExtension = require("./usesExtension");
 
-const defaultValue = Cesium.defaultValue;
 const defined = Cesium.defined;
 
 module.exports = removeUnusedElements;
@@ -30,7 +29,7 @@ const allElementTypes = [
  * @private
  */
 function removeUnusedElements(gltf, elementTypes) {
-  elementTypes = defaultValue(elementTypes, allElementTypes);
+  elementTypes = elementTypes ?? allElementTypes;
   allElementTypes.forEach(function (type) {
     if (elementTypes.indexOf(type) > -1) {
       removeUnusedElementsByType(gltf, type);

@@ -12,7 +12,6 @@ const {
 
 const clone = Cesium.clone;
 const ComponentDatatype = Cesium.ComponentDatatype;
-const defaultValue = Cesium.defaultValue;
 const defined = Cesium.defined;
 const numberOfComponentsForType = Cesium.numberOfComponentsForType;
 
@@ -47,7 +46,7 @@ function splitPrimitives(gltf) {
         mode: primitive.mode,
       });
       if (defined(hashPrimitives[hashPrimitive])) {
-        const duplicates = defaultValue(duplicatePrimitives[hashPrimitive], []);
+        const duplicates = duplicatePrimitives[hashPrimitive] ?? [];
         duplicatePrimitives[hashPrimitive] = duplicates;
         duplicates.push(primitive);
         return;
@@ -59,10 +58,8 @@ function splitPrimitives(gltf) {
         targets: primitive.targets,
         mode: primitive.mode,
       });
-      const primitivesShared = defaultValue(
-        primitivesWithSharedAttributes[hashAttributes],
-        [],
-      );
+      const primitivesShared =
+        primitivesWithSharedAttributes[hashAttributes] ?? [];
       primitivesWithSharedAttributes[hashAttributes] = primitivesShared;
       primitivesShared.push(primitive);
     });

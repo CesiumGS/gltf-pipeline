@@ -4,7 +4,6 @@ const Cesium = require("cesium");
 const addExtensionsUsed = require("./addExtensionsUsed");
 const ForEach = require("./ForEach");
 
-const defaultValue = Cesium.defaultValue;
 const defined = Cesium.defined;
 const WebGLConstants = Cesium.WebGLConstants;
 
@@ -90,10 +89,8 @@ function moveTechniqueRenderStates(gltf) {
             defined(blendFunctions.blendFuncSeparate))
         ) {
           blendingForTechnique[techniqueIndex] = {
-            blendEquation: defaultValue(
-              blendFunctions.blendEquationSeparate,
-              defaultBlendEquation,
-            ),
+            blendEquation:
+              blendFunctions.blendEquationSeparate ?? defaultBlendEquation,
             blendFactors: getSupportedBlendFactors(
               blendFunctions.blendFuncSeparate,
               defaultBlendFactors,

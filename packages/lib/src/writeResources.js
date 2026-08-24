@@ -9,7 +9,6 @@ const {
 const getImageExtension = require("./getImageExtension");
 const mergeBuffers = require("./mergeBuffers");
 
-const defaultValue = Cesium.defaultValue;
 const defined = Cesium.defined;
 const WebGLConstants = Cesium.WebGLConstants;
 
@@ -42,12 +41,12 @@ module.exports = writeResources;
  * @private
  */
 function writeResources(gltf, options) {
-  options = defaultValue(options, {});
-  options.separateBuffers = defaultValue(options.separateBuffers, false);
-  options.separateTextures = defaultValue(options.separateTextures, false);
-  options.separateShaders = defaultValue(options.separateShaders, false);
-  options.dataUris = defaultValue(options.dataUris, false);
-  options.forceMergeBuffers = defaultValue(options.forceMergeBuffers, false);
+  options = options ?? {};
+  options.separateBuffers = options.separateBuffers ?? false;
+  options.separateTextures = options.separateTextures ?? false;
+  options.separateShaders = options.separateShaders ?? false;
+  options.dataUris = options.dataUris ?? false;
+  options.forceMergeBuffers = options.forceMergeBuffers ?? false;
 
   // Remember which of the resources have been written, so we can re-use them.
   const writtenResourceMap = {};

@@ -10,7 +10,6 @@ const dataUriToBuffer = require("./dataUriToBuffer");
 const { fileURLToPath, pathToFileURL } = require("./FileUrl");
 
 const defined = Cesium.defined;
-const defaultValue = Cesium.defaultValue;
 const isDataUri = Cesium.isDataUri;
 const RuntimeError = Cesium.RuntimeError;
 
@@ -30,7 +29,7 @@ module.exports = readResources;
  */
 function readResources(gltf, options) {
   addPipelineExtras(gltf);
-  options = defaultValue(options, {});
+  options = options ?? {};
 
   // Make sure its an absolute path with a trailing separator
   options.resourceDirectory = defined(options.resourceDirectory)
@@ -120,7 +119,7 @@ function readBufferView(gltf, bufferViewId, object, saveResourceId) {
   const bufferView = gltf.bufferViews[bufferViewId];
   const buffer = gltf.buffers[bufferView.buffer];
   const source = buffer.extras._pipeline.source;
-  const byteOffset = defaultValue(bufferView.byteOffset, 0);
+  const byteOffset = bufferView.byteOffset ?? 0;
   return source.slice(byteOffset, byteOffset + bufferView.byteLength);
 }
 
