@@ -567,6 +567,45 @@ describe("removeUnusedElements", () => {
 
     expect(gltf.nodes.length).toEqual(3);
   });
+
+  it("does not decrement a meshopt buffer index below the removed buffer", () => {
+    const gltf = {
+      buffers: [
+        { name: "compressed", byteLength: 100 },
+        { name: "fallback", byteLength: 100 },
+        { name: "unused", byteLength: 100 },
+      ],
+      bufferViews: [
+        {
+          name: "meshopt",
+          buffer: 1,
+          byteOffset: 0,
+          byteLength: 100,
+          extensions: {
+            KHR_meshopt_compression: {
+              buffer: 0,
+              byteOffset: 0,
+              byteLength: 50,
+              byteStride: 4,
+              mode: "ATTRIBUTES",
+              count: 25,
+            },
+          },
+        },
+      ],
+      extensionsUsed: ["KHR_meshopt_compression"],
+    };
+
+    removeUnusedElements(gltf, ["buffer"]);
+
+    // The unused buffer (index 2) is removed. The compressed buffer (index 0)
+    // is below the removed index, so its reference must not be decremented.
+    expect(gltf.buffers.length).toBe(2);
+    expect(gltf.bufferViews[0].extensions.KHR_meshopt_compression.buffer).toBe(
+      0,
+    );
+    expect(gltf.bufferViews[0].buffer).toBe(1);
+  });
 });
 
 describe("removes unused materials, textures, images, samplers", () => {
@@ -1519,5 +1558,107 @@ describe("removes unused materials, textures, images, samplers", () => {
     expect(gltf.bufferViews.length).toBe(7);
     expect(gltf.textures.length).toBe(2);
     expect(gltf.images.length).toBe(2);
+  });
+
+  it("keeps KHR_materials_transmission.transmissionTexture", function () {
+    const gltf = {
+      materials: [
+        {
+          extensions: {
+            KHR_materials_transmission: {
+              transmissionTexture: { index: 1 },
+            },
+          },
+        },
+      ],
+      textures: [
+        { source: 0, sampler: 0 },
+        { source: 1, sampler: 0 },
+      ],
+      images: [{ name: "img0" }, { name: "img1" }],
+      samplers: [{}],
+      meshes: [
+        {
+          primitives: [
+            {
+              material: 0,
+            },
+          ],
+        },
+      ],
+    };
+
+    const origTransmissionImageName = gltf.images[gltf.textures[1].source].name;
+
+    removeUnusedElements(gltf, ["texture", "sampler", "image"]);
+
+    expect(gltf.textures.length).toBe(1);
+
+    const newIdx =
+      gltf.materials[0].extensions.KHR_materials_transmission
+        .transmissionTexture.index;
+    expect(gltf.images[gltf.textures[newIdx].source].name).toBe(
+      origTransmissionImageName,
+    );
+  });
+
+  it("keeps pbr baseColor and KHR_materials_transmission textures", function () {
+    const gltf = {
+      materials: [
+        {
+          pbrMetallicRoughness: {
+            baseColorTexture: { index: 3 },
+          },
+          extensions: {
+            KHR_materials_transmission: {
+              transmissionTexture: { index: 2 },
+            },
+          },
+        },
+      ],
+      textures: [
+        { source: 0, sampler: 0 },
+        { source: 1, sampler: 0 },
+        { source: 2, sampler: 0 },
+        { source: 3, sampler: 0 },
+      ],
+      images: [
+        { name: "img0" },
+        { name: "img1" },
+        { name: "img2" },
+        { name: "img3" },
+      ],
+      samplers: [{}],
+      meshes: [
+        {
+          primitives: [
+            {
+              material: 0,
+            },
+          ],
+        },
+      ],
+    };
+
+    const origTransmissionImageName = gltf.images[gltf.textures[2].source].name;
+    const origBaseColorImageName = gltf.images[gltf.textures[3].source].name;
+
+    removeUnusedElements(gltf, ["texture", "sampler", "image"]);
+
+    expect(gltf.textures.length).toBe(2);
+
+    const mat = gltf.materials[0];
+    const newTransmissionIdx =
+      mat.extensions.KHR_materials_transmission.transmissionTexture.index;
+    const newBaseColorIdx = mat.pbrMetallicRoughness.baseColorTexture.index;
+
+    expect(gltf.images[gltf.textures[newTransmissionIdx].source].name).toBe(
+      origTransmissionImageName,
+    );
+    expect(gltf.images[gltf.textures[newBaseColorIdx].source].name).toBe(
+      origBaseColorImageName,
+    );
+
+    expect(newTransmissionIdx).not.toBe(newBaseColorIdx);
   });
 });

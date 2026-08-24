@@ -42,8 +42,9 @@ function mergeBuffers(gltf, defaultName, force) {
     }
 
     const extensions = buffer.extensions ?? {};
-    const meshoptObject = extensions.EXT_meshopt_compression;
-    if (defined(meshoptObject) && meshoptObject.fallback) {
+    const ext = extensions.EXT_meshopt_compression;
+    const khr = extensions.KHR_meshopt_compression;
+    if ((defined(ext) && ext.fallback) || (defined(khr) && khr.fallback)) {
       // Prevent empty meshopt buffer from being merged into main buffer
       buffer.extras._pipeline.mergedBufferName = `meshopt-fallback-${bufferId}`;
     }
@@ -158,10 +159,14 @@ function forEachBufferViewLikeObject(gltf, callback) {
     callback(bufferView);
 
     const extensions = bufferView.extensions ?? {};
-    const meshoptObject = extensions.EXT_meshopt_compression;
-    if (defined(meshoptObject)) {
-      // The EXT_meshopt_compression object has buffer, byteOffset, and byteLength properties like a bufferView
-      callback(meshoptObject);
+    const ext = extensions.EXT_meshopt_compression;
+    if (defined(ext)) {
+      // The meshopt compression object has buffer, byteOffset, and byteLength properties like a bufferView
+      callback(ext);
+    }
+    const khr = extensions.KHR_meshopt_compression;
+    if (defined(khr)) {
+      callback(khr);
     }
   });
 }

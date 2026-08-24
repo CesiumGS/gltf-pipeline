@@ -12,7 +12,7 @@
     "license": [
       "Apache-2.0"
     ],
-    "version": "1.109.0",
+    "version": "1.131.0",
     "url": "https://www.npmjs.com/package/cesium"
   },
   {
@@ -20,7 +20,7 @@
     "license": [
       "Apache-2.0"
     ],
-    "version": "1.5.6",
+    "version": "1.5.7",
     "url": "https://www.npmjs.com/package/draco3d"
   },
   {
@@ -28,7 +28,7 @@
     "license": [
       "MIT"
     ],
-    "version": "11.1.1",
+    "version": "11.3.0",
     "url": "https://www.npmjs.com/package/fs-extra"
   },
   {

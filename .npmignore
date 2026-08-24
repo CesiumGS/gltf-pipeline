@@ -20,3 +20,4 @@
 gulpfile.js
 *.tgz
 !doc/gltf.png
+.github
