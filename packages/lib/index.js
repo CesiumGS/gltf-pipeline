@@ -6,7 +6,6 @@ const { removeExtension } = require("@gltf-pipeline/core");
 module.exports = {
   compressDracoMeshes: require("./src/compressDracoMeshes"),
   dataUriToBuffer: require("./src/dataUriToBuffer"),
-  FileUrl: require("./src/FileUrl"),
   getBufferPadded: require("./src/getBufferPadded"),
   getImageExtension: require("./src/getImageExtension"),
   getJsonBufferPadded: require("./src/getJsonBufferPadded"),

@@ -8,7 +8,6 @@ const { URL } = require("url");
 const { addPipelineExtras, ForEach} = require("@gltf-pipeline/core");
 const dataUriToBuffer = require("./dataUriToBuffer");
 const { fileURLToPath, pathToFileURL } = require("url");
-const ForEach = require("./ForEach");
 
 const defined = Cesium.defined;
 const isDataUri = Cesium.isDataUri;
