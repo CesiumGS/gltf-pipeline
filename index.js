@@ -1,10 +1,13 @@
 /*eslint-disable n/global-require*/
 "use strict";
+
+const { removeExtension } = require("@gltf-pipeline/core");
+
 module.exports = {
-  getStatistics: require("./lib/getStatistics"),
-  glbToGltf: require("./lib/glbToGltf"),
-  gltfToGlb: require("./lib/gltfToGlb"),
-  processGlb: require("./lib/processGlb"),
-  processGltf: require("./lib/processGltf"),
-  removeExtension: require("./lib/removeExtension"),
+  getStatistics: require("@gltf-pipeline/lib"),
+  glbToGltf: require("@gltf-pipeline/lib"),
+  gltfToGlb: require("@gltf-pipeline/lib"),
+  processGlb: require("@gltf-pipeline/lib"),
+  processGltf: require("@gltf-pipeline/lib"),
+  removeExtension: removeExtension,
 };

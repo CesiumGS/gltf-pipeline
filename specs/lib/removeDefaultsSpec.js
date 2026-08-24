@@ -1,5 +1,5 @@
 "use strict";
-const removeDefaults = require("../../lib/removeDefaults");
+const { removeDefaults } = require("@gltf-pipeline/lib");
 
 describe("removeDefaults", () => {
   it("removeDefaults", () => {

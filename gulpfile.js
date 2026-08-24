@@ -94,7 +94,7 @@ function cloc() {
 
   // Run cloc on primary Source files only
   const source = new Promise(function (resolve, reject) {
-    cmdLine = `perl ${clocPath} --quiet --progress-rate=0` + ` lib/ bin/`;
+    cmdLine = `perl ${clocPath} --quiet --progress-rate=0` + ` packages/ bin/`;
 
     child_process.exec(cmdLine, function (error, stdout, stderr) {
       if (error) {
@@ -227,7 +227,7 @@ function amdify(source, subDependencyMapping) {
 }
 
 function buildCesium() {
-  const basePath = "lib";
+  const basePath = "packages/core/src";
   const outputDir = "dist/cesium";
   const files = [
     "addDefaults.js",

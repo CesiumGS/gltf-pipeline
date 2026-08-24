@@ -1,6 +1,5 @@
 "use strict";
-const mergeBuffers = require("../../lib/mergeBuffers");
-const readResources = require("../../lib/readResources");
+const { mergeBuffers, readResources } = require("@gltf-pipeline/lib");
 
 describe("mergeBuffers", () => {
   it("merges buffers", async () => {

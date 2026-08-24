@@ -2,8 +2,7 @@
 
 const { RuntimeError } = require("cesium");
 
-const dataUriToBuffer = require("../../lib/dataUriToBuffer");
-const getImageExtension = require("../../lib/getImageExtension");
+const { dataUriToBuffer, getImageExtension } = require("@gltf-pipeline/lib");
 
 const pngData = dataUriToBuffer(
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAIAAAAmkwkpAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4gQcDxwOcoRpqQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAFElEQVQI12P8//8/AwwwMSAB3BwAlm4DBdoYksUAAAAASUVORK5CYII=",
