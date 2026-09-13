@@ -110,6 +110,43 @@ describe("writeResources", () => {
     );
   });
 
+  it("sanitizes special characters in resource names", () => {
+    const separateResources = {};
+    const options = {
+      separateBuffers: true,
+      separateTextures: true,
+      separateShaders: true,
+      separateResources: separateResources,
+    };
+    gltf.buffers[0].name = "my:buffer?";
+    gltf.images[0].name = "blob:https:__sandbox image";
+    gltf.extensions.KHR_techniques_webgl.shaders[0].name = "my<shader>";
+    writeResources(gltf, options);
+    expect(gltf.buffers[0].uri).toBe("my_buffer_.bin");
+    expect(gltf.images[0].uri).toBe("blob_https___sandbox image.png");
+    expect(gltf.extensions.KHR_techniques_webgl.shaders[0].uri).toBe(
+      "my_shader_.glsl",
+    );
+    expect(
+      Buffer.isBuffer(separateResources["blob_https___sandbox image.png"]),
+    );
+  });
+
+  it("sanitizes special characters in resource paths", () => {
+    const separateResources = {};
+    const options = {
+      separateTextures: true,
+      separateResources: separateResources,
+    };
+    gltf.images[0].extras._pipeline.relativePath =
+      "textures\\blob:https:__sandbox image.png";
+    writeResources(gltf, options);
+    expect(gltf.images[0].uri).toBe("textures/blob_https___sandbox image.png");
+    expect(
+      separateResources["textures/blob_https___sandbox image.png"],
+    ).toBeDefined();
+  });
+
   it("writes resources as files with gltf name when resources aren't named", () => {
     const separateResources = {};
     const options = {
